@@ -85,3 +85,26 @@ export function planSkill(p: Profile, skill: Skill, count: number): Planned[] {
   // Put retries in the middle so the session starts with a fresh question.
   return [...fresh.slice(0, 2), ...retries, ...fresh.slice(2)];
 }
+
+/** Log non-question practice (such as a typing lesson) toward the day's goal and XP. */
+export function logActivity(p: Profile, subject: Skill['subject'], questions: number, correct: number, seconds: number, xp: number, now: number): Profile {
+  const key = dayKey(now);
+  const day = p.days[key] ?? { questions: 0, correct: 0, seconds: 0, bySubject: {} };
+  return touchStreak(
+    {
+      ...p,
+      xp: p.xp + xp,
+      coins: p.coins + Math.ceil(xp / 2),
+      days: {
+        ...p.days,
+        [key]: {
+          questions: day.questions + questions,
+          correct: day.correct + correct,
+          seconds: day.seconds + seconds,
+          bySubject: { ...day.bySubject, [subject]: (day.bySubject[subject] ?? 0) + questions },
+        },
+      },
+    },
+    now,
+  );
+}

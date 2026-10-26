@@ -126,6 +126,8 @@ function ProfileReport({ p }: { p: Profile }) {
         </div>
       ))}
 
+      <SpellingList p={p} />
+
       <h3>Recent trouble spots</h3>
       {trouble.length === 0 ? (
         <p className="muted">Nothing missed recently.</p>
@@ -194,5 +196,27 @@ function Settings() {
       </div>
       {msg && <p>{msg}</p>}
     </section>
+  );
+}
+
+function SpellingList({ p }: { p: Profile }) {
+  const { setData } = useStore();
+  const [text, setText] = useState((p.spellingList ?? []).join('\n'));
+  const [saved, setSaved] = useState(false);
+  const save = () => {
+    const words = text.split(/[\n,]+/).map((w) => w.trim()).filter(Boolean);
+    setData((d) => ({ ...d, profiles: d.profiles.map((x) => (x.id === p.id ? { ...x, spellingList: words } : x)) }));
+    setSaved(true);
+  };
+  return (
+    <div>
+      <h3>🔤 This week's spelling words</h3>
+      <p className="muted small">One word per line (or separated by commas). Spell Builder reads them aloud for practice.</p>
+      <textarea className="word-list" rows={5} value={text} onChange={(e) => { setText(e.target.value); setSaved(false); }} />
+      <div className="row" style={{ justifyContent: 'flex-start' }}>
+        <button className="btn ghost" onClick={save}>Save list</button>
+        {saved && <span className="good">Saved</span>}
+      </div>
+    </div>
   );
 }

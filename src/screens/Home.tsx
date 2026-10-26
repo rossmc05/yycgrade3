@@ -3,6 +3,7 @@ import { dayKey, isReviewDue, status } from '../engine/adaptive';
 import { useStore } from '../engine/store';
 import { go } from '../router';
 import { SUBJECTS } from '../subjects';
+import { LESSONS } from '../subjects/typing/lessons';
 
 export function Home() {
   const { profile, data } = useStore();
@@ -46,7 +47,7 @@ export function Home() {
               <span className="tile-icon">{s.icon}</span>
               <span className="tile-name">{s.name}</span>
               <span className="tile-tag">{s.tagline}</span>
-              <span className="tile-meta">{s.ready ? `${mastered} of ${s.skills.length} skills mastered` : 'Coming soon'}</span>
+              <span className="tile-meta">{!s.ready ? 'Coming soon' : s.id === 'typing' ? `${Object.values(profile.typing ?? {}).reduce((n, r) => n + r.stars, 0)} of ${LESSONS.length * 3} stars` : `${mastered} of ${s.skills.length} skills mastered`}</span>
             </button>
           );
         })}

@@ -6,6 +6,7 @@ import { Play } from './screens/Play';
 import { Profiles } from './screens/Profiles';
 import { Rewards } from './screens/Rewards';
 import { SubjectScreen } from './screens/SubjectScreen';
+import { TypingHome, TypingLesson } from './screens/Typing';
 
 export function App() {
   const { profile } = useStore();
@@ -13,6 +14,8 @@ export function App() {
 
   if (page === 'parent') return <Parent />;
   if (!profile || page === 'profiles') return <Profiles />;
+  if (page === 'subject' && a === 'typing') return <TypingHome />;
+  if (page === 'type' && a) return <TypingLesson key={a} lessonId={a} />;
   if (page === 'subject' && a) return <SubjectScreen subjectId={a} />;
   if (page === 'play' && a && b) return <Play key={`${a}/${b}`} subjectId={a} target={b} />;
   if (page === 'rewards') return <Rewards />;

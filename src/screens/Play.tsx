@@ -14,7 +14,7 @@ const CHEERS = ['Awesome!', 'You got it!', 'Super!', 'Nailed it!', 'Brilliant!',
 
 /** Strip spaces and thousands separators so "12 345" and "12345" match. */
 export function normalize(s: string): string {
-  return s.trim().toLowerCase().replace(/[\s,]/g, '').replace(/^\$/, '').replace(/¢$/, '');
+  return s.trim().toLowerCase().replace(/[‘’]/g, "'").replace(/[\s,]/g, '').replace(/^\$/, '').replace(/¢$/, '');
 }
 
 type Phase = 'ask' | 'hint' | 'right' | 'shown';
@@ -53,6 +53,7 @@ function Session({ subjectId, target, again }: { subjectId: string; target: stri
   const [mastered, setMastered] = useState<string[]>([]);
   const [badges, setBadges] = useState<BadgeDef[]>([]);
   const [finished, setFinished] = useState(false);
+  const [showLearn, setShowLearn] = useState(() => !!single?.learn && !profile?.skills[single.id]?.history.length);
 
   const back = () => {
     stopSpeaking();
@@ -61,6 +62,7 @@ function Session({ subjectId, target, again }: { subjectId: string; target: stri
 
   // Generate each question when it is reached, so it uses the latest level.
   const [question, setQuestion] = useState<Question | null>(null);
+  const used = useRef(new Set<string>());
   const step = plan[index];
   useEffect(() => {
     if (!step || !profile) return;
@@ -69,7 +71,12 @@ function Session({ subjectId, target, again }: { subjectId: string; target: stri
       return;
     }
     const level = (profile.skills[step.skill.id] ?? newSkillState()).level;
-    setQuestion(step.skill.generate(level, Math.random));
+    const ctx = { spellingList: profile.spellingList ?? [] };
+    // Avoid repeating a question within one session.
+    let q = step.skill.generate(level, Math.random, ctx);
+    for (let tries = 0; tries < 12 && used.current.has(q.key); tries++) q = step.skill.generate(level, Math.random, ctx);
+    used.current.add(q.key);
+    setQuestion(q);
   }, [index]);
 
   const onDone = (firstTry: boolean, solved: boolean, seconds: number) => {
@@ -99,6 +106,25 @@ function Session({ subjectId, target, again }: { subjectId: string; target: stri
       <main className="page">
         <TopBar back={back} />
         <p className="card">Nothing to practise here yet.</p>
+      </main>
+    );
+  }
+
+  if (showLearn && single?.learn) {
+    return (
+      <main className="page">
+        <TopBar back={back} />
+        <section className="card learn">
+          <h1>{single.icon} {single.name}</h1>
+          <p className="muted">Let's learn a little first.</p>
+          <ul>
+            {single.learn.map((line) => <li key={line}>{line}</li>)}
+          </ul>
+          <div className="row">
+            <button className="btn ghost" onClick={() => speak(single.learn!.join(' '))}>🔊 Read to me</button>
+            <button className="btn primary" onClick={() => { stopSpeaking(); setShowLearn(false); }}>I'm ready!</button>
+          </div>
+        </section>
       </main>
     );
   }
@@ -176,15 +202,17 @@ function QuestionCard({ q, skill, level, readAloud, onDone }: {
   const start = useRef(Date.now());
   const tries = useRef(0);
 
+  const sayIt = () => speak(q.say ?? q.prompt);
   useEffect(() => {
-    if (readAloud) speak(q.prompt);
+    // Spelling questions always speak: the word is not shown on screen.
+    if (readAloud || q.say) sayIt();
   }, [q, readAloud]);
 
   const submit = (answer: string) => {
     if (phase === 'right' || phase === 'shown') return;
     if (!normalize(answer)) return;
     tries.current += 1;
-    const ok = normalize(answer) === normalize(q.answer);
+    const ok = q.input === 'choice' ? answer === q.answer : normalize(answer) === normalize(q.answer);
     if (ok) {
       setPhase('right');
       if (readAloud) speak(cheer);
@@ -211,6 +239,12 @@ function QuestionCard({ q, skill, level, readAloud, onDone }: {
         }
         return;
       }
+      if (q.input === 'text') {
+        if (/^[a-zA-Z' ]$/.test(e.key)) setValue((v) => (v.length < 24 ? v + e.key.toLowerCase() : v));
+        else if (e.key === 'Backspace') setValue((v) => v.slice(0, -1));
+        else if (e.key === 'Enter') submit(value);
+        return;
+      }
       if (q.input !== 'number') return;
       if (/^[0-9]$/.test(e.key)) setValue((v) => (v.length < 7 ? v + e.key : v));
       else if (e.key === 'Backspace') setValue((v) => v.slice(0, -1));
@@ -227,7 +261,7 @@ function QuestionCard({ q, skill, level, readAloud, onDone }: {
     <section className={`card question ${phase}`}>
       <div className="q-head">
         <span className="chip">{skill.icon} {skill.name} · {skill.levels[level]}</span>
-        <button className="icon-btn" onClick={() => speak(q.prompt)} aria-label="Read aloud">
+        <button className="icon-btn" onClick={sayIt} aria-label="Read aloud">
           🔊
         </button>
       </div>
@@ -241,7 +275,7 @@ function QuestionCard({ q, skill, level, readAloud, onDone }: {
       {q.input === 'choice' && q.choices && (
         <div className={`choices ${q.choices.length <= 3 ? 'few' : ''}`}>
           {q.choices.map((c) => {
-            const cls = done && normalize(c) === normalize(q.answer) ? 'correct' : picked === c && phase !== 'ask' ? 'wrong' : '';
+            const cls = done && c === q.answer ? 'correct' : picked === c && phase !== 'ask' ? 'wrong' : '';
             return (
               <button
                 key={c}
@@ -259,14 +293,17 @@ function QuestionCard({ q, skill, level, readAloud, onDone }: {
         </div>
       )}
 
-      {q.input !== 'choice' && (
+      {q.input === 'order' && q.choices && <OrderPicker q={q} done={done} phase={phase} onSubmit={submit} />}
+
+      {(q.input === 'number' || q.input === 'text') && (
         <>
           <div className="answer-box">
             {unitBefore && <span className="unit">$</span>}
-            <span className={`answer-value ${value ? '' : 'empty'}`}>{done && phase === 'shown' ? q.answer : value || '?'}</span>
+            <span className={`answer-value ${value ? '' : 'empty'} ${q.input === 'text' ? 'word' : ''}`}>{done && phase === 'shown' ? q.answer : value || '?'}</span>
             {q.unit && !unitBefore && <span className="unit">{q.unit}</span>}
           </div>
-          {!done && <Keypad value={value} setValue={setValue} onEnter={() => submit(value)} />}
+          {!done && q.input === 'number' && <Keypad value={value} setValue={setValue} onEnter={() => submit(value)} />}
+          {!done && q.input === 'text' && <LetterKeys value={value} setValue={setValue} onEnter={() => submit(value)} />}
         </>
       )}
 
@@ -315,6 +352,63 @@ function Keypad({ value, setValue, onEnter }: { value: string; setValue: (fn: (v
       <button className="key-go" onClick={onEnter} disabled={!value}>
         ✓
       </button>
+    </div>
+  );
+}
+
+const ROWS = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm'];
+
+function LetterKeys({ value, setValue, onEnter }: { value: string; setValue: (fn: (v: string) => string) => void; onEnter: () => void }) {
+  const press = (k: string) => setValue((v) => (v.length < 24 ? v + k : v));
+  return (
+    <div className="letter-keys">
+      {ROWS.map((row, i) => (
+        <div key={i} className="letter-row">
+          {i === 2 && <button className="wide" onClick={() => press("'")}>'</button>}
+          {row.split('').map((k) => (
+            <button key={k} onClick={() => press(k)}>{k}</button>
+          ))}
+          {i === 2 && <button className="wide key-back" onClick={() => setValue((v) => v.slice(0, -1))} aria-label="Delete">⌫</button>}
+        </div>
+      ))}
+      <div className="letter-row">
+        <button className="space" onClick={() => press(' ')}>space</button>
+        <button className="wide key-go" onClick={onEnter} disabled={!value.trim()}>✓</button>
+      </div>
+    </div>
+  );
+}
+
+function OrderPicker({ q, done, phase, onSubmit }: { q: Question; done: boolean; phase: Phase; onSubmit: (a: string) => void }) {
+  const [picked, setPicked] = useState<string[]>([]);
+  const items = q.choices ?? [];
+  // After a wrong try, clear so the child can rebuild it.
+  useEffect(() => {
+    if (phase === 'hint') setPicked([]);
+  }, [phase]);
+  const shown = done ? q.answer.split(' → ') : picked;
+  const tap = (c: string) => {
+    const next = [...picked, c];
+    setPicked(next);
+    if (next.length === items.length) onSubmit(next.join(' → '));
+  };
+  return (
+    <div className="order">
+      <ol className="order-slots">
+        {items.map((_, i) => (
+          <li key={i} className={shown[i] ? 'filled' : ''}>{shown[i] ?? ''}</li>
+        ))}
+      </ol>
+      {!done && (
+        <>
+          <div className="choices">
+            {items.map((c) => (
+              <button key={c} className="choice" disabled={picked.includes(c)} onClick={() => tap(c)}>{c}</button>
+            ))}
+          </div>
+          <button className="link" onClick={() => setPicked([])} disabled={!picked.length}>Start over</button>
+        </>
+      )}
     </div>
   );
 }

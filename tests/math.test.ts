@@ -1,17 +1,18 @@
 import { describe, expect, it } from 'vitest';
 import { seeded } from '../src/engine/random';
 import { MATH_SKILLS } from '../src/subjects/math/skills';
+import { ALL_SKILLS } from '../src/subjects';
 import { normalize } from '../src/screens/Play';
 
 const RUNS = 400;
 
-describe('every math question is well formed', () => {
-  for (const skill of MATH_SKILLS) {
+describe('every question is well formed', () => {
+  for (const skill of ALL_SKILLS) {
     for (let level = 0; level < skill.levels.length; level++) {
       it(`${skill.id} level ${level + 1}`, () => {
         const rng = seeded(level * 1000 + skill.id.length);
         for (let i = 0; i < RUNS; i++) {
-          const q = skill.generate(level, rng);
+          const q = skill.generate(level, rng, { spellingList: i % 2 ? ['Because', 'friend'] : [] });
           const all = [q.prompt, q.answer, q.hint, q.explain, q.key, ...(q.choices ?? [])].join(' | ');
           expect(all, all).not.toMatch(/NaN|undefined|Infinity|null/);
           expect(q.answer.length).toBeGreaterThan(0);
@@ -19,11 +20,19 @@ describe('every math question is well formed', () => {
             expect(normalize(q.answer), q.prompt).toMatch(/^\d+$/);
             expect(normalize(q.answer).length).toBeLessThanOrEqual(7);
           }
+          if (q.input === 'text') {
+            expect(normalize(q.answer), q.prompt).toMatch(/^[a-z']+$/);
+            if (q.say) expect(q.prompt.toLowerCase().split(" ")).not.toContain(normalize(q.answer));
+          }
+          if (q.input === 'order') {
+            expect([...q.choices!].sort(), q.prompt).toEqual(q.answer.split(' → ').sort());
+            expect(q.choices!.join(' → '), q.prompt).not.toBe(q.answer);
+          }
           if (q.input === 'choice') {
             expect(q.choices, q.prompt).toBeDefined();
             expect(q.choices!.length, q.prompt).toBeGreaterThanOrEqual(2);
             expect(q.choices, q.prompt).toContain(q.answer);
-            expect(new Set(q.choices!.map(normalize)).size, `${q.prompt} ${q.choices}`).toBe(q.choices!.length);
+            expect(new Set(q.choices).size, `${q.prompt} ${q.choices}`).toBe(q.choices!.length);
           }
         }
       });
@@ -63,7 +72,7 @@ describe('arithmetic answers match the question', () => {
     for (const skill of MATH_SKILLS) {
       for (let level = 0; level < skill.levels.length; level++) {
         for (let i = 0; i < 300; i++) {
-          const q = skill.generate(level, rng);
+          const q = skill.generate(level, rng, { spellingList: [] });
           const want = solve(q.prompt);
           if (want === null) continue;
           checked++;

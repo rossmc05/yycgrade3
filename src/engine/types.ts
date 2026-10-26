@@ -21,12 +21,14 @@ export interface Question {
   key: string;
   prompt: string;
   visual?: Visual;
-  /** 'number' shows a keypad; 'choice' shows buttons. */
-  input: 'number' | 'choice' | 'text';
+  /** 'number' shows a keypad; 'choice' shows buttons; 'order' asks to tap the choices in order. */
+  input: 'number' | 'choice' | 'text' | 'order';
   choices?: string[];
   answer: string;
   /** Unit shown after the input box, e.g. "cm" or "¢". */
   unit?: string;
+  /** What to read aloud instead of the prompt (e.g. the word to spell, used in a sentence). */
+  say?: string;
   hint: string;
   explain: string;
 }
@@ -42,8 +44,22 @@ export interface Skill {
   /** Alberta learning outcome text. */
   outcome: string;
   icon: string;
+  /** Short lesson shown before the first practice. */
+  learn?: string[];
   levels: string[];
-  generate: (level: number, rng: Rng) => Question;
+  generate: (level: number, rng: Rng, ctx: GenContext) => Question;
+}
+
+/** Per-child data a generator may use, such as the school spelling list. */
+export interface GenContext {
+  spellingList: string[];
+}
+
+export interface TypingResult {
+  bestWpm: number;
+  bestAccuracy: number;
+  stars: number;
+  plays: number;
 }
 
 export type Rng = () => number;
@@ -92,6 +108,9 @@ export interface Profile {
   owned: string[];
   equipped: string[];
   totalCorrect: number;
+  /** Weekly words entered by a parent. */
+  spellingList?: string[];
+  typing?: Record<string, TypingResult>;
 }
 
 export interface Settings {
