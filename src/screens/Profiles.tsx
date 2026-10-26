@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import { AvatarArt } from '../avatar/AvatarArt';
+import { DEFAULT_LOOK, PARTS, type Look, type Slot } from '../avatar/catalog';
 import { Avatar } from '../components/TopBar';
-import { AVATARS } from '../engine/rewards';
 import { newProfile } from '../engine/storage';
 import { useStore } from '../engine/store';
 import { go } from '../router';
@@ -9,7 +10,8 @@ export function Profiles() {
   const { data, setData } = useStore();
   const [adding, setAdding] = useState(data.profiles.length === 0);
   const [name, setName] = useState('');
-  const [avatar, setAvatar] = useState(AVATARS[0]);
+  const [look, setLook] = useState<Look>(DEFAULT_LOOK);
+  const freeParts = (slot: Slot) => PARTS.filter((x) => x.slot === slot && x.cost === 0);
 
   const choose = (id: string) => {
     setData((d) => ({ ...d, activeProfileId: id }));
@@ -18,7 +20,7 @@ export function Profiles() {
 
   const create = () => {
     if (!name.trim()) return;
-    const p = newProfile(name.trim(), avatar);
+    const p = { ...newProfile(name.trim(), '🙂'), look };
     setData((d) => ({ ...d, profiles: [...d.profiles, p], activeProfileId: p.id }));
     go('');
   };
@@ -32,7 +34,7 @@ export function Profiles() {
           <div className="profile-grid">
             {data.profiles.map((p) => (
               <button key={p.id} className="profile-card" onClick={() => choose(p.id)}>
-                <Avatar avatar={p.avatar} equipped={p.equipped} size={72} />
+                <Avatar profile={p} size={96} />
                 <span>{p.name}</span>
               </button>
             ))}
@@ -49,13 +51,27 @@ export function Profiles() {
             <span>Your name</span>
             <input value={name} onChange={(e) => setName(e.target.value)} maxLength={20} autoFocus onKeyDown={(e) => e.key === 'Enter' && create()} />
           </label>
-          <p className="muted">Pick a buddy</p>
-          <div className="avatar-picker">
-            {AVATARS.map((a) => (
-              <button key={a} className={a === avatar ? 'picked' : ''} onClick={() => setAvatar(a)} aria-label={a}>
-                {a}
-              </button>
-            ))}
+          <div className="maker">
+            <AvatarArt look={look} size={150} />
+            <div className="maker-options">
+              {(['skin', 'hair', 'hairColor', 'eyes', 'topColor'] as Slot[]).map((slot) => (
+                <div key={slot} className="maker-row">
+                  {freeParts(slot).map((it) => (
+                    <button
+                      key={it.id}
+                      className={`maker-pick ${look[slot as keyof Look] === it.id ? 'picked' : ''}`}
+                      style={it.color ? { background: it.color } : undefined}
+                      title={it.name}
+                      aria-label={it.name}
+                      onClick={() => setLook((l) => ({ ...l, [slot]: it.id }))}
+                    >
+                      {it.color ? '' : it.name}
+                    </button>
+                  ))}
+                </div>
+              ))}
+              <p className="muted small">Earn coins to unlock hats, pets, outfits and more in the Avatar Studio.</p>
+            </div>
           </div>
           <div className="row">
             {data.profiles.length > 0 && (

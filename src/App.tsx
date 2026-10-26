@@ -1,6 +1,8 @@
 import { useStore } from './engine/store';
 import { useRoute } from './router';
+import { AvatarStudio } from './screens/AvatarStudio';
 import { Home } from './screens/Home';
+import { World } from './screens/World';
 import { Parent } from './screens/Parent';
 import { Play } from './screens/Play';
 import { Profiles } from './screens/Profiles';
@@ -19,5 +21,7 @@ export function App() {
   if (page === 'subject' && a) return <SubjectScreen subjectId={a} />;
   if (page === 'play' && a && b) return <Play key={`${a}/${b}`} subjectId={a} target={b} />;
   if (page === 'rewards') return <Rewards />;
+  if (page === 'avatar') return <AvatarStudio />;
+  if (page === 'world') return <World />;
   return <Home />;
 }

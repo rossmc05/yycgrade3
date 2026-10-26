@@ -1,3 +1,5 @@
+import type { Look } from '../avatar/catalog';
+
 // Shared types for every subject app.
 
 export type SubjectId = 'math' | 'science' | 'typing' | 'spelling' | 'grammar';
@@ -111,6 +113,8 @@ export interface Profile {
   /** Weekly words entered by a parent. */
   spellingList?: string[];
   typing?: Record<string, TypingResult>;
+  /** Built avatar; older saves only have the emoji `avatar`. */
+  look?: Look;
 }
 
 export interface Settings {

@@ -51,6 +51,18 @@ export function Home() {
             </button>
           );
         })}
+        <button className="subject-tile" style={{ ['--tile' as string]: '#0f766e' }} onClick={() => go('avatar')}>
+          <span className="tile-icon">🎨</span>
+          <span className="tile-name">Avatar Studio</span>
+          <span className="tile-tag">Spend coins on hats, outfits and pets</span>
+          <span className="tile-meta">🪙 {profile.coins} to spend</span>
+        </button>
+        <button className="subject-tile" style={{ ['--tile' as string]: '#65a30d' }} onClick={() => go('world')}>
+          <span className="tile-icon">🏡</span>
+          <span className="tile-name">My World</span>
+          <span className="tile-tag">It grows every time you master a skill</span>
+          <span className="tile-meta">See what you've built</span>
+        </button>
         <button className="subject-tile" style={{ ['--tile' as string]: '#ca8a04' }} onClick={() => go('rewards')}>
           <span className="tile-icon">🏆</span>
           <span className="tile-name">Trophy Room</span>

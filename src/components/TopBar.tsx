@@ -1,15 +1,14 @@
-import { liveStreak, playerLevel, SHOP } from '../engine/rewards';
+import { AvatarArt } from '../avatar/AvatarArt';
+import { lookOf } from '../avatar/catalog';
+import { liveStreak, playerLevel } from '../engine/rewards';
+import type { Profile } from '../engine/types';
 import { useStore } from '../engine/store';
 import { go } from '../router';
 
-export function Avatar({ avatar, equipped, size = 48 }: { avatar: string; equipped: string[]; size?: number }) {
-  const hat = SHOP.find((i) => i.slot === 'hat' && equipped.includes(i.id));
-  const pet = SHOP.find((i) => i.slot === 'pet' && equipped.includes(i.id));
+export function Avatar({ profile, size = 48, background = true }: { profile: Profile; size?: number; background?: boolean }) {
   return (
-    <span className="avatar" style={{ fontSize: size * 0.7, width: size, height: size }}>
-      {hat && <span className="avatar-hat">{hat.icon}</span>}
-      {avatar}
-      {pet && <span className="avatar-pet">{pet.icon}</span>}
+    <span className="avatar" style={{ width: size, height: (size * 220) / 200 }}>
+      <AvatarArt look={lookOf(profile)} size={size} background={background} />
     </span>
   );
 }
@@ -27,7 +26,7 @@ export function TopBar({ back }: { back?: () => void }) {
         </button>
       ) : (
         <button className="icon-btn" onClick={() => go('profiles')} aria-label="Switch player">
-          <Avatar avatar={profile.avatar} equipped={profile.equipped} size={40} />
+          <Avatar profile={profile} size={40} />
         </button>
       )}
       <button className="level-pill" onClick={() => go('rewards')} title="Rewards">
