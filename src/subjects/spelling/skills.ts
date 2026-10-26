@@ -56,7 +56,7 @@ function plurals(level: number, rng: Rng): Question {
 // ---------- Endings: -ing and -ed (3CV1.5) ----------
 
 const ENDINGS: { base: string; ing: string; ed: string; rule: number }[] = [
-  ...[['jump', 'jumping', 'jumped'], ['play', 'playing', 'played'], ['help', 'helping', 'helped'], ['look', 'looking', 'looked'], ['kick', 'kicking', 'kicked'], ['rain', 'raining', 'rained'], ['pass', 'passing', 'passed'], ['melt', 'melting', 'melted']].map(([base, ing, ed]) => ({ base, ing, ed, rule: 0 })),
+  ...[['jump', 'jumping', 'jumped'], ['play', 'playing', 'played'], ['help', 'helping', 'helped'], ['look', 'looking', 'looked'], ['kick', 'kicking', 'kicked'], ['rain', 'raining', 'rained'], ['pass', 'passing', 'passed'], ['melt', 'melting', 'melted'], ['walk', 'walking', 'walked'], ['talk', 'talking', 'talked'], ['paint', 'painting', 'painted'], ['cook', 'cooking', 'cooked'], ['call', 'calling', 'called'], ['push', 'pushing', 'pushed'], ['fix', 'fixing', 'fixed'], ['snow', 'snowing', 'snowed'], ['climb', 'climbing', 'climbed'], ['count', 'counting', 'counted'], ['shout', 'shouting', 'shouted']].map(([base, ing, ed]) => ({ base, ing, ed, rule: 0 })),
   ...[['bake', 'baking', 'baked'], ['smile', 'smiling', 'smiled'], ['hope', 'hoping', 'hoped'], ['skate', 'skating', 'skated'], ['dance', 'dancing', 'danced'], ['slide', 'sliding', 'slid'], ['shine', 'shining', 'shone'], ['race', 'racing', 'raced'], ['score', 'scoring', 'scored'], ['share', 'sharing', 'shared'], ['wave', 'waving', 'waved'], ['joke', 'joking', 'joked']].map(([base, ing, ed]) => ({ base, ing, ed, rule: 1 })),
   ...[['hop', 'hopping', 'hopped'], ['stop', 'stopping', 'stopped'], ['clap', 'clapping', 'clapped'], ['plan', 'planning', 'planned'], ['skip', 'skipping', 'skipped'], ['drop', 'dropping', 'dropped'], ['hug', 'hugging', 'hugged'], ['jog', 'jogging', 'jogged'], ['shop', 'shopping', 'shopped'], ['nod', 'nodding', 'nodded'], ['trip', 'tripping', 'tripped'], ['grab', 'grabbing', 'grabbed']].map(([base, ing, ed]) => ({ base, ing, ed, rule: 2 })),
 ];
@@ -172,8 +172,14 @@ const PEOPLE: { base: string; word: string; doing: string }[] = [
   { base: 'act', word: 'actor', doing: 'acts in plays and movies' }, { base: 'sail', word: 'sailor', doing: 'sails ships' }, { base: 'visit', word: 'visitor', doing: 'visits' },
   { base: 'invent', word: 'inventor', doing: 'invents things' }, { base: 'art', word: 'artist', doing: 'makes art' }, { base: 'piano', word: 'pianist', doing: 'plays the piano' },
   { base: 'cycle', word: 'cyclist', doing: 'rides a bike' },
+  { base: 'build', word: 'builder', doing: 'builds houses' }, { base: 'drive', word: 'driver', doing: 'drives a bus' }, { base: 'read', word: 'reader', doing: 'reads books' },
+  { base: 'write', word: 'writer', doing: 'writes stories' }, { base: 'garden', word: 'gardener', doing: 'grows a garden' }, { base: 'dance', word: 'dancer', doing: 'dances' },
+  { base: 'ski', word: 'skier', doing: 'skis down mountains' }, { base: 'help', word: 'helper', doing: 'helps' }, { base: 'lead', word: 'leader', doing: 'leads a group' },
+  { base: 'climb', word: 'climber', doing: 'climbs rocks' }, { base: 'speak', word: 'speaker', doing: 'speaks to a crowd' }, { base: 'own', word: 'owner', doing: 'owns a store' },
+  { base: 'edit', word: 'editor', doing: 'fixes and checks writing' }, { base: 'direct', word: 'director', doing: 'directs a movie' }, { base: 'guitar', word: 'guitarist', doing: 'plays the guitar' },
+  { base: 'tour', word: 'tourist', doing: 'tours a new place' },
 ];
-const LY: [string, string][] = [['quick', 'quickly'], ['slow', 'slowly'], ['loud', 'loudly'], ['soft', 'softly'], ['brave', 'bravely'], ['careful', 'carefully'], ['sad', 'sadly'], ['kind', 'kindly'], ['quiet', 'quietly'], ['safe', 'safely'], ['proud', 'proudly'], ['neat', 'neatly']];
+const LY: [string, string][] = [['quick', 'quickly'], ['slow', 'slowly'], ['loud', 'loudly'], ['soft', 'softly'], ['brave', 'bravely'], ['careful', 'carefully'], ['sad', 'sadly'], ['kind', 'kindly'], ['quiet', 'quietly'], ['safe', 'safely'], ['proud', 'proudly'], ['neat', 'neatly'], ['sweet', 'sweetly'], ['bright', 'brightly'], ['calm', 'calmly'], ['glad', 'gladly'], ['warm', 'warmly'], ['nice', 'nicely'], ['wild', 'wildly'], ['fair', 'fairly'], ['silent', 'silently'], ['clear', 'clearly'], ['bad', 'badly']];
 
 function suffixes(level: number, rng: Rng): Question {
   if (level === 0 || (level === 3 && rng() < 0.4)) {
@@ -243,6 +249,18 @@ const SOUNDS: { word: string; sentence: string; hint: string }[] = [
   { word: 'splash', sentence: 'The kids splash in the pool.', hint: 'It starts with spl and ends with sh.' },
   { word: 'strong', sentence: 'The bridge is very strong.', hint: 'It starts with str and ends with ng.' },
   { word: 'graph', sentence: 'We made a bar graph.', hint: 'The f sound is spelled ph.' },
+  { word: 'dolphin', sentence: 'A dolphin jumped out of the water.', hint: 'The f sound in the middle is spelled ph.' },
+  { word: 'elephant', sentence: 'The elephant has a long trunk.', hint: 'The f sound is spelled ph.' },
+  { word: 'tough', sentence: 'The goalie is tough.', hint: 'The f sound at the end is spelled gh.' },
+  { word: 'high', sentence: 'The kite flew high in the sky.', hint: 'The long i sound is spelled igh.' },
+  { word: 'bright', sentence: 'The sun is bright today.', hint: 'The long i sound is spelled igh.' },
+  { word: 'right', sentence: 'Turn right at the corner.', hint: 'The long i sound is spelled igh.' },
+  { word: 'street', sentence: 'We live on a quiet street.', hint: 'It starts with str.' },
+  { word: 'string', sentence: 'Tie the string to the kite.', hint: 'It starts with str and ends with ng.' },
+  { word: 'split', sentence: 'We split the cookie in half.', hint: 'It starts with spl.' },
+  { word: 'stripe', sentence: 'The flag has a red stripe.', hint: 'It starts with str and ends with a silent e.' },
+  { word: 'whisper', sentence: 'Please whisper in the library.', hint: 'It starts with wh.' },
+  { word: 'chorus', sentence: 'We sang the chorus together.', hint: 'The k sound is spelled ch.' },
 ];
 
 function silent(level: number, rng: Rng): Question {
@@ -292,7 +310,20 @@ const HOMOPHONES: { s: string; a: string; c: string[] }[] = [
   { s: 'I need a ___ of socks.', a: 'pair', c: ['pair', 'pear'] },
   { s: "Let's ___ at the library.", a: 'meet', c: ['meat', 'meet'] },
   { s: 'There are seven days in a ___.', a: 'week', c: ['weak', 'week'] },
-  { s: 'She ___ her bike to school.', a: 'rode', c: ['road', 'rode'] },
+  { s: 'She ___ her bike to school.', a: 'rode', c: ['road', 'rode', 'rowed'] },
+  { s: 'The ___ was covered in snow.', a: 'road', c: ['road', 'rode', 'rowed'] },
+  { s: 'We ___ the canoe across the lake.', a: 'rowed', c: ['road', 'rode', 'rowed'] },
+  { s: 'Wave good___ to Grandma.', a: 'bye', c: ['by', 'buy', 'bye'] },
+  { s: 'The cat sat ___ the door.', a: 'by', c: ['by', 'buy', 'bye'] },
+  { s: 'I have ___ many toys in my room.', a: 'too', c: ['to', 'too', 'two'] },
+  { s: 'Pass the puck ___ me.', a: 'to', c: ['to', 'too', 'two'] },
+  { s: 'We scored ___ goals.', a: 'two', c: ['to', 'too', 'two'] },
+  { s: '___ dog is very friendly.', a: 'Their', c: ['Their', 'There', "They're"] },
+  { s: 'Look over ___!', a: 'there', c: ['their', 'there', "they're"] },
+  { s: 'I think ___ late for the bus.', a: "they're", c: ['their', 'there', "they're"] },
+  { s: 'The twins lost ___ mittens.', a: 'their', c: ['their', 'there', "they're"] },
+  { s: 'I have ___ quarters.', a: 'four', c: ['for', 'four'] },
+  { s: 'This present is ___ you.', a: 'for', c: ['for', 'four'] },
 ];
 
 function homophones(level: number, rng: Rng): Question {
@@ -368,7 +399,7 @@ function wordList(level: number, rng: Rng, ctx: GenContext): Question {
     const w = pick(rng, mine);
     return hearAndSpell(w, undefined, `list-${w}`, 'This word is on your spelling list. Say it slowly and spell each sound.');
   }
-  const [w, s] = pick(rng, level === 0 ? GRADE3_WORDS.slice(0, 20) : GRADE3_WORDS);
+  const [w, s] = pick(rng, level === 0 ? GRADE3_WORDS.slice(0, 40) : GRADE3_WORDS);
   return hearAndSpell(w, s, `word-${w}`, 'Say it slowly. Break it into chunks and spell each chunk.');
 }
 

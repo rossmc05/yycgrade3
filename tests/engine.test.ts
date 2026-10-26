@@ -134,3 +134,10 @@ describe('session planning', () => {
     }
   });
 });
+
+describe('first warm-up', () => {
+  it('mixes subjects for a brand-new player', () => {
+    const plan = planMix(newProfile('Test', '🦊'), ALL_SKILLS, 10, seeded(5), T0);
+    expect(new Set(plan.map((x) => x.skill.subject)).size).toBeGreaterThanOrEqual(2);
+  });
+});

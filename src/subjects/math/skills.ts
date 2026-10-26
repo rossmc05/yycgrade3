@@ -530,8 +530,8 @@ function sequences(level: number, rng: Rng): Question {
   }
   if (level === 3) {
     const kind = pick(rng, ['finite', 'infinite'] as const);
-    const finite = ['a countdown from 10 to 0', 'the days of the week', 'the pages in a book', 'the months in a year', 'the players on a hockey team'];
-    const infinite = ['the counting numbers 1, 2, 3, …', 'the even numbers 2, 4, 6, …', 'counting by 5s forever: 5, 10, 15, …', 'the odd numbers 1, 3, 5, …'];
+    const finite = ['a countdown from 10 to 0', 'the days of the week', 'the pages in a book', 'the months in a year', 'the players on a hockey team', '2, 4, 6, 8, 10 and stop', 'the letters of the alphabet', 'the numbers on a clock face', 'counting the students in your class', '100, 90, 80, …, 0'];
+    const infinite = ['the counting numbers 1, 2, 3, …', 'the even numbers 2, 4, 6, …', 'counting by 5s forever: 5, 10, 15, …', 'the odd numbers 1, 3, 5, …', 'counting by 10s that never stops: 10, 20, 30, …', 'counting by 100s forever: 100, 200, 300, …', 'the numbers 3, 6, 9, 12, … that keep going', 'adding 1 again and again with no end'];
     const item = kind === 'finite' ? pick(rng, finite) : pick(rng, infinite);
     return {
       key: `seq-fin-${item}`,
@@ -669,6 +669,16 @@ function length(level: number, rng: Rng): Question {
       { p: 'Which unit would you use to measure the width of your hand?', a: 'centimetres' },
       { p: 'Which unit would you use to measure the length of a school hallway?', a: 'metres' },
       { p: 'Which unit would you use to measure the length of a crayon?', a: 'centimetres' },
+      { p: 'Which unit would you use to measure the length of a swimming pool?', a: 'metres' },
+      { p: 'Which unit would you use to measure the length of a ladybug?', a: 'millimetres' },
+      { p: 'Which unit would you use to measure the length of your shoe?', a: 'centimetres' },
+      { p: 'Which unit would you use to measure the height of a tree?', a: 'metres' },
+      { p: 'Which unit would you use to measure the width of a grain of rice?', a: 'millimetres' },
+      { p: 'Which unit would you use to measure the length of a book?', a: 'centimetres' },
+      { p: 'Which unit would you use to measure the length of a soccer field?', a: 'metres' },
+      { p: 'Which unit would you use to measure the thickness of a pencil lead?', a: 'millimetres' },
+      { p: 'Which unit would you use to measure the length of a hockey stick?', a: 'centimetres' },
+      { p: 'Which unit would you use to measure the height of the Calgary Tower?', a: 'metres' },
     ]);
     return { key: `len-unit-${q.p}`, prompt: q.p, input: 'choice', choices: ['millimetres', 'centimetres', 'metres'], answer: q.a, hint: 'A millimetre is about the thickness of a dime. A centimetre is about a fingernail wide. A metre is about one big step.', explain: `Use ${q.a}.` };
   }
@@ -766,6 +776,18 @@ function geometry(level: number, rng: Rng): Question {
       { p: 'How many right angles does a rectangle have?', a: '4', c: ['0', '2', '4'] },
       { p: 'A square has how many pairs of parallel sides?', a: '2', c: ['0', '1', '2', '4'] },
       { p: 'Which capital letter has a right angle?', a: 'L', c: ['L', 'O', 'S', 'C'] },
+      { p: 'Which capital letter has a pair of parallel lines?', a: 'H', c: ['H', 'V', 'O', 'C'] },
+      { p: 'Which capital letter has perpendicular lines?', a: 'T', c: ['T', 'O', 'S', 'V'] },
+      { p: 'The lines on a hockey rink that go straight across the ice are…', a: 'parallel to each other', c: ['parallel to each other', 'perpendicular to each other', 'curved'] },
+      { p: 'Where a wall meets the floor, the corner is usually a…', a: 'right angle', c: ['right angle', 'smaller angle', 'bigger angle'] },
+      { p: 'How many right angles does a triangle with one square corner have?', a: '1', c: ['0', '1', '2', '3'] },
+      { p: 'At 6:00, the hands of a clock make a…', a: 'straight line', c: ['right angle', 'straight line', 'smaller angle'] },
+      { p: 'An angle smaller than a square corner is…', a: 'less than a right angle', c: ['less than a right angle', 'more than a right angle', 'a right angle'] },
+      { p: 'The two sides of a ladder are…', a: 'parallel', c: ['parallel', 'perpendicular', 'curved'] },
+      { p: 'A plus sign (+) is made of two lines that are…', a: 'perpendicular', c: ['parallel', 'perpendicular', 'curved'] },
+      { p: 'How many right angles does a square have?', a: '4', c: ['0', '2', '3', '4'] },
+      { p: 'Does a circle have any right angles?', a: 'no', c: ['yes', 'no'] },
+      { p: 'The opposite sides of a rectangle are…', a: 'parallel', c: ['parallel', 'perpendicular', 'curved'] },
     ]);
     return { key: `geo-prop-${q.p}`, prompt: q.p, input: 'choice', choices: shuffle(rng, q.c), answer: q.a, hint: 'A right angle is a square corner, like the letter L. Parallel lines are like train tracks.', explain: `The answer is ${q.a}.` };
   }
@@ -777,6 +799,18 @@ function geometry(level: number, rng: Rng): Question {
     { p: 'When you flip a shape, do its angles change size?', a: 'no' },
     { p: 'When you slide a shape, does it get bigger?', a: 'no' },
     { p: 'A regular pentagon is turned. Is it still regular?', a: 'yes' },
+    { p: 'You flip the letter b like a mirror. Does it look like the letter d?', a: 'yes' },
+    { p: 'A rectangle is slid 5 cm to the right. Does its perimeter change?', a: 'no' },
+    { p: 'A triangle is turned a quarter turn. Does it still have 3 angles?', a: 'yes' },
+    { p: 'After a slide, does a shape face a different way?', a: 'no' },
+    { p: 'After a flip, can a shape face the opposite way?', a: 'yes' },
+    { p: 'A square is reflected. Do its sides stay the same length?', a: 'yes' },
+    { p: 'An octagon is rotated. Does it now have 7 sides?', a: 'no' },
+    { p: 'When you turn a shape, does its size change?', a: 'no' },
+    { p: 'You slide a puck across the ice without spinning it. Is that a translation?', a: 'yes' },
+    { p: 'A wheel spinning around its middle is an example of a rotation. True? (yes or no)', a: 'yes' },
+    { p: 'Your reflection in a mirror is an example of a flip. True? (yes or no)', a: 'yes' },
+    { p: 'Does a slide make a shape smaller?', a: 'no' },
   ]);
   return { key: `geo-trans-${q.p}`, prompt: q.p, input: 'choice', choices: ['yes', 'no'], answer: q.a, hint: 'Slides, turns and flips move a shape but never change its size or shape.', explain: 'Translations, rotations and reflections keep side lengths and angles the same.' };
 }
@@ -860,6 +894,18 @@ function financial(level: number, rng: Rng): Question {
       { p: 'Is a fourth hockey stick a need or a want?', a: 'want' },
       { p: 'Is clean water a need or a want?', a: 'need' },
       { p: 'Is a toy robot a need or a want?', a: 'want' },
+      { p: 'Is a winter toque in Calgary a need or a want?', a: 'need' },
+      { p: 'Is a trip to the movies a need or a want?', a: 'want' },
+      { p: 'Is medicine when you are sick a need or a want?', a: 'need' },
+      { p: 'Are pop and chips a need or a want?', a: 'want' },
+      { p: 'Is a bed to sleep in a need or a want?', a: 'need' },
+      { p: 'Is a new phone case a need or a want?', a: 'want' },
+      { p: 'Is healthy lunch food a need or a want?', a: 'need' },
+      { p: 'Is a trading card pack a need or a want?', a: 'want' },
+      { p: 'Is a pair of boots that fit a need or a want?', a: 'need' },
+      { p: 'Is a slushie at the rink a need or a want?', a: 'want' },
+      { p: 'Is a bike helmet when you ride a need or a want?', a: 'need' },
+      { p: 'Is a giant stuffed animal a need or a want?', a: 'want' },
     ]);
     return { key: `fin-nw-${q.p}`, prompt: q.p, input: 'choice', choices: ['need', 'want'], answer: q.a, hint: 'A need is something you must have to live and be safe. A want is nice to have.', explain: `It is a ${q.a}.` };
   }
@@ -882,6 +928,16 @@ function financial(level: number, rng: Rng): Question {
     { p: 'Which is a long-term saving goal?', a: 'A bike next summer', c: ['A bike next summer', 'A treat today', 'A pencil tomorrow'] },
     { p: 'Giving some money to help people in need is called…', a: 'donating', c: ['donating', 'borrowing', 'spending'] },
     { p: 'Before buying something, it is smart to…', a: 'think about whether you need it', c: ['think about whether you need it', 'buy two of everything', 'buy it without looking at the price'] },
+    { p: 'Where is a safe place to keep money you are saving?', a: 'a piggy bank or a bank account', c: ['a piggy bank or a bank account', 'your coat pocket at recess', 'under a rock outside'] },
+    { p: 'Two toys cost the same, but one is better quality. Which is the smarter buy?', a: 'the better-quality toy', c: ['the better-quality toy', 'the one with the brighter box', 'it does not matter'] },
+    { p: 'A plan for how to spend and save your money is called a…', a: 'budget', c: ['budget', 'receipt', 'coupon'] },
+    { p: 'If you spend all your allowance on Monday, what happens on Saturday?', a: 'you have no money left', c: ['you have no money left', 'you get more for free', 'the money comes back'] },
+    { p: 'You want a $20 game. You have $8. What could you do?', a: 'save for a few more weeks', c: ['save for a few more weeks', 'take money without asking', 'give up on saving'] },
+    { p: 'Comparing prices at two stores before buying is…', a: 'a smart money habit', c: ['a smart money habit', 'a waste of time', 'not allowed'] },
+    { p: 'Money you earn by doing chores is called…', a: 'income', c: ['income', 'a gift', 'a loan'] },
+    { p: 'Borrowing a book from the library instead of buying it…', a: 'saves money', c: ['saves money', 'costs more', 'is against the rules'] },
+    { p: 'Which is a way to share with others?', a: 'giving to a food bank', c: ['giving to a food bank', 'hiding your money', 'buying more candy'] },
+    { p: 'Why do people save money?', a: 'to buy bigger things later or be ready for surprises', c: ['to buy bigger things later or be ready for surprises', 'because money goes bad', 'so they never have to spend it'] },
   ]);
   return { key: `fin-habit-${q.p}`, prompt: q.p, input: 'choice', choices: shuffle(rng, q.c), answer: q.a, hint: 'Think about what helps you reach your goals and helps others.', explain: `${q.a}.` };
 }

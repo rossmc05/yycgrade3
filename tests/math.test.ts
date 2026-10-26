@@ -142,3 +142,16 @@ describe('Canadian units', () => {
     }
   });
 });
+
+describe('variety', () => {
+  it('every skill level has enough different questions to avoid quick repeats', () => {
+    for (const skill of ALL_SKILLS) {
+      for (let level = 0; level < skill.levels.length; level++) {
+        const keys = new Set<string>();
+        const r = seeded(11);
+        for (let i = 0; i < 2000; i++) keys.add(skill.generate(level, r, { spellingList: [] }).key);
+        expect(keys.size, `${skill.id} level ${level}`).toBeGreaterThanOrEqual(9);
+      }
+    }
+  });
+});

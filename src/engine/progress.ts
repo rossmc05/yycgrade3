@@ -72,7 +72,11 @@ export function planMix(p: Profile, skills: Skill[], count: number, rng: Rng, no
   const chosen: Skill[] = [...due.slice(0, 2)];
   for (const s of practising) if (chosen.length < target - (fresh.length ? 1 : 0)) chosen.push(s);
   if (fresh.length) chosen.push(fresh[0]);
-  for (const s of [...practising, ...fresh.slice(1), ...skills]) if (chosen.length < target && !chosen.includes(s)) chosen.push(s);
+  const newSubject = (s: Skill) => !chosen.some((c) => c.subject === s.subject);
+  for (const s of [...practising, ...fresh.filter(newSubject), ...fresh, ...skills]) {
+    if (chosen.length < target && !chosen.includes(s) && (practising.includes(s) || !fresh.includes(s) || newSubject(s) || chosen.length + 1 === target)) chosen.push(s);
+  }
+  for (const s of skills) if (chosen.length < target && !chosen.includes(s)) chosen.push(s);
   const order = rng() < 0.5 ? chosen : [...chosen].reverse();
   const out: Planned[] = [];
   for (let i = 0; out.length < count; i++) {

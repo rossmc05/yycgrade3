@@ -26,6 +26,20 @@ const TAGGED = [
   'The [brave|a] [firefighter|n] [climbed|v] [up|p] the [ladder|n].',
   'The [students|n] [read|v] [books|n] [before|p] [lunch|n].',
   'Our [team|n] [cheered|v] [happily|av] [after|p] the [game|n].',
+  'The [little|a] [puppy|n] [barked|v] [loudly|av] [at|p] the [mail carrier|n].',
+  '[I|pr] [quickly|av] [zipped|v] my [warm|a] [coat|n].',
+  'The [old|a] [owl|n] [hooted|v] [softly|av] [in|p] the [night|n].',
+  'Grandpa [slowly|av] [shovelled|v] the [deep|a] [snow|n].',
+  'The [happy|a] [kids|n] [sang|v] [cheerfully|av] [on|p] the [bus|n].',
+  '[She|pr] [gently|av] [patted|v] the [soft|a] [kitten|n].',
+  'The [noisy|a] [crows|n] [flew|v] [above|p] the [houses|n].',
+  'My [dad|n] [cooked|v] [pancakes|n] [for|p] [breakfast|n].',
+  'The [sleepy|a] [cat|n] [yawned|v] [lazily|av] [by|p] the [window|n].',
+  '[They|pr] [ran|v] [safely|av] [across|p] the [street|n].',
+  'A [green|a] [frog|n] [hopped|v] [into|p] the [pond|n].',
+  '[He|pr] [kindly|av] [shared|v] his [yummy|a] [snack|n].',
+  'The [huge|a] [truck|n] [rumbled|v] [noisily|av] [down|p] the [road|n].',
+  '[We|pr] [watched|v] the [bright|a] [fireworks|n] [after|p] [dark|n].',
 ];
 
 const TAG_NAME: Record<string, string> = { n: 'noun', v: 'verb', a: 'adjective', av: 'adverb', p: 'preposition', pr: 'pronoun' };
@@ -171,9 +185,16 @@ function sentenceTypes(level: number, rng: Rng): Question {
 const LISTS = [
   ['a hat', 'mittens', 'a scarf'], ['apples', 'grapes', 'bananas'], ['skates', 'a helmet', 'gloves'], ['red', 'white', 'blue'],
   ['Sam', 'Ava', 'Noah'], ['pencils', 'crayons', 'markers'], ['dogs', 'cats', 'rabbits'], ['milk', 'eggs', 'bread'],
+  ['a toque', 'boots', 'snow pants'], ['carrots', 'peas', 'corn'], ['a puck', 'a stick', 'a jersey'], ['glue', 'scissors', 'paper'],
+  ['a moose', 'a deer', 'an elk'], ['juice', 'cookies', 'cheese'], ['a ball', 'a kite', 'a frisbee'], ['Liam', 'Maya', 'Jack'],
 ];
-const STARTS = ['I packed', 'We bought', 'She brought', 'Mom needs', 'I saw'];
-const QUOTES: [string, string][] = [['Sam', "Let's play outside"], ['Mom', 'Dinner is ready'], ['Coach', 'Great job, team'], ['Ava', 'I found my mitten'], ['Grandpa', 'It is cold today']];
+const STARTS = ['I packed', 'We bought', 'She brought', 'Mom needs', 'I saw', 'Dad found', 'We shared', 'He drew', 'They wanted'];
+const QUOTES: [string, string][] = [
+  ['Sam', "Let's play outside"], ['Mom', 'Dinner is ready'], ['Coach', 'Great job, team'], ['Ava', 'I found my mitten'], ['Grandpa', 'It is cold today'],
+  ['Dad', 'Time for bed'], ['The teacher', 'Please line up'], ['Noah', 'I scored a goal'], ['Grandma', 'The cookies are hot'], ['Maya', 'My dog can sit'],
+  ['The goalie', 'I am ready'], ['Liam', 'It is snowing'], ['The librarian', 'Return your books on Friday'], ['My sister', 'I lost a tooth'], ['The pilot', 'We will land soon'],
+  ['Jack', 'I like pizza'], ['The coach', 'Skate hard'], ['Mom', 'Wear your toque'],
+];
 const POSSESSIVE: { s: string; right: string; wrong: string[] }[] = [
   { s: 'That is the ___ bone.', right: "dog's", wrong: ['dogs', "dogs's"] },
   { s: 'I found my ___ hat.', right: "sister's", wrong: ['sisters', "sister'"] },
@@ -181,6 +202,20 @@ const POSSESSIVE: { s: string; right: string; wrong: string[] }[] = [
   { s: 'We visited the ___ farm.', right: "farmer's", wrong: ['farmers', "farmer'"] },
   { s: 'All the ___ backpacks are on the hooks.', right: "students'", wrong: ["students's", 'studentses'] },
   { s: 'The ___ tail is fluffy.', right: "cat's", wrong: ['cats', "cat'"] },
+  { s: 'My ___ car is blue.', right: "dad's", wrong: ['dads', "dad'"] },
+  { s: 'The ___ nest was high in the tree.', right: "bird's", wrong: ['birds', "bird'"] },
+  { s: 'We cheered for the ___ goal.', right: "player's", wrong: ['players', "player'"] },
+  { s: 'The ___ desk had a plant on it.', right: "teacher's", wrong: ['teachers', "teacher'"] },
+  { s: 'The two ___ beds are side by side.', right: "puppies'", wrong: ["puppies's", 'puppys'] },
+  { s: 'Both ___ bikes were red.', right: "boys'", wrong: ["boys's", "boy's's"] },
+  { s: 'The ___ antlers are huge.', right: "moose's", wrong: ['mooses', "moose'"] },
+  { s: 'My ___ birthday is in June.', right: "friend's", wrong: ['friends', "friend'"] },
+  { s: 'The ___ whistle was loud.', right: "coach's", wrong: ['coachs', "coaches's"] },
+  { s: 'All the ___ helmets were on the bench.', right: "players'", wrong: ["players's", "player's's"] },
+  { s: 'The ___ roof was covered in snow.', right: "house's", wrong: ['houses', "house'"] },
+  { s: 'My two ___ rooms are upstairs.', right: "sisters'", wrong: ["sisters's", "sister's's"] },
+  { s: 'The ___ hat blew away.', right: "girl's", wrong: ['girls', "girl'"] },
+  { s: 'We fed the ___ ducks at the pond.', right: "park's", wrong: ['parks', "park'"] },
 ];
 
 function punctuation(level: number, rng: Rng): Question {
@@ -230,6 +265,11 @@ const SUBJ_PRED: [string, string][] = [
   ['The tall girl', 'kicked the ball.'], ['My little brother', 'loves dinosaurs.'], ['The hockey team', 'practised on Tuesday.'],
   ['A big moose', 'crossed the road.'], ['Our teacher', 'read a funny story.'], ['The puppies', 'played in the snow.'],
   ['Grandma', 'baked cookies.'], ['The bright sun', 'melted the snowman.'], ['Five ducks', 'swam across the pond.'],
+  ['The goalie', 'blocked every shot.'], ['My best friend', 'lives next door.'], ['A noisy magpie', 'sat on the fence.'],
+  ['The school bus', 'arrived late today.'], ['Dad', 'shovelled the driveway.'], ['The little kitten', 'chased a ball of yarn.'],
+  ['Our class', 'visited the zoo.'], ['The cold wind', 'blew all night.'], ['Three girls', 'built a snow fort.'],
+  ['The firefighter', 'climbed the ladder.'], ['My cousin', 'plays the drums.'], ['The huge bear', 'ate the berries.'],
+  ['The children', 'sang a song.'], ['A red balloon', 'floated into the sky.'], ['Mom', 'drove us to the rink.'],
 ];
 
 function subjectPredicate(level: number, rng: Rng): Question {
@@ -266,6 +306,18 @@ const CONJ: { s: string; a: string }[] = [
   { s: 'The movie was long, ___ it was fun.', a: 'but' },
   { s: 'We can walk ___ take the bus.', a: 'or' },
   { s: 'Sam brought a puck ___ a stick.', a: 'and' },
+  { s: 'The road was icy, ___ Dad drove slowly.', a: 'so' },
+  { s: 'Is your birthday in May ___ June?', a: 'or' },
+  { s: 'I like cats, ___ my brother likes dogs.', a: 'but' },
+  { s: 'We built a snowman ___ went sledding.', a: 'and' },
+  { s: 'The store was closed, ___ we went home.', a: 'so' },
+  { s: 'You can have milk ___ juice.', a: 'or' },
+  { s: 'The puzzle was hard, ___ I finished it.', a: 'but' },
+  { s: 'Maya plays piano ___ guitar.', a: 'and' },
+  { s: 'My hands were cold, ___ I put on mittens.', a: 'so' },
+  { s: 'Should we play tag ___ hide and seek?', a: 'or' },
+  { s: 'I tried to catch the ball, ___ I missed.', a: 'but' },
+  { s: 'The bell rang, ___ we went inside.', a: 'so' },
 ];
 
 function conjunctions(_level: number, rng: Rng): Question {
@@ -313,8 +365,17 @@ function agreement(_level: number, rng: Rng): Question {
 
 // ---------- Similes ----------
 
-const SIMILES = ['She ran like the wind.', 'The snow was as white as a sheet.', 'He is as brave as a lion.', 'The baby slept like a log.', 'My hands were as cold as ice.', 'The puck flew like a rocket.'];
-const NOT_SIMILES = ['She ran to the store.', 'The snow fell all night.', 'He is a brave boy.', 'The baby slept in the crib.', 'My hands were cold.', 'I like the colour blue.', 'The puck went in the net.'];
+const SIMILES = [
+  'She ran like the wind.', 'The snow was as white as a sheet.', 'He is as brave as a lion.', 'The baby slept like a log.', 'My hands were as cold as ice.', 'The puck flew like a rocket.',
+  'The kitten was as soft as a cloud.', 'My brother eats like a hungry bear.', 'The lake was as smooth as glass.', 'Her eyes sparkled like stars.', 'The old man was as wise as an owl.',
+  'The pillow was as light as a feather.', 'He was as busy as a bee.', 'The truck roared like a lion.', 'The rink was as slippery as a banana peel.', 'My room is as neat as a pin.',
+  'The goalie moved like a cat.', 'The chinook wind felt as warm as a blanket.', 'The rock was as hard as a brick.', 'She swims like a fish.',
+];
+const NOT_SIMILES = [
+  'She ran to the store.', 'The snow fell all night.', 'He is a brave boy.', 'The baby slept in the crib.', 'My hands were cold.', 'I like the colour blue.', 'The puck went in the net.',
+  'I like playing hockey.', 'The lake was calm today.', 'My brother is hungry.', 'The kitten is very soft.', 'We would like some pie.', 'The truck was loud.', 'The rink was slippery.',
+  'The goalie caught the puck.', 'My pillow is light.',
+];
 
 function similes(_level: number, rng: Rng): Question {
   const right = pick(rng, SIMILES);
