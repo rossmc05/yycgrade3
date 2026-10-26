@@ -51,6 +51,12 @@ export function Home() {
             </button>
           );
         })}
+        <button className="subject-tile" style={{ ['--tile' as string]: '#9333ea' }} onClick={() => go('arcade')}>
+          <span className="tile-icon">🕹️</span>
+          <span className="tile-name">Game Arcade</span>
+          <span className="tile-tag">Fact races, boss battles, spelling bee and more</span>
+          <span className="tile-meta">10 games</span>
+        </button>
         <button className="subject-tile" style={{ ['--tile' as string]: '#0f766e' }} onClick={() => go('avatar')}>
           <span className="tile-icon">🎨</span>
           <span className="tile-name">Avatar Studio</span>

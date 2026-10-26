@@ -336,7 +336,7 @@ function QuestionCard({ q, skill, level, readAloud, onDone }: {
   );
 }
 
-function Keypad({ value, setValue, onEnter }: { value: string; setValue: (fn: (v: string) => string) => void; onEnter: () => void }) {
+export function Keypad({ value, setValue, onEnter }: { value: string; setValue: (fn: (v: string) => string) => void; onEnter: () => void }) {
   const press = (k: string) => setValue((v) => (v.length < 7 ? v + k : v));
   return (
     <div className="keypad">
@@ -358,7 +358,7 @@ function Keypad({ value, setValue, onEnter }: { value: string; setValue: (fn: (v
 
 const ROWS = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm'];
 
-function LetterKeys({ value, setValue, onEnter }: { value: string; setValue: (fn: (v: string) => string) => void; onEnter: () => void }) {
+export function LetterKeys({ value, setValue, onEnter }: { value: string; setValue: (fn: (v: string) => string) => void; onEnter: () => void }) {
   const press = (k: string) => setValue((v) => (v.length < 24 ? v + k : v));
   return (
     <div className="letter-keys">

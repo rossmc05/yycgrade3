@@ -93,6 +93,8 @@ export interface DayLog {
   correct: number;
   seconds: number;
   bySubject: Partial<Record<SubjectId, number>>;
+  /** Seconds spent per subject (added later, so older days lack it). */
+  secondsBySubject?: Partial<Record<SubjectId, number>>;
 }
 
 export interface Profile {
@@ -113,6 +115,8 @@ export interface Profile {
   /** Weekly words entered by a parent. */
   spellingList?: string[];
   typing?: Record<string, TypingResult>;
+  /** Best scores in the arcade games. */
+  games?: Record<string, { best: number; plays: number }>;
   /** Built avatar; older saves only have the emoji `avatar`. */
   look?: Look;
 }
@@ -122,6 +126,8 @@ export interface Settings {
   dailyGoal: number;
   readAloud: boolean;
   sessionLength: number;
+  /** Subjects the daily warm-up focuses on; empty means all. */
+  focus?: SubjectId[];
 }
 
 export interface AppData {

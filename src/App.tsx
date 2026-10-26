@@ -1,5 +1,6 @@
 import { useStore } from './engine/store';
 import { useRoute } from './router';
+import { Arcade, GameScreen } from './screens/Arcade';
 import { AvatarStudio } from './screens/AvatarStudio';
 import { Home } from './screens/Home';
 import { World } from './screens/World';
@@ -23,5 +24,7 @@ export function App() {
   if (page === 'rewards') return <Rewards />;
   if (page === 'avatar') return <AvatarStudio />;
   if (page === 'world') return <World />;
+  if (page === 'arcade') return <Arcade />;
+  if (page === 'game' && a) return <GameScreen key={a} id={a} />;
   return <Home />;
 }

@@ -24,6 +24,7 @@ export function applyAnswer(p: Profile, skill: Skill, q: Question, firstTry: boo
     correct: day.correct + (firstTry ? 1 : 0),
     seconds: day.seconds + Math.min(seconds, 120),
     bySubject: { ...day.bySubject, [skill.subject]: (day.bySubject[skill.subject] ?? 0) + 1 },
+    secondsBySubject: { ...day.secondsBySubject, [skill.subject]: (day.secondsBySubject?.[skill.subject] ?? 0) + Math.min(seconds, 120) },
   };
   const profile = touchStreak(
     {
@@ -102,9 +103,23 @@ export function logActivity(p: Profile, subject: Skill['subject'], questions: nu
           correct: day.correct + correct,
           seconds: day.seconds + seconds,
           bySubject: { ...day.bySubject, [subject]: (day.bySubject[subject] ?? 0) + questions },
+          secondsBySubject: { ...day.secondsBySubject, [subject]: (day.secondsBySubject?.[subject] ?? 0) + seconds },
         },
       },
     },
     now,
   );
+}
+
+/** Record a finished arcade game: XP, coins, time, and the best score. */
+export function finishGame(p: Profile, gameId: string, subject: Skill['subject'], score: number, seconds: number, now: number): { profile: Profile; xp: number; best: boolean } {
+  const xp = Math.min(60, 8 + Math.round(score));
+  const prev = p.games?.[gameId];
+  const best = !prev || score > prev.best;
+  const logged = logActivity(p, subject, 0, 0, Math.round(seconds), xp, now);
+  return {
+    profile: { ...logged, games: { ...logged.games, [gameId]: { best: Math.max(prev?.best ?? 0, score), plays: (prev?.plays ?? 0) + 1 } } },
+    xp,
+    best,
+  };
 }

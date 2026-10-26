@@ -22,6 +22,7 @@ export function SubjectScreen({ subjectId }: { subjectId: string }) {
           <h1>{subject.name}</h1>
           <p className="muted">Pick a skill, or let the mix choose for you.</p>
         </div>
+        <button className="btn ghost" onClick={() => go('arcade')}>🕹️ Games</button>
         <button className="btn primary" onClick={() => go('play', subject.id, 'mix')}>
           🎲 Mixed practice
         </button>
