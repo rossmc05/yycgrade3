@@ -1,6 +1,6 @@
 import { dayKey, finishReview, isReviewDue, newSkillState, recordAnswer, status } from './adaptive';
 import { XP_FIRST_TRY, XP_WITH_HINT, touchStreak } from './rewards';
-import type { Profile, Question, Rng, Skill } from './types';
+import type { GenContext, Profile, Question, Rng, Skill, SkillState } from './types';
 
 export interface AnswerOutcome {
   profile: Profile;
@@ -58,21 +58,25 @@ export interface Planned {
 }
 
 /**
- * Plan a mixed warm-up: due reviews first, then skills in progress, then new ones,
- * spread so the same skill doesn't come twice in a row when avoidable.
+ * Plan a mixed warm-up around a few skills, so each gets enough practice to move:
+ * due reviews first, then the skills in progress that waited longest, then one new skill
+ * from the subject with the fewest started. Questions come in pairs of the same skill.
  */
 export function planMix(p: Profile, skills: Skill[], count: number, rng: Rng, now: number): Planned[] {
-  const due = skills.filter((s) => isReviewDue(p.skills[s.id], now));
-  const practising = skills.filter((s) => status(p.skills[s.id]) === 'practising');
-  const fresh = skills.filter((s) => status(p.skills[s.id]) === 'new');
-  const pool = [...due, ...due, ...practising, ...practising, ...fresh.slice(0, 2)];
-  const source = pool.length ? pool : skills;
+  const last = (s: Skill) => p.skills[s.id]?.history.at(-1)?.t ?? 0;
+  const due = skills.filter((s) => isReviewDue(p.skills[s.id], now)).sort((a, b) => (p.skills[a.id].reviewAt ?? 0) - (p.skills[b.id].reviewAt ?? 0));
+  const practising = skills.filter((s) => status(p.skills[s.id]) === 'practising').sort((a, b) => last(a) - last(b));
+  const started = (subject: string) => skills.filter((s) => s.subject === subject && status(p.skills[s.id]) !== 'new').length;
+  const fresh = skills.filter((s) => status(p.skills[s.id]) === 'new').sort((a, b) => started(a.subject) - started(b.subject));
+  const target = Math.max(1, Math.min(4, Math.round(count / 3)));
+  const chosen: Skill[] = [...due.slice(0, 2)];
+  for (const s of practising) if (chosen.length < target - (fresh.length ? 1 : 0)) chosen.push(s);
+  if (fresh.length) chosen.push(fresh[0]);
+  for (const s of [...practising, ...fresh.slice(1), ...skills]) if (chosen.length < target && !chosen.includes(s)) chosen.push(s);
+  const order = rng() < 0.5 ? chosen : [...chosen].reverse();
   const out: Planned[] = [];
-  for (let i = 0; i < count; i++) {
-    let s = source[Math.floor(rng() * source.length)];
-    if (out.length && out[out.length - 1].skill.id === s.id && source.length > 1) {
-      s = source[(source.indexOf(s) + 1) % source.length];
-    }
+  for (let i = 0; out.length < count; i++) {
+    const s = order[Math.floor(i / 2) % order.length];
     out.push({ skill: s });
   }
   return out;
@@ -122,4 +126,16 @@ export function finishGame(p: Profile, gameId: string, subject: Skill['subject']
     xp,
     best,
   };
+}
+
+/**
+ * Generate a question the child hasn't seen lately: not in this session, and not
+ * among the skill's last 40 answers (across days). Falls back gracefully on small banks.
+ */
+export function freshQuestion(skill: Skill, state: SkillState | undefined, level: number, rng: Rng, ctx: GenContext, used: Set<string>): Question {
+  const lately = new Set((state?.history ?? []).slice(-40).map((a) => a.key));
+  let q = skill.generate(level, rng, ctx);
+  for (let tries = 0; tries < 40 && (used.has(q.key) || lately.has(q.key)); tries++) q = skill.generate(level, rng, ctx);
+  for (let tries = 0; tries < 20 && used.has(q.key); tries++) q = skill.generate(level, rng, ctx);
+  return q;
 }

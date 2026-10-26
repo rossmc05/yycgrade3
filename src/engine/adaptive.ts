@@ -1,8 +1,11 @@
 import type { Attempt, Question, Skill, SkillState } from './types';
 
+/** Move up after this many right in a row, or UP_OF_FIVE of the last five, at the current level. */
 export const UP_AFTER = 3;
-export const DOWN_AFTER = 2;
-export const MASTERY_WINDOW = 20;
+export const UP_OF_FIVE = 4;
+/** Move down after this many misses in the last four at the current level. */
+export const DOWN_AFTER = 3;
+export const MASTERY_WINDOW = 12;
 export const MASTERY_ACCURACY = 0.9;
 /** Days between spaced reviews once a skill is mastered. */
 export const REVIEW_DAYS = [1, 3, 7, 21, 60];
@@ -62,25 +65,31 @@ export function recordAnswer(skill: Skill, prev: SkillState, q: Question, firstT
   let levelChange: -1 | 0 | 1 = 0;
   const top = skill.levels.length - 1;
 
+  // Results at the current level since it last changed, kept across sessions.
+  const recent = [...(s.recent ?? []), firstTry].slice(-5);
+  s.recent = recent;
+  s.upStreak = firstTry ? s.upStreak + 1 : 0;
+  s.downStreak = firstTry ? 0 : s.downStreak + 1;
   if (firstTry) {
     s.missed = s.missed.filter((m) => m.key !== key);
-    s.downStreak = 0;
-    s.upStreak += 1;
-    if (s.upStreak >= UP_AFTER && s.level < top) {
+    const right = recent.filter(Boolean).length;
+    if ((s.upStreak >= UP_AFTER || right >= UP_OF_FIVE) && s.level < top) {
       s.level += 1;
-      s.upStreak = 0;
       levelChange = 1;
     }
   } else {
     if (!s.missed.some((m) => m.key === key)) s.missed.push(q);
     if (s.missed.length > 15) s.missed = s.missed.slice(-15);
-    s.upStreak = 0;
-    s.downStreak += 1;
-    if (s.downStreak >= DOWN_AFTER && s.level > 0) {
+    const misses = recent.slice(-4).filter((r) => !r).length;
+    if (misses >= DOWN_AFTER && s.level > 0) {
       s.level -= 1;
-      s.downStreak = 0;
       levelChange = -1;
     }
+  }
+  if (levelChange) {
+    s.recent = [];
+    s.upStreak = 0;
+    s.downStreak = 0;
   }
 
   let newlyMastered = false;

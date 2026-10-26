@@ -79,6 +79,8 @@ export interface SkillState {
   upStreak: number;
   /** Consecutive misses at the current level. */
   downStreak: number;
+  /** First-try results at the current level since it last changed (up to 5). */
+  recent?: boolean[];
   history: Attempt[];
   masteredAt?: number;
   /** Next spaced-review date (ms). */

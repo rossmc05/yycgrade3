@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { TopBar } from '../components/TopBar';
 import { VisualView } from '../components/Visuals';
 import { isReviewDue, newSkillState } from '../engine/adaptive';
-import { applyAnswer, closeReviews, planMix, planSkill, type Planned } from '../engine/progress';
+import { applyAnswer, closeReviews, freshQuestion, planMix, planSkill, type Planned } from '../engine/progress';
 import { checkBadges, type BadgeDef } from '../engine/rewards';
 import { speak, stopSpeaking } from '../engine/speech';
 import { useStore } from '../engine/store';
@@ -75,11 +75,9 @@ function Session({ subjectId, target, again }: { subjectId: string; target: stri
       setQuestion(step.retry);
       return;
     }
-    const level = (profile.skills[step.skill.id] ?? newSkillState()).level;
-    const ctx = { spellingList: profile.spellingList ?? [] };
-    // Avoid repeating a question within one session.
-    let q = step.skill.generate(level, Math.random, ctx);
-    for (let tries = 0; tries < 12 && used.current.has(q.key); tries++) q = step.skill.generate(level, Math.random, ctx);
+    const state = profile.skills[step.skill.id];
+    const level = (state ?? newSkillState()).level;
+    const q = freshQuestion(step.skill, state, level, Math.random, { spellingList: profile.spellingList ?? [] }, used.current);
     used.current.add(q.key);
     setQuestion(q);
   }, [index]);

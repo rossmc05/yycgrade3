@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { DOWN_AFTER, MASTERY_WINDOW, newSkillState, recordAnswer, status, UP_AFTER } from '../src/engine/adaptive';
-import { applyAnswer, planSkill } from '../src/engine/progress';
+import { DOWN_AFTER, MASTERY_WINDOW, newSkillState, recordAnswer, status, UP_AFTER, UP_OF_FIVE } from '../src/engine/adaptive';
+import { applyAnswer, freshQuestion, planMix, planSkill } from '../src/engine/progress';
+import { seeded } from '../src/engine/random';
+import { ALL_SKILLS } from '../src/subjects';
 import { checkBadges, playerLevel, touchStreak } from '../src/engine/rewards';
 import { newProfile } from '../src/engine/storage';
 import type { Question } from '../src/engine/types';
@@ -18,15 +20,32 @@ describe('adaptive difficulty', () => {
     expect(s.level).toBe(1);
   });
 
-  it(`moves down after ${DOWN_AFTER} misses and remembers missed items`, () => {
+  it(`moves up on ${UP_OF_FIVE} of the last 5, so one slip doesn't wipe progress`, () => {
+    let s = newSkillState();
+    for (const ok of [true, true, false, true]) s = recordAnswer(skill, s, q(`u${Math.random()}`), ok, T0).state;
+    expect(s.level).toBe(0);
+    s = recordAnswer(skill, s, q('u5'), true, T0).state;
+    expect(s.level).toBe(1);
+  });
+
+  it('keeps level progress across sessions', () => {
+    let p = newProfile('Test', '🦊');
+    for (let i = 0; i < 2; i++) p = applyAnswer(p, skill, q(`s1-${i}`), true, true, 5, T0).profile;
+    // A later session, after practising other things.
+    p = applyAnswer(p, skill, q('s2'), true, true, 5, T0 + DAY).profile;
+    expect(p.skills[skill.id].level).toBe(1);
+  });
+
+  it(`moves down after ${DOWN_AFTER} misses in the last 4 and remembers missed items`, () => {
     let s = { ...newSkillState(), level: 2 };
     s = recordAnswer(skill, s, q('x'), false, T0).state;
-    expect(s.level).toBe(2);
     s = recordAnswer(skill, s, q('y'), false, T0).state;
+    expect(s.level).toBe(2);
+    s = recordAnswer(skill, s, q('z'), false, T0).state;
     expect(s.level).toBe(1);
-    expect(s.missed.map((m) => m.key)).toEqual(['x', 'y']);
+    expect(s.missed.map((m) => m.key)).toEqual(['x', 'y', 'z']);
     s = recordAnswer(skill, s, q('x'), true, T0).state;
-    expect(s.missed.map((m) => m.key)).toEqual(['y']);
+    expect(s.missed.map((m) => m.key)).toEqual(['y', 'z']);
   });
 
   it('never goes below level 1 or above the top level', () => {
@@ -83,5 +102,35 @@ describe('rewards', () => {
     const plan = planSkill(p, skill, 10);
     expect(plan).toHaveLength(10);
     expect(plan.filter((x) => x.retry?.key === 'tricky')).toHaveLength(1);
+  });
+});
+
+describe('session planning', () => {
+  it('focuses a mixed warm-up on a few skills, in pairs', () => {
+    const p = newProfile('Test', '🦊');
+    const plan = planMix(p, ALL_SKILLS, 10, seeded(3), T0);
+    const ids = new Set(plan.map((x) => x.skill.id));
+    expect(plan).toHaveLength(10);
+    expect(ids.size).toBeLessThanOrEqual(4);
+    expect(ids.size).toBeGreaterThanOrEqual(2);
+    expect(plan[0].skill.id).toBe(plan[1].skill.id);
+  });
+
+  it('starts new skills from different subjects', () => {
+    const p = newProfile('Test', '🦊');
+    p.skills['math.place-value'] = { ...newSkillState(), history: [{ t: T0, correct: true, level: 0, key: 'k' }] };
+    const plan = planMix(p, ALL_SKILLS, 10, seeded(3), T0 + DAY);
+    expect(plan.map((x) => x.skill.id)).toContain('math.place-value');
+    expect(plan.some((x) => x.skill.subject !== 'math')).toBe(true);
+  });
+
+  it('avoids questions seen in recent days', () => {
+    const sk = ALL_SKILLS.find((s) => s.id === 'gram.similes')!;
+    const state = newSkillState();
+    const first = sk.generate(0, seeded(1), { spellingList: [] });
+    state.history.push({ t: T0, correct: true, level: 0, key: first.key });
+    for (let seed = 1; seed < 30; seed++) {
+      expect(freshQuestion(sk, state, 0, seeded(seed), { spellingList: [] }, new Set()).key).not.toBe(first.key);
+    }
   });
 });
