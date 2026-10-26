@@ -678,8 +678,8 @@ function length(level: number, rng: Rng): Question {
       () => { const c = int(rng, 1, 9); return { p: `${c} cm = ▢ mm`, a: c * 10, h: '1 cm = 10 mm' }; },
       () => { const m = int(rng, 1, 3); return { p: `${m} m = ▢ mm`, a: m * 1000, h: '1 m = 1000 mm' }; },
       () => { const c = int(rng, 1, 9) * 100; return { p: `${c} cm = ▢ m`, a: c / 100, h: '100 cm = 1 m' }; },
-      () => { const f = int(rng, 1, 3); return { p: `${f} ft = ▢ in`, a: f * 12, h: '1 foot = 12 inches' }; },
-      () => { const y = int(rng, 1, 3); return { p: `${y} yd = ▢ ft`, a: y * 3, h: '1 yard = 3 feet' }; },
+      () => { const c = int(rng, 1, 9) * 10; return { p: `${c} mm = ▢ cm`, a: c / 10, h: '10 mm = 1 cm' }; },
+      () => { const m = int(rng, 1, 4), c = int(rng, 1, 9) * 10; return { p: `${m} m ${c} cm = ▢ cm`, a: m * 100 + c, h: '1 m = 100 cm' }; },
     ])();
     return { key: `len-conv-${q.p}`, prompt: q.p, input: 'number', answer: String(q.a), hint: q.h, explain: `${q.h}, so the answer is ${q.a}.` };
   }

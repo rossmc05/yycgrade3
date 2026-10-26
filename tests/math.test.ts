@@ -128,3 +128,17 @@ describe('arithmetic answers match the question', () => {
     }
   });
 });
+
+describe('Canadian units', () => {
+  it('never uses US customary units', () => {
+    const us = /\b(feet|foot|ft|yards?|yd|inch(es)?|miles?|mph|pounds?|lbs?|ounces?|oz|gallons?|fahrenheit)\b|°F/i;
+    for (const skill of MATH_SKILLS) {
+      for (let level = 0; level < skill.levels.length; level++) {
+        for (let seed = 1; seed <= 150; seed++) {
+          const q = skill.generate(level, seeded(seed), { spellingList: [] });
+          expect(`${q.prompt} ${q.hint} ${q.explain} ${q.unit ?? ''}`, skill.id).not.toMatch(us);
+        }
+      }
+    }
+  });
+});
