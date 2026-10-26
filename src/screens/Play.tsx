@@ -33,8 +33,13 @@ function Session({ subjectId, target, again }: { subjectId: string; target: stri
   const { profile, data, updateProfile } = useStore();
   const subject = findSubject(subjectId);
   const pool: Skill[] = useMemo(
-    () => (subjectId === 'all' ? SUBJECTS.filter((s) => s.ready).flatMap((s) => s.skills) : subject?.skills ?? []),
-    [subjectId, subject],
+    () => {
+      if (subjectId !== 'all') return subject?.skills ?? [];
+      const ready = SUBJECTS.filter((s) => s.ready && s.skills.length);
+      const focus = ready.filter((s) => data.settings.focus?.includes(s.id));
+      return (focus.length ? focus : ready).flatMap((s) => s.skills);
+    },
+    [subjectId, subject, data.settings.focus],
   );
   const single = target !== 'mix' ? findSkill(target) : undefined;
   const len = data.settings.sessionLength;

@@ -87,6 +87,21 @@ function ProfileReport({ p }: { p: Profile }) {
         <div><strong>{liveStreak(p, Date.now())}</strong><span>day streak</span></div>
       </div>
 
+      <h3>Minutes this week by subject</h3>
+      <div className="subject-minutes">
+        {SUBJECTS.map((s) => {
+          const sec = days.reduce((n, d) => n + (d.log?.secondsBySubject?.[s.id] ?? 0), 0);
+          const max = Math.max(60, ...SUBJECTS.map((x) => days.reduce((n, d) => n + (d.log?.secondsBySubject?.[x.id] ?? 0), 0)));
+          return (
+            <div key={s.id} className="minutes-row">
+              <span>{s.icon} {s.name}</span>
+              <span className="minutes-bar"><span style={{ width: `${(sec / max) * 100}%`, background: s.color }} /></span>
+              <strong>{Math.round(sec / 60)} min</strong>
+            </div>
+          );
+        })}
+      </div>
+
       <h3>Last 7 days (questions)</h3>
       <div className="week-chart">
         {days.map((d, i) => (
@@ -98,7 +113,7 @@ function ProfileReport({ p }: { p: Profile }) {
         ))}
       </div>
 
-      {SUBJECTS.filter((s) => s.ready).map((subject) => (
+      {SUBJECTS.filter((s) => s.ready && s.skills.length).map((subject) => (
         <div key={subject.id}>
           <h3>{subject.icon} {subject.name}: curriculum progress</h3>
           <table className="skills-table">
@@ -187,6 +202,19 @@ function Settings() {
         <span>Read questions aloud</span>
         <input type="checkbox" checked={data.settings.readAloud} onChange={(e) => set({ readAloud: e.target.checked })} />
       </label>
+      <div className="field">
+        <span>Daily warm-up focus (none ticked means all subjects)</span>
+        <div className="row" style={{ justifyContent: 'flex-start' }}>
+          {SUBJECTS.filter((s) => s.skills.length).map((s) => {
+            const on = data.settings.focus?.includes(s.id) ?? false;
+            return (
+              <label key={s.id} className="chip">
+                <input type="checkbox" checked={on} onChange={() => set({ focus: on ? (data.settings.focus ?? []).filter((x) => x !== s.id) : [...(data.settings.focus ?? []), s.id] })} /> {s.icon} {s.name}
+              </label>
+            );
+          })}
+        </div>
+      </div>
       <p className="muted small">Progress is saved in this browser on this device. Make a backup to move it to another device.</p>
       <div className="row">
         <button className="btn ghost" onClick={exportData}>Download backup</button>

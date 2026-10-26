@@ -339,3 +339,8 @@ kbd { background: var(--accent-soft); border-radius: 6px; padding: 2px 10px; fon
 .mark { position: absolute; bottom: 4px; font-size: 0.75rem; font-weight: 800; color: #1e293b; border-left: 2px solid #1e293b; padding-left: 3px; }
 .lab-controls { display: flex; flex-direction: column; gap: 12px; }
 .lab-controls input[type=range] { width: 100%; accent-color: var(--accent); }
+
+.subject-minutes { display: flex; flex-direction: column; gap: 6px; }
+.minutes-row { display: grid; grid-template-columns: 160px 1fr 64px; gap: 10px; align-items: center; }
+.minutes-bar { height: 14px; background: var(--grid); border-radius: 99px; overflow: hidden; }
+.minutes-bar span { display: block; height: 100%; border-radius: 99px; }

@@ -970,3 +970,90 @@ export const MATH_SKILLS: Skill[] = [
     levels: ['Needs and wants', 'Saving goals', 'Good money habits'], generate: financial,
   },
 ];
+
+// ---------- Mini lessons shown before a skill's first session ----------
+
+const MATH_LESSONS: Record<string, string[]> = {
+  'math.place-value': [
+    'Each digit has a value that depends on its place.',
+    'In 4 752, the 4 means 4 thousands, the 7 means 7 hundreds, the 5 means 5 tens and the 2 means 2 ones.',
+    'Expanded form breaks a number into its parts: 4 752 = 4 000 + 700 + 50 + 2.',
+  ],
+  'math.compare': [
+    'To compare numbers, start with the biggest place value and look left to right.',
+    'The open mouth of < or > always eats the bigger number: 512 > 498.',
+    'If every digit is the same, the numbers are equal: 300 = 300.',
+  ],
+  'math.rounding': [
+    'Rounding finds a nearby friendly number.',
+    'Look at the digit to the right of the place you are rounding to.',
+    'If it is 5 or more, round up. If it is 4 or less, round down. 47 rounds to 50, and 43 rounds to 40.',
+  ],
+  'math.money': [
+    'Canadian coins: nickel 5¢, dime 10¢, quarter 25¢, loonie $1 and toonie $2.',
+    'Count the biggest coins first, then add the smaller ones.',
+    '100¢ is the same as $1.00.',
+  ],
+  'math.add-sub': [
+    'Line up the ones, tens and hundreds before you add or subtract.',
+    'When adding, if a column makes 10 or more, regroup 10 ones into 1 ten.',
+    'When subtracting, if the top digit is too small, borrow 1 ten and make it 10 ones.',
+  ],
+  'math.estimate': [
+    'An estimate is a smart guess that is close to the real answer.',
+    'Round each number first, then add or subtract the rounded numbers.',
+    '38 + 51 is about 40 + 50, which is 90.',
+  ],
+  'math.multiply': [
+    'Multiplying is adding equal groups. 3 × 4 means 3 groups of 4, which is 4 + 4 + 4 = 12.',
+    'An array shows rows and columns. 3 rows of 4 dots is 12 dots.',
+    'You can turn it around: 3 × 4 and 4 × 3 are both 12.',
+  ],
+  'math.divide': [
+    'Dividing is sharing equally or making equal groups.',
+    '12 ÷ 3 means share 12 into 3 equal groups. Each group gets 4.',
+    'Multiplication helps: 3 × 4 = 12, so 12 ÷ 3 = 4. Anything left over is the remainder.',
+  ],
+  'math.fractions': [
+    'A fraction is part of one whole that is cut into equal parts.',
+    'The bottom number says how many equal parts. The top number says how many parts we have.',
+    'With the same top number, more parts means smaller pieces, so 1/8 is smaller than 1/4.',
+  ],
+  'math.equations': [
+    'An equal sign means both sides have the same value, like a balanced scale.',
+    'To find the missing number in ▢ + 5 = 12, ask: what plus 5 makes 12? The answer is 7.',
+    'You can use the opposite operation: 12 − 5 = 7.',
+  ],
+  'math.sequences': [
+    'A pattern grows or shrinks by the same rule each time.',
+    'Find the rule by checking how much it changes from one number to the next.',
+    '5, 10, 15, 20 grows by 5 each time, so next is 25.',
+  ],
+  'math.time': [
+    'The short hand shows the hour. The long hand shows the minutes.',
+    'Each number on the clock is 5 minutes for the long hand.',
+    'a.m. is from midnight to noon. p.m. is from noon to midnight. On a 24-hour clock, 3 p.m. is 15:00.',
+  ],
+  'math.length': [
+    '10 millimetres make 1 centimetre, and 100 centimetres make 1 metre.',
+    'Perimeter is the distance all the way around a shape.',
+    'Add up every side to find the perimeter.',
+  ],
+  'math.geometry': [
+    'A polygon is a closed shape with straight sides. Count the sides to name it.',
+    'A right angle is a square corner, like the corner of a book.',
+    'A flip is a reflection, a slide is a translation and a turn is a rotation.',
+  ],
+  'math.statistics': [
+    'A bar graph uses bars to show how many of each thing.',
+    'Read the number at the top of each bar using the scale on the side.',
+    'To find how many more, subtract the smaller bar from the bigger bar.',
+  ],
+  'math.financial': [
+    'A need is something you must have, like food and a warm coat. A want is something nice to have.',
+    'Saving means keeping some money now for something you want later.',
+    'A saving goal helps you plan how much to save each week.',
+  ],
+};
+
+for (const s of MATH_SKILLS) s.learn = MATH_LESSONS[s.id];
