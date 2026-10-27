@@ -153,7 +153,7 @@ function ProfileReport({ p }: { p: Profile }) {
           ))}
         </ul>
       )}
-      <p className="muted small">Mastered means at least 90% right over 20 answers at the top level, on two or more days. Mastered skills come back for review after 1, 3, 7, 21 and 60 days.</p>
+      <p className="muted small">Mastered means at least 90% right over the last 20 answers at the top level, spread over three or more different days. Moving up a level takes 4 right in a row, or 4 of the last 5. Mastered skills come back for review after 1, 3, 7, 21 and 60 days.</p>
     </section>
   );
 }

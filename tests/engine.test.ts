@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DOWN_AFTER, MASTERY_WINDOW, newSkillState, recordAnswer, status, UP_AFTER, UP_OF_FIVE } from '../src/engine/adaptive';
+import { DOWN_AFTER, MASTERY_DAYS, MASTERY_WINDOW, newSkillState, recordAnswer, status, UP_AFTER, UP_OF_FIVE } from '../src/engine/adaptive';
 import { applyAnswer, freshQuestion, planMix, planSkill } from '../src/engine/progress';
 import { seeded } from '../src/engine/random';
 import { ALL_SKILLS } from '../src/subjects';
@@ -30,7 +30,7 @@ describe('adaptive difficulty', () => {
 
   it('keeps level progress across sessions', () => {
     let p = newProfile('Test', '🦊');
-    for (let i = 0; i < 2; i++) p = applyAnswer(p, skill, q(`s1-${i}`), true, true, 5, T0).profile;
+    for (let i = 0; i < UP_AFTER - 1; i++) p = applyAnswer(p, skill, q(`s1-${i}`), true, true, 5, T0).profile;
     // A later session, after practising other things.
     p = applyAnswer(p, skill, q('s2'), true, true, 5, T0 + DAY).profile;
     expect(p.skills[skill.id].level).toBe(1);
@@ -56,14 +56,22 @@ describe('adaptive difficulty', () => {
     expect(s.level).toBe(skill.levels.length - 1);
   });
 
-  it('needs two different days at the top level to master', () => {
+  it(`needs ${MASTERY_DAYS} different days at the top level to master`, () => {
     let s = { ...newSkillState(), level: skill.levels.length - 1 };
     for (let i = 0; i < MASTERY_WINDOW * 2; i++) s = recordAnswer(skill, s, q(`t${i}`), true, T0).state;
     expect(status(s)).toBe('practising');
-    const r = recordAnswer(skill, s, q('next-day'), true, T0 + DAY);
+    for (let i = 0; i < 5; i++) s = recordAnswer(skill, s, q(`d2-${i}`), true, T0 + DAY).state;
+    expect(status(s)).toBe('practising');
+    const r = recordAnswer(skill, s, q('day-3'), true, T0 + 2 * DAY);
     expect(r.newlyMastered).toBe(true);
     expect(status(r.state)).toBe('mastered');
-    expect(r.state.reviewAt).toBe(T0 + 2 * DAY);
+    expect(r.state.reviewAt).toBe(T0 + 3 * DAY);
+  });
+
+  it(`needs ${MASTERY_WINDOW} answers at the top level, not just a few good ones`, () => {
+    let s = { ...newSkillState(), level: skill.levels.length - 1 };
+    for (let d = 0; d < 3; d++) for (let i = 0; i < 4; i++) s = recordAnswer(skill, s, q(`w${d}-${i}`), true, T0 + d * DAY).state;
+    expect(status(s)).toBe('practising');
   });
 });
 

@@ -1,11 +1,13 @@
 import type { Attempt, Question, Skill, SkillState } from './types';
 
 /** Move up after this many right in a row, or UP_OF_FIVE of the last five, at the current level. */
-export const UP_AFTER = 3;
+export const UP_AFTER = 4;
 export const UP_OF_FIVE = 4;
 /** Move down after this many misses in the last four at the current level. */
 export const DOWN_AFTER = 3;
-export const MASTERY_WINDOW = 12;
+export const MASTERY_WINDOW = 20;
+/** Mastery needs the window spread over this many different days. */
+export const MASTERY_DAYS = 3;
 export const MASTERY_ACCURACY = 0.9;
 /** Days between spaced reviews once a skill is mastered. */
 export const REVIEW_DAYS = [1, 3, 7, 21, 60];
@@ -95,7 +97,7 @@ export function recordAnswer(skill: Skill, prev: SkillState, q: Question, firstT
   let newlyMastered = false;
   if (!isMastered(s)) {
     const { accuracy, count, days } = topLevelAccuracy(skill, s);
-    if (count >= MASTERY_WINDOW && accuracy >= MASTERY_ACCURACY && days >= 2) {
+    if (count >= MASTERY_WINDOW && accuracy >= MASTERY_ACCURACY && days >= MASTERY_DAYS) {
       s.masteredAt = now;
       s.reviewStep = 0;
       s.reviewAt = now + REVIEW_DAYS[0] * DAY;
