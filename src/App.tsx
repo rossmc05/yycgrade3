@@ -4,6 +4,8 @@ import { Arcade, GameScreen } from './screens/Arcade';
 import { AvatarStudio } from './screens/AvatarStudio';
 import { Home } from './screens/Home';
 import { World } from './screens/World';
+import { WorldMap } from './screens/WorldMap';
+import { Zone } from './screens/Zone';
 import { Parent } from './screens/Parent';
 import { Play } from './screens/Play';
 import { Profiles } from './screens/Profiles';
@@ -12,7 +14,7 @@ import { SubjectScreen } from './screens/SubjectScreen';
 import { TypingHome, TypingLesson } from './screens/Typing';
 
 export function App() {
-  const { profile } = useStore();
+  const { profile, data } = useStore();
   const [page, a, b] = useRoute();
 
   if (page === 'parent') return <Parent />;
@@ -26,5 +28,7 @@ export function App() {
   if (page === 'world') return <World />;
   if (page === 'arcade') return <Arcade />;
   if (page === 'game' && a) return <GameScreen key={a} id={a} />;
-  return <Home />;
+  if (page === 'zone' && a) return <Zone key={a} subjectId={a} />;
+  if (page === 'menu' || data.settings.battle === false) return <Home />;
+  return <WorldMap />;
 }

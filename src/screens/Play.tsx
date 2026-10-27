@@ -90,7 +90,7 @@ function Session({ subjectId, target, again }: { subjectId: string; target: stri
 
   const back = () => {
     stopSpeaking();
-    go(...(subjectId === 'all' ? [''] : ['subject', subjectId]));
+    go(...(subjectId === 'all' ? [''] : [data.settings.battle === false || subjectId === 'typing' ? 'subject' : 'zone', subjectId]));
   };
 
   // Generate each question when it is reached, so it uses the latest level.
