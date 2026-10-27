@@ -1,0 +1,1507 @@
+{
+ "FINITE": [
+  "a countdown from 10 to 0",
+  "the days of the week",
+  "the pages in a book",
+  "the months in a year",
+  "the players on a hockey team",
+  "2, 4, 6, 8, 10 and stop",
+  "the letters of the alphabet",
+  "the numbers on a clock face",
+  "counting the students in your class",
+  "100, 90, 80, …, 0",
+  "the days in a week from Monday to Sunday",
+  "counting down from 20 to 1 at a rocket launch",
+  "the numbers on a hockey scoreboard clock from 20:00 to 0:00",
+  "the floors in an elevator from 1 to 10",
+  "the 5 fingers on one hand",
+  "the seasons: winter, spring, summer, fall",
+  "the numbers from 1 to 1000",
+  "5, 10, 15, 20, 25 and stop",
+  "the cards in one deck",
+  "the stops on a bus route",
+  "the colours of a rainbow",
+  "the steps on a staircase"
+ ],
+ "INFINITE": [
+  "the counting numbers 1, 2, 3, …",
+  "the even numbers 2, 4, 6, …",
+  "counting by 5s forever: 5, 10, 15, …",
+  "the odd numbers 1, 3, 5, …",
+  "counting by 10s that never stops: 10, 20, 30, …",
+  "counting by 100s forever: 100, 200, 300, …",
+  "the numbers 3, 6, 9, 12, … that keep going",
+  "adding 1 again and again with no end",
+  "counting by 2s with no end: 2, 4, 6, …",
+  "counting by 1000s forever: 1000, 2000, 3000, …",
+  "the numbers 7, 14, 21, 28, … that go on forever",
+  "counting by 25s that never stops: 25, 50, 75, …",
+  "adding 2 again and again forever",
+  "the numbers 11, 12, 13, … that keep going",
+  "counting by 3s with no end: 3, 6, 9, …",
+  "the numbers 50, 100, 150, … that never stop",
+  "doubling forever: 1, 2, 4, 8, 16, …",
+  "the numbers 4, 8, 12, 16, … that keep going forever"
+ ],
+ "TIME_UNITS": [
+  {
+   "p": "How many seconds are in 1 minute?",
+   "a": "60"
+  },
+  {
+   "p": "How many minutes are in 1 hour?",
+   "a": "60"
+  },
+  {
+   "p": "How many minutes are in 2 hours?",
+   "a": "120"
+  },
+  {
+   "p": "How many seconds are in 2 minutes?",
+   "a": "120"
+  },
+  {
+   "p": "How many minutes are in half an hour?",
+   "a": "30"
+  },
+  {
+   "p": "How many hours are in one day?",
+   "a": "24"
+  },
+  {
+   "p": "How many minutes are in 3 hours?",
+   "a": "180"
+  },
+  {
+   "p": "How many seconds are in 3 minutes?",
+   "a": "180"
+  },
+  {
+   "p": "How many minutes are in a quarter of an hour?",
+   "a": "15"
+  },
+  {
+   "p": "How many days are in one week?",
+   "a": "7"
+  },
+  {
+   "p": "How many days are in 2 weeks?",
+   "a": "14"
+  },
+  {
+   "p": "How many months are in one year?",
+   "a": "12"
+  },
+  {
+   "p": "How many hours are in 2 days?",
+   "a": "48"
+  },
+  {
+   "p": "How many minutes are in an hour and a half?",
+   "a": "90"
+  },
+  {
+   "p": "How many seconds are in half a minute?",
+   "a": "30"
+  },
+  {
+   "p": "How many days are in 3 weeks?",
+   "a": "21"
+  },
+  {
+   "p": "How many hours are in half a day?",
+   "a": "12"
+  },
+  {
+   "p": "A hockey period is 20 minutes. How many minutes are 3 periods?",
+   "a": "60"
+  },
+  {
+   "p": "How many days are in the month of January?",
+   "a": "31"
+  },
+  {
+   "p": "How many days are in a year that is not a leap year?",
+   "a": "365"
+  }
+ ],
+ "AM_PM": [
+  {
+   "p": "You eat breakfast at 7:30. Is that a.m. or p.m.?",
+   "a": "a.m."
+  },
+  {
+   "p": "School ends at 3:15. Is that a.m. or p.m.?",
+   "a": "p.m."
+  },
+  {
+   "p": "You go to bed at 8:00 at night. Is that a.m. or p.m.?",
+   "a": "p.m."
+  },
+  {
+   "p": "Hockey practice starts at 6:00 in the morning. Is that a.m. or p.m.?",
+   "a": "a.m."
+  },
+  {
+   "p": "Lunch is at 12:00 noon. After that, times are…",
+   "a": "p.m."
+  },
+  {
+   "p": "Recess is at 10:15 in the morning. Is that a.m. or p.m.?",
+   "a": "a.m."
+  },
+  {
+   "p": "You wake up at 7:00 in the morning. Is that a.m. or p.m.?",
+   "a": "a.m."
+  },
+  {
+   "p": "Supper is at 6:00 in the evening. Is that a.m. or p.m.?",
+   "a": "p.m."
+  },
+  {
+   "p": "The fireworks start at 10:00 at night. Is that a.m. or p.m.?",
+   "a": "p.m."
+  },
+  {
+   "p": "School starts at 8:30. Is that a.m. or p.m.?",
+   "a": "a.m."
+  },
+  {
+   "p": "A Flames game starts at 7:00 in the evening. Is that a.m. or p.m.?",
+   "a": "p.m."
+  },
+  {
+   "p": "The sun rises at 6:45. Is that a.m. or p.m.?",
+   "a": "a.m."
+  },
+  {
+   "p": "You eat a snack at 3:30 after school. Is that a.m. or p.m.?",
+   "a": "p.m."
+  },
+  {
+   "p": "The bus picks you up at 8:05. Is that a.m. or p.m.?",
+   "a": "a.m."
+  },
+  {
+   "p": "Midnight is 12:00. The times right after midnight are…",
+   "a": "a.m."
+  },
+  {
+   "p": "Swimming lessons are at 4:15 in the afternoon. Is that a.m. or p.m.?",
+   "a": "p.m."
+  },
+  {
+   "p": "Saturday cartoons are at 9:00 in the morning. Is that a.m. or p.m.?",
+   "a": "a.m."
+  },
+  {
+   "p": "The moon is high in the sky at 11:00 at night. Is that a.m. or p.m.?",
+   "a": "p.m."
+  }
+ ],
+ "LENGTH_UNITS": [
+  {
+   "p": "Which unit would you use to measure the length of a hockey rink?",
+   "a": "metres"
+  },
+  {
+   "p": "Which unit would you use to measure the length of an ant?",
+   "a": "millimetres"
+  },
+  {
+   "p": "Which unit would you use to measure the length of a pencil?",
+   "a": "centimetres"
+  },
+  {
+   "p": "Which unit would you use to measure the height of a door?",
+   "a": "metres"
+  },
+  {
+   "p": "Which unit would you use to measure the thickness of a coin?",
+   "a": "millimetres"
+  },
+  {
+   "p": "Which unit would you use to measure the width of your hand?",
+   "a": "centimetres"
+  },
+  {
+   "p": "Which unit would you use to measure the length of a school hallway?",
+   "a": "metres"
+  },
+  {
+   "p": "Which unit would you use to measure the length of a crayon?",
+   "a": "centimetres"
+  },
+  {
+   "p": "Which unit would you use to measure the length of a swimming pool?",
+   "a": "metres"
+  },
+  {
+   "p": "Which unit would you use to measure the length of a ladybug?",
+   "a": "millimetres"
+  },
+  {
+   "p": "Which unit would you use to measure the length of your shoe?",
+   "a": "centimetres"
+  },
+  {
+   "p": "Which unit would you use to measure the height of a tree?",
+   "a": "metres"
+  },
+  {
+   "p": "Which unit would you use to measure the width of a grain of rice?",
+   "a": "millimetres"
+  },
+  {
+   "p": "Which unit would you use to measure the length of a book?",
+   "a": "centimetres"
+  },
+  {
+   "p": "Which unit would you use to measure the length of a soccer field?",
+   "a": "metres"
+  },
+  {
+   "p": "Which unit would you use to measure the thickness of a pencil lead?",
+   "a": "millimetres"
+  },
+  {
+   "p": "Which unit would you use to measure the length of a hockey stick?",
+   "a": "centimetres"
+  },
+  {
+   "p": "Which unit would you use to measure the height of the Calgary Tower?",
+   "a": "metres"
+  },
+  {
+   "p": "Which unit would you use to measure the length of a car?",
+   "a": "metres"
+  },
+  {
+   "p": "Which unit would you use to measure the length of a paper clip?",
+   "a": "centimetres"
+  },
+  {
+   "p": "Which unit would you use to measure the thickness of a fingernail?",
+   "a": "millimetres"
+  },
+  {
+   "p": "Which unit would you use to measure the height of your desk?",
+   "a": "centimetres"
+  },
+  {
+   "p": "Which unit would you use to measure the length of a bus?",
+   "a": "metres"
+  },
+  {
+   "p": "Which unit would you use to measure the length of a mosquito?",
+   "a": "millimetres"
+  },
+  {
+   "p": "Which unit would you use to measure the length of a carrot?",
+   "a": "centimetres"
+  },
+  {
+   "p": "Which unit would you use to measure the length of a toboggan hill?",
+   "a": "metres"
+  },
+  {
+   "p": "Which unit would you use to measure the width of a button?",
+   "a": "millimetres"
+  },
+  {
+   "p": "Which unit would you use to measure the length of a skate blade?",
+   "a": "centimetres"
+  },
+  {
+   "p": "Which unit would you use to measure the height of a house?",
+   "a": "metres"
+  },
+  {
+   "p": "Which unit would you use to measure the thickness of a sheet of cardboard?",
+   "a": "millimetres"
+  },
+  {
+   "p": "Which unit would you use to measure the length of a banana?",
+   "a": "centimetres"
+  },
+  {
+   "p": "Which unit would you use to measure the length of a running track?",
+   "a": "metres"
+  },
+  {
+   "p": "Which unit would you use to measure the width of a seed?",
+   "a": "millimetres"
+  },
+  {
+   "p": "Which unit would you use to measure the length of your arm?",
+   "a": "centimetres"
+  }
+ ],
+ "GEO_PROPS": [
+  {
+   "p": "Lines that never meet and stay the same distance apart are…",
+   "a": "parallel",
+   "c": [
+    "parallel",
+    "perpendicular",
+    "curved"
+   ]
+  },
+  {
+   "p": "Lines that meet to make a square corner (90°) are…",
+   "a": "perpendicular",
+   "c": [
+    "parallel",
+    "perpendicular",
+    "curved"
+   ]
+  },
+  {
+   "p": "The two rails of a train track are…",
+   "a": "parallel",
+   "c": [
+    "parallel",
+    "perpendicular"
+   ]
+  },
+  {
+   "p": "The corner of a piece of paper is a…",
+   "a": "right angle",
+   "c": [
+    "right angle",
+    "smaller angle",
+    "bigger angle"
+   ]
+  },
+  {
+   "p": "At 3:00, the hands of a clock make a…",
+   "a": "right angle",
+   "c": [
+    "right angle",
+    "straight line",
+    "smaller angle"
+   ]
+  },
+  {
+   "p": "How many right angles does a rectangle have?",
+   "a": "4",
+   "c": [
+    "0",
+    "2",
+    "4"
+   ]
+  },
+  {
+   "p": "A square has how many pairs of parallel sides?",
+   "a": "2",
+   "c": [
+    "0",
+    "1",
+    "2",
+    "4"
+   ]
+  },
+  {
+   "p": "Which capital letter has a right angle?",
+   "a": "L",
+   "c": [
+    "L",
+    "O",
+    "S",
+    "C"
+   ]
+  },
+  {
+   "p": "Which capital letter has a pair of parallel lines?",
+   "a": "H",
+   "c": [
+    "H",
+    "V",
+    "O",
+    "C"
+   ]
+  },
+  {
+   "p": "Which capital letter has perpendicular lines?",
+   "a": "T",
+   "c": [
+    "T",
+    "O",
+    "S",
+    "V"
+   ]
+  },
+  {
+   "p": "The lines on a hockey rink that go straight across the ice are…",
+   "a": "parallel to each other",
+   "c": [
+    "parallel to each other",
+    "perpendicular to each other",
+    "curved"
+   ]
+  },
+  {
+   "p": "Where a wall meets the floor, the corner is usually a…",
+   "a": "right angle",
+   "c": [
+    "right angle",
+    "smaller angle",
+    "bigger angle"
+   ]
+  },
+  {
+   "p": "How many right angles does a triangle with one square corner have?",
+   "a": "1",
+   "c": [
+    "0",
+    "1",
+    "2",
+    "3"
+   ]
+  },
+  {
+   "p": "At 6:00, the hands of a clock make a…",
+   "a": "straight line",
+   "c": [
+    "right angle",
+    "straight line",
+    "smaller angle"
+   ]
+  },
+  {
+   "p": "An angle smaller than a square corner is…",
+   "a": "less than a right angle",
+   "c": [
+    "less than a right angle",
+    "more than a right angle",
+    "a right angle"
+   ]
+  },
+  {
+   "p": "The two sides of a ladder are…",
+   "a": "parallel",
+   "c": [
+    "parallel",
+    "perpendicular",
+    "curved"
+   ]
+  },
+  {
+   "p": "A plus sign (+) is made of two lines that are…",
+   "a": "perpendicular",
+   "c": [
+    "parallel",
+    "perpendicular",
+    "curved"
+   ]
+  },
+  {
+   "p": "How many right angles does a square have?",
+   "a": "4",
+   "c": [
+    "0",
+    "2",
+    "3",
+    "4"
+   ]
+  },
+  {
+   "p": "Does a circle have any right angles?",
+   "a": "no",
+   "c": [
+    "yes",
+    "no"
+   ]
+  },
+  {
+   "p": "The opposite sides of a rectangle are…",
+   "a": "parallel",
+   "c": [
+    "parallel",
+    "perpendicular",
+    "curved"
+   ]
+  },
+  {
+   "p": "The lines on lined paper are…",
+   "a": "parallel",
+   "c": [
+    "parallel",
+    "perpendicular",
+    "curved"
+   ]
+  },
+  {
+   "p": "The corner of a book cover is a…",
+   "a": "right angle",
+   "c": [
+    "right angle",
+    "smaller angle",
+    "bigger angle"
+   ]
+  },
+  {
+   "p": "The letter E has how many right angles?",
+   "a": "4",
+   "c": [
+    "2",
+    "3",
+    "4"
+   ]
+  },
+  {
+   "p": "Which capital letter has no straight lines?",
+   "a": "O",
+   "c": [
+    "O",
+    "L",
+    "T",
+    "E"
+   ]
+  },
+  {
+   "p": "The edges of a door and the floor meet at a…",
+   "a": "right angle",
+   "c": [
+    "right angle",
+    "straight line",
+    "smaller angle"
+   ]
+  },
+  {
+   "p": "The stripes on a crosswalk are…",
+   "a": "parallel to each other",
+   "c": [
+    "parallel to each other",
+    "perpendicular to each other",
+    "curved"
+   ]
+  },
+  {
+   "p": "A window frame’s top edge and side edge are…",
+   "a": "perpendicular",
+   "c": [
+    "parallel",
+    "perpendicular",
+    "curved"
+   ]
+  },
+  {
+   "p": "How many right angles does the letter L have?",
+   "a": "1",
+   "c": [
+    "0",
+    "1",
+    "2"
+   ]
+  },
+  {
+   "p": "An angle that is wider than a square corner is…",
+   "a": "more than a right angle",
+   "c": [
+    "less than a right angle",
+    "more than a right angle",
+    "a right angle"
+   ]
+  },
+  {
+   "p": "At 9:00, the hands of a clock make a…",
+   "a": "right angle",
+   "c": [
+    "right angle",
+    "straight line",
+    "smaller angle"
+   ]
+  },
+  {
+   "p": "At 1:00, the hands of a clock make an angle that is…",
+   "a": "less than a right angle",
+   "c": [
+    "less than a right angle",
+    "a right angle",
+    "a straight line"
+   ]
+  },
+  {
+   "p": "The strings on a guitar are…",
+   "a": "parallel",
+   "c": [
+    "parallel",
+    "perpendicular",
+    "curved"
+   ]
+  },
+  {
+   "p": "Which capital letter has both parallel and perpendicular lines?",
+   "a": "H",
+   "c": [
+    "H",
+    "V",
+    "A",
+    "O"
+   ]
+  },
+  {
+   "p": "Do parallel lines ever cross?",
+   "a": "no",
+   "c": [
+    "yes",
+    "no"
+   ]
+  },
+  {
+   "p": "The blue lines and the red line on a hockey rink are…",
+   "a": "parallel",
+   "c": [
+    "parallel",
+    "perpendicular",
+    "curved"
+   ]
+  }
+ ],
+ "GEO_TRANS": [
+  {
+   "p": "A triangle is slid across the page (a translation). Does it keep the same side lengths?",
+   "a": "yes"
+  },
+  {
+   "p": "A square is turned (a rotation). Is it still a square?",
+   "a": "yes"
+  },
+  {
+   "p": "A hexagon is flipped (a reflection). Does it still have 6 sides?",
+   "a": "yes"
+  },
+  {
+   "p": "When you flip a shape, do its angles change size?",
+   "a": "no"
+  },
+  {
+   "p": "When you slide a shape, does it get bigger?",
+   "a": "no"
+  },
+  {
+   "p": "A regular pentagon is turned. Is it still regular?",
+   "a": "yes"
+  },
+  {
+   "p": "You flip the letter b like a mirror. Does it look like the letter d?",
+   "a": "yes"
+  },
+  {
+   "p": "A rectangle is slid 5 cm to the right. Does its perimeter change?",
+   "a": "no"
+  },
+  {
+   "p": "A triangle is turned a quarter turn. Does it still have 3 angles?",
+   "a": "yes"
+  },
+  {
+   "p": "After a slide, does a shape face a different way?",
+   "a": "no"
+  },
+  {
+   "p": "After a flip, can a shape face the opposite way?",
+   "a": "yes"
+  },
+  {
+   "p": "A square is reflected. Do its sides stay the same length?",
+   "a": "yes"
+  },
+  {
+   "p": "An octagon is rotated. Does it now have 7 sides?",
+   "a": "no"
+  },
+  {
+   "p": "When you turn a shape, does its size change?",
+   "a": "no"
+  },
+  {
+   "p": "You slide a puck across the ice without spinning it. Is that a translation?",
+   "a": "yes"
+  },
+  {
+   "p": "A wheel spinning around its middle is an example of a rotation. True? (yes or no)",
+   "a": "yes"
+  },
+  {
+   "p": "Your reflection in a mirror is an example of a flip. True? (yes or no)",
+   "a": "yes"
+  },
+  {
+   "p": "Does a slide make a shape smaller?",
+   "a": "no"
+  },
+  {
+   "p": "You turn a puzzle piece to make it fit. Is that a rotation?",
+   "a": "yes"
+  },
+  {
+   "p": "Your mitten print in the snow and your mitten are mirror images. Is that a reflection?",
+   "a": "yes"
+  },
+  {
+   "p": "You slide a book across your desk. Does it change shape?",
+   "a": "no"
+  },
+  {
+   "p": "A triangle is flipped. Does it still have 3 sides?",
+   "a": "yes"
+  },
+  {
+   "p": "A rectangle is rotated a quarter turn. Is it still a rectangle?",
+   "a": "yes"
+  },
+  {
+   "p": "Does flipping a square make it a triangle?",
+   "a": "no"
+  },
+  {
+   "p": "A translation moves a shape in a straight line. Does it turn the shape?",
+   "a": "no"
+  },
+  {
+   "p": "A Ferris wheel going around is an example of a rotation. True? (yes or no)",
+   "a": "yes"
+  },
+  {
+   "p": "When you turn a shape, do its side lengths change?",
+   "a": "no"
+  },
+  {
+   "p": "The letter p flipped like a mirror looks like q. True? (yes or no)",
+   "a": "yes"
+  },
+  {
+   "p": "Does sliding a shape make it heavier?",
+   "a": "no"
+  },
+  {
+   "p": "Can a turn make a shape face a different way?",
+   "a": "yes"
+  },
+  {
+   "p": "A butterfly’s two wings look like reflections of each other. True? (yes or no)",
+   "a": "yes"
+  },
+  {
+   "p": "After a flip, does a pentagon have 6 sides?",
+   "a": "no"
+  }
+ ],
+ "NEEDS_WANTS": [
+  {
+   "p": "Is food a need or a want?",
+   "a": "need"
+  },
+  {
+   "p": "Is a new video game a need or a want?",
+   "a": "want"
+  },
+  {
+   "p": "Is a warm winter coat a need or a want?",
+   "a": "need"
+  },
+  {
+   "p": "Is candy a need or a want?",
+   "a": "want"
+  },
+  {
+   "p": "Is a place to live a need or a want?",
+   "a": "need"
+  },
+  {
+   "p": "Is a fourth hockey stick a need or a want?",
+   "a": "want"
+  },
+  {
+   "p": "Is clean water a need or a want?",
+   "a": "need"
+  },
+  {
+   "p": "Is a toy robot a need or a want?",
+   "a": "want"
+  },
+  {
+   "p": "Is a winter toque in Calgary a need or a want?",
+   "a": "need"
+  },
+  {
+   "p": "Is a trip to the movies a need or a want?",
+   "a": "want"
+  },
+  {
+   "p": "Is medicine when you are sick a need or a want?",
+   "a": "need"
+  },
+  {
+   "p": "Are pop and chips a need or a want?",
+   "a": "want"
+  },
+  {
+   "p": "Is a bed to sleep in a need or a want?",
+   "a": "need"
+  },
+  {
+   "p": "Is a new phone case a need or a want?",
+   "a": "want"
+  },
+  {
+   "p": "Is healthy lunch food a need or a want?",
+   "a": "need"
+  },
+  {
+   "p": "Is a trading card pack a need or a want?",
+   "a": "want"
+  },
+  {
+   "p": "Is a pair of boots that fit a need or a want?",
+   "a": "need"
+  },
+  {
+   "p": "Is a slushie at the rink a need or a want?",
+   "a": "want"
+  },
+  {
+   "p": "Is a bike helmet when you ride a need or a want?",
+   "a": "need"
+  },
+  {
+   "p": "Is a giant stuffed animal a need or a want?",
+   "a": "want"
+  },
+  {
+   "p": "Is a toothbrush a need or a want?",
+   "a": "need"
+  },
+  {
+   "p": "Is a second video game console a need or a want?",
+   "a": "want"
+  },
+  {
+   "p": "Are warm mittens in January a need or a want?",
+   "a": "need"
+  },
+  {
+   "p": "Is a new skateboard a need or a want?",
+   "a": "want"
+  },
+  {
+   "p": "Is soap a need or a want?",
+   "a": "need"
+  },
+  {
+   "p": "Is a hockey jersey with your favourite player’s name a need or a want?",
+   "a": "want"
+  },
+  {
+   "p": "Is a seatbelt in a car a need or a want?",
+   "a": "need"
+  },
+  {
+   "p": "Is a bag of gummy bears a need or a want?",
+   "a": "want"
+  },
+  {
+   "p": "Is a heater in winter a need or a want?",
+   "a": "need"
+  },
+  {
+   "p": "Is a ticket to an amusement park a need or a want?",
+   "a": "want"
+  },
+  {
+   "p": "Are vegetables for supper a need or a want?",
+   "a": "need"
+  },
+  {
+   "p": "Is a light-up toy sword a need or a want?",
+   "a": "want"
+  },
+  {
+   "p": "Is a visit to the doctor when you are hurt a need or a want?",
+   "a": "need"
+  },
+  {
+   "p": "Is a new poster for your room a need or a want?",
+   "a": "want"
+  },
+  {
+   "p": "Is milk for breakfast a need or a want?",
+   "a": "need"
+  },
+  {
+   "p": "Is an ice cream cone a need or a want?",
+   "a": "want"
+  }
+ ],
+ "MONEY_HABITS": [
+  {
+   "p": "You have $10. What is a good money habit?",
+   "a": "Save some and spend some",
+   "c": [
+    "Save some and spend some",
+    "Spend it all right away",
+    "Lose it"
+   ]
+  },
+  {
+   "p": "Which is a short-term saving goal?",
+   "a": "A book next week",
+   "c": [
+    "A book next week",
+    "A car when you grow up",
+    "University"
+   ]
+  },
+  {
+   "p": "Which is a long-term saving goal?",
+   "a": "A bike next summer",
+   "c": [
+    "A bike next summer",
+    "A treat today",
+    "A pencil tomorrow"
+   ]
+  },
+  {
+   "p": "Giving some money to help people in need is called…",
+   "a": "donating",
+   "c": [
+    "donating",
+    "borrowing",
+    "spending"
+   ]
+  },
+  {
+   "p": "Before buying something, it is smart to…",
+   "a": "think about whether you need it",
+   "c": [
+    "think about whether you need it",
+    "buy two of everything",
+    "buy it without looking at the price"
+   ]
+  },
+  {
+   "p": "Where is a safe place to keep money you are saving?",
+   "a": "a piggy bank or a bank account",
+   "c": [
+    "a piggy bank or a bank account",
+    "your coat pocket at recess",
+    "under a rock outside"
+   ]
+  },
+  {
+   "p": "Two toys cost the same, but one is better quality. Which is the smarter buy?",
+   "a": "the better-quality toy",
+   "c": [
+    "the better-quality toy",
+    "the one with the brighter box",
+    "it does not matter"
+   ]
+  },
+  {
+   "p": "A plan for how to spend and save your money is called a…",
+   "a": "budget",
+   "c": [
+    "budget",
+    "receipt",
+    "coupon"
+   ]
+  },
+  {
+   "p": "If you spend all your allowance on Monday, what happens on Saturday?",
+   "a": "you have no money left",
+   "c": [
+    "you have no money left",
+    "you get more for free",
+    "the money comes back"
+   ]
+  },
+  {
+   "p": "You want a $20 game. You have $8. What could you do?",
+   "a": "save for a few more weeks",
+   "c": [
+    "save for a few more weeks",
+    "take money without asking",
+    "give up on saving"
+   ]
+  },
+  {
+   "p": "Comparing prices at two stores before buying is…",
+   "a": "a smart money habit",
+   "c": [
+    "a smart money habit",
+    "a waste of time",
+    "not allowed"
+   ]
+  },
+  {
+   "p": "Money you earn by doing chores is called…",
+   "a": "income",
+   "c": [
+    "income",
+    "a gift",
+    "a loan"
+   ]
+  },
+  {
+   "p": "Borrowing a book from the library instead of buying it…",
+   "a": "saves money",
+   "c": [
+    "saves money",
+    "costs more",
+    "is against the rules"
+   ]
+  },
+  {
+   "p": "Which is a way to share with others?",
+   "a": "giving to a food bank",
+   "c": [
+    "giving to a food bank",
+    "hiding your money",
+    "buying more candy"
+   ]
+  },
+  {
+   "p": "Why do people save money?",
+   "a": "to buy bigger things later or be ready for surprises",
+   "c": [
+    "to buy bigger things later or be ready for surprises",
+    "because money goes bad",
+    "so they never have to spend it"
+   ]
+  },
+  {
+   "p": "You get $5 for your birthday. Which is a good plan?",
+   "a": "save some, spend some, share some",
+   "c": [
+    "save some, spend some, share some",
+    "spend it all on candy",
+    "leave it on the bus"
+   ]
+  },
+  {
+   "p": "An item costs $12 at one store and $9 at another. Which is the smarter buy if they are the same?",
+   "a": "the $9 one",
+   "c": [
+    "the $9 one",
+    "the $12 one",
+    "it does not matter"
+   ]
+  },
+  {
+   "p": "A paper that shows what you bought and how much you paid is a…",
+   "a": "receipt",
+   "c": [
+    "receipt",
+    "budget",
+    "coupon"
+   ]
+  },
+  {
+   "p": "Which is a want, not a need, when your family makes a budget?",
+   "a": "a trip to the arcade",
+   "c": [
+    "a trip to the arcade",
+    "groceries",
+    "rent for your home"
+   ]
+  },
+  {
+   "p": "Why is it good to wait a day before buying a toy you just saw?",
+   "a": "you can decide if you really want it",
+   "c": [
+    "you can decide if you really want it",
+    "the toy will get cheaper by itself for sure",
+    "there is no reason"
+   ]
+  },
+  {
+   "p": "Lending money means…",
+   "a": "giving it for a while and getting it back",
+   "c": [
+    "giving it for a while and getting it back",
+    "giving it away forever",
+    "spending it on yourself"
+   ]
+  },
+  {
+   "p": "You found a $5 bill in the classroom. What should you do?",
+   "a": "give it to the teacher",
+   "c": [
+    "give it to the teacher",
+    "keep it secretly",
+    "throw it away"
+   ]
+  },
+  {
+   "p": "Which is a way to earn money?",
+   "a": "shovelling a neighbour’s driveway",
+   "c": [
+    "shovelling a neighbour’s driveway",
+    "taking a sibling’s allowance",
+    "wishing for it"
+   ]
+  },
+  {
+   "p": "Spending more than you have is…",
+   "a": "not a good money habit",
+   "c": [
+    "not a good money habit",
+    "a smart plan",
+    "always fine"
+   ]
+  },
+  {
+   "p": "A coupon helps you…",
+   "a": "pay less for something",
+   "c": [
+    "pay less for something",
+    "pay more for something",
+    "get free money forever"
+   ]
+  },
+  {
+   "p": "Saving a little every week helps you…",
+   "a": "reach a bigger goal over time",
+   "c": [
+    "reach a bigger goal over time",
+    "lose money",
+    "spend more today"
+   ]
+  },
+  {
+   "p": "Which is a long-term goal?",
+   "a": "saving for a new bike for next year",
+   "c": [
+    "saving for a new bike for next year",
+    "buying a snack at recess",
+    "getting a sticker today"
+   ]
+  },
+  {
+   "p": "A store has a sale. Should you buy things you do not need just because they are on sale?",
+   "a": "no",
+   "c": [
+    "yes",
+    "no"
+   ]
+  },
+  {
+   "p": "Donating old toys to kids who need them is a way to…",
+   "a": "share",
+   "c": [
+    "share",
+    "save",
+    "borrow"
+   ]
+  },
+  {
+   "p": "Which is a need your family pays for every month?",
+   "a": "electricity for your home",
+   "c": [
+    "electricity for your home",
+    "a new toy every week",
+    "movie tickets"
+   ]
+  },
+  {
+   "p": "Keeping track of how much money you have is…",
+   "a": "a smart money habit",
+   "c": [
+    "a smart money habit",
+    "a waste of time",
+    "bad luck"
+   ]
+  }
+ ],
+ "POLY_FACTS": [
+  {
+   "p": "How many sides does a triangle have?",
+   "a": "3",
+   "c": [
+    "3",
+    "4",
+    "5",
+    "6"
+   ]
+  },
+  {
+   "p": "How many sides does a pentagon have?",
+   "a": "5",
+   "c": [
+    "4",
+    "5",
+    "6",
+    "8"
+   ]
+  },
+  {
+   "p": "How many sides does a hexagon have?",
+   "a": "6",
+   "c": [
+    "5",
+    "6",
+    "7",
+    "8"
+   ]
+  },
+  {
+   "p": "How many sides does an octagon have?",
+   "a": "8",
+   "c": [
+    "6",
+    "7",
+    "8",
+    "10"
+   ]
+  },
+  {
+   "p": "How many sides does a quadrilateral have?",
+   "a": "4",
+   "c": [
+    "3",
+    "4",
+    "5",
+    "6"
+   ]
+  },
+  {
+   "p": "How many corners (vertices) does a triangle have?",
+   "a": "3",
+   "c": [
+    "2",
+    "3",
+    "4"
+   ]
+  },
+  {
+   "p": "How many corners (vertices) does a hexagon have?",
+   "a": "6",
+   "c": [
+    "5",
+    "6",
+    "8"
+   ]
+  },
+  {
+   "p": "How many corners (vertices) does a square have?",
+   "a": "4",
+   "c": [
+    "3",
+    "4",
+    "5"
+   ]
+  },
+  {
+   "p": "A stop sign is shaped like an…",
+   "a": "octagon",
+   "c": [
+    "octagon",
+    "hexagon",
+    "pentagon"
+   ]
+  },
+  {
+   "p": "A honeycomb cell is shaped like a…",
+   "a": "hexagon",
+   "c": [
+    "hexagon",
+    "pentagon",
+    "triangle"
+   ]
+  },
+  {
+   "p": "A yield sign is shaped like a…",
+   "a": "triangle",
+   "c": [
+    "triangle",
+    "square",
+    "pentagon"
+   ]
+  },
+  {
+   "p": "A shape with 4 sides is called a…",
+   "a": "quadrilateral",
+   "c": [
+    "quadrilateral",
+    "pentagon",
+    "triangle"
+   ]
+  },
+  {
+   "p": "A shape with 5 sides is called a…",
+   "a": "pentagon",
+   "c": [
+    "pentagon",
+    "hexagon",
+    "octagon"
+   ]
+  },
+  {
+   "p": "Is a circle a polygon?",
+   "a": "no",
+   "c": [
+    "yes",
+    "no"
+   ]
+  },
+  {
+   "p": "A polygon is a closed shape with…",
+   "a": "straight sides",
+   "c": [
+    "straight sides",
+    "curved sides",
+    "no sides"
+   ]
+  },
+  {
+   "p": "Which shape has the most sides?",
+   "a": "octagon",
+   "c": [
+    "octagon",
+    "hexagon",
+    "pentagon",
+    "triangle"
+   ]
+  },
+  {
+   "p": "A slice of pizza is often shaped like a…",
+   "a": "triangle",
+   "c": [
+    "triangle",
+    "hexagon",
+    "octagon"
+   ]
+  },
+  {
+   "p": "A home plate in baseball has 5 sides. It is a…",
+   "a": "pentagon",
+   "c": [
+    "pentagon",
+    "hexagon",
+    "quadrilateral"
+   ]
+  },
+  {
+   "p": "A rectangle is a kind of…",
+   "a": "quadrilateral",
+   "c": [
+    "quadrilateral",
+    "pentagon",
+    "triangle"
+   ]
+  },
+  {
+   "p": "How many sides do 2 triangles have altogether?",
+   "a": "6",
+   "c": [
+    "5",
+    "6",
+    "8"
+   ]
+  }
+ ],
+ "REGULAR_FACTS": [
+  {
+   "p": "A square has 4 equal sides and 4 equal angles. Is it regular?",
+   "a": "regular"
+  },
+  {
+   "p": "A rectangle that is long and thin has sides that are not all equal. Is it regular?",
+   "a": "irregular"
+  },
+  {
+   "p": "A stop sign has 8 equal sides. Is it regular?",
+   "a": "regular"
+  },
+  {
+   "p": "A triangle with sides 3 cm, 4 cm and 5 cm. Is it regular?",
+   "a": "irregular"
+  },
+  {
+   "p": "A triangle with all sides 6 cm and all angles equal. Is it regular?",
+   "a": "regular"
+  },
+  {
+   "p": "A pentagon shaped like a house, with a tall pointy roof. Is it regular?",
+   "a": "irregular"
+  },
+  {
+   "p": "A honeycomb hexagon with 6 equal sides and angles. Is it regular?",
+   "a": "regular"
+  },
+  {
+   "p": "A hexagon with two long sides and four short sides. Is it regular?",
+   "a": "irregular"
+  },
+  {
+   "p": "A quadrilateral with sides 2 cm, 2 cm, 5 cm and 5 cm. Is it regular?",
+   "a": "irregular"
+  },
+  {
+   "p": "A pentagon with 5 equal sides and 5 equal angles. Is it regular?",
+   "a": "regular"
+  },
+  {
+   "p": "An octagon where one side is much longer than the others. Is it regular?",
+   "a": "irregular"
+  },
+  {
+   "p": "A diamond (rhombus) with 4 equal sides but two wide and two narrow angles. Is it regular?",
+   "a": "irregular"
+  },
+  {
+   "p": "A shape has 3 sides of 10 cm each and equal angles. Is it regular?",
+   "a": "regular"
+  },
+  {
+   "p": "A triangle with one square corner and two smaller corners. Is it regular?",
+   "a": "irregular"
+  },
+  {
+   "p": "A square tile on the floor. Is it regular?",
+   "a": "regular"
+  },
+  {
+   "p": "A shape with sides 1 cm, 2 cm, 3 cm, 4 cm and 5 cm. Is it regular?",
+   "a": "irregular"
+  },
+  {
+   "p": "A kite shape with two long sides and two short sides. Is it regular?",
+   "a": "irregular"
+  },
+  {
+   "p": "An equal-sided triangle on a yield sign. Is it regular?",
+   "a": "regular"
+  },
+  {
+   "p": "A door is a rectangle that is taller than it is wide. Is it regular?",
+   "a": "irregular"
+  },
+  {
+   "p": "A triangle with two long sides and one short side. Is it regular?",
+   "a": "irregular"
+  },
+  {
+   "p": "A square sticky note. Is it regular?",
+   "a": "regular"
+  },
+  {
+   "p": "A rectangle with sides 4 cm, 4 cm, 4 cm and 4 cm. Is it regular?",
+   "a": "regular"
+  }
+ ],
+ "SAVE_GOALS": [
+  "a new ball",
+  "a puzzle",
+  "a book",
+  "a pack of hockey cards",
+  "a toy truck",
+  "art supplies",
+  "a new water bottle",
+  "a board game",
+  "a kite",
+  "a gift for Grandma"
+ ]
+}

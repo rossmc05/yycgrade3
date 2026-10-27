@@ -2,8 +2,8 @@
  "PLURAL_HINTS": [
   "Most words add s. Words ending in s, x, sh or ch add es.",
   "If a consonant comes before the y, change y to i and add es. If a vowel comes before the y, just add s.",
-  "For many words ending in f or fe, change the f to v and add es.",
-  "Some words change in a special way, and some stay the same: one moose, two moose."
+  "For many words ending in f or fe, change the f to v and add es: leaf → leaves. But some just add s: roof → roofs, cliff → cliffs.",
+  "Some words change in a special way (mouse → mice), some stay the same (one moose, two moose), and words ending in o add s or es (potatoes, pianos)."
  ],
  "ENDING_HINTS": [
   "Just add the ending to the word.",
@@ -106,6 +106,94 @@
   [
    "should not",
    "shouldn't"
+  ],
+  [
+   "I would",
+   "I'd"
+  ],
+  [
+   "you would",
+   "you'd"
+  ],
+  [
+   "they would",
+   "they'd"
+  ],
+  [
+   "we would",
+   "we'd"
+  ],
+  [
+   "she would",
+   "she'd"
+  ],
+  [
+   "he would",
+   "he'd"
+  ],
+  [
+   "it will",
+   "it'll"
+  ],
+  [
+   "that is",
+   "that's"
+  ],
+  [
+   "there is",
+   "there's"
+  ],
+  [
+   "who is",
+   "who's"
+  ],
+  [
+   "what is",
+   "what's"
+  ],
+  [
+   "here is",
+   "here's"
+  ],
+  [
+   "has not",
+   "hasn't"
+  ],
+  [
+   "were not",
+   "weren't"
+  ],
+  [
+   "you have",
+   "you've"
+  ],
+  [
+   "we have",
+   "we've"
+  ],
+  [
+   "they have",
+   "they've"
+  ],
+  [
+   "he is",
+   "he's"
+  ],
+  [
+   "she will",
+   "she'll"
+  ],
+  [
+   "they will",
+   "they'll"
+  ],
+  [
+   "where is",
+   "where's"
+  ],
+  [
+   "must not",
+   "mustn't"
   ]
  ],
  "PREFIX_MEANING": {
@@ -250,6 +338,288 @@
    "prefix": "in",
    "base": "complete",
    "meaning": "not complete"
+  },
+  {
+   "word": "redo",
+   "prefix": "re",
+   "base": "do",
+   "meaning": "do again"
+  },
+  {
+   "word": "rebuild",
+   "prefix": "re",
+   "base": "build",
+   "meaning": "build again"
+  },
+  {
+   "word": "reuse",
+   "prefix": "re",
+   "base": "use",
+   "meaning": "use again"
+  },
+  {
+   "word": "retell",
+   "prefix": "re",
+   "base": "tell",
+   "meaning": "tell again"
+  },
+  {
+   "word": "repaint",
+   "prefix": "re",
+   "base": "paint",
+   "meaning": "paint again"
+  },
+  {
+   "word": "reheat",
+   "prefix": "re",
+   "base": "heat",
+   "meaning": "heat again"
+  },
+  {
+   "word": "restart",
+   "prefix": "re",
+   "base": "start",
+   "meaning": "start again"
+  },
+  {
+   "word": "recount",
+   "prefix": "re",
+   "base": "count",
+   "meaning": "count again"
+  },
+  {
+   "word": "revisit",
+   "prefix": "re",
+   "base": "visit",
+   "meaning": "visit again"
+  },
+  {
+   "word": "rewind",
+   "prefix": "re",
+   "base": "wind",
+   "meaning": "wind back again"
+  },
+  {
+   "word": "reload",
+   "prefix": "re",
+   "base": "load",
+   "meaning": "load again"
+  },
+  {
+   "word": "recheck",
+   "prefix": "re",
+   "base": "check",
+   "meaning": "check again"
+  },
+  {
+   "word": "unfair",
+   "prefix": "un",
+   "base": "fair",
+   "meaning": "not fair"
+  },
+  {
+   "word": "unlucky",
+   "prefix": "un",
+   "base": "lucky",
+   "meaning": "not lucky"
+  },
+  {
+   "word": "untidy",
+   "prefix": "un",
+   "base": "tidy",
+   "meaning": "not tidy"
+  },
+  {
+   "word": "unclear",
+   "prefix": "un",
+   "base": "clear",
+   "meaning": "not clear"
+  },
+  {
+   "word": "unwell",
+   "prefix": "un",
+   "base": "well",
+   "meaning": "not well"
+  },
+  {
+   "word": "unafraid",
+   "prefix": "un",
+   "base": "afraid",
+   "meaning": "not afraid"
+  },
+  {
+   "word": "unfriendly",
+   "prefix": "un",
+   "base": "friendly",
+   "meaning": "not friendly"
+  },
+  {
+   "word": "unable",
+   "prefix": "un",
+   "base": "able",
+   "meaning": "not able"
+  },
+  {
+   "word": "untie",
+   "prefix": "un",
+   "base": "tie",
+   "meaning": "the opposite of tie"
+  },
+  {
+   "word": "unzip",
+   "prefix": "un",
+   "base": "zip",
+   "meaning": "the opposite of zip"
+  },
+  {
+   "word": "unpack",
+   "prefix": "un",
+   "base": "pack",
+   "meaning": "the opposite of pack"
+  },
+  {
+   "word": "unhealthy",
+   "prefix": "un",
+   "base": "healthy",
+   "meaning": "not healthy"
+  },
+  {
+   "word": "disobey",
+   "prefix": "dis",
+   "base": "obey",
+   "meaning": "not obey"
+  },
+  {
+   "word": "dishonest",
+   "prefix": "dis",
+   "base": "honest",
+   "meaning": "not honest"
+  },
+  {
+   "word": "disconnect",
+   "prefix": "dis",
+   "base": "connect",
+   "meaning": "the opposite of connect"
+  },
+  {
+   "word": "disloyal",
+   "prefix": "dis",
+   "base": "loyal",
+   "meaning": "not loyal"
+  },
+  {
+   "word": "displease",
+   "prefix": "dis",
+   "base": "please",
+   "meaning": "the opposite of please"
+  },
+  {
+   "word": "distrust",
+   "prefix": "dis",
+   "base": "trust",
+   "meaning": "not trust"
+  },
+  {
+   "word": "misread",
+   "prefix": "mis",
+   "base": "read",
+   "meaning": "read wrongly"
+  },
+  {
+   "word": "miscount",
+   "prefix": "mis",
+   "base": "count",
+   "meaning": "count wrongly"
+  },
+  {
+   "word": "misuse",
+   "prefix": "mis",
+   "base": "use",
+   "meaning": "use wrongly"
+  },
+  {
+   "word": "misjudge",
+   "prefix": "mis",
+   "base": "judge",
+   "meaning": "judge wrongly"
+  },
+  {
+   "word": "misprint",
+   "prefix": "mis",
+   "base": "print",
+   "meaning": "print wrongly"
+  },
+  {
+   "word": "mislead",
+   "prefix": "mis",
+   "base": "lead",
+   "meaning": "lead wrongly"
+  },
+  {
+   "word": "subzero",
+   "prefix": "sub",
+   "base": "zero",
+   "meaning": "below zero"
+  },
+  {
+   "word": "subtitle",
+   "prefix": "sub",
+   "base": "title",
+   "meaning": "words under a picture or film"
+  },
+  {
+   "word": "subsoil",
+   "prefix": "sub",
+   "base": "soil",
+   "meaning": "the soil under the top layer"
+  },
+  {
+   "word": "supermarket",
+   "prefix": "super",
+   "base": "market",
+   "meaning": "a very large food store"
+  },
+  {
+   "word": "supersize",
+   "prefix": "super",
+   "base": "size",
+   "meaning": "an extra big size"
+  },
+  {
+   "word": "superpower",
+   "prefix": "super",
+   "base": "power",
+   "meaning": "an extra special power"
+  },
+  {
+   "word": "nonsense",
+   "prefix": "non",
+   "base": "sense",
+   "meaning": "words that make no sense"
+  },
+  {
+   "word": "nonliving",
+   "prefix": "non",
+   "base": "living",
+   "meaning": "not living"
+  },
+  {
+   "word": "nonstick",
+   "prefix": "non",
+   "base": "stick",
+   "meaning": "food will not stick to it"
+  },
+  {
+   "word": "invisible",
+   "prefix": "in",
+   "base": "visible",
+   "meaning": "not able to be seen"
+  },
+  {
+   "word": "inactive",
+   "prefix": "in",
+   "base": "active",
+   "meaning": "not active"
   }
  ],
  "PEOPLE": [
@@ -397,6 +767,166 @@
    "base": "tour",
    "word": "tourist",
    "doing": "tours a new place"
+  },
+  {
+   "base": "swim",
+   "word": "swimmer",
+   "doing": "swims"
+  },
+  {
+   "base": "run",
+   "word": "runner",
+   "doing": "runs"
+  },
+  {
+   "base": "skate",
+   "word": "skater",
+   "doing": "skates"
+  },
+  {
+   "base": "hike",
+   "word": "hiker",
+   "doing": "hikes"
+  },
+  {
+   "base": "camp",
+   "word": "camper",
+   "doing": "camps"
+  },
+  {
+   "base": "shop",
+   "word": "shopper",
+   "doing": "shops"
+  },
+  {
+   "base": "bank",
+   "word": "banker",
+   "doing": "works in a bank"
+  },
+  {
+   "base": "jog",
+   "word": "jogger",
+   "doing": "jogs"
+  },
+  {
+   "base": "golf",
+   "word": "golfer",
+   "doing": "plays golf"
+  },
+  {
+   "base": "box",
+   "word": "boxer",
+   "doing": "boxes"
+  },
+  {
+   "base": "report",
+   "word": "reporter",
+   "doing": "reports the news"
+  },
+  {
+   "base": "travel",
+   "word": "traveller",
+   "doing": "travels"
+  },
+  {
+   "base": "explore",
+   "word": "explorer",
+   "doing": "explores"
+  },
+  {
+   "base": "bowl",
+   "word": "bowler",
+   "doing": "bowls"
+  },
+  {
+   "base": "ride",
+   "word": "rider",
+   "doing": "rides a horse"
+  },
+  {
+   "base": "catch",
+   "word": "catcher",
+   "doing": "catches the ball in baseball"
+  },
+  {
+   "base": "pitch",
+   "word": "pitcher",
+   "doing": "pitches the ball in baseball"
+  },
+  {
+   "base": "sculpt",
+   "word": "sculptor",
+   "doing": "makes sculptures"
+  },
+  {
+   "base": "conduct",
+   "word": "conductor",
+   "doing": "leads an orchestra"
+  },
+  {
+   "base": "collect",
+   "word": "collector",
+   "doing": "collects things"
+  },
+  {
+   "base": "instruct",
+   "word": "instructor",
+   "doing": "teaches a skill, like swimming"
+  },
+  {
+   "base": "survive",
+   "word": "survivor",
+   "doing": "survives something hard"
+  },
+  {
+   "base": "narrate",
+   "word": "narrator",
+   "doing": "tells a story"
+  },
+  {
+   "base": "translate",
+   "word": "translator",
+   "doing": "changes words into another language"
+  },
+  {
+   "base": "decorate",
+   "word": "decorator",
+   "doing": "decorates rooms"
+  },
+  {
+   "base": "violin",
+   "word": "violinist",
+   "doing": "plays the violin"
+  },
+  {
+   "base": "cartoon",
+   "word": "cartoonist",
+   "doing": "draws cartoons"
+  },
+  {
+   "base": "novel",
+   "word": "novelist",
+   "doing": "writes novels"
+  },
+  {
+   "base": "harp",
+   "word": "harpist",
+   "doing": "plays the harp"
+  },
+  {
+   "base": "journal",
+   "word": "journalist",
+   "doing": "writes news stories"
+  },
+  {
+   "base": "organ",
+   "word": "organist",
+   "doing": "plays the organ"
+  },
+  {
+   "base": "cello",
+   "word": "cellist",
+   "doing": "plays the cello"
   }
  ],
  "LY": [
@@ -491,6 +1021,70 @@
   [
    "bad",
    "badly"
+  ],
+  [
+   "rude",
+   "rudely"
+  ],
+  [
+   "wise",
+   "wisely"
+  ],
+  [
+   "bold",
+   "boldly"
+  ],
+  [
+   "tight",
+   "tightly"
+  ],
+  [
+   "sharp",
+   "sharply"
+  ],
+  [
+   "firm",
+   "firmly"
+  ],
+  [
+   "eager",
+   "eagerly"
+  ],
+  [
+   "honest",
+   "honestly"
+  ],
+  [
+   "polite",
+   "politely"
+  ],
+  [
+   "smooth",
+   "smoothly"
+  ],
+  [
+   "rough",
+   "roughly"
+  ],
+  [
+   "swift",
+   "swiftly"
+  ],
+  [
+   "final",
+   "finally"
+  ],
+  [
+   "playful",
+   "playfully"
+  ],
+  [
+   "cheerful",
+   "cheerfully"
+  ],
+  [
+   "helpful",
+   "helpfully"
   ]
  ],
  "COMPOUNDS": [
@@ -593,6 +1187,86 @@
   [
    "pop",
    "corn"
+  ],
+  [
+   "tree",
+   "house"
+  ],
+  [
+   "door",
+   "bell"
+  ],
+  [
+   "hand",
+   "shake"
+  ],
+  [
+   "skate",
+   "board"
+  ],
+  [
+   "moon",
+   "light"
+  ],
+  [
+   "dog",
+   "house"
+  ],
+  [
+   "note",
+   "book"
+  ],
+  [
+   "lunch",
+   "box"
+  ],
+  [
+   "sea",
+   "shell"
+  ],
+  [
+   "rain",
+   "coat"
+  ],
+  [
+   "snow",
+   "flake"
+  ],
+  [
+   "head",
+   "band"
+  ],
+  [
+   "hair",
+   "cut"
+  ],
+  [
+   "blue",
+   "berry"
+  ],
+  [
+   "water",
+   "fall"
+  ],
+  [
+   "sun",
+   "set"
+  ],
+  [
+   "out",
+   "side"
+  ],
+  [
+   "in",
+   "side"
+  ],
+  [
+   "birth",
+   "day"
+  ],
+  [
+   "lady",
+   "bug"
   ]
  ],
  "SILENT": [
@@ -685,6 +1359,111 @@
    "word": "ghost",
    "letter": "h",
    "sentence": "The ghost said boo."
+  },
+  {
+   "word": "knot",
+   "letter": "k",
+   "sentence": "I tied a knot in my skate lace."
+  },
+  {
+   "word": "knit",
+   "letter": "k",
+   "sentence": "Grandma will knit me a toque."
+  },
+  {
+   "word": "kneel",
+   "letter": "k",
+   "sentence": "Please kneel down on the mat."
+  },
+  {
+   "word": "knob",
+   "letter": "k",
+   "sentence": "Turn the knob to open the door."
+  },
+  {
+   "word": "wreck",
+   "letter": "w",
+   "sentence": "The storm left a wreck on the beach."
+  },
+  {
+   "word": "wrote",
+   "letter": "w",
+   "sentence": "I wrote a letter to my cousin."
+  },
+  {
+   "word": "wrench",
+   "letter": "w",
+   "sentence": "Dad used a wrench to fix my bike."
+  },
+  {
+   "word": "crumb",
+   "letter": "b",
+   "sentence": "There is a crumb on your chin."
+  },
+  {
+   "word": "limb",
+   "letter": "b",
+   "sentence": "A tree limb fell in the wind."
+  },
+  {
+   "word": "gnaw",
+   "letter": "g",
+   "sentence": "Beavers gnaw on trees."
+  },
+  {
+   "word": "island",
+   "letter": "s",
+   "sentence": "We took a ferry to the island."
+  },
+  {
+   "word": "fasten",
+   "letter": "t",
+   "sentence": "Fasten your seatbelt, please."
+  },
+  {
+   "word": "half",
+   "letter": "l",
+   "sentence": "I ate half of the sandwich."
+  },
+  {
+   "word": "walk",
+   "letter": "l",
+   "sentence": "We walk the dog every night."
+  },
+  {
+   "word": "talk",
+   "letter": "l",
+   "sentence": "Let's talk about our trip."
+  },
+  {
+   "word": "calm",
+   "letter": "l",
+   "sentence": "The lake is calm this morning."
+  },
+  {
+   "word": "palm",
+   "letter": "l",
+   "sentence": "Hold the seed in your palm."
+  },
+  {
+   "word": "autumn",
+   "letter": "n",
+   "sentence": "The leaves fall in autumn."
+  },
+  {
+   "word": "honest",
+   "letter": "h",
+   "sentence": "Always be honest with your friends."
+  },
+  {
+   "word": "answer",
+   "letter": "w",
+   "sentence": "I know the answer to that one."
+  },
+  {
+   "word": "sword",
+   "letter": "w",
+   "sentence": "The knight held a shiny sword."
   }
  ],
  "SOUNDS": [
@@ -797,6 +1576,91 @@
    "word": "chorus",
    "sentence": "We sang the chorus together.",
    "hint": "The k sound is spelled ch."
+  },
+  {
+   "word": "photo",
+   "sentence": "We took a photo at the lake.",
+   "hint": "The f sound is spelled ph."
+  },
+  {
+   "word": "alphabet",
+   "sentence": "We sang the alphabet song.",
+   "hint": "The f sound is spelled ph."
+  },
+  {
+   "word": "trophy",
+   "sentence": "Our team won a shiny trophy.",
+   "hint": "The f sound is spelled ph, and the end sounds like ee but is spelled y."
+  },
+  {
+   "word": "enough",
+   "sentence": "We have enough snow for a fort.",
+   "hint": "The f sound at the end is spelled gh."
+  },
+  {
+   "word": "cough",
+   "sentence": "Cover your mouth when you cough.",
+   "hint": "The f sound at the end is spelled gh."
+  },
+  {
+   "word": "rough",
+   "sentence": "The bark on the tree is rough.",
+   "hint": "The f sound at the end is spelled gh."
+  },
+  {
+   "word": "fight",
+   "sentence": "Brothers should not fight.",
+   "hint": "The long i sound is spelled igh."
+  },
+  {
+   "word": "flight",
+   "sentence": "Our flight to Toronto was long.",
+   "hint": "The long i sound is spelled igh."
+  },
+  {
+   "word": "sight",
+   "sentence": "The mountains are a beautiful sight.",
+   "hint": "The long i sound is spelled igh."
+  },
+  {
+   "word": "stream",
+   "sentence": "Fish swim in the stream.",
+   "hint": "It starts with str, and the long e is spelled ea."
+  },
+  {
+   "word": "spring",
+   "sentence": "Flowers bloom in the spring.",
+   "hint": "It starts with spr."
+  },
+  {
+   "word": "scream",
+   "sentence": "We scream on the roller coaster.",
+   "hint": "It starts with scr, and the long e is spelled ea."
+  },
+  {
+   "word": "scrub",
+   "sentence": "Scrub the pot with soap.",
+   "hint": "It starts with scr."
+  },
+  {
+   "word": "throw",
+   "sentence": "Throw the ball to me.",
+   "hint": "It starts with thr, and the long o is spelled ow."
+  },
+  {
+   "word": "wheel",
+   "sentence": "My bike has a flat wheel.",
+   "hint": "It starts with wh, and the long e is spelled ee."
+  },
+  {
+   "word": "shrimp",
+   "sentence": "I ate shrimp for supper.",
+   "hint": "It starts with shr."
+  },
+  {
+   "word": "splinter",
+   "sentence": "I got a splinter from the fence.",
+   "hint": "It starts with spl."
   }
  ],
  "HOMOPHONES": [
@@ -1170,6 +2034,373 @@
     "for",
     "four"
    ]
+  },
+  {
+   "s": "Grandma bought ___ new hockey sticks for us.",
+   "a": "two",
+   "c": [
+    "to",
+    "too",
+    "two"
+   ]
+  },
+  {
+   "s": "My little brother wants to play ___.",
+   "a": "too",
+   "c": [
+    "to",
+    "too",
+    "two"
+   ]
+  },
+  {
+   "s": "We drove ___ Drumheller to see the dinosaurs.",
+   "a": "to",
+   "c": [
+    "to",
+    "too",
+    "two"
+   ]
+  },
+  {
+   "s": "This hill is ___ steep for my bike.",
+   "a": "too",
+   "c": [
+    "to",
+    "too",
+    "two"
+   ]
+  },
+  {
+   "s": "Give the ball ___ the goalie.",
+   "a": "to",
+   "c": [
+    "to",
+    "too",
+    "two"
+   ]
+  },
+  {
+   "s": "The puppy has ___ white paws.",
+   "a": "two",
+   "c": [
+    "to",
+    "too",
+    "two"
+   ]
+  },
+  {
+   "s": "___ going to win the game tonight.",
+   "a": "They're",
+   "c": [
+    "Their",
+    "There",
+    "They're"
+   ]
+  },
+  {
+   "s": "___ is a moose by the road!",
+   "a": "There",
+   "c": [
+    "Their",
+    "There",
+    "They're"
+   ]
+  },
+  {
+   "s": "___ dog barks at the mail carrier.",
+   "a": "Their",
+   "c": [
+    "Their",
+    "There",
+    "They're"
+   ]
+  },
+  {
+   "s": "I left my mittens over ___.",
+   "a": "there",
+   "c": [
+    "their",
+    "there",
+    "they're"
+   ]
+  },
+  {
+   "s": "The birds built ___ nest in our tree.",
+   "a": "their",
+   "c": [
+    "their",
+    "there",
+    "they're"
+   ]
+  },
+  {
+   "s": "Ask the players if ___ ready.",
+   "a": "they're",
+   "c": [
+    "their",
+    "there",
+    "they're"
+   ]
+  },
+  {
+   "s": "Put the puck right ___.",
+   "a": "there",
+   "c": [
+    "their",
+    "there",
+    "they're"
+   ]
+  },
+  {
+   "s": "The kids hung ___ coats on the hooks.",
+   "a": "their",
+   "c": [
+    "their",
+    "there",
+    "they're"
+   ]
+  },
+  {
+   "s": "I think ___ at the park already.",
+   "a": "they're",
+   "c": [
+    "their",
+    "there",
+    "they're"
+   ]
+  },
+  {
+   "s": "We saw a grizzly ___ in Banff.",
+   "a": "bear",
+   "c": [
+    "bear",
+    "bare"
+   ]
+  },
+  {
+   "s": "The trees are ___ in winter.",
+   "a": "bare",
+   "c": [
+    "bear",
+    "bare"
+   ]
+  },
+  {
+   "s": "I scored ___ goal in the game.",
+   "a": "one",
+   "c": [
+    "one",
+    "won"
+   ]
+  },
+  {
+   "s": "Their ___ plays on my team.",
+   "a": "son",
+   "c": [
+    "sun",
+    "son"
+   ]
+  },
+  {
+   "s": "The wolf eats ___.",
+   "a": "meat",
+   "c": [
+    "meet",
+    "meat"
+   ]
+  },
+  {
+   "s": "We had to ___ for the bus.",
+   "a": "wait",
+   "c": [
+    "wait",
+    "weight"
+   ]
+  },
+  {
+   "s": "What is your ___ in kilograms?",
+   "a": "weight",
+   "c": [
+    "wait",
+    "weight"
+   ]
+  },
+  {
+   "s": "___ you like some juice?",
+   "a": "Would",
+   "c": [
+    "Would",
+    "Wood"
+   ]
+  },
+  {
+   "s": "The cabin is made of ___.",
+   "a": "wood",
+   "c": [
+    "would",
+    "wood"
+   ]
+  },
+  {
+   "s": "I stubbed my ___ on the chair.",
+   "a": "toe",
+   "c": [
+    "toe",
+    "tow"
+   ]
+  },
+  {
+   "s": "The truck will ___ our car to the garage.",
+   "a": "tow",
+   "c": [
+    "toe",
+    "tow"
+   ]
+  },
+  {
+   "s": "Look both ways before you cross the ___.",
+   "a": "road",
+   "c": [
+    "rode",
+    "road"
+   ]
+  },
+  {
+   "s": "We ___ snowballs at the fort.",
+   "a": "threw",
+   "c": [
+    "threw",
+    "through"
+   ]
+  },
+  {
+   "s": "The dog ran ___ the open door.",
+   "a": "through",
+   "c": [
+    "threw",
+    "through"
+   ]
+  },
+  {
+   "s": "My dog has a fluffy ___.",
+   "a": "tail",
+   "c": [
+    "tail",
+    "tale"
+   ]
+  },
+  {
+   "s": "Grandpa told us a ___ about a dragon.",
+   "a": "tale",
+   "c": [
+    "tail",
+    "tale"
+   ]
+  },
+  {
+   "s": "I have a ___ throat today.",
+   "a": "sore",
+   "c": [
+    "sore",
+    "soar"
+   ]
+  },
+  {
+   "s": "Eagles ___ high over the river.",
+   "a": "soar",
+   "c": [
+    "sore",
+    "soar"
+   ]
+  },
+  {
+   "s": "The baby began to ___ when she dropped her toy.",
+   "a": "wail",
+   "c": [
+    "whale",
+    "wail"
+   ]
+  },
+  {
+   "s": "Can you ___ the snowplow coming?",
+   "a": "hear",
+   "c": [
+    "hear",
+    "here"
+   ]
+  },
+  {
+   "s": "Please put your boots ___ by the door.",
+   "a": "here",
+   "c": [
+    "hear",
+    "here"
+   ]
+  },
+  {
+   "s": "We ___ hot dogs at the campfire.",
+   "a": "ate",
+   "c": [
+    "eight",
+    "ate"
+   ]
+  },
+  {
+   "s": "Our class has ___ computers.",
+   "a": "eight",
+   "c": [
+    "eight",
+    "ate"
+   ]
+  },
+  {
+   "s": "The ___ is very bright today.",
+   "a": "sun",
+   "c": [
+    "sun",
+    "son"
+   ]
+  },
+  {
+   "s": "My ___ hat is warm and fuzzy.",
+   "a": "blue",
+   "c": [
+    "blew",
+    "blue"
+   ]
+  },
+  {
+   "s": "Do you ___ how to skate backwards?",
+   "a": "know",
+   "c": [
+    "know",
+    "no"
+   ]
+  },
+  {
+   "s": "There is ___ more milk in the fridge.",
+   "a": "no",
+   "c": [
+    "know",
+    "no"
+   ]
+  },
+  {
+   "s": "I need a new ___ of skates.",
+   "a": "pair",
+   "c": [
+    "pear",
+    "pair"
+   ]
+  },
+  {
+   "s": "Our team ___ the hockey tournament!",
+   "a": "won",
+   "c": [
+    "one",
+    "won"
+   ]
   }
  ],
  "SYN": [
@@ -1228,6 +2459,62 @@
   [
    "look",
    "see"
+  ],
+  [
+   "jump",
+   "leap"
+  ],
+  [
+   "rock",
+   "stone"
+  ],
+  [
+   "quiet",
+   "silent"
+  ],
+  [
+   "tired",
+   "sleepy"
+  ],
+  [
+   "easy",
+   "simple"
+  ],
+  [
+   "grab",
+   "snatch"
+  ],
+  [
+   "sick",
+   "ill"
+  ],
+  [
+   "rush",
+   "hurry"
+  ],
+  [
+   "wet",
+   "damp"
+  ],
+  [
+   "gift",
+   "present"
+  ],
+  [
+   "shy",
+   "timid"
+  ],
+  [
+   "choose",
+   "pick"
+  ],
+  [
+   "kind",
+   "nice"
+  ],
+  [
+   "toss",
+   "throw"
   ]
  ],
  "ANT": [
@@ -1290,6 +2577,62 @@
   [
    "fast",
    "slow"
+  ],
+  [
+   "tall",
+   "short"
+  ],
+  [
+   "inside",
+   "outside"
+  ],
+  [
+   "laugh",
+   "cry"
+  ],
+  [
+   "near",
+   "far"
+  ],
+  [
+   "buy",
+   "sell"
+  ],
+  [
+   "always",
+   "never"
+  ],
+  [
+   "give",
+   "take"
+  ],
+  [
+   "front",
+   "back"
+  ],
+  [
+   "rough",
+   "smooth"
+  ],
+  [
+   "sweet",
+   "sour"
+  ],
+  [
+   "clean",
+   "dirty"
+  ],
+  [
+   "awake",
+   "asleep"
+  ],
+  [
+   "strong",
+   "weak"
+  ],
+  [
+   "add",
+   "subtract"
   ]
  ],
  "ABBR": [
@@ -1348,6 +2691,118 @@
   [
    "Drive",
    "Dr."
+  ],
+  [
+   "Mistress",
+   "Mrs."
+  ],
+  [
+   "Mount",
+   "Mt."
+  ],
+  [
+   "kilometre",
+   "km"
+  ],
+  [
+   "kilogram",
+   "kg"
+  ],
+  [
+   "gram",
+   "g"
+  ],
+  [
+   "litre",
+   "L"
+  ],
+  [
+   "millilitre",
+   "mL"
+  ],
+  [
+   "hour",
+   "h"
+  ],
+  [
+   "Tuesday",
+   "Tues."
+  ],
+  [
+   "Wednesday",
+   "Wed."
+  ],
+  [
+   "Thursday",
+   "Thurs."
+  ],
+  [
+   "Sunday",
+   "Sun."
+  ],
+  [
+   "February",
+   "Feb."
+  ],
+  [
+   "August",
+   "Aug."
+  ],
+  [
+   "October",
+   "Oct."
+  ],
+  [
+   "December",
+   "Dec."
+  ],
+  [
+   "British Columbia",
+   "BC"
+  ],
+  [
+   "Saskatchewan",
+   "SK"
+  ],
+  [
+   "Ontario",
+   "ON"
+  ],
+  [
+   "Boulevard",
+   "Blvd."
+  ],
+  [
+   "Crescent",
+   "Cres."
+  ],
+  [
+   "Northwest",
+   "NW"
+  ],
+  [
+   "Southeast",
+   "SE"
+  ],
+  [
+   "Northeast",
+   "NE"
+  ],
+  [
+   "Southwest",
+   "SW"
+  ],
+  [
+   "millimetre",
+   "mm"
+  ],
+  [
+   "November",
+   "Nov."
+  ],
+  [
+   "September",
+   "Sept."
   ]
  ],
  "GRADE3_WORDS": [
@@ -1774,6 +3229,386 @@
    "one": "bison",
    "many": "bison",
    "rule": 3
+  },
+  {
+   "one": "class",
+   "many": "classes",
+   "rule": 0
+  },
+  {
+   "one": "kiss",
+   "many": "kisses",
+   "rule": 0
+  },
+  {
+   "one": "match",
+   "many": "matches",
+   "rule": 0
+  },
+  {
+   "one": "beach",
+   "many": "beaches",
+   "rule": 0
+  },
+  {
+   "one": "peach",
+   "many": "peaches",
+   "rule": 0
+  },
+  {
+   "one": "bush",
+   "many": "bushes",
+   "rule": 0
+  },
+  {
+   "one": "crash",
+   "many": "crashes",
+   "rule": 0
+  },
+  {
+   "one": "tax",
+   "many": "taxes",
+   "rule": 0
+  },
+  {
+   "one": "sandwich",
+   "many": "sandwiches",
+   "rule": 0
+  },
+  {
+   "one": "mitten",
+   "many": "mittens",
+   "rule": 0
+  },
+  {
+   "one": "skate",
+   "many": "skates",
+   "rule": 0
+  },
+  {
+   "one": "helmet",
+   "many": "helmets",
+   "rule": 0
+  },
+  {
+   "one": "goal",
+   "many": "goals",
+   "rule": 0
+  },
+  {
+   "one": "tree",
+   "many": "trees",
+   "rule": 0
+  },
+  {
+   "one": "glove",
+   "many": "gloves",
+   "rule": 0
+  },
+  {
+   "one": "torch",
+   "many": "torches",
+   "rule": 0
+  },
+  {
+   "one": "address",
+   "many": "addresses",
+   "rule": 0
+  },
+  {
+   "one": "flash",
+   "many": "flashes",
+   "rule": 0
+  },
+  {
+   "one": "lake",
+   "many": "lakes",
+   "rule": 0
+  },
+  {
+   "one": "lady",
+   "many": "ladies",
+   "rule": 1
+  },
+  {
+   "one": "fly",
+   "many": "flies",
+   "rule": 1
+  },
+  {
+   "one": "spy",
+   "many": "spies",
+   "rule": 1
+  },
+  {
+   "one": "penny",
+   "many": "pennies",
+   "rule": 1
+  },
+  {
+   "one": "body",
+   "many": "bodies",
+   "rule": 1
+  },
+  {
+   "one": "daisy",
+   "many": "daisies",
+   "rule": 1
+  },
+  {
+   "one": "library",
+   "many": "libraries",
+   "rule": 1
+  },
+  {
+   "one": "country",
+   "many": "countries",
+   "rule": 1
+  },
+  {
+   "one": "kitty",
+   "many": "kitties",
+   "rule": 1
+  },
+  {
+   "one": "diary",
+   "many": "diaries",
+   "rule": 1
+  },
+  {
+   "one": "valley",
+   "many": "valleys",
+   "rule": 1
+  },
+  {
+   "one": "turkey",
+   "many": "turkeys",
+   "rule": 1
+  },
+  {
+   "one": "donkey",
+   "many": "donkeys",
+   "rule": 1
+  },
+  {
+   "one": "tray",
+   "many": "trays",
+   "rule": 1
+  },
+  {
+   "one": "jockey",
+   "many": "jockeys",
+   "rule": 1
+  },
+  {
+   "one": "hobby",
+   "many": "hobbies",
+   "rule": 1
+  },
+  {
+   "one": "hoof",
+   "many": "hooves",
+   "rule": 2
+  },
+  {
+   "one": "self",
+   "many": "selves",
+   "rule": 2
+  },
+  {
+   "one": "wharf",
+   "many": "wharves",
+   "rule": 2
+  },
+  {
+   "one": "roof",
+   "many": "roofs",
+   "rule": 2
+  },
+  {
+   "one": "chief",
+   "many": "chiefs",
+   "rule": 2
+  },
+  {
+   "one": "cliff",
+   "many": "cliffs",
+   "rule": 2
+  },
+  {
+   "one": "chef",
+   "many": "chefs",
+   "rule": 2
+  },
+  {
+   "one": "giraffe",
+   "many": "giraffes",
+   "rule": 2
+  },
+  {
+   "one": "puff",
+   "many": "puffs",
+   "rule": 2
+  },
+  {
+   "one": "reef",
+   "many": "reefs",
+   "rule": 2
+  },
+  {
+   "one": "safe",
+   "many": "safes",
+   "rule": 2
+  },
+  {
+   "one": "sniff",
+   "many": "sniffs",
+   "rule": 2
+  },
+  {
+   "one": "belief",
+   "many": "beliefs",
+   "rule": 2
+  },
+  {
+   "one": "proof",
+   "many": "proofs",
+   "rule": 2
+  },
+  {
+   "one": "cuff",
+   "many": "cuffs",
+   "rule": 2
+  },
+  {
+   "one": "muff",
+   "many": "muffs",
+   "rule": 2
+  },
+  {
+   "one": "gulf",
+   "many": "gulfs",
+   "rule": 2
+  },
+  {
+   "one": "ox",
+   "many": "oxen",
+   "rule": 3
+  },
+  {
+   "one": "trout",
+   "many": "trout",
+   "rule": 3
+  },
+  {
+   "one": "salmon",
+   "many": "salmon",
+   "rule": 3
+  },
+  {
+   "one": "shrimp",
+   "many": "shrimp",
+   "rule": 3
+  },
+  {
+   "one": "elk",
+   "many": "elk",
+   "rule": 3
+  },
+  {
+   "one": "aircraft",
+   "many": "aircraft",
+   "rule": 3
+  },
+  {
+   "one": "snowman",
+   "many": "snowmen",
+   "rule": 3
+  },
+  {
+   "one": "grandchild",
+   "many": "grandchildren",
+   "rule": 3
+  },
+  {
+   "one": "potato",
+   "many": "potatoes",
+   "rule": 3
+  },
+  {
+   "one": "tomato",
+   "many": "tomatoes",
+   "rule": 3
+  },
+  {
+   "one": "hero",
+   "many": "heroes",
+   "rule": 3
+  },
+  {
+   "one": "echo",
+   "many": "echoes",
+   "rule": 3
+  },
+  {
+   "one": "piano",
+   "many": "pianos",
+   "rule": 3
+  },
+  {
+   "one": "photo",
+   "many": "photos",
+   "rule": 3
+  },
+  {
+   "one": "radio",
+   "many": "radios",
+   "rule": 3
+  },
+  {
+   "one": "kangaroo",
+   "many": "kangaroos",
+   "rule": 3
+  },
+  {
+   "one": "video",
+   "many": "videos",
+   "rule": 3
+  },
+  {
+   "one": "zoo",
+   "many": "zoos",
+   "rule": 3
+  },
+  {
+   "one": "igloo",
+   "many": "igloos",
+   "rule": 3
+  },
+  {
+   "one": "cod",
+   "many": "cod",
+   "rule": 3
+  },
+  {
+   "one": "sheriff",
+   "many": "sheriffs",
+   "rule": 2
+  },
+  {
+   "one": "bluff",
+   "many": "bluffs",
+   "rule": 2
+  },
+  {
+   "one": "whiff",
+   "many": "whiffs",
+   "rule": 2
+  },
+  {
+   "one": "crutch",
+   "many": "crutches",
+   "rule": 0
   }
  ],
  "ENDINGS": [
@@ -2034,6 +3869,342 @@
    "ing": "grabbing",
    "ed": "grabbed",
    "rule": 2
+  },
+  {
+   "base": "fish",
+   "ing": "fishing",
+   "ed": "fished",
+   "rule": 0
+  },
+  {
+   "base": "wish",
+   "ing": "wishing",
+   "ed": "wished",
+   "rule": 0
+  },
+  {
+   "base": "pull",
+   "ing": "pulling",
+   "ed": "pulled",
+   "rule": 0
+  },
+  {
+   "base": "work",
+   "ing": "working",
+   "ed": "worked",
+   "rule": 0
+  },
+  {
+   "base": "pick",
+   "ing": "picking",
+   "ed": "picked",
+   "rule": 0
+  },
+  {
+   "base": "yell",
+   "ing": "yelling",
+   "ed": "yelled",
+   "rule": 0
+  },
+  {
+   "base": "spell",
+   "ing": "spelling",
+   "ed": "spelled",
+   "rule": 0
+  },
+  {
+   "base": "pack",
+   "ing": "packing",
+   "ed": "packed",
+   "rule": 0
+  },
+  {
+   "base": "float",
+   "ing": "floating",
+   "ed": "floated",
+   "rule": 0
+  },
+  {
+   "base": "learn",
+   "ing": "learning",
+   "ed": "learned",
+   "rule": 0
+  },
+  {
+   "base": "crash",
+   "ing": "crashing",
+   "ed": "crashed",
+   "rule": 0
+  },
+  {
+   "base": "wait",
+   "ing": "waiting",
+   "ed": "waited",
+   "rule": 0
+  },
+  {
+   "base": "close",
+   "ing": "closing",
+   "ed": "closed",
+   "rule": 1
+  },
+  {
+   "base": "invite",
+   "ing": "inviting",
+   "ed": "invited",
+   "rule": 1
+  },
+  {
+   "base": "move",
+   "ing": "moving",
+   "ed": "moved",
+   "rule": 1
+  },
+  {
+   "base": "rake",
+   "ing": "raking",
+   "ed": "raked",
+   "rule": 1
+  },
+  {
+   "base": "trade",
+   "ing": "trading",
+   "ed": "traded",
+   "rule": 1
+  },
+  {
+   "base": "chase",
+   "ing": "chasing",
+   "ed": "chased",
+   "rule": 1
+  },
+  {
+   "base": "save",
+   "ing": "saving",
+   "ed": "saved",
+   "rule": 1
+  },
+  {
+   "base": "bounce",
+   "ing": "bouncing",
+   "ed": "bounced",
+   "rule": 1
+  },
+  {
+   "base": "sneeze",
+   "ing": "sneezing",
+   "ed": "sneezed",
+   "rule": 1
+  },
+  {
+   "base": "tickle",
+   "ing": "tickling",
+   "ed": "tickled",
+   "rule": 1
+  },
+  {
+   "base": "juggle",
+   "ing": "juggling",
+   "ed": "juggled",
+   "rule": 1
+  },
+  {
+   "base": "giggle",
+   "ing": "giggling",
+   "ed": "giggled",
+   "rule": 1
+  },
+  {
+   "base": "wiggle",
+   "ing": "wiggling",
+   "ed": "wiggled",
+   "rule": 1
+  },
+  {
+   "base": "taste",
+   "ing": "tasting",
+   "ed": "tasted",
+   "rule": 1
+  },
+  {
+   "base": "paddle",
+   "ing": "paddling",
+   "ed": "paddled",
+   "rule": 1
+  },
+  {
+   "base": "phone",
+   "ing": "phoning",
+   "ed": "phoned",
+   "rule": 1
+  },
+  {
+   "base": "use",
+   "ing": "using",
+   "ed": "used",
+   "rule": 1
+  },
+  {
+   "base": "rub",
+   "ing": "rubbing",
+   "ed": "rubbed",
+   "rule": 2
+  },
+  {
+   "base": "tap",
+   "ing": "tapping",
+   "ed": "tapped",
+   "rule": 2
+  },
+  {
+   "base": "wag",
+   "ing": "wagging",
+   "ed": "wagged",
+   "rule": 2
+  },
+  {
+   "base": "pat",
+   "ing": "patting",
+   "ed": "patted",
+   "rule": 2
+  },
+  {
+   "base": "chop",
+   "ing": "chopping",
+   "ed": "chopped",
+   "rule": 2
+  },
+  {
+   "base": "step",
+   "ing": "stepping",
+   "ed": "stepped",
+   "rule": 2
+  },
+  {
+   "base": "slip",
+   "ing": "slipping",
+   "ed": "slipped",
+   "rule": 2
+  },
+  {
+   "base": "drip",
+   "ing": "dripping",
+   "ed": "dripped",
+   "rule": 2
+  },
+  {
+   "base": "flip",
+   "ing": "flipping",
+   "ed": "flipped",
+   "rule": 2
+  },
+  {
+   "base": "grin",
+   "ing": "grinning",
+   "ed": "grinned",
+   "rule": 2
+  },
+  {
+   "base": "hum",
+   "ing": "humming",
+   "ed": "hummed",
+   "rule": 2
+  },
+  {
+   "base": "beg",
+   "ing": "begging",
+   "ed": "begged",
+   "rule": 2
+  },
+  {
+   "base": "rob",
+   "ing": "robbing",
+   "ed": "robbed",
+   "rule": 2
+  },
+  {
+   "base": "sob",
+   "ing": "sobbing",
+   "ed": "sobbed",
+   "rule": 2
+  },
+  {
+   "base": "mop",
+   "ing": "mopping",
+   "ed": "mopped",
+   "rule": 2
+  },
+  {
+   "base": "zip",
+   "ing": "zipping",
+   "ed": "zipped",
+   "rule": 2
+  },
+  {
+   "base": "pop",
+   "ing": "popping",
+   "ed": "popped",
+   "rule": 2
+  },
+  {
+   "base": "tug",
+   "ing": "tugging",
+   "ed": "tugged",
+   "rule": 2
+  },
+  {
+   "base": "plug",
+   "ing": "plugging",
+   "ed": "plugged",
+   "rule": 2
+  },
+  {
+   "base": "scrub",
+   "ing": "scrubbing",
+   "ed": "scrubbed",
+   "rule": 2
+  },
+  {
+   "base": "skid",
+   "ing": "skidding",
+   "ed": "skidded",
+   "rule": 2
+  },
+  {
+   "base": "trot",
+   "ing": "trotting",
+   "ed": "trotted",
+   "rule": 2
+  },
+  {
+   "base": "pin",
+   "ing": "pinning",
+   "ed": "pinned",
+   "rule": 2
+  },
+  {
+   "base": "squeeze",
+   "ing": "squeezing",
+   "ed": "squeezed",
+   "rule": 1
+  },
+  {
+   "base": "wipe",
+   "ing": "wiping",
+   "ed": "wiped",
+   "rule": 1
+  },
+  {
+   "base": "hike",
+   "ing": "hiking",
+   "ed": "hiked",
+   "rule": 1
+  },
+  {
+   "base": "scrape",
+   "ing": "scraping",
+   "ed": "scraped",
+   "rule": 1
   }
  ]
 }

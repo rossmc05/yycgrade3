@@ -2,6 +2,7 @@
 
 import { fmt, int, options, pick, shuffle } from '../../engine/random';
 import type { Question, Rng, Skill } from '../../engine/types';
+import bank from '../../content/math.json';
 
 const S = 'math' as const;
 
@@ -113,7 +114,7 @@ const COIN_VALUE: Record<string, number> = { nickel: 5, dime: 10, quarter: 25, l
 function money(level: number, rng: Rng): Question {
   if (level <= 1) {
     const kinds = level === 0 ? ['nickel', 'dime'] : ['nickel', 'dime', 'quarter'];
-    const count = int(rng, 3, level === 0 ? 6 : 8);
+    const count = int(rng, 2, level === 0 ? 9 : 8);
     const coins = Array.from({ length: count }, () => pick(rng, kinds)).sort((x, y) => COIN_VALUE[y] - COIN_VALUE[x]);
     const total = coins.reduce((t, c) => t + COIN_VALUE[c], 0);
     return {
@@ -144,8 +145,22 @@ function money(level: number, rng: Rng): Question {
     };
   }
   // Level 3: can you afford it / change from a purchase.
-  const price = int(rng, 2, 18);
-  const paid = pick(rng, [5, 10, 20].filter((v) => v > price));
+  if (rng() < 0.5) {
+    const [a, b] = [int(rng, 2, 15), int(rng, 2, 15)];
+    const paid = pick(rng, [20, 50, 100].filter((v) => v > a + b));
+    const [i1, i2] = shuffle(rng, ['a hockey puck', 'a book', 'a toy car', 'a bag of popcorn', 'a pack of stickers', 'a water bottle', 'a kite', 'a puzzle', 'a toque', 'a skipping rope']).slice(0, 2);
+    return {
+      key: `money-change2-${a}-${b}-${paid}`,
+      prompt: `You buy ${i1} for $${a} and ${i2} for $${b}. You pay with $${paid}. How much change do you get?`,
+      input: 'number',
+      unit: '$',
+      answer: String(paid - a - b),
+      hint: `First add the prices: $${a} + $${b}. Then count up to $${paid}.`,
+      explain: `$${a} + $${b} = $${a + b}. $${paid} − $${a + b} = $${paid - a - b}.`,
+    };
+  }
+  const price = int(rng, 2, 45);
+  const paid = pick(rng, [5, 10, 20, 50].filter((v) => v > price));
   const item = pick(rng, ['a hockey puck', 'a book', 'a toy car', 'a bag of popcorn', 'a pack of stickers', 'a water bottle']);
   return {
     key: `money-change-${price}-${paid}`,
@@ -339,12 +354,34 @@ const NAMES: Record<number, [string, string]> = {
 };
 const NUMWORD = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve'];
 
+const FOODS = ['pizza', 'pie', 'chocolate bar', 'sandwich', 'cake', 'pan of brownies', 'quesadilla', 'garden', 'flag', 'window'];
+
+/** A fraction in a story: a whole cut into equal parts. */
+function fractionStory(rng: Rng, d: number): Question {
+  const n = int(rng, 1, d - 1);
+  const thing = pick(rng, FOODS);
+  const eaten = ['pizza', 'pie', 'chocolate bar', 'sandwich', 'cake', 'pan of brownies', 'quesadilla'].includes(thing);
+  const did = eaten ? `You eat ${NUMWORD[n]}` : `You colour ${NUMWORD[n]}`;
+  const left = rng() < 0.4;
+  const a = left ? d - n : n;
+  return {
+    key: `fr-story-${thing}-${n}/${d}-${left}`,
+    prompt: `A ${thing} is cut into ${NUMWORD[d]} equal parts. ${did} of them. What fraction ${left ? 'is left' : eaten ? 'did you eat' : 'did you colour'}?`,
+    input: 'choice',
+    choices: options(rng, `${a}/${d}`, [`${d - a || d}/${d}`, `${a}/${d + 1}`, `${d}/${a}`, `1/${a + 1}`]),
+    answer: `${a}/${d}`,
+    hint: 'The bottom number is how many equal parts in all. The top number is how many parts you are counting.',
+    explain: `${a} of ${d} equal parts: ${a}/${d}.`,
+  };
+}
+
 export function fractionName(n: number, d: number): string {
   return `${NUMWORD[n]} ${n === 1 ? NAMES[d][0] : NAMES[d][1]}`;
 }
 
 function fractions(level: number, rng: Rng): Question {
   const d = pick(rng, level === 0 ? [2, 3, 4] : DENOMS);
+  if (level === 0 && rng() < 0.5) return fractionStory(rng, d);
   if (level <= 1) {
     const n = int(rng, 1, d);
     return {
@@ -530,8 +567,8 @@ function sequences(level: number, rng: Rng): Question {
   }
   if (level === 3) {
     const kind = pick(rng, ['finite', 'infinite'] as const);
-    const finite = ['a countdown from 10 to 0', 'the days of the week', 'the pages in a book', 'the months in a year', 'the players on a hockey team', '2, 4, 6, 8, 10 and stop', 'the letters of the alphabet', 'the numbers on a clock face', 'counting the students in your class', '100, 90, 80, …, 0'];
-    const infinite = ['the counting numbers 1, 2, 3, …', 'the even numbers 2, 4, 6, …', 'counting by 5s forever: 5, 10, 15, …', 'the odd numbers 1, 3, 5, …', 'counting by 10s that never stops: 10, 20, 30, …', 'counting by 100s forever: 100, 200, 300, …', 'the numbers 3, 6, 9, 12, … that keep going', 'adding 1 again and again with no end'];
+    const finite = bank.FINITE;
+    const infinite = bank.INFINITE;
     const item = kind === 'finite' ? pick(rng, finite) : pick(rng, infinite);
     return {
       key: `seq-fin-${item}`,
@@ -568,9 +605,26 @@ function pad2(n: number) {
 }
 
 function time(level: number, rng: Rng): Question {
+  if (level === 0 && rng() < 0.4) {
+    const hour = int(rng, 1, 12);
+    const minute = pick(rng, [0, 30]);
+    const later = rng() < 0.6;
+    const h2 = later ? (hour % 12) + 1 : hour === 1 ? 12 : hour - 1;
+    const ans = `${h2}:${pad2(minute)}`;
+    return {
+      key: `time-hour-${hour}:${minute}-${later}`,
+      prompt: `What time will it be one hour ${later ? 'later' : 'earlier'}?`,
+      visual: { kind: 'clock', hour, minute },
+      input: 'choice',
+      choices: options(rng, ans, [`${hour}:${pad2(minute)}`, `${later ? (h2 % 12) + 1 : h2 === 1 ? 12 : h2 - 1}:${pad2(minute)}`, `${h2}:${pad2((minute + 30) % 60)}`]),
+      answer: ans,
+      hint: `Read the clock first. Then move the hour hand ${later ? 'forward' : 'back'} one number.`,
+      explain: `The clock shows ${hour}:${pad2(minute)}. One hour ${later ? 'later' : 'earlier'} is ${ans}.`,
+    };
+  }
   if (level <= 2) {
     const hour = int(rng, 1, 12);
-    const minute = level === 0 ? pick(rng, [0, 30]) : level === 1 ? pick(rng, [0, 15, 30, 45, 5, 10, 20, 25, 35, 40, 50, 55]) : int(rng, 0, 59);
+    const minute = level === 0 ? pick(rng, [0, 30]) : level === 1 ? pick(rng, [0,  15,  30,  45,  5,  10,  20,  25,  35,  40,  50,  55]) : int(rng, 0, 59);
     const ans = `${hour}:${pad2(minute)}`;
     const wrongHour = hour === 12 ? 1 : hour + 1;
     return {
@@ -592,7 +646,7 @@ function time(level: number, rng: Rng): Question {
   if (level === 3) {
     const kind = pick(rng, ['until', 'units', 'ampm'] as const);
     if (kind === 'until') {
-      const m = pick(rng, [5, 10, 15, 20, 25, 35, 40, 45, 50, 55]);
+      const m = pick(rng, [5,  10,  15,  20,  25,  35,  40,  45,  50,  55]);
       const h = int(rng, 1, 11);
       return {
         key: `time-until-${h}-${m}`,
@@ -606,24 +660,10 @@ function time(level: number, rng: Rng): Question {
       };
     }
     if (kind === 'units') {
-      const q = pick(rng, [
-        { p: 'How many seconds are in 1 minute?', a: '60' },
-        { p: 'How many minutes are in 1 hour?', a: '60' },
-        { p: 'How many minutes are in 2 hours?', a: '120' },
-        { p: 'How many seconds are in 2 minutes?', a: '120' },
-        { p: 'How many minutes are in half an hour?', a: '30' },
-        { p: 'How many hours are in one day?', a: '24' },
-      ]);
+      const q = pick(rng, bank.TIME_UNITS);
       return { key: `time-units-${q.p}`, prompt: q.p, input: 'number', answer: q.a, hint: '60 seconds make a minute and 60 minutes make an hour.', explain: `The answer is ${q.a}.` };
     }
-    const q = pick(rng, [
-      { p: 'You eat breakfast at 7:30. Is that a.m. or p.m.?', a: 'a.m.' },
-      { p: 'School ends at 3:15. Is that a.m. or p.m.?', a: 'p.m.' },
-      { p: 'You go to bed at 8:00 at night. Is that a.m. or p.m.?', a: 'p.m.' },
-      { p: 'Hockey practice starts at 6:00 in the morning. Is that a.m. or p.m.?', a: 'a.m.' },
-      { p: 'Lunch is at 12:00 noon. After that, times are…', a: 'p.m.' },
-      { p: 'Recess is at 10:15 in the morning. Is that a.m. or p.m.?', a: 'a.m.' },
-    ]);
+    const q = pick(rng, bank.AM_PM);
     return { key: `time-ampm-${q.p}`, prompt: q.p, input: 'choice', choices: ['a.m.', 'p.m.'], answer: q.a, hint: 'a.m. is from midnight to noon. p.m. is from noon to midnight.', explain: `It is ${q.a}.` };
   }
   // Level 4: 24-hour time.
@@ -660,26 +700,7 @@ function time(level: number, rng: Rng): Question {
 
 function length(level: number, rng: Rng): Question {
   if (level === 0) {
-    const q = pick(rng, [
-      { p: 'Which unit would you use to measure the length of a hockey rink?', a: 'metres' },
-      { p: 'Which unit would you use to measure the length of an ant?', a: 'millimetres' },
-      { p: 'Which unit would you use to measure the length of a pencil?', a: 'centimetres' },
-      { p: 'Which unit would you use to measure the height of a door?', a: 'metres' },
-      { p: 'Which unit would you use to measure the thickness of a coin?', a: 'millimetres' },
-      { p: 'Which unit would you use to measure the width of your hand?', a: 'centimetres' },
-      { p: 'Which unit would you use to measure the length of a school hallway?', a: 'metres' },
-      { p: 'Which unit would you use to measure the length of a crayon?', a: 'centimetres' },
-      { p: 'Which unit would you use to measure the length of a swimming pool?', a: 'metres' },
-      { p: 'Which unit would you use to measure the length of a ladybug?', a: 'millimetres' },
-      { p: 'Which unit would you use to measure the length of your shoe?', a: 'centimetres' },
-      { p: 'Which unit would you use to measure the height of a tree?', a: 'metres' },
-      { p: 'Which unit would you use to measure the width of a grain of rice?', a: 'millimetres' },
-      { p: 'Which unit would you use to measure the length of a book?', a: 'centimetres' },
-      { p: 'Which unit would you use to measure the length of a soccer field?', a: 'metres' },
-      { p: 'Which unit would you use to measure the thickness of a pencil lead?', a: 'millimetres' },
-      { p: 'Which unit would you use to measure the length of a hockey stick?', a: 'centimetres' },
-      { p: 'Which unit would you use to measure the height of the Calgary Tower?', a: 'metres' },
-    ]);
+    const q = pick(rng, bank.LENGTH_UNITS);
     return { key: `len-unit-${q.p}`, prompt: q.p, input: 'choice', choices: ['millimetres', 'centimetres', 'metres'], answer: q.a, hint: 'A millimetre is about the thickness of a dime. A centimetre is about a fingernail wide. A metre is about one big step.', explain: `Use ${q.a}.` };
   }
   if (level === 1) {
@@ -738,6 +759,18 @@ function length(level: number, rng: Rng): Question {
 const POLY_NAMES: Record<number, string> = { 3: 'triangle', 4: 'quadrilateral', 5: 'pentagon', 6: 'hexagon', 8: 'octagon' };
 
 function geometry(level: number, rng: Rng): Question {
+  if (level <= 1 && rng() < 0.6) {
+    const q = level === 0 ? pick(rng, bank.POLY_FACTS) : { ...pick(rng, bank.REGULAR_FACTS), c: ['regular', 'irregular'] };
+    return {
+      key: `geo-fact-${q.p}`,
+      prompt: q.p,
+      input: 'choice',
+      choices: level === 0 ? shuffle(rng, q.c) : q.c,
+      answer: q.a,
+      hint: level === 0 ? 'Count the sides. Tri = 3, quad = 4, penta = 5, hexa = 6, octa = 8.' : 'A regular polygon has all sides the same length and all angles the same size.',
+      explain: `The answer is ${q.a}.`,
+    };
+  }
   if (level === 0) {
     const sides = pick(rng, [3, 4, 5, 6, 8]);
     const regular = rng() < 0.5;
@@ -767,51 +800,11 @@ function geometry(level: number, rng: Rng): Question {
     };
   }
   if (level === 2) {
-    const q = pick(rng, [
-      { p: 'Lines that never meet and stay the same distance apart are…', a: 'parallel', c: ['parallel', 'perpendicular', 'curved'] },
-      { p: 'Lines that meet to make a square corner (90°) are…', a: 'perpendicular', c: ['parallel', 'perpendicular', 'curved'] },
-      { p: 'The two rails of a train track are…', a: 'parallel', c: ['parallel', 'perpendicular'] },
-      { p: 'The corner of a piece of paper is a…', a: 'right angle', c: ['right angle', 'smaller angle', 'bigger angle'] },
-      { p: 'At 3:00, the hands of a clock make a…', a: 'right angle', c: ['right angle', 'straight line', 'smaller angle'] },
-      { p: 'How many right angles does a rectangle have?', a: '4', c: ['0', '2', '4'] },
-      { p: 'A square has how many pairs of parallel sides?', a: '2', c: ['0', '1', '2', '4'] },
-      { p: 'Which capital letter has a right angle?', a: 'L', c: ['L', 'O', 'S', 'C'] },
-      { p: 'Which capital letter has a pair of parallel lines?', a: 'H', c: ['H', 'V', 'O', 'C'] },
-      { p: 'Which capital letter has perpendicular lines?', a: 'T', c: ['T', 'O', 'S', 'V'] },
-      { p: 'The lines on a hockey rink that go straight across the ice are…', a: 'parallel to each other', c: ['parallel to each other', 'perpendicular to each other', 'curved'] },
-      { p: 'Where a wall meets the floor, the corner is usually a…', a: 'right angle', c: ['right angle', 'smaller angle', 'bigger angle'] },
-      { p: 'How many right angles does a triangle with one square corner have?', a: '1', c: ['0', '1', '2', '3'] },
-      { p: 'At 6:00, the hands of a clock make a…', a: 'straight line', c: ['right angle', 'straight line', 'smaller angle'] },
-      { p: 'An angle smaller than a square corner is…', a: 'less than a right angle', c: ['less than a right angle', 'more than a right angle', 'a right angle'] },
-      { p: 'The two sides of a ladder are…', a: 'parallel', c: ['parallel', 'perpendicular', 'curved'] },
-      { p: 'A plus sign (+) is made of two lines that are…', a: 'perpendicular', c: ['parallel', 'perpendicular', 'curved'] },
-      { p: 'How many right angles does a square have?', a: '4', c: ['0', '2', '3', '4'] },
-      { p: 'Does a circle have any right angles?', a: 'no', c: ['yes', 'no'] },
-      { p: 'The opposite sides of a rectangle are…', a: 'parallel', c: ['parallel', 'perpendicular', 'curved'] },
-    ]);
+    const q = pick(rng, bank.GEO_PROPS);
     return { key: `geo-prop-${q.p}`, prompt: q.p, input: 'choice', choices: shuffle(rng, q.c), answer: q.a, hint: 'A right angle is a square corner, like the letter L. Parallel lines are like train tracks.', explain: `The answer is ${q.a}.` };
   }
   // Transformations keep shape and size.
-  const q = pick(rng, [
-    { p: 'A triangle is slid across the page (a translation). Does it keep the same side lengths?', a: 'yes' },
-    { p: 'A square is turned (a rotation). Is it still a square?', a: 'yes' },
-    { p: 'A hexagon is flipped (a reflection). Does it still have 6 sides?', a: 'yes' },
-    { p: 'When you flip a shape, do its angles change size?', a: 'no' },
-    { p: 'When you slide a shape, does it get bigger?', a: 'no' },
-    { p: 'A regular pentagon is turned. Is it still regular?', a: 'yes' },
-    { p: 'You flip the letter b like a mirror. Does it look like the letter d?', a: 'yes' },
-    { p: 'A rectangle is slid 5 cm to the right. Does its perimeter change?', a: 'no' },
-    { p: 'A triangle is turned a quarter turn. Does it still have 3 angles?', a: 'yes' },
-    { p: 'After a slide, does a shape face a different way?', a: 'no' },
-    { p: 'After a flip, can a shape face the opposite way?', a: 'yes' },
-    { p: 'A square is reflected. Do its sides stay the same length?', a: 'yes' },
-    { p: 'An octagon is rotated. Does it now have 7 sides?', a: 'no' },
-    { p: 'When you turn a shape, does its size change?', a: 'no' },
-    { p: 'You slide a puck across the ice without spinning it. Is that a translation?', a: 'yes' },
-    { p: 'A wheel spinning around its middle is an example of a rotation. True? (yes or no)', a: 'yes' },
-    { p: 'Your reflection in a mirror is an example of a flip. True? (yes or no)', a: 'yes' },
-    { p: 'Does a slide make a shape smaller?', a: 'no' },
-  ]);
+  const q = pick(rng, bank.GEO_TRANS);
   return { key: `geo-trans-${q.p}`, prompt: q.p, input: 'choice', choices: ['yes', 'no'], answer: q.a, hint: 'Slides, turns and flips move a shape but never change its size or shape.', explain: 'Translations, rotations and reflections keep side lengths and angles the same.' };
 }
 
@@ -885,36 +878,16 @@ function statistics(level: number, rng: Rng): Question {
 
 function financial(level: number, rng: Rng): Question {
   if (level === 0) {
-    const q = pick(rng, [
-      { p: 'Is food a need or a want?', a: 'need' },
-      { p: 'Is a new video game a need or a want?', a: 'want' },
-      { p: 'Is a warm winter coat a need or a want?', a: 'need' },
-      { p: 'Is candy a need or a want?', a: 'want' },
-      { p: 'Is a place to live a need or a want?', a: 'need' },
-      { p: 'Is a fourth hockey stick a need or a want?', a: 'want' },
-      { p: 'Is clean water a need or a want?', a: 'need' },
-      { p: 'Is a toy robot a need or a want?', a: 'want' },
-      { p: 'Is a winter toque in Calgary a need or a want?', a: 'need' },
-      { p: 'Is a trip to the movies a need or a want?', a: 'want' },
-      { p: 'Is medicine when you are sick a need or a want?', a: 'need' },
-      { p: 'Are pop and chips a need or a want?', a: 'want' },
-      { p: 'Is a bed to sleep in a need or a want?', a: 'need' },
-      { p: 'Is a new phone case a need or a want?', a: 'want' },
-      { p: 'Is healthy lunch food a need or a want?', a: 'need' },
-      { p: 'Is a trading card pack a need or a want?', a: 'want' },
-      { p: 'Is a pair of boots that fit a need or a want?', a: 'need' },
-      { p: 'Is a slushie at the rink a need or a want?', a: 'want' },
-      { p: 'Is a bike helmet when you ride a need or a want?', a: 'need' },
-      { p: 'Is a giant stuffed animal a need or a want?', a: 'want' },
-    ]);
+    const q = pick(rng, bank.NEEDS_WANTS);
     return { key: `fin-nw-${q.p}`, prompt: q.p, input: 'choice', choices: ['need', 'want'], answer: q.a, hint: 'A need is something you must have to live and be safe. A want is nice to have.', explain: `It is a ${q.a}.` };
   }
   if (level === 1) {
-    const week = int(rng, 2, 5);
-    const goal = week * int(rng, 3, 8);
+    const week = int(rng, 2, 10);
+    const goal = week * int(rng, 2, 8);
+    const item = pick(rng, bank.SAVE_GOALS);
     return {
       key: `fin-save-${week}-${goal}`,
-      prompt: `You want to save $${goal} for a new ball. You save $${week} each week. How many weeks will it take?`,
+      prompt: `You want to save $${goal} for ${item}. You save $${week} each week. How many weeks will it take?`,
       input: 'number',
       unit: 'weeks',
       answer: String(goal / week),
@@ -922,23 +895,7 @@ function financial(level: number, rng: Rng): Question {
       explain: `$${goal} ÷ $${week} = ${goal / week} weeks.`,
     };
   }
-  const q = pick(rng, [
-    { p: 'You have $10. What is a good money habit?', a: 'Save some and spend some', c: ['Save some and spend some', 'Spend it all right away', 'Lose it'] },
-    { p: 'Which is a short-term saving goal?', a: 'A book next week', c: ['A book next week', 'A car when you grow up', 'University'] },
-    { p: 'Which is a long-term saving goal?', a: 'A bike next summer', c: ['A bike next summer', 'A treat today', 'A pencil tomorrow'] },
-    { p: 'Giving some money to help people in need is called…', a: 'donating', c: ['donating', 'borrowing', 'spending'] },
-    { p: 'Before buying something, it is smart to…', a: 'think about whether you need it', c: ['think about whether you need it', 'buy two of everything', 'buy it without looking at the price'] },
-    { p: 'Where is a safe place to keep money you are saving?', a: 'a piggy bank or a bank account', c: ['a piggy bank or a bank account', 'your coat pocket at recess', 'under a rock outside'] },
-    { p: 'Two toys cost the same, but one is better quality. Which is the smarter buy?', a: 'the better-quality toy', c: ['the better-quality toy', 'the one with the brighter box', 'it does not matter'] },
-    { p: 'A plan for how to spend and save your money is called a…', a: 'budget', c: ['budget', 'receipt', 'coupon'] },
-    { p: 'If you spend all your allowance on Monday, what happens on Saturday?', a: 'you have no money left', c: ['you have no money left', 'you get more for free', 'the money comes back'] },
-    { p: 'You want a $20 game. You have $8. What could you do?', a: 'save for a few more weeks', c: ['save for a few more weeks', 'take money without asking', 'give up on saving'] },
-    { p: 'Comparing prices at two stores before buying is…', a: 'a smart money habit', c: ['a smart money habit', 'a waste of time', 'not allowed'] },
-    { p: 'Money you earn by doing chores is called…', a: 'income', c: ['income', 'a gift', 'a loan'] },
-    { p: 'Borrowing a book from the library instead of buying it…', a: 'saves money', c: ['saves money', 'costs more', 'is against the rules'] },
-    { p: 'Which is a way to share with others?', a: 'giving to a food bank', c: ['giving to a food bank', 'hiding your money', 'buying more candy'] },
-    { p: 'Why do people save money?', a: 'to buy bigger things later or be ready for surprises', c: ['to buy bigger things later or be ready for surprises', 'because money goes bad', 'so they never have to spend it'] },
-  ]);
+  const q = pick(rng, bank.MONEY_HABITS);
   return { key: `fin-habit-${q.p}`, prompt: q.p, input: 'choice', choices: shuffle(rng, q.c), answer: q.a, hint: 'Think about what helps you reach your goals and helps others.', explain: `${q.a}.` };
 }
 

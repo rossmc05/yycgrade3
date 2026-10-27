@@ -7,7 +7,22 @@
    "a pencil",
    "a frozen pond",
    "a wooden block",
-   "a snowflake"
+   "a snowflake",
+   "a skate blade",
+   "a hockey stick",
+   "an icicle",
+   "a pebble",
+   "a frozen popsicle",
+   "a crayon",
+   "a brick",
+   "a spoon",
+   "a hailstone",
+   "a seashell",
+   "a LEGO brick",
+   "a dinosaur bone",
+   "a coin",
+   "a block of cheese",
+   "a glass marble"
   ],
   "liquid": [
    "milk",
@@ -16,14 +31,37 @@
    "melted butter",
    "lake water",
    "maple syrup",
-   "soup"
+   "soup",
+   "orange juice",
+   "vinegar",
+   "melted chocolate",
+   "shampoo",
+   "river water",
+   "vegetable oil",
+   "honey",
+   "liquid soap",
+   "a raindrop",
+   "hot chocolate",
+   "melted snow",
+   "ketchup",
+   "dish soap"
   ],
   "gas": [
    "steam from a kettle",
    "the air in a balloon",
    "water vapour",
    "the bubbles in pop",
-   "your breath"
+   "your breath",
+   "the air in a soccer ball",
+   "the bubbles in sparkling water",
+   "the air you blow into bubble gum",
+   "the helium in a party balloon",
+   "the steam above a hot bath",
+   "the air inside a bike tire",
+   "the smell of popcorn drifting through the house",
+   "the fog of your breath on a cold day",
+   "the air in a beach ball",
+   "the gas in a barbecue tank once it comes out"
   ]
  },
  "STATE_FACTS": [
@@ -154,6 +192,221 @@
    ],
    "hint": "Even air takes up space: think of a balloon.",
    "why": "All matter takes up space and has weight."
+  },
+  {
+   "q": "What happens to most solids when you heat them enough?",
+   "a": "they melt into a liquid",
+   "w": [
+    "they turn into gas right away",
+    "they get colder",
+    "nothing ever happens"
+   ],
+   "hint": "Think of butter in a hot pan.",
+   "why": "Enough heat makes most solids melt."
+  },
+  {
+   "q": "Which is the coldest?",
+   "a": "−10 °C",
+   "w": [
+    "0 °C",
+    "15 °C",
+    "30 °C"
+   ],
+   "hint": "Numbers below zero are colder than zero.",
+   "why": "−10 °C is below freezing, so it is the coldest."
+  },
+  {
+   "q": "The outdoor rink is −5 °C. Will the ice stay frozen?",
+   "a": "yes, it is below 0 °C",
+   "w": [
+    "no, it will melt",
+    "only if it is sunny"
+   ],
+   "hint": "Water freezes at 0 °C.",
+   "why": "Below 0 °C, water stays frozen."
+  },
+  {
+   "q": "It is 12 °C on a spring day. What happens to a snowman?",
+   "a": "it melts",
+   "w": [
+    "it freezes harder",
+    "it turns into steam right away",
+    "it grows"
+   ],
+   "hint": "12 °C is warmer than 0 °C.",
+   "why": "Above 0 °C, snow and ice melt."
+  },
+  {
+   "q": "What tool do we use to measure temperature?",
+   "a": "a thermometer",
+   "w": [
+    "a ruler",
+    "a scale",
+    "a clock"
+   ],
+   "hint": "It has a red or silver line that goes up when it is warm.",
+   "why": "A thermometer measures temperature in degrees Celsius."
+  },
+  {
+   "q": "What happens when you cool water vapour?",
+   "a": "it condenses into liquid water",
+   "w": [
+    "it melts",
+    "it turns into rock",
+    "it gets hotter"
+   ],
+   "hint": "Think of drops on a cold window.",
+   "why": "Cooling a gas turns it back into a liquid. That is condensation."
+  },
+  {
+   "q": "Why does a pot of soup steam when it is hot?",
+   "a": "some of the water is evaporating",
+   "w": [
+    "the soup is freezing",
+    "the pot is melting",
+    "smoke is coming out"
+   ],
+   "hint": "Hot liquid water turns into a gas.",
+   "why": "Heat makes water evaporate into steam."
+  },
+  {
+   "q": "Can water be a solid, a liquid and a gas?",
+   "a": "yes: ice, water and water vapour",
+   "w": [
+    "no, water is only a liquid",
+    "only a liquid and a solid",
+    "only a gas"
+   ],
+   "hint": "Think of an ice cube, a glass of water and steam.",
+   "why": "Water can be ice (solid), water (liquid) or vapour (gas)."
+  },
+  {
+   "q": "Why do people put salt on icy sidewalks?",
+   "a": "salt helps the ice melt",
+   "w": [
+    "salt makes ice thicker",
+    "salt makes the sidewalk warmer than the sun",
+    "salt makes it snow"
+   ],
+   "hint": "Salty ice melts below 0 °C.",
+   "why": "Salt lowers the temperature ice melts at, so the ice melts."
+  },
+  {
+   "q": "Which state of matter is hard to squeeze into a smaller space?",
+   "a": "a solid",
+   "w": [
+    "a gas",
+    "air"
+   ],
+   "hint": "Try squeezing a rock, then squeeze a balloon.",
+   "why": "Solids keep their shape and size. Gases can be squeezed."
+  },
+  {
+   "q": "Which state of matter can you squeeze into a smaller space, like air in a bike pump?",
+   "a": "a gas",
+   "w": [
+    "a solid",
+    "a liquid"
+   ],
+   "hint": "Push down on a bike pump.",
+   "why": "The bits of a gas are far apart, so you can squeeze them together."
+  },
+  {
+   "q": "Ice cubes float in a glass of water. Is the ice still water?",
+   "a": "yes, it is water as a solid",
+   "w": [
+    "no, it is plastic",
+    "no, it is a gas"
+   ],
+   "hint": "What happens when it melts?",
+   "why": "Ice is just frozen water."
+  },
+  {
+   "q": "A chinook blows into Calgary and it goes from −15 °C to 8 °C. What happens to the snow?",
+   "a": "it starts to melt",
+   "w": [
+    "it freezes harder",
+    "nothing changes",
+    "it turns blue"
+   ],
+   "hint": "Is 8 °C above or below freezing?",
+   "why": "Warm chinook winds raise the temperature above 0 °C, so snow melts."
+  },
+  {
+   "q": "Which is the hottest?",
+   "a": "boiling water at 100 °C",
+   "w": [
+    "a warm bath at 38 °C",
+    "a sunny day at 25 °C",
+    "a cold drink at 5 °C"
+   ],
+   "hint": "Look for the biggest number.",
+   "why": "100 °C is the hottest of these."
+  },
+  {
+   "q": "When chocolate melts and then cools again, what happens?",
+   "a": "it becomes solid again",
+   "w": [
+    "it turns into a gas",
+    "it stays liquid forever",
+    "it turns into milk"
+   ],
+   "hint": "Melting can be undone by cooling.",
+   "why": "Cooling a melted solid makes it freeze back into a solid."
+  },
+  {
+   "q": "Your body temperature is about…",
+   "a": "37 °C",
+   "w": [
+    "0 °C",
+    "100 °C",
+    "10 °C"
+   ],
+   "hint": "It is warm, but not as hot as boiling water.",
+   "why": "A healthy body is about 37 °C."
+  },
+  {
+   "q": "Which change needs heat to be taken away?",
+   "a": "freezing",
+   "w": [
+    "melting",
+    "evaporating",
+    "boiling"
+   ],
+   "hint": "Think of a freezer.",
+   "why": "Freezing happens when a liquid is cooled."
+  },
+  {
+   "q": "Which change needs heat to be added?",
+   "a": "evaporating",
+   "w": [
+    "freezing",
+    "condensing"
+   ],
+   "hint": "Think of the sun drying a puddle.",
+   "why": "Heat makes liquids evaporate."
+  },
+  {
+   "q": "What is the gas that we breathe all around us called?",
+   "a": "air",
+   "w": [
+    "water",
+    "ice",
+    "juice"
+   ],
+   "hint": "You fill balloons with it.",
+   "why": "Air is a mix of gases all around us."
+  },
+  {
+   "q": "Why does a balloon get bigger when you blow into it?",
+   "a": "the gas spreads out to fill it",
+   "w": [
+    "the balloon is melting",
+    "the balloon is freezing",
+    "the balloon is a liquid"
+   ],
+   "hint": "Gases fill whatever space they are in.",
+   "why": "The air you blow in spreads out and pushes the balloon wider."
   }
  ],
  "CHANGE_NAMES": {
@@ -163,7 +416,13 @@
    "a snowman shrinking in a chinook",
    "chocolate going runny in your pocket",
    "icicles dripping in the spring sun",
-   "a crayon left on a hot car seat"
+   "a crayon left on a hot car seat",
+   "an ice rink turning slushy in March",
+   "an ice cream cone dripping at the Stampede",
+   "snow on the roof turning to water",
+   "hail melting on the warm deck",
+   "a cheese slice going gooey on a hot burger",
+   "frost disappearing from a window as the sun warms it"
   ],
   "freezing": [
    "a puddle turning to ice overnight",
@@ -171,7 +430,13 @@
    "the outdoor rink getting hard in January",
    "water in a dog bowl going solid outside",
    "a lake getting ice on top in winter",
-   "ice cube trays in the freezer"
+   "ice cube trays in the freezer",
+   "water in a hose freezing in winter",
+   "rain turning to ice on the car",
+   "melted wax getting hard again",
+   "lemonade in an ice cube tray turning solid",
+   "a wet mitten going stiff outside in winter",
+   "the Bow River getting ice along the edges"
   ],
   "evaporation": [
    "wet hair drying in the sun",
@@ -179,7 +444,13 @@
    "laundry drying on a clothesline",
    "water boiling away from a pot",
    "a wet sidewalk drying after rain",
-   "paint water drying up in a cup"
+   "paint water drying up in a cup",
+   "sweat drying on your skin after hockey",
+   "a wet towel drying on the beach",
+   "a lake getting lower on a hot summer",
+   "the steam rising from a hot cup of tea",
+   "a wet dog drying in the sun",
+   "rain drying off the slide at recess"
   ],
   "condensation": [
    "a foggy bathroom mirror after a shower",
@@ -187,7 +458,13 @@
    "dew on the grass in the morning",
    "your breath fogging a car window",
    "drops forming on the lid of a pot",
-   "a cold can of pop getting wet on the outside"
+   "a cold can of pop getting wet on the outside",
+   "drops forming inside a lunch container",
+   "water drops on the inside of a tent in the morning",
+   "fog on your glasses when you come inside in winter",
+   "drops on the outside of a cold juice box",
+   "clouds forming high in the sky",
+   "drops running down a cold window on a winter morning"
   ]
  },
  "WATER": [
@@ -386,6 +663,182 @@
    ],
    "hint": "Who drinks the water?",
    "why": "People, plants and animals all depend on clean water."
+  },
+  {
+   "q": "What do we call water that soaks into the ground?",
+   "a": "groundwater",
+   "w": [
+    "cloud water",
+    "steam",
+    "ice"
+   ],
+   "hint": "It is under the ground.",
+   "why": "Water that soaks into soil and rock is groundwater."
+  },
+  {
+   "q": "What makes water in a cloud fall as rain?",
+   "a": "the drops join up and get too heavy",
+   "w": [
+    "the cloud gets tired",
+    "the wind turns off",
+    "the moon pulls it down"
+   ],
+   "hint": "Tiny drops bump together and grow.",
+   "why": "When cloud drops grow too heavy, they fall as precipitation."
+  },
+  {
+   "q": "Where is most of Earth’s water?",
+   "a": "in the oceans",
+   "w": [
+    "in clouds",
+    "in lakes",
+    "in bottles"
+   ],
+   "hint": "Look at a globe. What colour covers most of it?",
+   "why": "Most of Earth’s water is salty ocean water."
+  },
+  {
+   "q": "Why can’t we drink ocean water?",
+   "a": "it is too salty",
+   "w": [
+    "it is too cold",
+    "it is too blue",
+    "it is too wet"
+   ],
+   "hint": "Taste the sea and you will know.",
+   "why": "Ocean water has too much salt for people to drink."
+  },
+  {
+   "q": "Where does Calgary get its drinking water?",
+   "a": "from the Bow and Elbow rivers",
+   "w": [
+    "from the ocean",
+    "from the clouds directly",
+    "from a volcano"
+   ],
+   "hint": "Two rivers flow through the city.",
+   "why": "Calgary cleans water from the Bow and Elbow rivers."
+  },
+  {
+   "q": "What happens to snow on the ground in spring?",
+   "a": "it melts and flows into streams or soaks into the ground",
+   "w": [
+    "it turns into rock",
+    "it flies back into the clouds right away",
+    "it stays forever"
+   ],
+   "hint": "Spring is warmer.",
+   "why": "Melting snow joins rivers and groundwater."
+  },
+  {
+   "q": "Why are there drops on the grass early in the morning?",
+   "a": "water vapour condensed on the cool grass",
+   "w": [
+    "it rained in the night for sure",
+    "the grass made juice",
+    "a sprinkler did it every time"
+   ],
+   "hint": "The grass is cool after the night.",
+   "why": "That water is dew. Vapour in the air condenses on cool surfaces."
+  },
+  {
+   "q": "What does the water cycle need to keep going?",
+   "a": "energy from the sun",
+   "w": [
+    "electricity",
+    "wind only",
+    "people"
+   ],
+   "hint": "What heats the water?",
+   "why": "The sun’s heat drives evaporation, which keeps the cycle moving."
+  },
+  {
+   "q": "A cloud gets dark and grey before a storm because…",
+   "a": "it is full of lots of water drops",
+   "w": [
+    "it is dirty",
+    "it is made of smoke",
+    "it is night"
+   ],
+   "hint": "Thick clouds block more sunlight.",
+   "why": "Big storm clouds hold lots of water, so less light gets through."
+  },
+  {
+   "q": "Which way does water flow in a river?",
+   "a": "downhill",
+   "w": [
+    "uphill",
+    "in circles only",
+    "it does not move"
+   ],
+   "hint": "Think about water poured on a slide.",
+   "why": "Gravity pulls water downhill."
+  },
+  {
+   "q": "Which of these is a way to save water?",
+   "a": "turning off the tap while brushing your teeth",
+   "w": [
+    "leaving the hose running",
+    "taking very long showers",
+    "watering the lawn in the rain"
+   ],
+   "hint": "Do not let water run when you are not using it.",
+   "why": "Saving water keeps more clean water for everyone."
+  },
+  {
+   "q": "Snow is a kind of…",
+   "a": "precipitation",
+   "w": [
+    "evaporation",
+    "condensation",
+    "collection"
+   ],
+   "hint": "It falls from clouds.",
+   "why": "Snow is frozen precipitation."
+  },
+  {
+   "q": "What turns into water vapour when it is heated by the sun?",
+   "a": "water in lakes, rivers and oceans",
+   "w": [
+    "rocks",
+    "clouds",
+    "trees only"
+   ],
+   "hint": "It is a liquid.",
+   "why": "Liquid water evaporates when it is heated."
+  },
+  {
+   "q": "A glacier is part of the water cycle because…",
+   "a": "it stores water as ice and melts slowly",
+   "w": [
+    "it is made of rock",
+    "it never changes",
+    "it is a cloud"
+   ],
+   "hint": "Glaciers are frozen water.",
+   "why": "Glaciers hold water as ice and release it as meltwater."
+  },
+  {
+   "q": "Plants are part of the water cycle because they…",
+   "a": "give off water vapour from their leaves",
+   "w": [
+    "make rain",
+    "turn water into rock",
+    "do not use water"
+   ],
+   "hint": "Leaves breathe out a little water.",
+   "why": "Plants release water vapour into the air."
+  },
+  {
+   "q": "Rain soaks into the soil. Who uses that water next?",
+   "a": "plant roots",
+   "w": [
+    "clouds",
+    "rocks",
+    "the moon"
+   ],
+   "hint": "What drinks from the ground?",
+   "why": "Roots take up water from the soil."
   }
  ],
  "CYCLE_ORDERS": [
@@ -444,6 +897,104 @@
     "the water evaporates",
     "the vapour forms a cloud",
     "it rains again"
+   ]
+  ],
+  [
+   "Put the steps in order, starting with the ocean.",
+   [
+    "the sun heats the ocean",
+    "water evaporates",
+    "vapour cools into clouds",
+    "rain falls on the land",
+    "rivers carry water back to the ocean"
+   ]
+  ],
+  [
+   "Follow a raindrop. Put the steps in order.",
+   [
+    "a raindrop falls from a cloud",
+    "it lands in a stream",
+    "the stream flows into a lake",
+    "the sun warms the lake",
+    "the water evaporates again"
+   ]
+  ],
+  [
+   "Dew on the grass. Put what happens in order.",
+   [
+    "warm air holds water vapour",
+    "the night gets cool",
+    "vapour touches the cool grass",
+    "drops of dew form",
+    "the morning sun dries the dew"
+   ]
+  ],
+  [
+   "A snowflake’s journey. Put the steps in order.",
+   [
+    "water vapour rises from a lake",
+    "it freezes high in a cold cloud",
+    "a snowflake falls",
+    "the snow melts in spring",
+    "the water flows back to the lake"
+   ]
+  ],
+  [
+   "Put the water cycle in order, starting with water collecting in a river.",
+   [
+    "collection",
+    "evaporation",
+    "condensation",
+    "precipitation"
+   ]
+  ],
+  [
+   "A cold glass of milk on a hot day. Put what happens in order.",
+   [
+    "you pour cold milk into a glass",
+    "warm air touches the cold glass",
+    "water vapour condenses",
+    "drops form on the outside of the glass"
+   ]
+  ],
+  [
+   "Water for Calgary. Put the steps in order.",
+   [
+    "snow falls in the mountains",
+    "it melts in spring",
+    "the water flows down the Bow River",
+    "the city cleans the water",
+    "it comes out of your tap"
+   ]
+  ],
+  [
+   "A rain puddle at recess. Put the steps in order.",
+   [
+    "clouds get heavy with water",
+    "rain falls on the field",
+    "a puddle collects",
+    "the sun comes out",
+    "the puddle evaporates"
+   ]
+  ],
+  [
+   "A glacier in the Rockies. Put the steps in order.",
+   [
+    "snow falls year after year",
+    "the snow packs down into ice",
+    "the glacier slowly moves",
+    "the end of the glacier melts",
+    "meltwater flows into a river"
+   ]
+  ],
+  [
+   "A pot of water on the stove. Put what happens in order.",
+   [
+    "the stove heats the water",
+    "the water gets hotter",
+    "it starts to boil",
+    "steam rises from the pot",
+    "drops form on the lid"
    ]
   ]
  ],
@@ -559,7 +1110,7 @@
    "why": "Cotton is a natural fibre from the cotton plant."
   },
   {
-   "q": "Which of these is a natural material?",
+   "q": "Which of these natural materials comes from an animal?",
    "a": "wool",
    "w": [
     "plastic",
@@ -645,6 +1196,149 @@
    ],
    "hint": "People tap trees in early spring.",
    "why": "Sap is boiled down to make maple syrup."
+  },
+  {
+   "q": "Rubber for boots first comes from…",
+   "a": "sap from rubber trees",
+   "w": [
+    "rocks",
+    "sheep",
+    "sand"
+   ],
+   "hint": "It drips out of a tree like syrup.",
+   "why": "Natural rubber is made from tree sap."
+  },
+  {
+   "q": "A wooden hockey stick was made from…",
+   "a": "trees",
+   "w": [
+    "rocks",
+    "oil",
+    "sand"
+   ],
+   "hint": "Wood comes from…",
+   "why": "Wood is processed from trees."
+  },
+  {
+   "q": "Silk is a natural material made by…",
+   "a": "silkworms",
+   "w": [
+    "sheep",
+    "trees",
+    "cows"
+   ],
+   "hint": "It is spun by a little caterpillar.",
+   "why": "Silkworms spin silk threads."
+  },
+  {
+   "q": "Which would be the best material for a raincoat?",
+   "a": "a waterproof material like plastic or rubber",
+   "w": [
+    "paper",
+    "wool",
+    "cotton balls"
+   ],
+   "hint": "Rain needs to roll off.",
+   "why": "Waterproof materials keep you dry."
+  },
+  {
+   "q": "Which would be the best material for a goalie’s water bottle?",
+   "a": "plastic, because it is light and will not break",
+   "w": [
+    "glass, because it is clear",
+    "paper, because it is cheap",
+    "clay, because it is soft"
+   ],
+   "hint": "It might get dropped on the ice.",
+   "why": "Plastic is light and unbreakable, so it is good for sports bottles."
+  },
+  {
+   "q": "Concrete for sidewalks is made by mixing…",
+   "a": "rock, sand, water and cement",
+   "w": [
+    "wool and milk",
+    "sugar and flour",
+    "paper and glue"
+   ],
+   "hint": "It starts wet and gets hard as stone.",
+   "why": "Concrete is a processed material made from rock materials."
+  },
+  {
+   "q": "Butter is processed from…",
+   "a": "cream from milk",
+   "w": [
+    "wheat",
+    "apples",
+    "tree sap"
+   ],
+   "hint": "It is shaken or churned.",
+   "why": "Butter is made by churning cream."
+  },
+  {
+   "q": "Jam is processed from…",
+   "a": "fruit",
+   "w": [
+    "milk",
+    "rocks",
+    "wool"
+   ],
+   "hint": "Think of strawberries.",
+   "why": "Jam is cooked fruit and sugar."
+  },
+  {
+   "q": "Which material would make the best snow shovel?",
+   "a": "strong plastic or metal",
+   "w": [
+    "paper",
+    "cotton",
+    "glass"
+   ],
+   "hint": "It must be strong and not break.",
+   "why": "Strong, light materials are good for shovels."
+  },
+  {
+   "q": "Why are frying pans made of metal?",
+   "a": "metal carries heat well and does not burn",
+   "w": [
+    "metal is soft",
+    "metal is see-through",
+    "metal is light as a feather"
+   ],
+   "hint": "The pan has to get hot.",
+   "why": "Metal conducts heat and can take high temperatures."
+  },
+  {
+   "q": "Traditional Indigenous birchbark canoes were made from…",
+   "a": "bark from birch trees",
+   "w": [
+    "plastic",
+    "metal",
+    "glass"
+   ],
+   "hint": "The name tells you.",
+   "why": "Birchbark is a strong, light, natural material."
+  },
+  {
+   "q": "Which material is see-through?",
+   "a": "glass",
+   "w": [
+    "wood",
+    "brick",
+    "metal"
+   ],
+   "hint": "Windows are made of it.",
+   "why": "Glass lets light through, so we can see through it."
+  },
+  {
+   "q": "Which material is the best to make a warm blanket?",
+   "a": "wool",
+   "w": [
+    "glass",
+    "metal",
+    "stone"
+   ],
+   "hint": "It comes from sheep.",
+   "why": "Wool traps heat and keeps you warm."
   }
  ],
  "CHANGES": {
@@ -660,7 +1354,19 @@
    "melting candle wax",
    "blowing up a balloon",
    "freezing a lake",
-   "dissolving sugar in water and letting it dry"
+   "dissolving sugar in water and letting it dry",
+   "melting butter",
+   "freezing ice cubes",
+   "rolling clay into a snake",
+   "stacking blocks",
+   "bending a pipe cleaner",
+   "folding a T-shirt",
+   "melting a popsicle",
+   "letting a puddle freeze",
+   "crumpling a ball of tin foil and flattening it",
+   "mixing beads of two colours",
+   "evaporating water from salty water to get the salt back",
+   "inflating a bike tire"
   ],
   "permanent": [
    "cooking an egg",
@@ -674,7 +1380,19 @@
    "frying a pancake",
    "striking a match",
    "a banana going brown",
-   "grinding wheat into flour"
+   "grinding wheat into flour",
+   "burning a marshmallow",
+   "hard-boiling an egg",
+   "making pancakes from batter",
+   "baking cookies",
+   "a nail rusting outside",
+   "milk going sour",
+   "an apple slice turning brown",
+   "a log burning in a campfire",
+   "baking bread",
+   "painting a fence",
+   "cutting your hair",
+   "making popcorn"
   ]
  },
  "FORCES": [
@@ -873,6 +1591,168 @@
    ],
    "hint": "Heavier things need more force.",
    "why": "Heavier objects need a bigger force to move."
+  },
+  {
+   "q": "You push a toy car softly, then hard. When does it go farther?",
+   "a": "when you push it hard",
+   "w": [
+    "when you push it softly",
+    "it goes the same both times"
+   ],
+   "hint": "A bigger force makes a bigger change.",
+   "why": "A bigger push gives the car more motion."
+  },
+  {
+   "q": "What makes a moving hockey puck slow down and stop by itself?",
+   "a": "friction with the ice",
+   "w": [
+    "gravity pushing it sideways",
+    "magnetism",
+    "the puck gets tired"
+   ],
+   "hint": "Even ice has a tiny bit of rubbing.",
+   "why": "Friction slowly slows the puck."
+  },
+  {
+   "q": "A soccer ball is rolling. A player kicks it from the side. What changes?",
+   "a": "its direction",
+   "w": [
+    "its colour",
+    "its size",
+    "nothing"
+   ],
+   "hint": "Where is it going now?",
+   "why": "A force can change the direction of a moving object."
+  },
+  {
+   "q": "Which surface has the MOST friction for a sled?",
+   "a": "a gravel path",
+   "w": [
+    "smooth ice",
+    "packed snow",
+    "a waxed slide"
+   ],
+   "hint": "Rough surfaces rub more.",
+   "why": "Rough surfaces like gravel have lots of friction."
+  },
+  {
+   "q": "Why do winter tires have deep, bumpy treads?",
+   "a": "to add friction on snow and ice",
+   "w": [
+    "to look cool",
+    "to make the car lighter",
+    "to make the car go uphill only"
+   ],
+   "hint": "They need to grip the road.",
+   "why": "Deep treads grip slippery roads by adding friction."
+  },
+  {
+   "q": "Do magnets attract wood?",
+   "a": "no, only some metals like iron",
+   "w": [
+    "yes, all wood",
+    "only wet wood"
+   ],
+   "hint": "Try a fridge magnet on a pencil.",
+   "why": "Magnets attract some metals, like iron and steel, but not wood."
+  },
+  {
+   "q": "The two ends of a magnet are called…",
+   "a": "poles",
+   "w": [
+    "tips",
+    "sides",
+    "handles"
+   ],
+   "hint": "North and south…",
+   "why": "Every magnet has a north pole and a south pole."
+  },
+  {
+   "q": "Two magnets push apart. What must be facing each other?",
+   "a": "the same poles, like north and north",
+   "w": [
+    "different poles",
+    "nothing",
+    "the middles"
+   ],
+   "hint": "Same poles push away. Different poles pull together.",
+   "why": "Like poles repel each other."
+  },
+  {
+   "q": "A ball sits still on the floor. What forces are acting on it?",
+   "a": "gravity pulls down and the floor pushes up",
+   "w": [
+    "no forces at all",
+    "only magnetism",
+    "only friction"
+   ],
+   "hint": "Gravity never turns off.",
+   "why": "Balanced forces keep the ball still."
+  },
+  {
+   "q": "Which can a force change?",
+   "a": "speed, direction and shape",
+   "w": [
+    "only colour",
+    "only smell",
+    "only temperature"
+   ],
+   "hint": "Think of kicking, steering and squishing.",
+   "why": "Forces can change how fast, which way, and the shape of things."
+  },
+  {
+   "q": "Why is it easier to slide in socks on a wood floor than on a carpet?",
+   "a": "wood floors have less friction",
+   "w": [
+    "carpet is slippery",
+    "socks are magnets",
+    "wood is warmer"
+   ],
+   "hint": "Smooth surfaces rub less.",
+   "why": "Smooth wood has less friction than rough carpet."
+  },
+  {
+   "q": "A hockey player taps a puck gently. Then she takes a slapshot. Which force is bigger?",
+   "a": "the slapshot",
+   "w": [
+    "the gentle tap",
+    "they are the same"
+   ],
+   "hint": "Which one makes the puck go faster?",
+   "why": "A bigger force makes the puck move faster."
+  },
+  {
+   "q": "What happens if you stop pedalling your bike on flat ground?",
+   "a": "friction slowly makes it stop",
+   "w": [
+    "it speeds up",
+    "it goes forever",
+    "it goes backward"
+   ],
+   "hint": "Something is rubbing on the wheels and road.",
+   "why": "Friction slows the bike down."
+  },
+  {
+   "q": "A diver jumps off a diving board and falls into the pool. Which force pulls the diver down?",
+   "a": "gravity",
+   "w": [
+    "friction",
+    "magnetism",
+    "tension"
+   ],
+   "hint": "It pulls everything toward Earth.",
+   "why": "Gravity pulls the diver down."
+  },
+  {
+   "q": "A stretched rubber band is let go. What does it do?",
+   "a": "it snaps back to its shape",
+   "w": [
+    "it stays stretched",
+    "it melts",
+    "it gets longer"
+   ],
+   "hint": "Rubber is stretchy.",
+   "why": "Elastic materials spring back after stretching."
   }
  ],
  "MACHINES": [
@@ -1037,6 +1917,138 @@
    ],
    "hint": "A gentle slope needs less force, but you go farther.",
    "why": "A longer, gentler inclined plane needs less force."
+  },
+  {
+   "q": "The middle point a lever turns on is called the…",
+   "a": "fulcrum",
+   "w": [
+    "axle",
+    "wedge",
+    "handle"
+   ],
+   "hint": "On a seesaw it is the middle.",
+   "why": "A lever turns on a fulcrum."
+  },
+  {
+   "q": "Why does a long-handled shovel make digging easier?",
+   "a": "a longer lever needs less force",
+   "w": [
+    "it is heavier",
+    "it is shinier",
+    "it is shorter"
+   ],
+   "hint": "Longer levers help more.",
+   "why": "A longer lever gives you more lifting power."
+  },
+  {
+   "q": "A pulley can let you lift something up by pulling…",
+   "a": "down",
+   "w": [
+    "up only",
+    "sideways only",
+    "nothing"
+   ],
+   "hint": "Think of a flag going up a pole.",
+   "why": "A pulley changes the direction of your force."
+  },
+  {
+   "q": "A wedge works by…",
+   "a": "pushing things apart",
+   "w": [
+    "pulling things together",
+    "rolling",
+    "lifting with a rope"
+   ],
+   "hint": "Think of an axe splitting wood.",
+   "why": "A wedge’s thin edge pushes material apart."
+  },
+  {
+   "q": "A screw is really an inclined plane that is…",
+   "a": "wrapped around a post",
+   "w": [
+    "flat on the ground",
+    "made of rope",
+    "a wheel"
+   ],
+   "hint": "Look at the ridges on a screw.",
+   "why": "The thread of a screw is a ramp wrapped in a spiral."
+  },
+  {
+   "q": "Why is a road up a mountain zig-zagged instead of straight up?",
+   "a": "a long, gentle slope is easier to climb",
+   "w": [
+    "to make the trip shorter",
+    "because roads like zig-zags",
+    "to stop snow"
+   ],
+   "hint": "It is like a long ramp.",
+   "why": "A gentler inclined plane needs less force, even if it is longer."
+  },
+  {
+   "q": "Indigenous peoples used a travois, two poles dragged by a dog or horse, to carry loads. It works like a…",
+   "a": "sled that slides on the ground",
+   "w": [
+    "pulley",
+    "wedge for cutting",
+    "screw"
+   ],
+   "hint": "The poles drag along the ground.",
+   "why": "A travois lets a load be dragged instead of carried, which makes the work easier."
+  },
+  {
+   "q": "Which simple machine has a rope over a wheel?",
+   "a": "pulley",
+   "w": [
+    "lever",
+    "wedge",
+    "inclined plane"
+   ],
+   "hint": "Flagpoles have one at the top.",
+   "why": "A pulley is a wheel with a rope or cable."
+  },
+  {
+   "q": "Which two simple machines are in a wheelbarrow?",
+   "a": "a lever and a wheel and axle",
+   "w": [
+    "a pulley and a wedge",
+    "a screw and a pulley",
+    "two wedges"
+   ],
+   "hint": "It has handles and a wheel.",
+   "why": "The handles make a lever and the wheel turns on an axle."
+  },
+  {
+   "q": "Scissors are made of two…",
+   "a": "levers with wedge blades",
+   "w": [
+    "pulleys",
+    "inclined planes for sliding",
+    "wheels"
+   ],
+   "hint": "They turn on a pin, and the blades are sharp.",
+   "why": "Scissors are two levers, and each blade is a wedge."
+  },
+  {
+   "q": "Which is a simple machine you use at the playground?",
+   "a": "a slide",
+   "w": [
+    "a sandbox",
+    "a bench",
+    "a water fountain"
+   ],
+   "hint": "It is a slope.",
+   "why": "A slide is an inclined plane."
+  },
+  {
+   "q": "Which simple machine helps an elevator go up and down?",
+   "a": "pulley",
+   "w": [
+    "wedge",
+    "lever",
+    "inclined plane"
+   ],
+   "hint": "Strong cables pass over wheels.",
+   "why": "Elevators use pulleys and cables."
   }
  ],
  "PUSH_PULL": {
@@ -1051,7 +2063,19 @@
    "squishing a marshmallow",
    "pedalling a bike",
    "shovelling snow off a driveway",
-   "typing on a keyboard"
+   "typing on a keyboard",
+   "pushing a shopping cart",
+   "kicking a football",
+   "pressing a doorbell",
+   "pushing a friend on a swing",
+   "shoving a sled down a hill",
+   "pushing a lawn mower",
+   "hitting a baseball with a bat",
+   "pressing a button on a remote",
+   "squeezing toothpaste out of a tube",
+   "stomping on a pop can",
+   "rolling a bowling ball",
+   "shooting a basketball"
   ],
   "a pull": [
    "opening a drawer",
@@ -1064,7 +2088,19 @@
    "lifting a backpack off the floor",
    "pulling on your boots",
    "a dog walking you on a leash",
-   "pulling a wagon"
+   "pulling a wagon",
+   "pulling a zipper down",
+   "picking an apple off a tree",
+   "pulling a cart",
+   "yanking open a sock drawer",
+   "lifting a bucket by its handle",
+   "pulling up your socks",
+   "hauling a fishing net",
+   "tugging off your mittens",
+   "pulling a door open",
+   "dragging a hockey bag",
+   "pulling a carrot out of the garden",
+   "pulling on a dog’s leash"
   ]
  },
  "DIETS": {
@@ -1210,6 +2246,107 @@
    "mouse",
    "snake",
    "hawk"
+  ],
+  [
+   "sun",
+   "grass",
+   "cow",
+   "human"
+  ],
+  [
+   "sun",
+   "grass",
+   "elk",
+   "wolf"
+  ],
+  [
+   "sun",
+   "seeds",
+   "chipmunk",
+   "hawk"
+  ],
+  [
+   "sun",
+   "algae",
+   "tadpole",
+   "fish",
+   "heron"
+  ],
+  [
+   "sun",
+   "grass",
+   "vole",
+   "fox"
+  ],
+  [
+   "sun",
+   "leaves",
+   "beetle",
+   "woodpecker"
+  ],
+  [
+   "sun",
+   "plants",
+   "mosquito",
+   "dragonfly",
+   "frog"
+  ],
+  [
+   "sun",
+   "acorns",
+   "squirrel",
+   "fox"
+  ],
+  [
+   "sun",
+   "berries",
+   "mouse",
+   "owl"
+  ],
+  [
+   "sun",
+   "sedge grass",
+   "caribou",
+   "wolf"
+  ],
+  [
+   "sun",
+   "lichen",
+   "caribou",
+   "grizzly bear"
+  ],
+  [
+   "sun",
+   "grass",
+   "grasshopper",
+   "mouse",
+   "snake"
+  ],
+  [
+   "sun",
+   "water plants",
+   "muskrat",
+   "mink"
+  ],
+  [
+   "sun",
+   "leaves",
+   "aphid",
+   "ladybug",
+   "bird"
+  ],
+  [
+   "sun",
+   "wild flowers",
+   "butterfly",
+   "spider",
+   "bird"
+  ],
+  [
+   "sun",
+   "plankton",
+   "krill",
+   "whale"
   ]
  ],
  "SENSES": [
@@ -1388,6 +2525,182 @@
    ],
    "hint": "The shell is like armour.",
    "why": "Hiding in its shell protects the turtle."
+  },
+  {
+   "q": "An owl can hunt at night because it has great…",
+   "a": "eyesight and hearing",
+   "w": [
+    "taste",
+    "a long tail",
+    "a loud voice"
+   ],
+   "hint": "It must find a mouse in the dark.",
+   "why": "Owls use sharp eyes and ears to hunt at night."
+  },
+  {
+   "q": "A cat’s whiskers help it…",
+   "a": "feel its way in tight spaces",
+   "w": [
+    "taste food",
+    "hear better",
+    "see colours"
+   ],
+   "hint": "Whiskers are very sensitive to touch.",
+   "why": "Whiskers help cats sense what is around them."
+  },
+  {
+   "q": "In the fall, many leaves change colour and drop. The tree is responding to…",
+   "a": "colder weather and less sunlight",
+   "w": [
+    "loud noises",
+    "people walking by",
+    "the moon"
+   ],
+   "hint": "Days get shorter in fall.",
+   "why": "Trees respond to the seasons by dropping their leaves."
+  },
+  {
+   "q": "Geese fly in a V shape on their way south. They are…",
+   "a": "migrating",
+   "w": [
+    "hibernating",
+    "hiding",
+    "sleeping"
+   ],
+   "hint": "They are going on a long trip.",
+   "why": "Migration is moving to a new place for the season."
+  },
+  {
+   "q": "A bat finds bugs in the dark by…",
+   "a": "listening to echoes of its own sounds",
+   "w": [
+    "smelling the moon",
+    "using a flashlight",
+    "feeling the wind only"
+   ],
+   "hint": "It squeaks and listens.",
+   "why": "Bats use echolocation."
+  },
+  {
+   "q": "A Venus flytrap snaps shut when a fly lands on it. It is responding to…",
+   "a": "touch",
+   "w": [
+    "music",
+    "colour",
+    "cold"
+   ],
+   "hint": "Something brushed its tiny hairs.",
+   "why": "Some plants respond to touch."
+  },
+  {
+   "q": "A skunk sprays when it feels…",
+   "a": "in danger",
+   "w": [
+    "happy",
+    "hungry",
+    "sleepy"
+   ],
+   "hint": "It is a way to protect itself.",
+   "why": "Skunks spray to scare away predators."
+  },
+  {
+   "q": "Why do porcupines have quills?",
+   "a": "to protect themselves from predators",
+   "w": [
+    "to stay warm in summer",
+    "to help them swim",
+    "to catch fish"
+   ],
+   "hint": "Would you want to bite one?",
+   "why": "Sharp quills keep predators away."
+  },
+  {
+   "q": "What does a seed need to start growing?",
+   "a": "water, warmth and air",
+   "w": [
+    "darkness and cold only",
+    "plastic",
+    "music"
+   ],
+   "hint": "Think of planting seeds in spring.",
+   "why": "Seeds sprout when they get water, warmth and air."
+  },
+  {
+   "q": "What do plants need to make their own food?",
+   "a": "sunlight, water and air",
+   "w": [
+    "pizza",
+    "darkness",
+    "sand only"
+   ],
+   "hint": "Their leaves soak up light.",
+   "why": "Plants use sunlight, water and air to make food."
+  },
+  {
+   "q": "An arctic fox has a white coat in winter and a brown coat in summer. This is called…",
+   "a": "camouflage",
+   "w": [
+    "migration",
+    "hibernation",
+    "pollination"
+   ],
+   "hint": "It helps the fox blend in.",
+   "why": "Changing colour helps the fox hide in each season."
+  },
+  {
+   "q": "A gopher pops back into its hole when a hawk flies over. It saw the hawk’s…",
+   "a": "shadow or shape",
+   "w": [
+    "smell",
+    "song",
+    "taste"
+   ],
+   "hint": "It used its eyes.",
+   "why": "Animals use sight to spot danger."
+  },
+  {
+   "q": "You smell smoke and leave the building. Which sense kept you safe?",
+   "a": "smell",
+   "w": [
+    "taste",
+    "touch",
+    "hearing"
+   ],
+   "hint": "You used your nose.",
+   "why": "Our senses help us stay safe."
+  },
+  {
+   "q": "Why should you never leave food out at a campsite in the Rockies?",
+   "a": "bears can smell it and come close",
+   "w": [
+    "the food will freeze",
+    "birds will sing",
+    "it attracts fish"
+   ],
+   "hint": "Bears have an amazing nose.",
+   "why": "Food smells attract bears, which is dangerous for people and bears."
+  },
+  {
+   "q": "A plant left in a dark closet for a week turns pale and droopy. What does it need?",
+   "a": "light",
+   "w": [
+    "more darkness",
+    "music",
+    "salt"
+   ],
+   "hint": "Plants make food using…",
+   "why": "Plants need light to stay healthy."
+  },
+  {
+   "q": "A beaver slaps its tail on the water. It is…",
+   "a": "warning other beavers of danger",
+   "w": [
+    "catching fish",
+    "taking a bath",
+    "making a dam"
+   ],
+   "hint": "It is a loud signal.",
+   "why": "Beavers slap their tails to warn others."
   }
  ],
  "EARTH": [
@@ -1543,6 +2856,137 @@
    ],
    "hint": "Roots are like nets.",
    "why": "Plant roots help stop erosion."
+  },
+  {
+   "q": "What carved the deep valleys in the Rocky Mountains long ago?",
+   "a": "huge glaciers",
+   "w": [
+    "people with machines",
+    "dinosaurs",
+    "wind only in one day"
+   ],
+   "hint": "Giant rivers of ice.",
+   "why": "Moving glaciers scraped out wide valleys."
+  },
+  {
+   "q": "An avalanche is…",
+   "a": "a sudden slide of snow down a mountain",
+   "w": [
+    "a slow-moving glacier",
+    "a type of rock",
+    "a rainstorm"
+   ],
+   "hint": "It happens in seconds in the mountains.",
+   "why": "An avalanche is a sudden change."
+  },
+  {
+   "q": "Why do farmers plant rows of trees beside their fields on the prairies?",
+   "a": "to stop the wind from blowing the soil away",
+   "w": [
+    "to make shade for cows only",
+    "to make it rain",
+    "to hide the field"
+   ],
+   "hint": "Wind can erode soil.",
+   "why": "Shelterbelts protect soil from wind erosion."
+  },
+  {
+   "q": "Which helps protect a river bank from washing away?",
+   "a": "plants growing along the bank",
+   "w": [
+    "cutting all the plants",
+    "driving trucks on it",
+    "dumping garbage"
+   ],
+   "hint": "Roots hold soil.",
+   "why": "Roots hold the soil in place."
+  },
+  {
+   "q": "Mining and building roads are ways that…",
+   "a": "people change Earth’s surface",
+   "w": [
+    "animals change Earth’s surface",
+    "weather changes Earth",
+    "nothing changes"
+   ],
+   "hint": "Who drives the machines?",
+   "why": "Human activities change the land too."
+  },
+  {
+   "q": "Beavers change the land by…",
+   "a": "building dams that make ponds",
+   "w": [
+    "digging volcanoes",
+    "making mountains",
+    "melting glaciers"
+   ],
+   "hint": "They chew trees and pile them in a stream.",
+   "why": "Beaver dams flood areas and create wetlands."
+  },
+  {
+   "q": "A forest fire changes the land…",
+   "a": "quickly",
+   "w": [
+    "over millions of years",
+    "never"
+   ],
+   "hint": "It can burn a forest in days.",
+   "why": "Fires are sudden changes, but forests slowly grow back."
+  },
+  {
+   "q": "Which of these is a slow change to the land?",
+   "a": "a river bending into a new path over many years",
+   "w": [
+    "a flood",
+    "an earthquake",
+    "a landslide"
+   ],
+   "hint": "It takes a long time.",
+   "why": "Rivers change course slowly."
+  },
+  {
+   "q": "Recycling and composting help the Earth because…",
+   "a": "less garbage goes into landfills",
+   "w": [
+    "they make more garbage",
+    "they melt glaciers",
+    "they make rivers dirty"
+   ],
+   "hint": "Where does garbage go?",
+   "why": "Less garbage means less land used for landfills."
+  },
+  {
+   "q": "Rocks tumbling in a river for a long time become…",
+   "a": "smooth and round",
+   "w": [
+    "sharper",
+    "bigger",
+    "square"
+   ],
+   "hint": "Look at river pebbles.",
+   "why": "Water and rubbing wear rocks smooth."
+  },
+  {
+   "q": "Why are there big rocks sitting alone on the prairie, like the Okotoks Big Rock?",
+   "a": "glaciers carried them there long ago",
+   "w": [
+    "people rolled them there",
+    "they fell from space",
+    "they grew there"
+   ],
+   "hint": "Ice can carry heavy things.",
+   "why": "Glaciers moved giant rocks and left them behind when they melted."
+  },
+  {
+   "q": "Which weather can cause erosion?",
+   "a": "heavy rain and strong wind",
+   "w": [
+    "a calm sunny day",
+    "a rainbow",
+    "a quiet night"
+   ],
+   "hint": "Water and wind move soil.",
+   "why": "Rain and wind carry soil and rock away."
   }
  ],
  "FOSSILS": [
@@ -1699,6 +3143,179 @@
    ],
    "hint": "In Alberta, fossils belong to everyone.",
    "why": "Fossils are protected so scientists can study them."
+  },
+  {
+   "q": "Which dinosaur was found in Alberta and named after the province?",
+   "a": "Albertosaurus",
+   "w": [
+    "Stegosaurus",
+    "Brachiosaurus",
+    "Velociraptor"
+   ],
+   "hint": "The name has Alberta in it.",
+   "why": "Albertosaurus was a meat-eater that lived in Alberta."
+  },
+  {
+   "q": "What do fossils tell us?",
+   "a": "what living things were like long ago",
+   "w": [
+    "what the weather will be tomorrow",
+    "how to cook",
+    "nothing at all"
+   ],
+   "hint": "They are clues from the past.",
+   "why": "Fossils show us plants and animals from long ago."
+  },
+  {
+   "q": "Most fossils are found in which kind of rock?",
+   "a": "rock made from layers of mud and sand",
+   "w": [
+    "melted lava",
+    "ice",
+    "glass"
+   ],
+   "hint": "Layers pile up and squeeze together.",
+   "why": "Fossils form in sedimentary rock made from layers."
+  },
+  {
+   "q": "A paleontologist finds a big, sharp tooth. The dinosaur probably ate…",
+   "a": "meat",
+   "w": [
+    "only leaves",
+    "only grass",
+    "only fruit"
+   ],
+   "hint": "Sharp teeth tear meat.",
+   "why": "Sharp, pointed teeth belong to meat-eaters."
+  },
+  {
+   "q": "A paleontologist finds flat, grinding teeth. The dinosaur probably ate…",
+   "a": "plants",
+   "w": [
+    "meat",
+    "fish only",
+    "rocks"
+   ],
+   "hint": "Cows have flat teeth for chewing grass.",
+   "why": "Flat teeth are good for grinding plants."
+  },
+  {
+   "q": "Which of these could become a fossil?",
+   "a": "a fish skeleton buried in mud",
+   "w": [
+    "a cloud",
+    "a rainbow",
+    "a sound"
+   ],
+   "hint": "Fossils come from real living things.",
+   "why": "Bones buried in mud can become fossils."
+  },
+  {
+   "q": "Dinosaurs lived…",
+   "a": "millions of years ago, before people",
+   "w": [
+    "at the same time as cavemen",
+    "last year",
+    "only in movies"
+   ],
+   "hint": "No person ever saw a living dinosaur.",
+   "why": "Dinosaurs died out about 66 million years ago."
+  },
+  {
+   "q": "A fossil of a seashell found on a mountain tells us…",
+   "a": "the land was once under the sea",
+   "w": [
+    "shells can climb",
+    "someone dropped it",
+    "the shell was a bird"
+   ],
+   "hint": "Where do shells usually live?",
+   "why": "Sea fossils on land show that the area was once covered by water."
+  },
+  {
+   "q": "Why is topsoil important?",
+   "a": "plants grow in it",
+   "w": [
+    "it is good for building rockets",
+    "it keeps us dry",
+    "it makes the sky blue"
+   ],
+   "hint": "Farms need good soil.",
+   "why": "Topsoil has the nutrients plants need."
+  },
+  {
+   "q": "Compost helps soil by…",
+   "a": "adding rotted food and leaves that feed plants",
+   "w": [
+    "making it plastic",
+    "making it into rock",
+    "drying it out"
+   ],
+   "hint": "Old banana peels turn into…",
+   "why": "Compost adds nutrients to soil."
+  },
+  {
+   "q": "Which soil feels gritty and lets water drain fast?",
+   "a": "sandy soil",
+   "w": [
+    "clay soil",
+    "rich garden soil"
+   ],
+   "hint": "It is like the beach.",
+   "why": "Sandy soil has big grains, so water drains quickly."
+  },
+  {
+   "q": "Which soil is sticky and holds water for a long time?",
+   "a": "clay soil",
+   "w": [
+    "sandy soil",
+    "gravel"
+   ],
+   "hint": "You can mould it into shapes.",
+   "why": "Clay has tiny particles that hold water."
+  },
+  {
+   "q": "A trace fossil is…",
+   "a": "a sign left by a living thing, like a footprint",
+   "w": [
+    "a toy fossil",
+    "a picture of a dinosaur",
+    "a new rock"
+   ],
+   "hint": "It is not a bone.",
+   "why": "Footprints, nests and burrows are trace fossils."
+  },
+  {
+   "q": "Which tool would a paleontologist use first to clean dirt off a fossil?",
+   "a": "a soft brush",
+   "w": [
+    "a bulldozer",
+    "a hammer",
+    "a hose on full blast"
+   ],
+   "hint": "Be gentle.",
+   "why": "Brushes remove dirt without damaging the fossil."
+  },
+  {
+   "q": "Where would you find the oldest fossils in a cliff of rock layers?",
+   "a": "near the bottom",
+   "w": [
+    "near the top",
+    "in the middle every time"
+   ],
+   "hint": "Bottom layers formed first.",
+   "why": "Lower layers are older, so they hold older fossils."
+  },
+  {
+   "q": "Hadrosaurs, often found in Alberta, were called duck-billed dinosaurs because…",
+   "a": "their mouths were shaped like a duck’s bill",
+   "w": [
+    "they could quack",
+    "they had feathers like a duck",
+    "they lived in ponds only"
+   ],
+   "hint": "Look at the shape of the snout.",
+   "why": "Hadrosaurs had wide, flat, bill-shaped snouts."
   }
  ],
  "EARTH_ORDERS": [
@@ -1765,6 +3382,72 @@
     "the top layer"
    ],
    "Layers pile up one on top of another."
+  ],
+  [
+   "How does an ammolite gem form? Put the steps in order.",
+   [
+    "an ammonite lives in an ancient sea",
+    "it dies and sinks to the sea floor",
+    "mud buries its shell",
+    "over millions of years it turns to stone",
+    "people dig up the shiny gem"
+   ],
+   "Start with the living sea animal."
+  ],
+  [
+   "How do hoodoos form? Put the steps in order.",
+   [
+    "layers of soft rock build up",
+    "a hard rock layer sits on top",
+    "rain and wind wear away the soft rock",
+    "the hard cap protects the rock below it",
+    "a tall pillar is left standing"
+   ],
+   "Start with the layers. What wears away?"
+  ],
+  [
+   "How does a footprint become a fossil? Put the steps in order.",
+   [
+    "a dinosaur steps in soft mud",
+    "the mud dries in the sun",
+    "sand blows in and fills the print",
+    "layers turn to rock",
+    "erosion uncovers the footprint"
+   ],
+   "Start with the step. How is the print saved?"
+  ],
+  [
+   "A fossil goes to the museum. Put the steps in order.",
+   [
+    "a hiker spots a bone",
+    "they tell the museum",
+    "paleontologists dig it out",
+    "the bone is cleaned in the lab",
+    "it goes on display"
+   ],
+   "Start with the discovery."
+  ],
+  [
+   "How does compost become soil? Put the steps in order.",
+   [
+    "you put food scraps in the bin",
+    "worms and tiny living things eat them",
+    "the scraps rot and break down",
+    "it turns into dark compost",
+    "you mix it into the garden"
+   ],
+   "Start with the scraps."
+  ],
+  [
+   "How does a glacier change a valley? Put the steps in order.",
+   [
+    "snow piles up in the mountains",
+    "it packs down into thick ice",
+    "the glacier slowly slides downhill",
+    "it scrapes the rock beneath it",
+    "a wide U-shaped valley is left"
+   ],
+   "Start with the snow."
   ]
  ],
  "ROUTINES": [
@@ -1892,6 +3575,150 @@
     "dial her number",
     "wait for her to answer",
     "say hello"
+   ]
+  ],
+  [
+   "Get dressed for winter recess",
+   [
+    "put on snow pants",
+    "put on your boots",
+    "zip up your jacket",
+    "put on your hat and mittens"
+   ]
+  ],
+  [
+   "Make toast",
+   [
+    "put bread in the toaster",
+    "push the lever down",
+    "wait for the toast to pop up",
+    "spread on butter"
+   ]
+  ],
+  [
+   "Pack your backpack",
+   [
+    "open your backpack",
+    "put in your homework",
+    "add your lunch",
+    "zip it closed"
+   ]
+  ],
+  [
+   "Give a dog a bath",
+   [
+    "fill the tub with warm water",
+    "put the dog in the tub",
+    "scrub with dog shampoo",
+    "rinse and dry the dog"
+   ]
+  ],
+  [
+   "Bake cookies",
+   [
+    "mix the dough",
+    "scoop dough onto a tray",
+    "bake in the oven",
+    "let them cool"
+   ]
+  ],
+  [
+   "Score a goal in hockey",
+   [
+    "skate toward the net",
+    "get the puck on your stick",
+    "shoot the puck",
+    "celebrate the goal"
+   ]
+  ],
+  [
+   "Go to bed",
+   [
+    "put on your pyjamas",
+    "brush your teeth",
+    "read a book",
+    "turn off the light"
+   ]
+  ],
+  [
+   "Make lemonade",
+   [
+    "squeeze the lemons",
+    "pour the juice into a jug",
+    "add water and sugar",
+    "stir and serve"
+   ]
+  ],
+  [
+   "Ride a bike safely",
+   [
+    "put on your helmet",
+    "check your tires",
+    "get on the bike",
+    "start pedalling"
+   ]
+  ],
+  [
+   "Borrow a library e-book",
+   [
+    "open the library app",
+    "search for a book",
+    "tap borrow",
+    "start reading"
+   ]
+  ],
+  [
+   "Recycle a pop can",
+   [
+    "finish your drink",
+    "rinse the can",
+    "put it in the blue bin",
+    "the truck takes it away"
+   ]
+  ],
+  [
+   "Wrap a present",
+   [
+    "put the gift in a box",
+    "wrap paper around the box",
+    "tape the paper",
+    "add a bow"
+   ]
+  ],
+  [
+   "Take a photo with a tablet",
+   [
+    "open the camera app",
+    "point it at what you want",
+    "tap the button",
+    "look at your photo"
+   ]
+  ],
+  [
+   "Set the table for supper",
+   [
+    "put down the placemats",
+    "add the plates",
+    "put forks and knives beside the plates",
+    "fill the water glasses"
+   ]
+  ],
+  [
+   "Build a sandcastle",
+   [
+    "fill a bucket with wet sand",
+    "flip the bucket over",
+    "lift the bucket off",
+    "add a flag on top"
+   ]
+  ],
+  [
+   "Make a smoothie",
+   [
+    "put fruit in the blender",
+    "add yogurt and milk",
+    "put the lid on and blend",
+    "pour it into a glass"
    ]
   ]
  ],
@@ -2048,6 +3875,371 @@
    ],
    "hint": "You are learning right now!",
    "why": "Anyone can learn to code with practice."
+  },
+  {
+   "q": "A loop in a program…",
+   "a": "repeats steps",
+   "w": [
+    "deletes steps",
+    "stops the program",
+    "draws a circle every time"
+   ],
+   "hint": "Loop means go around again.",
+   "why": "Loops repeat instructions."
+  },
+  {
+   "q": "A bug in a program is…",
+   "a": "a mistake in the code",
+   "w": [
+    "an insect inside the computer",
+    "a game",
+    "a picture"
+   ],
+   "hint": "It makes the program do the wrong thing.",
+   "why": "A bug is an error in the instructions."
+  },
+  {
+   "q": "“If the light is red, stop. Otherwise, go.” What does the robot do at a green light?",
+   "a": "go",
+   "w": [
+    "stop",
+    "turn around",
+    "nothing"
+   ],
+   "hint": "Green is not red.",
+   "why": "The condition is false, so the robot does the “otherwise” part."
+  },
+  {
+   "q": "A robot starts facing north. It turns right once. Which way is it facing?",
+   "a": "east",
+   "w": [
+    "west",
+    "south",
+    "north"
+   ],
+   "hint": "North is up. Turn clockwise.",
+   "why": "Turning right from north points east."
+  },
+  {
+   "q": "A robot starts facing north. It turns right twice. Which way is it facing?",
+   "a": "south",
+   "w": [
+    "east",
+    "west",
+    "north"
+   ],
+   "hint": "Two right turns make a U-turn.",
+   "why": "Two right turns point the robot the opposite way."
+  },
+  {
+   "q": "Which is the best first step to solve a big problem?",
+   "a": "break it into smaller parts",
+   "w": [
+    "give up",
+    "guess randomly",
+    "do everything at once"
+   ],
+   "hint": "Small steps are easier.",
+   "why": "Decomposing makes big problems manageable."
+  },
+  {
+   "q": "A program uses “repeat 3 times: jump”. How many jumps happen?",
+   "a": "3",
+   "w": [
+    "1",
+    "6",
+    "0"
+   ],
+   "hint": "Count the repeats.",
+   "why": "The loop runs the jump 3 times."
+  },
+  {
+   "q": "A program uses “repeat 2 times: clap, stomp”. What happens?",
+   "a": "clap, stomp, clap, stomp",
+   "w": [
+    "clap, clap, stomp, stomp",
+    "clap, stomp",
+    "stomp, clap, stomp, clap"
+   ],
+   "hint": "Do the whole inside part, then do it again.",
+   "why": "The loop repeats both steps in order, twice."
+  },
+  {
+   "q": "An input is information that goes INTO a computer. Which is an input?",
+   "a": "typing on a keyboard",
+   "w": [
+    "sound from a speaker",
+    "a picture on the screen",
+    "a printed page"
+   ],
+   "hint": "You give it to the computer.",
+   "why": "Keyboards, mice and microphones are inputs."
+  },
+  {
+   "q": "An output is information that comes OUT of a computer. Which is an output?",
+   "a": "sound from speakers",
+   "w": [
+    "clicking a mouse",
+    "talking into a microphone",
+    "typing"
+   ],
+   "hint": "The computer gives it to you.",
+   "why": "Screens, speakers and printers are outputs."
+  },
+  {
+   "q": "Why should code be tested many times with different inputs?",
+   "a": "to make sure it works in every case",
+   "w": [
+    "to make it slower",
+    "testing is not needed",
+    "to use up battery"
+   ],
+   "hint": "Maybe it works for one case but not another.",
+   "why": "Testing with different inputs catches hidden bugs."
+  },
+  {
+   "q": "Which instruction is clearest for a robot?",
+   "a": "move forward 3 steps",
+   "w": [
+    "go over there",
+    "move a bit",
+    "do the thing"
+   ],
+   "hint": "Robots need exact instructions.",
+   "why": "Computers follow exact, precise instructions."
+  },
+  {
+   "q": "Sorting your hockey cards by team is a way of…",
+   "a": "organizing data",
+   "w": [
+    "debugging",
+    "looping",
+    "deleting"
+   ],
+   "hint": "You are putting information into groups.",
+   "why": "Grouping and sorting helps us organize data."
+  },
+  {
+   "q": "Why should you keep your passwords secret?",
+   "a": "to keep your accounts safe",
+   "w": [
+    "passwords do not matter",
+    "so you can forget them",
+    "so the computer runs faster"
+   ],
+   "hint": "Who should be able to log in as you?",
+   "why": "Secret passwords protect your information."
+  },
+  {
+   "q": "A traffic light changes red, green, yellow, red, green, yellow. What kind of thinking spots this?",
+   "a": "pattern recognition",
+   "w": [
+    "decomposition",
+    "debugging",
+    "guessing"
+   ],
+   "hint": "Something repeats.",
+   "why": "Spotting repeats is pattern recognition."
+  },
+  {
+   "q": "Which of these is a computer?",
+   "a": "all of these",
+   "w": [
+    "only a laptop",
+    "only a phone",
+    "only a tablet"
+   ],
+   "hint": "Lots of things have tiny computers inside.",
+   "why": "Laptops, phones, tablets and many toys all have computers inside."
   }
- ]
+ ],
+ "CYCLE_PARTS": {
+  "evaporation": [
+   "the sun warming the ocean so water rises as vapour",
+   "a lake drying up in the sun",
+   "wet clothes drying on a line",
+   "a puddle disappearing",
+   "steam rising from a hot spring",
+   "a wet playground drying after rain",
+   "a river getting lower on a hot day"
+  ],
+  "condensation": [
+   "clouds forming high in the sky",
+   "dew forming on grass",
+   "fog forming over a lake in the morning",
+   "drops forming on a cold window",
+   "water vapour cooling into tiny drops",
+   "a bathroom mirror fogging up"
+  ],
+  "precipitation": [
+   "rain falling",
+   "snow falling on the Rockies",
+   "hail pounding the car",
+   "sleet falling in spring",
+   "drizzle on the way to school",
+   "a big summer thunderstorm"
+  ],
+  "collection": [
+   "rain running into a river",
+   "snowmelt filling a lake",
+   "water soaking into the ground",
+   "a stream flowing into the Bow River",
+   "rain filling a pond",
+   "water gathering in the ocean"
+  ]
+ },
+ "NAT_PROC": {
+  "natural": [
+   "wood",
+   "a rock",
+   "wool",
+   "cotton",
+   "sand",
+   "clay",
+   "a pine cone",
+   "a seashell",
+   "a leaf",
+   "a feather",
+   "honey",
+   "an egg",
+   "a lump of coal",
+   "a cow’s milk",
+   "a log",
+   "a sunflower seed",
+   "a goose down feather",
+   "sap from a tree"
+  ],
+  "processed": [
+   "plastic",
+   "glass",
+   "paper",
+   "steel",
+   "nylon",
+   "a brick",
+   "cheese",
+   "bread",
+   "concrete",
+   "a rubber eraser",
+   "a cotton T-shirt",
+   "cardboard",
+   "a wool sweater",
+   "a metal spoon",
+   "maple syrup",
+   "a crayon",
+   "a candle",
+   "jam"
+  ]
+ },
+ "FORCE_KIND": {
+  "friction": [
+   "your shoes gripping the gym floor",
+   "a bike slowing down when you squeeze the brakes",
+   "rubbing your hands together to warm them",
+   "a sled stopping in deep snow",
+   "a box being hard to slide across carpet",
+   "sand on an icy road helping cars stop"
+  ],
+  "gravity": [
+   "an apple falling from a tree",
+   "a ball rolling down a hill",
+   "rain falling from a cloud",
+   "you landing after a jump",
+   "a toboggan sliding down a hill",
+   "a dropped mitten landing on the ground"
+  ],
+  "magnetism": [
+   "a fridge magnet holding a drawing",
+   "a compass needle pointing north",
+   "a magnet picking up paper clips",
+   "two magnets pushing apart",
+   "a magnetic letter sticking to a whiteboard"
+  ],
+  "elastic force": [
+   "a rubber band snapping back",
+   "a trampoline bouncing you up",
+   "a spring in a pogo stick",
+   "a stretched slingshot band",
+   "a bouncy ball springing off the floor"
+  ],
+  "tension": [
+   "a tight rope in tug of war",
+   "a guitar string pulled tight",
+   "a kite string on a windy day",
+   "a rope holding up a swing",
+   "a leash pulled tight by a dog"
+  ]
+ },
+ "MACHINE_KIND": {
+  "lever": [
+   "a seesaw",
+   "a crowbar lifting a board",
+   "a bottle opener",
+   "a hockey stick",
+   "a pair of scissors",
+   "a shovel",
+   "a hammer pulling out a nail",
+   "a canoe paddle",
+   "a wheelbarrow handle"
+  ],
+  "inclined plane": [
+   "a ramp into a moving truck",
+   "a playground slide",
+   "a wheelchair ramp",
+   "a road winding up a mountain",
+   "a boat launch ramp",
+   "a skateboard ramp",
+   "a sloped driveway"
+  ],
+  "wheel and axle": [
+   "a doorknob",
+   "a wagon wheel",
+   "a bicycle wheel",
+   "a pencil sharpener handle",
+   "a steering wheel",
+   "a rolling suitcase",
+   "a pizza cutter",
+   "a skateboard wheel"
+  ],
+  "pulley": [
+   "a flagpole rope",
+   "window blinds",
+   "a crane lifting steel beams",
+   "a well bucket on a rope",
+   "a clothesline on wheels",
+   "a ski lift cable",
+   "an elevator cable"
+  ],
+  "wedge": [
+   "an axe",
+   "a knife",
+   "a doorstop",
+   "a zipper’s slider",
+   "the front of a canoe",
+   "a nail’s point",
+   "an ulu",
+   "a chisel"
+  ]
+ },
+ "LAND_CHANGE": {
+  "a slow change": [
+   "a river slowly carving a canyon",
+   "wind wearing down a rock",
+   "a glacier moving down a valley",
+   "waves slowly wearing away a beach",
+   "roots slowly cracking a sidewalk",
+   "a mountain wearing down",
+   "soil building up from dead leaves",
+   "hoodoos forming in the badlands"
+  ],
+  "a sudden change": [
+   "a landslide",
+   "a flood",
+   "an earthquake",
+   "a volcano erupting",
+   "an avalanche",
+   "a forest fire",
+   "a tornado knocking down trees",
+   "a sinkhole opening up"
+  ]
+ }
 }

@@ -29,7 +29,37 @@
   "A [green|a] [frog|n] [hopped|v] [into|p] the [pond|n].",
   "[He|pr] [kindly|av] [shared|v] his [yummy|a] [snack|n].",
   "The [huge|a] [truck|n] [rumbled|v] [noisily|av] [down|p] the [road|n].",
-  "[We|pr] [watched|v] the [bright|a] [fireworks|n] [after|p] [dark|n]."
+  "[We|pr] [watched|v] the [bright|a] [fireworks|n] [after|p] [dark|n].",
+  "The [fluffy|a] [puppy|n] [barked|v] [loudly|av] [at|p] the [mail carrier|n].",
+  "[We|pr] [built|v] a [huge|a] [snow fort|n] [behind|p] the [school|n].",
+  "[He|pr] [carefully|av] [carried|v] the [hot|a] [soup|n] [to|p] the [table|n].",
+  "The [brave|a] [firefighter|n] [climbed|v] [quickly|av] [up|p] the [ladder|n].",
+  "[They|pr] [played|v] [happily|av] [in|p] the [deep|a] [snow|n].",
+  "My [grandma|n] [baked|v] [delicious|a] [cookies|n] [for|p] [us|pr].",
+  "The [tiny|a] [mouse|n] [hid|v] [quietly|av] [under|p] the [couch|n].",
+  "[I|pr] [found|v] a [shiny|a] [rock|n] [beside|p] the [river|n].",
+  "The [noisy|a] [crowd|n] [cheered|v] [wildly|av] [for|p] the [Flames|n].",
+  "[She|pr] [painted|v] a [bright|a] [rainbow|n] [on|p] the [wall|n].",
+  "The [old|a] [truck|n] [rumbled|v] [slowly|av] [down|p] the [road|n].",
+  "[You|pr] [sat|v] [next to|p] [me|pr] on the [bus|n].",
+  "The [clever|a] [fox|n] [sneaked|v] [silently|av] [through|p] the [grass|n].",
+  "Our [teacher|n] [read|v] a [funny|a] [story|n] [after|p] [lunch|n].",
+  "[He|pr] [kicked|v] the [ball|n] [hard|av] [into|p] the [net|n].",
+  "The [cold|a] [wind|n] [blew|v] [fiercely|av] [across|p] the [prairie|n].",
+  "[We|pr] [hiked|v] [up|p] a [steep|a] [mountain|n] [yesterday|av].",
+  "The [sleepy|a] [cat|n] [curled|v] up [on|p] the [soft|a] [bed|n].",
+  "[They|pr] [quickly|av] [packed|v] [warm|a] [sweaters|n] [for|p] the [trip|n].",
+  "A [giant|a] [moose|n] [walked|v] [slowly|av] [across|p] the [highway|n].",
+  "[I|pr] [gently|av] [put|v] the [little|a] [bird|n] [into|p] the [nest|n].",
+  "The [strong|a] [beaver|n] [chewed|v] [through|p] the [tall|a] [tree|n].",
+  "[She|pr] [sang|v] [sweetly|av] [at|p] the [lovely|a] [concert|n].",
+  "The [excited|a] [kids|n] [raced|v] [outside|av] [at|p] [recess|n].",
+  "My [dad|n] [cooked|v] [pancakes|n] [for|p] [us|pr] [today|av].",
+  "[He|pr] [waited|v] [patiently|av] [by|p] the [door|n] for his [friend|n].",
+  "The [heavy|a] [rain|n] [fell|v] [all night|av] [on|p] the [roof|n].",
+  "[We|pr] [watched|v] the [colourful|a] [fireworks|n] [from|p] the [hill|n].",
+  "The [playful|a] [otter|n] [slid|v] [down|p] the [muddy|a] [bank|n].",
+  "[They|pr] [skied|v] [fast|av] [between|p] the [tall|a] [trees|n]."
  ],
  "TAG_NAME": {
   "n": "noun",
@@ -59,7 +89,27 @@
   "Grandma visited us from Edmonton on Sunday.",
   "Our dog Biscuit loves the snow.",
   "Next Monday, I start swimming lessons.",
-  "Dr. Patel works at the Alberta Children’s Hospital."
+  "Dr. Patel works at the Alberta Children’s Hospital.",
+  "Last Tuesday, Noah visited the Calgary Zoo.",
+  "My aunt Priya flew to Vancouver in May.",
+  "We read a book called Charlotte's Web.",
+  "Our class went to Heritage Park on Thursday.",
+  "In August, we camped near Lake Minnewanka.",
+  "Mr. Wong teaches music at our school.",
+  "Grandpa watched the Oilers play the Flames.",
+  "Mia and I went skating on Wednesday.",
+  "The Elbow River runs through Calgary.",
+  "On Canada Day, we watched the fireworks.",
+  "My friend Kai was born in Saskatoon.",
+  "We drove through Red Deer on Sunday.",
+  "In October, my sister turns eight.",
+  "Our cat Mittens sleeps on my bed.",
+  "Ms. Martin took us to the Royal Tyrrell Museum.",
+  "My family visited Drumheller in June.",
+  "Dad and I went to the Calgary Stampede.",
+  "On Monday, Jacob forgot his lunch.",
+  "We crossed the Peace Bridge with Grandma.",
+  "In April, we planted seeds with Mrs. Lee."
  ],
  "TYPES": [
   {
@@ -156,6 +206,101 @@
    "s": "Do not touch the stove",
    "type": "command",
    "end": "."
+  },
+  {
+   "s": "How many goals did you score",
+   "type": "question",
+   "end": "?"
+  },
+  {
+   "s": "Are we going to Banff this weekend",
+   "type": "question",
+   "end": "?"
+  },
+  {
+   "s": "Who ate the last cookie",
+   "type": "question",
+   "end": "?"
+  },
+  {
+   "s": "When does recess start",
+   "type": "question",
+   "end": "?"
+  },
+  {
+   "s": "Is it snowing outside",
+   "type": "question",
+   "end": "?"
+  },
+  {
+   "s": "Can you help me tie my skates",
+   "type": "question",
+   "end": "?"
+  },
+  {
+   "s": "My dog has brown spots",
+   "type": "statement",
+   "end": "."
+  },
+  {
+   "s": "We have gym on Fridays",
+   "type": "statement",
+   "end": "."
+  },
+  {
+   "s": "The library is next to the office",
+   "type": "statement",
+   "end": "."
+  },
+  {
+   "s": "Calgary is in Alberta",
+   "type": "statement",
+   "end": "."
+  },
+  {
+   "s": "I like to read comics",
+   "type": "statement",
+   "end": "."
+  },
+  {
+   "s": "The bus was late this morning",
+   "type": "statement",
+   "end": "."
+  },
+  {
+   "s": "Moose live in the forest",
+   "type": "statement",
+   "end": "."
+  },
+  {
+   "s": "Watch out for that puck",
+   "type": "exclamation",
+   "end": "!"
+  },
+  {
+   "s": "I can't believe it is my birthday",
+   "type": "exclamation",
+   "end": "!"
+  },
+  {
+   "s": "Yikes, a spider is on my arm",
+   "type": "exclamation",
+   "end": "!"
+  },
+  {
+   "s": "Line up at the door",
+   "type": "command",
+   "end": "."
+  },
+  {
+   "s": "Wash your hands before lunch",
+   "type": "command",
+   "end": "."
+  },
+  {
+   "s": "Pass me the crayons, please",
+   "type": "command",
+   "end": "."
   }
  ],
  "LISTS": [
@@ -238,6 +383,31 @@
    "Liam",
    "Maya",
    "Jack"
+  ],
+  [
+   "toques",
+   "scarves",
+   "boots"
+  ],
+  [
+   "pencils",
+   "erasers",
+   "glue"
+  ],
+  [
+   "a moose",
+   "a bear",
+   "an elk"
+  ],
+  [
+   "cookies",
+   "milk",
+   "apples"
+  ],
+  [
+   "a ball",
+   "a bat",
+   "a glove"
   ]
  ],
  "STARTS": [
@@ -249,7 +419,11 @@
   "Dad found",
   "We shared",
   "He drew",
-  "They wanted"
+  "They wanted",
+  "Grandma knitted",
+  "The coach handed out",
+  "At the store, we got",
+  "In my desk I keep"
  ],
  "QUOTES": [
   [
@@ -323,6 +497,54 @@
   [
    "Mom",
    "Wear your toque"
+  ],
+  [
+   "Dad",
+   "Put on your boots"
+  ],
+  [
+   "Grandma",
+   "I love you"
+  ],
+  [
+   "Leo",
+   "That was a great goal"
+  ],
+  [
+   "Maya",
+   "Look at the moose"
+  ],
+  [
+   "Coach",
+   "Keep your stick on the ice"
+  ],
+  [
+   "Noah",
+   "I am so hungry"
+  ],
+  [
+   "Mom",
+   "Time for bed"
+  ],
+  [
+   "The bus driver",
+   "Sit down, please"
+  ],
+  [
+   "Grandpa",
+   "Let's go fishing"
+  ],
+  [
+   "Ben",
+   "My tooth fell out"
+  ],
+  [
+   "Ella",
+   "It is snowing again"
+  ],
+  [
+   "Mr. Singh",
+   "Open your books"
   ]
  ],
  "POSSESSIVE": [
@@ -485,6 +707,102 @@
     "parks",
     "park'"
    ]
+  },
+  {
+   "s": "Where are the ___ skates?",
+   "right": "boy's",
+   "wrong": [
+    "boys",
+    "boy'"
+   ]
+  },
+  {
+   "s": "The ___ nest was full of eggs.",
+   "right": "bird's",
+   "wrong": [
+    "birds",
+    "birds's"
+   ]
+  },
+  {
+   "s": "I borrowed my ___ pencil.",
+   "right": "friend's",
+   "wrong": [
+    "friends",
+    "friend'"
+   ]
+  },
+  {
+   "s": "The ___ locker room was messy.",
+   "right": "players'",
+   "wrong": [
+    "players's",
+    "player'"
+   ]
+  },
+  {
+   "s": "The ___ tail is long and bushy.",
+   "right": "fox's",
+   "wrong": [
+    "foxs",
+    "foxes's"
+   ]
+  },
+  {
+   "s": "We cleaned the ___ cage.",
+   "right": "hamster's",
+   "wrong": [
+    "hamsters",
+    "hamster'"
+   ]
+  },
+  {
+   "s": "The two ___ bikes are in the garage.",
+   "right": "brothers'",
+   "wrong": [
+    "brothers's",
+    "brother'"
+   ]
+  },
+  {
+   "s": "My ___ car is red.",
+   "right": "uncle's",
+   "wrong": [
+    "uncles",
+    "uncle'"
+   ]
+  },
+  {
+   "s": "All the ___ coats were on the hooks.",
+   "right": "students'",
+   "wrong": [
+    "students's",
+    "student'"
+   ]
+  },
+  {
+   "s": "The ___ voice was very kind.",
+   "right": "teacher's",
+   "wrong": [
+    "teachers",
+    "teacher'"
+   ]
+  },
+  {
+   "s": "The ___ hooves were muddy.",
+   "right": "horse's",
+   "wrong": [
+    "horses",
+    "horse'"
+   ]
+  },
+  {
+   "s": "Both ___ mittens got wet.",
+   "right": "twins'",
+   "wrong": [
+    "twins's",
+    "twin'"
+   ]
   }
  ],
  "SUBJ_PRED": [
@@ -583,6 +901,58 @@
   [
    "Mom",
    "drove us to the rink."
+  ],
+  [
+   "The grumpy goalie",
+   "blocked every shot."
+  ],
+  [
+   "Three ducks",
+   "swam across the pond."
+  ],
+  [
+   "Our class",
+   "planted a garden."
+  ],
+  [
+   "The fluffy kitten",
+   "chased a ball of yarn."
+  ],
+  [
+   "Grandpa",
+   "told a funny joke."
+  ],
+  [
+   "The snowplow",
+   "cleared our street."
+  ],
+  [
+   "Two hungry bears",
+   "searched for berries."
+  ],
+  [
+   "My mom",
+   "drives a blue car."
+  ],
+  [
+   "The school bell",
+   "rang loudly."
+  ],
+  [
+   "A bald eagle",
+   "landed on the branch."
+  ],
+  [
+   "The kids in my class",
+   "love recess."
+  ],
+  [
+   "Our neighbour's dog",
+   "barks at squirrels."
+  ],
+  [
+   "The Calgary Tower",
+   "is very tall."
   ]
  ],
  "CONJ": [
@@ -681,6 +1051,54 @@
   {
    "s": "The bell rang, ___ we went inside.",
    "a": "so"
+  },
+  {
+   "s": "I like hockey, ___ my sister likes soccer.",
+   "a": "but"
+  },
+  {
+   "s": "We can walk ___ ride our bikes.",
+   "a": "or"
+  },
+  {
+   "s": "It was very cold, ___ we wore our toques.",
+   "a": "so"
+  },
+  {
+   "s": "I brushed my teeth ___ went to bed.",
+   "a": "and"
+  },
+  {
+   "s": "Would you like milk ___ juice?",
+   "a": "or"
+  },
+  {
+   "s": "We ate popcorn ___ watched a movie.",
+   "a": "and"
+  },
+  {
+   "s": "The puppy was tired, ___ it took a nap.",
+   "a": "so"
+  },
+  {
+   "s": "I studied hard, ___ the test was still tricky.",
+   "a": "but"
+  },
+  {
+   "s": "Do you want to paint ___ draw?",
+   "a": "or"
+  },
+  {
+   "s": "Mom packed sandwiches ___ apples for the trip.",
+   "a": "and"
+  },
+  {
+   "s": "It started to rain, ___ we went inside.",
+   "a": "so"
+  },
+  {
+   "s": "I wanted pizza, ___ we had soup.",
+   "a": "but"
   }
  ],
  "SUBJECTS": [
@@ -802,7 +1220,21 @@
   "The goalie moved like a cat.",
   "The chinook wind felt as warm as a blanket.",
   "The rock was as hard as a brick.",
-  "She swims like a fish."
+  "She swims like a fish.",
+  "The puck was as fast as a rocket.",
+  "He ate like a hungry bear.",
+  "Her smile was as bright as the sun.",
+  "The pillow felt like a marshmallow.",
+  "My brother is as busy as a beaver.",
+  "The thunder sounded like a drum.",
+  "She swam like a fish.",
+  "The wind howled like a wolf.",
+  "The gym was as hot as an oven.",
+  "The snowflakes danced like tiny fairies.",
+  "My dog is as loyal as a best friend.",
+  "The rock was as heavy as an elephant.",
+  "His feet were as quiet as a mouse.",
+  "The stars sparkled like diamonds."
  ],
  "NOT_SIMILES": [
   "She ran to the store.",
@@ -820,6 +1252,14 @@
   "The truck was loud.",
   "The rink was slippery.",
   "The goalie caught the puck.",
-  "My pillow is light."
+  "My pillow is light.",
+  "The puck flew into the net.",
+  "My hands were cold after recess.",
+  "I like hot chocolate.",
+  "The lake froze in December.",
+  "He likes to eat pancakes.",
+  "The wind blew all day.",
+  "She swims every Saturday.",
+  "I would like a turn, please."
  ]
 }

@@ -61,18 +61,22 @@ const CHANGE_NAMES = bank.CHANGE_NAMES;
 function states(level: number, rng: Rng): Question {
   if (level === 0) return sorter(rng, 'state', (x) => `Is ${x} a solid, a liquid, or a gas?`, STATES, 'Solids keep their shape. Liquids pour. Gases spread out to fill a space.');
   if (level === 1 && rng() < 0.6) return sorter(rng, 'change', (x) => `Which change of state is this: ${x}?`, CHANGE_NAMES, 'Melting: solid to liquid. Freezing: liquid to solid. Evaporation: liquid to gas. Condensation: gas to liquid.');
-  return ask(rng, 'statefact', pick(rng, level === 1 ? STATE_FACTS.slice(0, 7) : STATE_FACTS));
+  if (level === 2 && rng() < 0.3) return sorter(rng, 'change', (x) => `Which change of state is this: ${x}?`, CHANGE_NAMES, 'Melting: solid to liquid. Freezing: liquid to solid. Evaporation: liquid to gas. Condensation: gas to liquid.');
+  return ask(rng, 'statefact', pick(rng, level === 1 ? STATE_FACTS.slice(0, 7) : STATE_FACTS.slice(7)));
 }
 
 // ---------- Water cycle (3M1.5) ----------
 
 const WATER: Item[] = bank.WATER as Item[];
+const WATER_PARTS = WATER.filter((it) => it.q.startsWith('Which part of the water cycle'));
+const WATER_FACTS = WATER.filter((it) => !WATER_PARTS.includes(it));
 
 const CYCLE_ORDERS: [string, string[]][] = bank.CYCLE_ORDERS as [string, string[]][];
 
 function waterCycle(level: number, rng: Rng): Question {
-  if (level === 0) return ask(rng, 'water', pick(rng, WATER.slice(0, 13)));
-  if (rng() < 0.4) return ask(rng, 'water', pick(rng, WATER.slice(13)));
+  if (level === 0) return ask(rng, 'water', pick(rng, WATER_FACTS));
+  if (rng() < 0.15) return ask(rng, 'water', pick(rng, WATER_PARTS));
+  if (rng() < 0.45) return sorter(rng, 'part', (x) => `Which part of the water cycle is this: ${x}?`, bank.CYCLE_PARTS, 'Evaporation: water rises as vapour. Condensation: vapour cools into drops. Precipitation: water falls. Collection: water gathers in rivers, lakes and the ground.');
   const [prompt, steps] = pick(rng, CYCLE_ORDERS);
   return order(rng, 'cycle', prompt, steps, 'Heat makes water evaporate. High up, vapour cools into clouds. Then it falls, and it collects again.', `${steps.join(' → ')}.`);
 }
@@ -83,7 +87,10 @@ const NATURAL: Item[] = bank.NATURAL as Item[];
 const CHANGES = bank.CHANGES;
 
 function materials(level: number, rng: Rng): Question {
-  if (level === 0) return ask(rng, 'mat', pick(rng, NATURAL));
+  if (level === 0) {
+    if (rng() < 0.45) return sorter(rng, 'np', (x) => `Is ${x} natural or processed?`, bank.NAT_PROC, 'Natural materials come straight from nature. Processed materials have been changed by people.');
+    return ask(rng, 'mat', pick(rng, NATURAL));
+  }
   return sorter(rng, 'chg', (x) => `Is ${x} a reversible change or a permanent change?`, CHANGES, 'Reversible means you can change it back. Permanent means you cannot undo it.');
 }
 
@@ -96,6 +103,8 @@ const PUSH_PULL = bank.PUSH_PULL;
 
 function forces(level: number, rng: Rng): Question {
   if (level === 0 && rng() < 0.7) return sorter(rng, 'pp', (x) => `Is ${x} a push or a pull?`, PUSH_PULL, 'A push moves something away from you. A pull brings it toward you.');
+  if (level === 1 && rng() < 0.4) return sorter(rng, 'fk', (x) => `Which force is at work: ${x}?`, bank.FORCE_KIND, 'Friction rubs, gravity pulls down, magnets attract some metals, stretchy things spring back, and tight ropes have tension.');
+  if (level === 2 && rng() < 0.5) return sorter(rng, 'mk', (x) => `Which simple machine is ${x}?`, bank.MACHINE_KIND, 'A lever turns on a point. A ramp is an inclined plane. A wheel turns on an axle. A pulley uses a rope over a wheel. A wedge pushes things apart.');
   return ask(rng, 'force', pick(rng, level === 0 ? FORCES.slice(0, 6) : level === 1 ? FORCES : MACHINES));
 }
 
@@ -127,6 +136,7 @@ function earth(level: number, rng: Rng): Question {
     const [prompt, steps, hint] = pick(rng, EARTH_ORDERS);
     return order(rng, 'fossil', prompt, steps, hint, `${steps.join(' → ')}.`);
   }
+  if (level === 0 && rng() < 0.4) return sorter(rng, 'lc', (x) => `Is ${x} a slow change or a sudden change to the land?`, bank.LAND_CHANGE, 'Slow changes take many years. Sudden changes happen in minutes or days.');
   return ask(rng, 'earth', pick(rng, level === 0 ? EARTH : FOSSILS));
 }
 
@@ -140,7 +150,28 @@ function coding(level: number, rng: Rng): Question {
     const [task, steps] = pick(rng, ROUTINES);
     return order(rng, 'algo', `Write the instructions for “${task}”. Tap the steps in order.`, steps, 'What has to happen first? What can only happen at the end?', `${steps.join(', then ')}.`);
   }
+  if (rng() < 0.35) return patternNext(rng);
   return ask(rng, 'cs', pick(rng, CS));
+}
+
+const SYMBOLS = ['🔴', '🔵', '🟡', '🟢', '⭐', '🏒', '⚽', '🍎', '🐟', '❄️'];
+
+/** Pattern recognition: what comes next in a repeating pattern? */
+function patternNext(rng: Rng): Question {
+  const unit = shuffle(rng, SYMBOLS).slice(0, 2 + Math.floor(rng() * 2));
+  if (unit.length === 2 && rng() < 0.5) unit.push(unit[0]); // AAB-style patterns: 🔴🔵🔴
+  const shown = 2 * unit.length + Math.floor(rng() * unit.length);
+  const seq = Array.from({ length: shown }, (_, i) => unit[i % unit.length]);
+  const answer = unit[shown % unit.length];
+  return {
+    key: `pat-${seq.join('')}`,
+    prompt: `What comes next? ${seq.join(' ')} …`,
+    input: 'choice',
+    choices: shuffle(rng, [...new Set(unit)]),
+    answer,
+    hint: `Find the part that repeats: ${unit.join(' ')}.`,
+    explain: `The pattern repeats ${unit.join(' ')}, so next is ${answer}.`,
+  };
 }
 
 // ---------- Skill list ----------
