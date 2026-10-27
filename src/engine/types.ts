@@ -130,6 +130,10 @@ export interface Settings {
   sessionLength: number;
   /** Subjects the daily warm-up focuses on; empty means all. */
   focus?: SubjectId[];
+  /** Battle mode for practice sessions (on unless turned off). */
+  battle?: boolean;
+  /** Game sound effects (on unless turned off). */
+  sound?: boolean;
 }
 
 export interface AppData {

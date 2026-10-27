@@ -8,7 +8,14 @@ import { speak, stopSpeaking } from '../engine/speech';
 import { useStore } from '../engine/store';
 import type { Question, Skill } from '../engine/types';
 import { go } from '../router';
-import { ALL_SKILLS, SUBJECTS, findSkill, findSubject } from '../subjects';
+import { ALL_SKILLS, findSkill, findSubject } from '../subjects';
+import { AvatarArt } from '../avatar/AvatarArt';
+import { lookOf } from '../avatar/catalog';
+import { BattleStage, type StageEvent } from '../battle/BattleStage';
+import { MonsterArt } from '../battle/Art';
+import { applyTurn, startBattle, type Battle } from '../battle/engine';
+import { setSound, sfx } from '../battle/sfx';
+import { dailySubject, zoneFor } from '../battle/zones';
 
 const CHEERS = ['Awesome!', 'You got it!', 'Super!', 'Nailed it!', 'Brilliant!', 'Great thinking!', 'Way to go!', 'Yes!'];
 
@@ -30,14 +37,13 @@ export function Play(props: { subjectId: string; target: string }) {
 }
 
 function Session({ subjectId, target, again }: { subjectId: string; target: string; again: () => void }) {
-  const { profile, data, updateProfile } = useStore();
+  const { profile, data, setData, updateProfile } = useStore();
   const subject = findSubject(subjectId);
   const pool: Skill[] = useMemo(
     () => {
       if (subjectId !== 'all') return subject?.skills ?? [];
-      const ready = SUBJECTS.filter((s) => s.ready && s.skills.length);
-      const focus = ready.filter((s) => data.settings.focus?.includes(s.id));
-      return (focus.length ? focus : ready).flatMap((s) => s.skills);
+      // The daily warm-up is one subject a day, rotating (or within the parent's focus list).
+      return findSubject(dailySubject(Date.now(), data.settings.focus))?.skills ?? [];
     },
     [subjectId, subject, data.settings.focus],
   );
@@ -59,6 +65,28 @@ function Session({ subjectId, target, again }: { subjectId: string; target: stri
   const [badges, setBadges] = useState<BadgeDef[]>([]);
   const [finished, setFinished] = useState(false);
   const [showLearn, setShowLearn] = useState(() => !!single?.learn && !profile?.skills[single.id]?.history.length);
+
+  // Battle mode: one zone per session, from the session's subject.
+  const zone = data.settings.battle === false ? undefined : zoneFor(plan[0]?.skill.subject ?? 'typing');
+  const [battle, setBattle] = useState<Battle>(() => startBattle(plan.length, zone?.monsters ?? ['x'], Math.random));
+  const [stageEvent, setStageEvent] = useState<StageEvent | null>(null);
+  const eventId = useRef(0);
+  const soundOn = data.settings.sound !== false;
+  useEffect(() => setSound(soundOn), [soundOn]);
+
+  const onResult = (r: 'right1' | 'wrong1' | 'right2' | 'wrong2', seconds: number) => {
+    if (!zone) return;
+    sfx.unlock();
+    eventId.current += 1;
+    if (r === 'wrong1') {
+      setStageEvent({ id: eventId.current, kind: 'attack', damage: 0, heal: 0, finished: false, coins: 0, foe: battle.current });
+      return;
+    }
+    const outcome = r === 'right1' ? 'first' : r === 'right2' ? 'block' : 'miss';
+    const t = applyTurn(battle, outcome, seconds, plan.length - index);
+    setBattle(t.battle);
+    setStageEvent({ id: eventId.current, ...t.event, foe: battle.current });
+  };
 
   const back = () => {
     stopSpeaking();
@@ -93,6 +121,8 @@ function Session({ subjectId, target, again }: { subjectId: string; target: stri
     const all = [...results, { skillId: step.skill.id, correct: firstTry }];
     setResults(all);
     if (index + 1 >= plan.length) {
+      // Coins dropped by monsters in battle mode.
+      if (zone) nextProfile = { ...nextProfile, coins: nextProfile.coins + battle.coins };
       const checked = checkBadges(closeReviews(nextProfile, all, wasDue, now), ALL_SKILLS, now);
       nextProfile = checked.profile;
       setBadges(checked.won);
@@ -126,6 +156,54 @@ function Session({ subjectId, target, again }: { subjectId: string; target: stri
           <div className="row">
             <button className="btn ghost" onClick={() => speak(single.learn!.join(' '))}>🔊 Read to me</button>
             <button className="btn primary" onClick={() => { stopSpeaking(); setShowLearn(false); }}>I'm ready!</button>
+          </div>
+        </section>
+      </main>
+    );
+  }
+
+  if (finished && zone) {
+    const right = results.filter((r) => r.correct).length;
+    const beaten = battle.foes.filter((f) => f.end === 'defeated');
+    return (
+      <main className="page">
+        <TopBar back={back} />
+        <section className={`card center summary victory zone-${zone.subject}`}>
+          <div className="victory-hero">
+            <AvatarArt look={lookOf(profile)} size={140} background={false} />
+          </div>
+          <h1>{beaten.length === battle.foes.length ? 'Victory!' : beaten.length ? 'Battle won!' : 'They got away!'}</h1>
+          <p className="muted">{zone.name}</p>
+          <div className="beaten-row">
+            {battle.foes.map((f, i) => (
+              <div key={i} className={`beaten ${f.end}`}>
+                <MonsterArt subject={zone.subject} kind={f.kind} hurt size={70} />
+                <small>{f.name}</small>
+                <small className={f.end === 'defeated' ? 'good' : 'muted'}>{f.end === 'defeated' ? 'Defeated' : 'Got away'}</small>
+              </div>
+            ))}
+          </div>
+          <div className="loot-row">
+            <div><strong>{right}/{results.length}</strong><span>first try</span></div>
+            <div><strong>+{xpEarned}</strong><span>XP</span></div>
+            <div><strong>+{Math.ceil(xpEarned / 2) + battle.coins}</strong><span>coins</span></div>
+            <div><strong>{battle.crits + battle.specials}</strong><span>big hits</span></div>
+          </div>
+          {levelUps.length > 0 && <p className="good">⬆️ Level up in {[...new Set(levelUps)].join(', ')}!</p>}
+          {mastered.length > 0 && <p className="good">⭐ You mastered {mastered.join(', ')}!</p>}
+          {badges.length > 0 && (
+            <div className="badge-row">
+              {badges.map((b) => (
+                <div key={b.id} className="badge earned pop">
+                  <span className="badge-icon">{b.icon}</span>
+                  <span>{b.name}</span>
+                </div>
+              ))}
+            </div>
+          )}
+          <div className="row">
+            <button className="btn ghost" onClick={back}>Done</button>
+            <button className="btn primary" onClick={again}>Battle again</button>
           </div>
         </section>
       </main>
@@ -177,6 +255,14 @@ function Session({ subjectId, target, again }: { subjectId: string; target: stri
           <span key={i} className={i < results.length ? (results[i].correct ? 'ok' : 'miss') : i === index ? 'now' : ''} />
         ))}
       </div>
+      {zone && (
+        <>
+          <BattleStage zone={zone} battle={battle} event={stageEvent} look={lookOf(profile)} />
+          <button className="sound-toggle" onClick={() => setData((d) => ({ ...d, settings: { ...d.settings, sound: !soundOn } }))} aria-label={soundOn ? 'Turn sound off' : 'Turn sound on'}>
+            {soundOn ? '🔊' : '🔇'}
+          </button>
+        </>
+      )}
       {question && step && (
         <QuestionCard
           key={`${index}-${question.key}`}
@@ -185,18 +271,20 @@ function Session({ subjectId, target, again }: { subjectId: string; target: stri
           level={(profile.skills[step.skill.id] ?? newSkillState()).level}
           readAloud={data.settings.readAloud}
           onDone={onDone}
+          onResult={onResult}
         />
       )}
     </main>
   );
 }
 
-function QuestionCard({ q, skill, level, readAloud, onDone }: {
+function QuestionCard({ q, skill, level, readAloud, onDone, onResult }: {
   q: Question;
   skill: Skill;
   level: number;
   readAloud: boolean;
   onDone: (firstTry: boolean, solved: boolean, seconds: number) => void;
+  onResult?: (r: 'right1' | 'wrong1' | 'right2' | 'wrong2', seconds: number) => void;
 }) {
   const [phase, setPhase] = useState<Phase>('ask');
   const [value, setValue] = useState('');
@@ -216,6 +304,8 @@ function QuestionCard({ q, skill, level, readAloud, onDone }: {
     if (!normalize(answer)) return;
     tries.current += 1;
     const ok = q.input === 'choice' ? answer === q.answer : normalize(answer) === normalize(q.answer);
+    const secs = (Date.now() - start.current) / 1000;
+    onResult?.(ok ? (tries.current === 1 ? 'right1' : 'right2') : tries.current === 1 ? 'wrong1' : 'wrong2', secs);
     if (ok) {
       setPhase('right');
       if (readAloud) speak(cheer);

@@ -4,6 +4,7 @@ import { useStore } from '../engine/store';
 import { go } from '../router';
 import { SUBJECTS } from '../subjects';
 import { LESSONS } from '../subjects/typing/lessons';
+import { dailySubject, zoneFor } from '../battle/zones';
 
 export function Home() {
   const { profile, data } = useStore();
@@ -13,6 +14,7 @@ export function Home() {
   const goal = data.settings.dailyGoal;
   const done = today?.questions ?? 0;
   const pct = Math.min(100, (done / goal) * 100);
+  const quest = zoneFor(dailySubject(now, data.settings.focus));
   const due = SUBJECTS.flatMap((s) => s.skills).filter((s) => isReviewDue(profile.skills[s.id], now)).length;
 
   return (
@@ -29,7 +31,7 @@ export function Home() {
           </div>
         </div>
         <button className="btn primary big" onClick={() => go('play', 'all', 'mix')}>
-          ▶ Daily warm-up{due ? ` (${due} to review)` : ''}
+          {data.settings.battle === false || !quest ? '▶ Daily warm-up' : `⚔️ Today's quest: ${quest.name}`}{due ? ` (${due} to review)` : ''}
         </button>
       </section>
 

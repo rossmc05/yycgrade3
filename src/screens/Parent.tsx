@@ -199,11 +199,19 @@ function Settings() {
         </select>
       </label>
       <label className="field inline">
+        <span>Battle mode (practice as monster battles)</span>
+        <input type="checkbox" checked={data.settings.battle !== false} onChange={(e) => set({ battle: e.target.checked })} />
+      </label>
+      <label className="field inline">
+        <span>Game sounds</span>
+        <input type="checkbox" checked={data.settings.sound !== false} onChange={(e) => set({ sound: e.target.checked })} />
+      </label>
+      <label className="field inline">
         <span>Read questions aloud</span>
         <input type="checkbox" checked={data.settings.readAloud} onChange={(e) => set({ readAloud: e.target.checked })} />
       </label>
       <div className="field">
-        <span>Daily warm-up focus (none ticked means all subjects)</span>
+        <span>Daily quest subjects (one a day, rotating; none ticked means all)</span>
         <div className="row" style={{ justifyContent: 'flex-start' }}>
           {SUBJECTS.filter((s) => s.skills.length).map((s) => {
             const on = data.settings.focus?.includes(s.id) ?? false;
