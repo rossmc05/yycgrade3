@@ -24,6 +24,9 @@ function parseTagged(t: string) {
   return { plain, words };
 }
 
+/** "a noun", "an adjective". */
+const an = (word: string) => `${/^[aeiou]/.test(word) ? 'an' : 'a'} ${word}`;
+
 function partsOfSpeech(level: number, rng: Rng): Question {
   const tags = [['n', 'v'], ['a'], ['av'], ['p', 'pr'], ['n', 'v', 'a', 'av', 'p', 'pr']][level];
   const tag = pick(rng, tags);
@@ -33,12 +36,12 @@ function partsOfSpeech(level: number, rng: Rng): Question {
   const wrong = shuffle(rng, words.filter((w) => w.tag !== tag)).slice(0, 3).map((w) => w.word);
   return {
     key: `pos-${tag}-${plain}-${right.word}`,
-    prompt: `Which word is a ${TAG_NAME[tag]}? "${plain}"`,
+    prompt: `Which word is ${an(TAG_NAME[tag])}? "${plain}"`,
     input: 'choice',
     choices: options(rng, right.word, wrong),
     answer: right.word,
     hint: TAG_HINT[tag],
-    explain: `"${right.word}" is a ${TAG_NAME[tag]}. ${TAG_HINT[tag]}`,
+    explain: `"${right.word}" is ${an(TAG_NAME[tag])}. ${TAG_HINT[tag]}`,
   };
 }
 
@@ -56,7 +59,8 @@ function capitals(level: number, rng: Rng): Question {
   const wrongs = [...shuffle(rng, capIdx).slice(0, 3).map(lower), ...shuffle(rng, lowIdx).slice(0, level === 0 ? 0 : 2).map(upper)];
   if (level >= 2) {
     // Find the word that should have a capital.
-    const i = pick(rng, capIdx.filter((k) => k > 0).length ? capIdx.filter((k) => k > 0) : capIdx);
+    const names = capIdx.filter((k) => k > 0 && words[k] !== 'I');
+    const i = pick(rng, names.length ? names : capIdx);
     const shown = lower(i);
     const word = words[i].replace(/[.,!?]/g, '');
     const choices = options(rng, word.toLowerCase(), shuffle(rng, lowIdx).map((k) => words[k].replace(/[.,!?]/g, '').toLowerCase()));
@@ -114,7 +118,7 @@ function sentenceTypes(level: number, rng: Rng): Question {
 
 const LISTS = bank.LISTS;
 const STARTS = bank.STARTS;
-const QUOTES: [string, string][] = bank.QUOTES as [string, string][];
+const QUOTES = bank.QUOTES as [string, string, string?][];
 const POSSESSIVE: { s: string; right: string; wrong: string[] }[] = bank.POSSESSIVE as { s: string; right: string; wrong: string[] }[];
 
 function punctuation(level: number, rng: Rng): Question {
@@ -129,20 +133,20 @@ function punctuation(level: number, rng: Rng): Question {
       input: 'choice',
       choices: options(rng, right, [`${st} ${a} ${b} and ${c}.`, `${st}, ${a} ${b}, and ${c}.`, `${st} ${a}, ${b} and, ${c}.`]),
       answer: right,
-      hint: 'Use a comma to separate things in a list.',
+      hint: 'Use a comma to separate things in a list. A comma before "and" is fine too.',
       explain: right,
     };
   }
   if (kind === 'quote') {
-    const [who, said] = pick(rng, QUOTES);
-    const right = `${who} said, "${said}."`;
+    const [who, said, end = '.'] = pick(rng, QUOTES);
+    const right = `${who} said, "${said}${end}"`;
     return {
       key: `quote-${right}`,
       prompt: 'Which sentence uses quotation marks correctly?',
       input: 'choice',
-      choices: options(rng, right, [`"${who} said, ${said}."`, `${who} said, ${said}.`, `${who} "said, ${said}."`]),
+      choices: options(rng, right, [`"${who} said, ${said}${end}"`, `${who} said, ${said}${end}`, `${who} said "${said}${end}"`, `${who} said, "${said}"${end}`]),
       answer: right,
-      hint: 'Quotation marks go around the exact words someone says.',
+      hint: 'Quotation marks go around the exact words someone says. Put a comma after said, and put the end mark inside the quotation marks.',
       explain: right,
     };
   }
@@ -192,7 +196,7 @@ function conjunctions(_level: number, rng: Rng): Question {
     prompt: `Choose the joining word: ${c.s.replace('___', '_____')}`,
     say: c.s.replace('___', 'blank'),
     input: 'choice',
-    choices: ['and', 'but', 'or', 'so'],
+    choices: c.a === 'and' ? ['and', 'but', 'or', 'so'] : ['but', 'or', 'so'],
     answer: c.a,
     hint: 'and adds more. but shows something different. or gives a choice. so tells what happened because of it.',
     explain: c.s.replace('___', c.a),
@@ -206,7 +210,7 @@ const VERBS: { one: string; many: string; rest: string }[] = bank.VERBS as { one
 
 function agreement(_level: number, rng: Rng): Question {
   const sub = pick(rng, SUBJECTS);
-  const v = pick(rng, VERBS);
+  const v = pick(rng, sub.s === 'I' ? VERBS.filter((x) => x.one !== 'is' && x.one !== 'was') : VERBS);
   const ans = sub.many ? v.many : v.one;
   return {
     key: `sva-${sub.s}-${v.one}`,

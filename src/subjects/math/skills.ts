@@ -12,12 +12,15 @@ const PLACES = ['ones', 'tens', 'hundreds', 'thousands', 'ten thousands'];
 
 function placeValue(level: number, rng: Rng): Question {
   const digits = [3, 4, 5, 5, 5][level];
-  const n = int(rng, 10 ** (digits - 1), 10 ** digits - 1);
   const kind = level < 3 ? pick(rng, ['value', 'digit', 'build'] as const) : pick(rng, ['value', 'build', 'expanded'] as const);
+  let n = int(rng, 10 ** (digits - 1), 10 ** digits - 1);
+  // For "the value of the 5", the digit must appear only once, or two answers fit.
+  const unique = (x: number) => [...String(x)].map((c, i, a) => (c !== '0' && a.indexOf(c) === a.lastIndexOf(c) ? digits - 1 - i : -1)).filter((p) => p >= 0);
+  while (kind === 'value' && !unique(n).length) n = int(rng, 10 ** (digits - 1), 10 ** digits - 1);
   const s = String(n);
   if (kind === 'value' || kind === 'digit') {
     // Choose a place whose digit is not 0 so the value is meaningful.
-    let p = int(rng, 0, digits - 1);
+    let p = kind === 'value' ? pick(rng, unique(n)) : int(rng, 0, digits - 1);
     while (s[digits - 1 - p] === '0') p = (p + 1) % digits;
     const d = Number(s[digits - 1 - p]);
     if (kind === 'digit') {
@@ -35,7 +38,7 @@ function placeValue(level: number, rng: Rng): Question {
       key: `pv-value-${n}-${p}`,
       prompt: `What is the value of the ${d} in ${fmt(n)}?`,
       input: 'choice',
-      choices: options(rng, fmt(value), [String(d), fmt(d * 10 ** ((p + 1) % digits)), fmt(d * 10 ** Math.max(p - 1, 0)), fmt(d * 10 ** (p + 1))]),
+      choices: options(rng, fmt(value), [0, 1, 2, 3, 4, 5].filter((q) => q !== p).map((q) => fmt(d * 10 ** q))),
       answer: fmt(value),
       hint: `The ${d} is in the ${PLACES[p]} place. Its value is ${d} × ${fmt(10 ** p)}.`,
       explain: `The ${d} is in the ${PLACES[p]} place, so it is worth ${d} × ${fmt(10 ** p)} = ${fmt(value)}.`,
@@ -92,7 +95,8 @@ function compareNumbers(level: number, rng: Rng): Question {
 
 function rounding(level: number, rng: Rng): Question {
   const to = [10, 100, 1000, 10000][level];
-  const n = int(rng, to + 1, Math.min(to * 100, 99999));
+  let n = int(rng, to + 1, Math.min(to * 100, 99999));
+  if (n % to === 0) n += int(rng, 1, to - 1);
   const r = Math.round(n / to) * to;
   const down = Math.floor(n / to) * to;
   const up = down + to;
@@ -100,7 +104,7 @@ function rounding(level: number, rng: Rng): Question {
     key: `round-${n}-${to}`,
     prompt: `Round ${fmt(n)} to the nearest ${fmt(to)}.`,
     input: 'choice',
-    choices: options(rng, fmt(r), [fmt(down), fmt(up), fmt(Math.round(n / (to / 10 || 1)) * (to / 10 || 1)), fmt(down - to)]),
+    choices: options(rng, fmt(r), [fmt(down), fmt(up), fmt(Math.round(n / (to / 10 || 1)) * (to / 10 || 1)), fmt(up + to)]),
     answer: fmt(r),
     hint: `It is between ${fmt(down)} and ${fmt(up)}. Halfway is ${fmt(down + to / 2)}. Halfway or more rounds up.`,
     explain: `${fmt(n)} is between ${fmt(down)} and ${fmt(up)}; it is closer to ${fmt(r)}${n - down === to / 2 ? ' (exactly halfway rounds up)' : ''}.`,
@@ -135,7 +139,7 @@ function money(level: number, rng: Rng): Question {
     const total = coins.reduce((t, c) => t + COIN_VALUE[c], 0) / 100;
     return {
       key: `money-d-${coins.join('.')}`,
-      prompt: 'How many dollars is this money worth?',
+      prompt: 'How many dollars are these coins and bills worth?',
       visual: { kind: 'coins', coins },
       input: 'number',
       unit: '$',
@@ -159,9 +163,9 @@ function money(level: number, rng: Rng): Question {
       explain: `$${a} + $${b} = $${a + b}. $${paid} − $${a + b} = $${paid - a - b}.`,
     };
   }
-  const price = int(rng, 2, 45);
+  const [item, lo, hi] = pick(rng, [['a hockey puck', 2, 8], ['a book', 5, 20], ['a toy car', 3, 15], ['a bag of popcorn', 2, 6], ['a pack of stickers', 2, 5], ['a water bottle', 5, 15], ['a board game', 15, 40], ['a hockey stick', 20, 45], ['a backpack', 15, 40], ['a pair of mittens', 8, 20]] as [string, number, number][]);
+  const price = int(rng, lo, hi);
   const paid = pick(rng, [5, 10, 20, 50].filter((v) => v > price));
-  const item = pick(rng, ['a hockey puck', 'a book', 'a toy car', 'a bag of popcorn', 'a pack of stickers', 'a water bottle']);
   return {
     key: `money-change-${price}-${paid}`,
     prompt: `You buy ${item} for $${price} and pay with $${paid}. How much change do you get?`,
@@ -189,13 +193,21 @@ function addSub(level: number, rng: Rng): Question {
     // Two-digit with regrouping.
     a = int(rng, 25, 89);
     b = op === '+' ? int(rng, 12, 99) : int(rng, 12, a - 1);
+    for (let t = 0; t < 50 && !(op === '+' ? (a % 10) + (b % 10) >= 10 : b % 10 > a % 10); t++) {
+      a = int(rng, 25, 89);
+      b = op === '+' ? int(rng, 12, 99) : int(rng, 12, a - 1);
+    }
   } else if (level === 2) {
     a = int(rng, 120, 899);
     b = op === '+' ? int(rng, 100, 999 - a) : int(rng, 100, a - 10);
   } else {
     // Three-digit with regrouping across zeros, up to 1000.
-    a = op === '-' ? pick(rng, [int(rng, 300, 1000), int(rng, 3, 9) * 100 + int(rng, 0, 9)]) : int(rng, 150, 850);
+    a = op === '-' ? pick(rng, [int(rng, 3, 10) * 100, int(rng, 3, 9) * 100 + int(rng, 1, 9)]) : int(rng, 150, 850);
     b = op === '+' ? int(rng, 100, 1000 - a) : int(rng, 101, a - 1);
+    // Make sure it regroups: ones (or tens) that need carrying or borrowing.
+    for (let t = 0; t < 50 && !(op === '+' ? (a % 10) + (b % 10) >= 10 || (a % 100) + (b % 100) >= 100 : b % 10 > a % 10); t++) {
+      b = op === '+' ? int(rng, 100, 1000 - a) : int(rng, 101, a - 1);
+    }
   }
   if (b < 0) b = 0;
   const ans = op === '+' ? a + b : a - b;
@@ -220,8 +232,8 @@ function addSub(level: number, rng: Rng): Question {
 
 function estimate(level: number, rng: Rng): Question {
   const to = level === 0 ? 10 : 100;
-  const a = level === 0 ? int(rng, 11, 89) : level === 2 ? int(rng, 400, 890) : int(rng, 110, 890);
-  const b = level === 0 ? int(rng, 11, 89) : int(rng, 110, level === 2 ? a - 150 : 890);
+  const a = level === 0 ? int(rng, 11, 89) : level === 2 ? int(rng, 400, 890) : int(rng, 110, 780);
+  const b = level === 0 ? int(rng, 11, 89) : int(rng, 110, level === 2 ? a - 150 : Math.min(890, 1000 - a));
   const op = level === 2 ? '-' : '+';
   const ra = Math.round(a / to) * to;
   const rb = Math.round(b / to) * to;
@@ -293,7 +305,7 @@ function multiply(level: number, rng: Rng): Question {
 }
 
 function divide(level: number, rng: Rng): Question {
-  const set = FACT_SETS[Math.min(level + 1, 3)].filter((v) => v > 0);
+  const set = FACT_SETS[Math.min(level + 1, 3)].filter((v) => v > 1);
   const d = pick(rng, set);
   const q = int(rng, 1, 10);
   const n = d * q;
@@ -354,7 +366,7 @@ const NAMES: Record<number, [string, string]> = {
 };
 const NUMWORD = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve'];
 
-const FOODS = ['pizza', 'pie', 'chocolate bar', 'sandwich', 'cake', 'pan of brownies', 'quesadilla', 'garden', 'flag', 'window'];
+const FOODS = ['pizza', 'pie', 'chocolate bar', 'sandwich', 'cake', 'pan of brownies', 'quesadilla', 'paper strip', 'quilt', 'poster'];
 
 /** A fraction in a story: a whole cut into equal parts. */
 function fractionStory(rng: Rng, d: number): Question {
@@ -366,7 +378,7 @@ function fractionStory(rng: Rng, d: number): Question {
   const a = left ? d - n : n;
   return {
     key: `fr-story-${thing}-${n}/${d}-${left}`,
-    prompt: `A ${thing} is cut into ${NUMWORD[d]} equal parts. ${did} of them. What fraction ${left ? 'is left' : eaten ? 'did you eat' : 'did you colour'}?`,
+    prompt: `A ${thing} ${eaten ? 'is cut' : 'is split'} into ${NUMWORD[d]} equal parts. ${did} of them. What fraction ${left ? (eaten ? 'is left' : 'is not coloured') : eaten ? 'did you eat' : 'did you colour'}?`,
     input: 'choice',
     choices: options(rng, `${a}/${d}`, [`${d - a || d}/${d}`, `${a}/${d + 1}`, `${d}/${a}`, `1/${a + 1}`]),
     answer: `${a}/${d}`,
@@ -442,7 +454,8 @@ function fractions(level: number, rng: Rng): Question {
       explain: `The dot is ${n} jumps of 1/${d} from 0: ${n}/${d}.`,
     };
   }
-  // Benchmarks 0, 1/2, 1.
+  // Benchmarks 0, 1/2, 1 (even denominators, so half is a whole number of parts).
+  if (d % 2) return fractions(level, rng);
   const n = int(rng, 0, d);
   const v = n / d;
   // Exactly 1/4 or 3/4 is halfway between two benchmarks, so ask a number-line question instead.
@@ -572,7 +585,7 @@ function sequences(level: number, rng: Rng): Question {
     const item = kind === 'finite' ? pick(rng, finite) : pick(rng, infinite);
     return {
       key: `seq-fin-${item}`,
-      prompt: `Is ${item} a finite or infinite sequence?`,
+      prompt: `Does this sequence end (finite) or go on forever (infinite)? ${item[0].toUpperCase() + item.slice(1)}`,
       input: 'choice',
       choices: ['finite', 'infinite'],
       answer: kind,
@@ -635,12 +648,12 @@ function time(level: number, rng: Rng): Question {
       choices: options(rng, ans, [
         `${wrongHour}:${pad2(minute)}`,
         `${hour}:${pad2((minute + 5) % 60)}`,
-        `${Math.round(minute / 5) || 12}:${pad2((hour * 5) % 60)}`,
+        ...(`${Math.round(minute / 5) || 12}:${pad2((hour * 5) % 60)}` === ans ? [] : [`${Math.round(minute / 5) || 12}:${pad2((hour * 5) % 60)}`]),
         `${hour === 1 ? 12 : hour - 1}:${pad2(minute)}`,
       ]),
       answer: ans,
       hint: 'The short hand points to the hour. The long hand counts minutes: each number is 5 minutes.',
-      explain: `The hour hand is at ${hour}${minute > 0 ? ' (just past)' : ''} and the minute hand shows ${minute} minutes: ${ans}.`,
+      explain: `The hour hand is ${minute === 0 ? 'on' : minute < 30 ? 'just past' : 'past'} ${hour} and the minute hand shows ${minute} minutes: ${ans}.`,
     };
   }
   if (level === 3) {
@@ -672,8 +685,8 @@ function time(level: number, rng: Rng): Question {
   const toTwelve = rng() < 0.5;
   const h12 = h24 % 12 === 0 ? 12 : h24 % 12;
   const ampm = h24 < 12 ? 'a.m.' : 'p.m.';
-  const t12 = `${h12}:${pad2(m)} ${ampm}`;
-  const t24 = `${h24}:${pad2(m)}`;
+  const t12 = h24 === 12 && m === 0 ? '12:00 noon' : h24 === 0 && m === 0 ? '12:00 midnight' : `${h12}:${pad2(m)} ${ampm}`;
+  const t24 = `${pad2(h24)}:${pad2(m)}`;
   if (toTwelve) {
     return {
       key: `time-24to12-${t24}`,
@@ -681,7 +694,7 @@ function time(level: number, rng: Rng): Question {
       input: 'choice',
       choices: options(rng, t12, [`${h12}:${pad2(m)} ${ampm === 'a.m.' ? 'p.m.' : 'a.m.'}`, `${(h24 + 2) % 12 || 12}:${pad2(m)} ${ampm}`, `${h24 % 10 || 10}:${pad2(m)} ${ampm}`]),
       answer: t12,
-      hint: 'Hours 13 to 23 are p.m.: subtract 12. Hour 0 is 12 a.m. (midnight).',
+      hint: 'Hours 13 to 23 are p.m.: subtract 12. 00:00 is midnight.',
       explain: `${t24} is ${t12}.`,
     };
   }
@@ -689,9 +702,9 @@ function time(level: number, rng: Rng): Question {
     key: `time-12to24-${t12}`,
     prompt: `What is ${t12} on a 24-hour clock?`,
     input: 'choice',
-    choices: options(rng, t24, [`${(h24 + 12) % 24}:${pad2(m)}`, `${h12}:${pad2(m)}`, `${(h24 + 1) % 24}:${pad2(m)}`]),
+    choices: options(rng, t24, [`${pad2((h24 + 12) % 24)}:${pad2(m)}`, `${pad2(h12)}:${pad2(m)}`, `${pad2((h24 + 1) % 24)}:${pad2(m)}`]),
     answer: t24,
-    hint: 'For p.m. times after 12:59, add 12 to the hour. 12 a.m. is 0:00.',
+    hint: 'For p.m. times after 12:59, add 12 to the hour. Midnight is 00:00.',
     explain: `${t12} is ${t24}.`,
   };
 }
@@ -851,6 +864,7 @@ function statistics(level: number, rng: Rng): Question {
   const j = (i + 1 + int(rng, 0, 2)) % 4;
   const kind = level === 2 ? 'more' : 'total';
   if (kind === 'more') {
+    if (values[i] === values[j]) values[j] = values[i] > 1 ? values[i] - 1 : values[i] + 1;
     const [a, b] = values[i] >= values[j] ? [i, j] : [j, i];
     return {
       key: `stat-diff-${g.title}-${values.join('.')}-${a}-${b}`,
@@ -882,11 +896,11 @@ function financial(level: number, rng: Rng): Question {
     return { key: `fin-nw-${q.p}`, prompt: q.p, input: 'choice', choices: ['need', 'want'], answer: q.a, hint: 'A need is something you must have to live and be safe. A want is nice to have.', explain: `It is a ${q.a}.` };
   }
   if (level === 1) {
-    const week = int(rng, 2, 10);
+    const week = int(rng, 2, 5);
     const goal = week * int(rng, 2, 8);
     const item = pick(rng, bank.SAVE_GOALS);
     return {
-      key: `fin-save-${week}-${goal}`,
+      key: `fin-save-${week}-${goal}-${item}`,
       prompt: `You want to save $${goal} for ${item}. You save $${week} each week. How many weeks will it take?`,
       input: 'number',
       unit: 'weeks',

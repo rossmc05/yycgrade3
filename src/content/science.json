@@ -47,24 +47,66 @@
    "dish soap"
   ],
   "gas": [
-   "steam from a kettle",
+   "the invisible water vapour above a boiling kettle",
    "the air in a balloon",
    "water vapour",
-   "the bubbles in pop",
+   "the fizz in pop",
    "your breath",
    "the air in a soccer ball",
-   "the bubbles in sparkling water",
-   "the air you blow into bubble gum",
+   "the fizz in sparkling water",
+   "the air inside a bubble-gum bubble",
    "the helium in a party balloon",
-   "the steam above a hot bath",
    "the air inside a bike tire",
-   "the smell of popcorn drifting through the house",
-   "the fog of your breath on a cold day",
    "the air in a beach ball",
-   "the gas in a barbecue tank once it comes out"
+   "the air in a room",
+   "the oxygen you breathe in"
   ]
  },
  "STATE_FACTS": [
+  {
+   "q": "Which is the coldest?",
+   "a": "−10 °C",
+   "w": [
+    "0 °C",
+    "15 °C",
+    "30 °C"
+   ],
+   "hint": "Numbers below zero are colder than zero.",
+   "why": "−10 °C is below freezing, so it is the coldest."
+  },
+  {
+   "q": "What tool do we use to measure temperature?",
+   "a": "a thermometer",
+   "w": [
+    "a ruler",
+    "a scale",
+    "a clock"
+   ],
+   "hint": "It has a red or silver line that goes up when it is warm.",
+   "why": "A thermometer measures temperature in degrees Celsius."
+  },
+  {
+   "q": "Which is the hottest?",
+   "a": "boiling water at 100 °C",
+   "w": [
+    "a warm bath at 38 °C",
+    "a sunny day at 25 °C",
+    "a cold drink at 5 °C"
+   ],
+   "hint": "Look for the biggest number.",
+   "why": "100 °C is the hottest of these."
+  },
+  {
+   "q": "What is the gas that we breathe all around us called?",
+   "a": "air",
+   "w": [
+    "water",
+    "ice",
+    "juice"
+   ],
+   "hint": "You fill balloons with it.",
+   "why": "Air is a mix of gases all around us."
+  },
   {
    "q": "Which state of matter keeps its own shape?",
    "a": "solid",
@@ -162,7 +204,7 @@
    "why": "Water boils at 100 °C."
   },
   {
-   "q": "Is the melting point of a substance the same as its freezing point?",
+   "q": "Does water melt and freeze at the same temperature?",
    "a": "Yes, they are the same",
    "w": [
     "No, melting is always hotter",
@@ -205,17 +247,6 @@
    "why": "Enough heat makes most solids melt."
   },
   {
-   "q": "Which is the coldest?",
-   "a": "−10 °C",
-   "w": [
-    "0 °C",
-    "15 °C",
-    "30 °C"
-   ],
-   "hint": "Numbers below zero are colder than zero.",
-   "why": "−10 °C is below freezing, so it is the coldest."
-  },
-  {
    "q": "The outdoor rink is −5 °C. Will the ice stay frozen?",
    "a": "yes, it is below 0 °C",
    "w": [
@@ -235,17 +266,6 @@
    ],
    "hint": "12 °C is warmer than 0 °C.",
    "why": "Above 0 °C, snow and ice melt."
-  },
-  {
-   "q": "What tool do we use to measure temperature?",
-   "a": "a thermometer",
-   "w": [
-    "a ruler",
-    "a scale",
-    "a clock"
-   ],
-   "hint": "It has a red or silver line that goes up when it is warm.",
-   "why": "A thermometer measures temperature in degrees Celsius."
   },
   {
    "q": "What happens when you cool water vapour?",
@@ -289,27 +309,17 @@
     "salt makes it snow"
    ],
    "hint": "Salty ice melts below 0 °C.",
-   "why": "Salt lowers the temperature ice melts at, so the ice melts."
+   "why": "Salt helps ice melt, but it works best when it is not very cold. Calgary also spreads sand and gravel for grip."
   },
   {
-   "q": "Which state of matter is hard to squeeze into a smaller space?",
-   "a": "a solid",
-   "w": [
-    "a gas",
-    "air"
-   ],
-   "hint": "Try squeezing a rock, then squeeze a balloon.",
-   "why": "Solids keep their shape and size. Gases can be squeezed."
-  },
-  {
-   "q": "Which state of matter can you squeeze into a smaller space, like air in a bike pump?",
+   "q": "Which state of matter can be squeezed into a much smaller space?",
    "a": "a gas",
    "w": [
     "a solid",
     "a liquid"
    ],
-   "hint": "Push down on a bike pump.",
-   "why": "The bits of a gas are far apart, so you can squeeze them together."
+   "hint": "Think of air in a bike pump.",
+   "why": "The bits of a gas are far apart, so a gas can be squeezed. Solids and liquids hardly squeeze at all."
   },
   {
    "q": "Ice cubes float in a glass of water. Is the ice still water?",
@@ -331,17 +341,6 @@
    ],
    "hint": "Is 8 °C above or below freezing?",
    "why": "Warm chinook winds raise the temperature above 0 °C, so snow melts."
-  },
-  {
-   "q": "Which is the hottest?",
-   "a": "boiling water at 100 °C",
-   "w": [
-    "a warm bath at 38 °C",
-    "a sunny day at 25 °C",
-    "a cold drink at 5 °C"
-   ],
-   "hint": "Look for the biggest number.",
-   "why": "100 °C is the hottest of these."
   },
   {
    "q": "When chocolate melts and then cools again, what happens?",
@@ -387,17 +386,6 @@
    "why": "Heat makes liquids evaporate."
   },
   {
-   "q": "What is the gas that we breathe all around us called?",
-   "a": "air",
-   "w": [
-    "water",
-    "ice",
-    "juice"
-   ],
-   "hint": "You fill balloons with it.",
-   "why": "Air is a mix of gases all around us."
-  },
-  {
    "q": "Why does a balloon get bigger when you blow into it?",
    "a": "the gas spreads out to fill it",
    "w": [
@@ -422,7 +410,7 @@
    "snow on the roof turning to water",
    "hail melting on the warm deck",
    "a cheese slice going gooey on a hot burger",
-   "frost disappearing from a window as the sun warms it"
+   "frost on a window turning into water drops"
   ],
   "freezing": [
    "a puddle turning to ice overnight",
@@ -448,7 +436,7 @@
    "sweat drying on your skin after hockey",
    "a wet towel drying on the beach",
    "a lake getting lower on a hot summer",
-   "the steam rising from a hot cup of tea",
+   "the water level in a pot going down as it boils",
    "a wet dog drying in the sun",
    "rain drying off the slide at recess"
   ],
@@ -1030,7 +1018,7 @@
     "trees"
    ],
    "hint": "Which animal grows a fleece?",
-   "why": "Wool is processed from sheep fleece."
+   "why": "Wool is a natural material from sheep. People spin it into yarn."
   },
   {
    "q": "Cheese is processed from…",
@@ -1217,7 +1205,7 @@
     "sand"
    ],
    "hint": "Wood comes from…",
-   "why": "Wood is processed from trees."
+   "why": "Wood is a natural material from trees. People cut and shape it."
   },
   {
    "q": "Silk is a natural material made by…",
@@ -1298,14 +1286,14 @@
   },
   {
    "q": "Why are frying pans made of metal?",
-   "a": "metal carries heat well and does not burn",
+   "a": "metal passes heat to the food and can take high heat",
    "w": [
     "metal is soft",
     "metal is see-through",
     "metal is light as a feather"
    ],
    "hint": "The pan has to get hot.",
-   "why": "Metal conducts heat and can take high temperatures."
+   "why": "Metal carries heat well and does not melt on a stove."
   },
   {
    "q": "Traditional Indigenous birchbark canoes were made from…",
@@ -1345,28 +1333,21 @@
   "reversible": [
    "melting chocolate",
    "freezing juice into a popsicle",
-   "melting a snowman",
-   "folding paper",
    "boiling water into steam",
    "stretching a rubber band",
    "squishing play dough into a ball",
-   "mixing marbles and sand",
    "melting candle wax",
-   "blowing up a balloon",
    "freezing a lake",
    "dissolving sugar in water and letting it dry",
    "melting butter",
    "freezing ice cubes",
-   "rolling clay into a snake",
-   "stacking blocks",
-   "bending a pipe cleaner",
-   "folding a T-shirt",
-   "melting a popsicle",
    "letting a puddle freeze",
-   "crumpling a ball of tin foil and flattening it",
-   "mixing beads of two colours",
-   "evaporating water from salty water to get the salt back",
-   "inflating a bike tire"
+   "melting a crayon and letting it cool",
+   "freezing apple juice and letting it melt",
+   "melting ice cubes and freezing them again",
+   "dissolving salt in water and letting the water dry up",
+   "stretching a spring",
+   "melting snow in a pot and freezing it again"
   ],
   "permanent": [
    "cooking an egg",
@@ -1390,7 +1371,6 @@
    "an apple slice turning brown",
    "a log burning in a campfire",
    "baking bread",
-   "painting a fence",
    "cutting your hair",
    "making popcorn"
   ]
@@ -1476,7 +1456,7 @@
    "a": "elastic force",
    "w": [
     "friction",
-    "tension only",
+    "gravity",
     "light"
    ],
    "hint": "Things like springs and rubber bands bounce back.",
@@ -1695,7 +1675,7 @@
    "w": [
     "only colour",
     "only smell",
-    "only temperature"
+    "only its name"
    ],
    "hint": "Think of kicking, steering and squishing.",
    "why": "Forces can change how fast, which way, and the shape of things."
@@ -1822,7 +1802,7 @@
   },
   {
    "q": "Which uses a lever to make lifting easier?",
-   "a": "a hockey stick lifting a puck",
+   "a": "a crowbar lifting a rock",
    "w": [
     "a slide at the park",
     "a bicycle wheel",
@@ -1919,14 +1899,14 @@
    "why": "A longer, gentler inclined plane needs less force."
   },
   {
-   "q": "The middle point a lever turns on is called the…",
+   "q": "The point a lever turns on is called the…",
    "a": "fulcrum",
    "w": [
     "axle",
     "wedge",
     "handle"
    ],
-   "hint": "On a seesaw it is the middle.",
+   "hint": "On a seesaw it is the part in the middle.",
    "why": "A lever turns on a fulcrum."
   },
   {
@@ -1983,17 +1963,6 @@
    ],
    "hint": "It is like a long ramp.",
    "why": "A gentler inclined plane needs less force, even if it is longer."
-  },
-  {
-   "q": "Indigenous peoples used a travois, two poles dragged by a dog or horse, to carry loads. It works like a…",
-   "a": "sled that slides on the ground",
-   "w": [
-    "pulley",
-    "wedge for cutting",
-    "screw"
-   ],
-   "hint": "The poles drag along the ground.",
-   "why": "A travois lets a load be dragged instead of carried, which makes the work easier."
   },
   {
    "q": "Which simple machine has a rope over a wheel?",
@@ -2056,16 +2025,11 @@
    "kicking a soccer ball",
    "shooting a puck",
    "pressing an elevator button",
-   "closing a door",
    "pushing a stroller",
-   "throwing a snowball",
    "bowling a ball",
    "squishing a marshmallow",
-   "pedalling a bike",
-   "shovelling snow off a driveway",
    "typing on a keyboard",
    "pushing a shopping cart",
-   "kicking a football",
    "pressing a doorbell",
    "pushing a friend on a swing",
    "shoving a sled down a hill",
@@ -2074,7 +2038,6 @@
    "pressing a button on a remote",
    "squeezing toothpaste out of a tube",
    "stomping on a pop can",
-   "rolling a bowling ball",
    "shooting a basketball"
   ],
   "a pull": [
@@ -2085,20 +2048,15 @@
    "pulling weeds in the garden",
    "opening a fridge door",
    "reeling in a fish",
-   "lifting a backpack off the floor",
    "pulling on your boots",
-   "a dog walking you on a leash",
    "pulling a wagon",
    "pulling a zipper down",
    "picking an apple off a tree",
-   "pulling a cart",
    "yanking open a sock drawer",
-   "lifting a bucket by its handle",
    "pulling up your socks",
    "hauling a fishing net",
    "tugging off your mittens",
    "pulling a door open",
-   "dragging a hockey bag",
    "pulling a carrot out of the garden",
    "pulling on a dog’s leash"
   ]
@@ -2125,10 +2083,10 @@
    "an owl",
    "a frog",
    "a cougar",
-   "a shark",
+   "a pike",
    "a bald eagle",
    "a snake",
-   "a polar bear",
+   "a bobcat",
    "a spider",
    "a weasel"
   ],
@@ -2182,11 +2140,6 @@
   ],
   [
    "sun",
-   "berries",
-   "black bear"
-  ],
-  [
-   "sun",
    "clover",
    "gopher",
    "badger"
@@ -2201,7 +2154,7 @@
    "sun",
    "flowers",
    "bee",
-   "bird"
+   "swallow"
   ],
   [
    "sun",
@@ -2286,14 +2239,14 @@
   ],
   [
    "sun",
-   "plants",
-   "mosquito",
-   "dragonfly",
+   "algae",
+   "mosquito larva",
+   "dragonfly nymph",
    "frog"
   ],
   [
    "sun",
-   "acorns",
+   "spruce seeds",
    "squirrel",
    "fox"
   ],
@@ -2308,12 +2261,6 @@
    "sedge grass",
    "caribou",
    "wolf"
-  ],
-  [
-   "sun",
-   "lichen",
-   "caribou",
-   "grizzly bear"
   ],
   [
    "sun",
@@ -2333,7 +2280,7 @@
    "leaves",
    "aphid",
    "ladybug",
-   "bird"
+   "robin"
   ],
   [
    "sun",
@@ -2344,9 +2291,22 @@
   ],
   [
    "sun",
-   "plankton",
-   "krill",
-   "whale"
+   "algae",
+   "water flea",
+   "minnow",
+   "trout"
+  ],
+  [
+   "sun",
+   "grass",
+   "gopher",
+   "hawk"
+  ],
+  [
+   "sun",
+   "willow",
+   "beaver",
+   "wolf"
   ]
  ],
  "SENSES": [
@@ -2728,14 +2688,14 @@
   },
   {
    "q": "Many of Alberta’s big rivers, like the Bow River, get water from…",
-   "a": "melting glaciers in the Rockies",
+   "a": "melting snow and glaciers in the Rockies",
    "w": [
     "the ocean",
     "underground volcanoes",
-    "rain only"
+    "a big lake in the city"
    ],
    "hint": "Rivers of ice high in the mountains.",
-   "why": "Glacier meltwater feeds many Alberta rivers."
+   "why": "Snow and glacier meltwater from the mountains feed many Alberta rivers."
   },
   {
    "q": "The badlands near Drumheller were shaped mostly by…",
@@ -3497,15 +3457,6 @@
    ]
   ],
   [
-   "Get ready for hockey",
-   [
-    "put on your base layer",
-    "put on your shin pads and socks",
-    "lace up your skates",
-    "put on your helmet"
-   ]
-  ],
-  [
    "Build a snowman",
    [
     "roll a big snowball for the bottom",
@@ -3530,15 +3481,6 @@
     "look left, right and left again",
     "wait until it is clear",
     "walk across"
-   ]
-  ],
-  [
-   "Feed the dog",
-   [
-    "get the dog bowl",
-    "scoop in the food",
-    "put the bowl on the floor",
-    "fill the water dish"
    ]
   ],
   [
@@ -3578,30 +3520,12 @@
    ]
   ],
   [
-   "Get dressed for winter recess",
-   [
-    "put on snow pants",
-    "put on your boots",
-    "zip up your jacket",
-    "put on your hat and mittens"
-   ]
-  ],
-  [
    "Make toast",
    [
     "put bread in the toaster",
     "push the lever down",
     "wait for the toast to pop up",
     "spread on butter"
-   ]
-  ],
-  [
-   "Pack your backpack",
-   [
-    "open your backpack",
-    "put in your homework",
-    "add your lunch",
-    "zip it closed"
    ]
   ],
   [
@@ -3623,39 +3547,12 @@
    ]
   ],
   [
-   "Score a goal in hockey",
-   [
-    "skate toward the net",
-    "get the puck on your stick",
-    "shoot the puck",
-    "celebrate the goal"
-   ]
-  ],
-  [
-   "Go to bed",
-   [
-    "put on your pyjamas",
-    "brush your teeth",
-    "read a book",
-    "turn off the light"
-   ]
-  ],
-  [
    "Make lemonade",
    [
     "squeeze the lemons",
     "pour the juice into a jug",
     "add water and sugar",
     "stir and serve"
-   ]
-  ],
-  [
-   "Ride a bike safely",
-   [
-    "put on your helmet",
-    "check your tires",
-    "get on the bike",
-    "start pedalling"
    ]
   ],
   [
@@ -3695,15 +3592,6 @@
    ]
   ],
   [
-   "Set the table for supper",
-   [
-    "put down the placemats",
-    "add the plates",
-    "put forks and knives beside the plates",
-    "fill the water glasses"
-   ]
-  ],
-  [
    "Build a sandcastle",
    [
     "fill a bucket with wet sand",
@@ -3719,6 +3607,87 @@
     "add yogurt and milk",
     "put the lid on and blend",
     "pour it into a glass"
+   ]
+  ],
+  [
+   "Send a text message",
+   [
+    "open the messages app",
+    "choose a friend",
+    "type the message",
+    "tap send"
+   ]
+  ],
+  [
+   "Buy a snack",
+   [
+    "choose a snack",
+    "take it to the counter",
+    "pay for it",
+    "eat it"
+   ]
+  ],
+  [
+   "Bake a cake",
+   [
+    "mix the batter",
+    "pour it into a pan",
+    "bake it in the oven",
+    "spread on the icing"
+   ]
+  ],
+  [
+   "Carve a pumpkin",
+   [
+    "cut off the top",
+    "scoop out the seeds",
+    "carve a face",
+    "put a light inside"
+   ]
+  ],
+  [
+   "Make a snow angel",
+   [
+    "lie down in the snow",
+    "sweep your arms and legs",
+    "stand up carefully",
+    "look at your angel"
+   ]
+  ],
+  [
+   "Blow up a balloon",
+   [
+    "take a balloon",
+    "blow air into it",
+    "pinch the end",
+    "tie a knot"
+   ]
+  ],
+  [
+   "Take a bath",
+   [
+    "fill the tub",
+    "get in",
+    "wash with soap",
+    "dry off with a towel"
+   ]
+  ],
+  [
+   "Make a paper airplane",
+   [
+    "fold the paper in half",
+    "fold the corners to the middle",
+    "fold down the wings",
+    "throw it"
+   ]
+  ],
+  [
+   "Make popcorn",
+   [
+    "put the bag in the microwave",
+    "press start",
+    "wait for the popping to stop",
+    "open the bag carefully"
    ]
   ]
  ],
@@ -4059,7 +4028,7 @@
    "a lake drying up in the sun",
    "wet clothes drying on a line",
    "a puddle disappearing",
-   "steam rising from a hot spring",
+   "water rising as vapour from a warm lake",
    "a wet playground drying after rain",
    "a river getting lower on a hot day"
   ],
@@ -4135,17 +4104,15 @@
    "your shoes gripping the gym floor",
    "a bike slowing down when you squeeze the brakes",
    "rubbing your hands together to warm them",
-   "a sled stopping in deep snow",
    "a box being hard to slide across carpet",
    "sand on an icy road helping cars stop"
   ],
   "gravity": [
    "an apple falling from a tree",
-   "a ball rolling down a hill",
    "rain falling from a cloud",
    "you landing after a jump",
-   "a toboggan sliding down a hill",
-   "a dropped mitten landing on the ground"
+   "a dropped mitten landing on the ground",
+   "a raindrop falling to the ground"
   ],
   "magnetism": [
    "a fridge magnet holding a drawing",
@@ -4159,13 +4126,12 @@
    "a trampoline bouncing you up",
    "a spring in a pogo stick",
    "a stretched slingshot band",
-   "a bouncy ball springing off the floor"
+   "a stretchy headband snapping back"
   ],
   "tension": [
    "a tight rope in tug of war",
    "a guitar string pulled tight",
    "a kite string on a windy day",
-   "a rope holding up a swing",
    "a leash pulled tight by a dog"
   ]
  },
@@ -4174,12 +4140,11 @@
    "a seesaw",
    "a crowbar lifting a board",
    "a bottle opener",
-   "a hockey stick",
-   "a pair of scissors",
    "a shovel",
    "a hammer pulling out a nail",
-   "a canoe paddle",
-   "a wheelbarrow handle"
+   "a wheelbarrow handle",
+   "a nutcracker",
+   "a rake lifting leaves"
   ],
   "inclined plane": [
    "a ramp into a moving truck",
@@ -4197,14 +4162,11 @@
    "a pencil sharpener handle",
    "a steering wheel",
    "a rolling suitcase",
-   "a pizza cutter",
    "a skateboard wheel"
   ],
   "pulley": [
    "a flagpole rope",
-   "window blinds",
    "a crane lifting steel beams",
-   "a well bucket on a rope",
    "a clothesline on wheels",
    "a ski lift cable",
    "an elevator cable"
@@ -4213,9 +4175,6 @@
    "an axe",
    "a knife",
    "a doorstop",
-   "a zipper’s slider",
-   "the front of a canoe",
-   "a nail’s point",
    "an ulu",
    "a chisel"
   ]
@@ -4241,5 +4200,359 @@
    "a tornado knocking down trees",
    "a sinkhole opening up"
   ]
- }
+ },
+ "SCI_METHOD": [
+  {
+   "q": "What is a prediction?",
+   "a": "a smart guess about what will happen",
+   "w": [
+    "a fact you looked up",
+    "the end of a test",
+    "a kind of tool"
+   ],
+   "hint": "You make it before you test.",
+   "why": "A prediction is what you think will happen, based on what you know."
+  },
+  {
+   "q": "You test which ball bounces highest. To make it a fair test, you should…",
+   "a": "drop every ball from the same height",
+   "w": [
+    "drop each ball from a different height",
+    "throw the balls as hard as you can",
+    "only test one ball"
+   ],
+   "hint": "Change only one thing: the ball.",
+   "why": "In a fair test, you change only one thing and keep everything else the same."
+  },
+  {
+   "q": "You want to know which mitten keeps a hand warmest. What should you change?",
+   "a": "only the kind of mitten",
+   "w": [
+    "the mitten and the weather",
+    "nothing at all",
+    "the person each time"
+   ],
+   "hint": "Change just one thing.",
+   "why": "Change one thing (the mitten) and keep the rest the same."
+  },
+  {
+   "q": "Which tool measures how long a pencil is?",
+   "a": "a ruler",
+   "w": [
+    "a thermometer",
+    "a balance",
+    "a clock"
+   ],
+   "hint": "It has centimetre marks.",
+   "why": "A ruler measures length."
+  },
+  {
+   "q": "Which tool measures how hot or cold the water is?",
+   "a": "a thermometer",
+   "w": [
+    "a ruler",
+    "a balance",
+    "a measuring cup"
+   ],
+   "hint": "It shows degrees Celsius.",
+   "why": "A thermometer measures temperature."
+  },
+  {
+   "q": "Which tool compares which rock is heavier?",
+   "a": "a balance",
+   "w": [
+    "a ruler",
+    "a thermometer",
+    "a magnifying glass"
+   ],
+   "hint": "It has two pans that tip.",
+   "why": "A balance compares mass."
+  },
+  {
+   "q": "Which tool helps you see tiny details on a bug?",
+   "a": "a magnifying glass",
+   "w": [
+    "a ruler",
+    "a thermometer",
+    "a balance"
+   ],
+   "hint": "It makes things look bigger.",
+   "why": "A magnifying glass makes small things look bigger."
+  },
+  {
+   "q": "Why do scientists write down what they observe?",
+   "a": "so they remember and can share it",
+   "w": [
+    "so it looks neat",
+    "because they are bored",
+    "they never write things down"
+   ],
+   "hint": "Memories can be wrong.",
+   "why": "Recording results helps scientists remember, compare and share."
+  },
+  {
+   "q": "Which is a question you can test?",
+   "a": "Which paper towel soaks up the most water?",
+   "w": [
+    "Why is blue the best colour?",
+    "Do dogs like Mondays?",
+    "What is the nicest song?"
+   ],
+   "hint": "You could do an experiment to find out.",
+   "why": "A testable question can be answered by doing a test and measuring."
+  },
+  {
+   "q": "Your results do not match your prediction. What should you do?",
+   "a": "say what really happened and think about why",
+   "w": [
+    "change the results to match",
+    "throw the results away",
+    "stop doing science"
+   ],
+   "hint": "Scientists are honest.",
+   "why": "Unexpected results are useful. Report them honestly."
+  },
+  {
+   "q": "You test a toy car on 3 ramps. Why run each test 3 times?",
+   "a": "to make sure the results are the same each time",
+   "w": [
+    "to use up time",
+    "because 3 is a lucky number",
+    "to tire out the car"
+   ],
+   "hint": "One try could be a fluke.",
+   "why": "Repeating a test makes the results more trustworthy."
+  },
+  {
+   "q": "Which is an observation?",
+   "a": "The ice cube melted in 10 minutes.",
+   "w": [
+    "I think the ice will melt fast.",
+    "Ice is the best.",
+    "Maybe ice is magic."
+   ],
+   "hint": "Something you saw or measured.",
+   "why": "An observation is what you notice with your senses or measure."
+  },
+  {
+   "q": "A table and a bar graph are good ways to…",
+   "a": "show your results",
+   "w": [
+    "make a prediction",
+    "pick a question",
+    "clean up"
+   ],
+   "hint": "They organize numbers.",
+   "why": "Tables and graphs make results easy to read and compare."
+  },
+  {
+   "q": "What is a conclusion?",
+   "a": "what you learned from your results",
+   "w": [
+    "your first guess",
+    "the list of materials",
+    "the title of your test"
+   ],
+   "hint": "It comes at the end.",
+   "why": "A conclusion answers your question using your evidence."
+  },
+  {
+   "q": "Before mixing things in an experiment, you should…",
+   "a": "ask an adult and wear safety glasses if needed",
+   "w": [
+    "taste everything",
+    "mix everything you find",
+    "work alone without telling anyone"
+   ],
+   "hint": "Safety first.",
+   "why": "Scientists stay safe by following rules and asking for help."
+  },
+  {
+   "q": "You test which surface makes a sled go farthest. What do you measure?",
+   "a": "how far the sled goes",
+   "w": [
+    "the colour of the sled",
+    "the name of the hill",
+    "the weather next week"
+   ],
+   "hint": "What does your question ask about?",
+   "why": "Measure the thing your question is about."
+  },
+  {
+   "q": "You grow two bean plants. One gets light and one is kept in the dark. What are you testing?",
+   "a": "whether plants need light",
+   "w": [
+    "whether plants need water",
+    "which pot is nicer",
+    "how tall you are"
+   ],
+   "hint": "What is different between the two plants?",
+   "why": "The only difference is light, so that is what you are testing."
+  },
+  {
+   "q": "In the bean plant test, what should stay the same for both plants?",
+   "a": "the water, soil and pot size",
+   "w": [
+    "the light",
+    "nothing",
+    "only the colour of the pot"
+   ],
+   "hint": "Everything except the thing you are testing.",
+   "why": "Keep everything else the same so the test is fair."
+  },
+  {
+   "q": "Evidence is…",
+   "a": "facts and measurements that support an idea",
+   "w": [
+    "a guess",
+    "a story you made up",
+    "a kind of tool"
+   ],
+   "hint": "It is what you saw and measured.",
+   "why": "Evidence comes from observations and measurements."
+  },
+  {
+   "q": "Which unit would you use to record a temperature?",
+   "a": "degrees Celsius (°C)",
+   "w": [
+    "centimetres",
+    "kilograms",
+    "litres"
+   ],
+   "hint": "Thermometers in Canada use it.",
+   "why": "Temperature in Canada is measured in degrees Celsius."
+  },
+  {
+   "q": "You want to know if salt helps ice melt faster. Which is the fair test?",
+   "a": "two ice cubes the same size, salt on one only",
+   "w": [
+    "a big ice cube with salt and a tiny one without",
+    "both ice cubes with salt",
+    "one ice cube in the freezer and one outside"
+   ],
+   "hint": "Only one thing should be different.",
+   "why": "Same size, same place, only the salt is different."
+  },
+  {
+   "q": "Why should scientists share their results?",
+   "a": "so others can learn and check them",
+   "w": [
+    "to brag",
+    "so nobody else tries",
+    "it is not important"
+   ],
+   "hint": "Science is teamwork.",
+   "why": "Sharing lets others learn from and repeat the test."
+  },
+  {
+   "q": "Which of these is a good way to share your results?",
+   "a": "a poster with a graph",
+   "w": [
+    "keep them a secret",
+    "throw them away",
+    "only tell your dog"
+   ],
+   "hint": "Other people need to see them.",
+   "why": "Posters, talks and reports share what you found."
+  },
+  {
+   "q": "You drop a feather and a rock. You see the rock land first. This is…",
+   "a": "an observation",
+   "w": [
+    "a prediction",
+    "a question",
+    "a guess"
+   ],
+   "hint": "You saw it happen.",
+   "why": "Something you see happen is an observation."
+  },
+  {
+   "q": "“I think the bigger magnet will pick up more paper clips.” This is…",
+   "a": "a prediction",
+   "w": [
+    "an observation",
+    "a conclusion",
+    "a measurement"
+   ],
+   "hint": "It says what you think will happen.",
+   "why": "A prediction is made before testing."
+  },
+  {
+   "q": "You counted 12 paper clips on the big magnet and 5 on the small one. Your conclusion is…",
+   "a": "the big magnet picked up more paper clips",
+   "w": [
+    "magnets are boring",
+    "paper clips are heavy",
+    "the small magnet is broken for sure"
+   ],
+   "hint": "What do your numbers show?",
+   "why": "A conclusion uses the results: 12 is more than 5."
+  },
+  {
+   "q": "What should you do first in an investigation?",
+   "a": "ask a question",
+   "w": [
+    "write the conclusion",
+    "share the results",
+    "clean up"
+   ],
+   "hint": "What do you want to find out?",
+   "why": "Every investigation starts with a question."
+  },
+  {
+   "q": "Which sense would you use to observe if a fabric is soft?",
+   "a": "touch",
+   "w": [
+    "taste",
+    "hearing",
+    "smell"
+   ],
+   "hint": "Use your fingers.",
+   "why": "Touch tells you how something feels."
+  },
+  {
+   "q": "Why is it NOT safe to taste things in a science test?",
+   "a": "some materials can make you sick",
+   "w": [
+    "tasting is always safe",
+    "it makes the test faster",
+    "food is never used in science"
+   ],
+   "hint": "You do not always know what is in it.",
+   "why": "Never taste materials unless an adult says it is safe."
+  },
+  {
+   "q": "You measure a plant every Monday for 4 weeks. The best way to show how it grew is…",
+   "a": "a table or a graph",
+   "w": [
+    "a song",
+    "one drawing of a tree",
+    "a guess"
+   ],
+   "hint": "You have 4 numbers to compare.",
+   "why": "Tables and graphs show changes over time."
+  },
+  {
+   "q": "A scientist changes the amount of water each plant gets. The amount of water is the thing being…",
+   "a": "tested",
+   "w": [
+    "ignored",
+    "eaten",
+    "painted"
+   ],
+   "hint": "It is the one thing that is different.",
+   "why": "The thing you change on purpose is what you are testing."
+  },
+  {
+   "q": "Which question could you answer with a fair test at home?",
+   "a": "Does ice melt faster in water or in air?",
+   "w": [
+    "What will I dream tonight?",
+    "Is my cat happy?",
+    "Which colour is the prettiest?"
+   ],
+   "hint": "You could measure it with a timer.",
+   "why": "You can measure melting time to answer it."
+  }
+ ]
 }

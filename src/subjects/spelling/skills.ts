@@ -30,6 +30,9 @@ const PLURAL_HINTS = bank.PLURAL_HINTS;
 function plurals(level: number, rng: Rng): Question {
   const rule = level < 4 ? level : int(rng, 0, 3);
   const w = pick(rng, PLURALS.filter((p) => p.rule === rule));
+  if (w.one !== w.many && rng() < 0.3) {
+    return { key: `pl-back-${w.many}`, prompt: `Two ${w.many}, one ______. Type the singular (just one).`, input: 'text', answer: w.one, hint: PLURAL_HINTS[rule], explain: `Two ${w.many}, one ${w.one}.` };
+  }
   return {
     key: `pl-${w.one}`,
     prompt: `One ${w.one}, two ______. Type the plural.`,
@@ -102,6 +105,9 @@ function contractions(level: number, rng: Rng): Question {
 const PREFIX_MEANING: Record<string, string> = bank.PREFIX_MEANING as Record<string, string>;
 const PREFIX_WORDS: { word: string; prefix: string; base: string; meaning: string }[] = bank.PREFIX_WORDS as { word: string; prefix: string; base: string; meaning: string }[];
 
+/** Real words not in the bank, so they are never offered as a wrong prefix. */
+const ALSO_WORDS = ['unlike', 'mistrust', 'disable', 'unstick', 'displace', 'undo', 'unfill', 'misplay', 'distrust', 'unread', 'unwind'];
+
 function prefixes(level: number, rng: Rng): Question {
   const sets = [['re', 'un'], ['re', 'un', 'dis', 'mis'], Object.keys(PREFIX_MEANING), Object.keys(PREFIX_MEANING)];
   const w = pick(rng, PREFIX_WORDS.filter((p) => sets[Math.min(level, 3)].includes(p.prefix)));
@@ -109,11 +115,12 @@ function prefixes(level: number, rng: Rng): Question {
   if (level === 3) {
     return { ...hearAndSpell(w.word, undefined, `pre-spell-${w.word}`, hint), prompt: `🔊 Spell the word that means "${w.meaning}".` };
   }
-  if (rng() < 0.5) {
+  const addChoices = options(rng, w.prefix, sets[Math.min(level, 3)].filter((p) => !PREFIX_WORDS.some((x) => x.word === p + w.base) && !ALSO_WORDS.includes(p + w.base)));
+  if (rng() < 0.5 || addChoices.length < 2) {
     const others = shuffle(rng, PREFIX_WORDS.filter((p) => p.meaning !== w.meaning)).slice(0, 3).map((p) => p.meaning);
     return { key: `pre-mean-${w.word}`, prompt: `What does "${w.word}" mean?`, input: 'choice', choices: options(rng, w.meaning, others), answer: w.meaning, hint, explain: `${w.prefix} + ${w.base} = ${w.word}, which means ${w.meaning}.` };
   }
-  const choices = options(rng, w.prefix, sets[Math.min(level, 3)].filter((p) => !PREFIX_WORDS.some((x) => x.word === p + w.base)));
+  const choices = addChoices;
   return { key: `pre-add-${w.word}`, prompt: `Which prefix makes a word that means "${w.meaning}"? ___${w.base}`, input: 'choice', choices, answer: w.prefix, hint, explain: `${w.prefix} + ${w.base} = ${w.word}.` };
 }
 
@@ -126,7 +133,7 @@ function suffixes(level: number, rng: Rng): Question {
     return { key: `suf-ly-${word}`, prompt: `Add -ly: ${base} + ly = ______`, input: 'text', answer: word, hint: 'Adding -ly tells how something is done: quick → quickly.', explain: `${base} + ly = ${word}.` };
   }
   const stem = (x: { base: string }) => x.base.replace(/e$/, '');
-  const pool = level === 1 ? PEOPLE.filter((x) => x.word.endsWith('er')) : level === 2 ? PEOPLE.filter((x) => x.word.startsWith(stem(x))) : PEOPLE;
+  const pool = level === 1 ? PEOPLE.filter((x) => x.word.endsWith('er')) : level === 2 ? PEOPLE.filter((x) => ['er', 'or', 'ist'].some((e) => x.word === stem(x) + e)) : PEOPLE;
   const p = pick(rng, pool);
   if (level === 2) {
     const end = p.word.endsWith('ist') ? 'ist' : p.word.endsWith('or') ? 'or' : 'er';
@@ -140,7 +147,7 @@ function suffixes(level: number, rng: Rng): Question {
       explain: `A person who ${p.doing} is a ${p.word}.`,
     };
   }
-  return { key: `suf-type-${p.word}`, prompt: `A person who ${p.doing} is a ______.`, input: 'text', answer: p.word, hint: 'Add -er, -or or -ist to name a person who does something.', explain: `${p.base} → ${p.word}.` };
+  return { key: `suf-type-${p.word}`, prompt: `${p.base} → A person who ${p.doing} is a ______.`, input: 'text', answer: p.word, hint: 'Add -er, -or or -ist to name a person who does something.', explain: `${p.base} → ${p.word}.` };
 }
 
 // ---------- Compound words (3V1.2, 3CV1.5) ----------
@@ -168,7 +175,7 @@ const SOUNDS: { word: string; sentence: string; hint: string }[] = bank.SOUNDS a
 function silent(level: number, rng: Rng): Question {
   if (level === 0) {
     const w = pick(rng, SILENT);
-    const letters = [...new Set(w.word.split(''))];
+    const letters = [...new Set(w.word.split(''))].filter((l) => l === w.letter || !(l === 'e' || (l === 'c' && w.word.includes('ck')) || (l === 'w' && /[oa]w/.test(w.word)) || (l === 'h' && /[cgsw]h/.test(w.word)) || (l === 'u' && /ou/.test(w.word))));
     return { key: `sil-which-${w.word}`, prompt: `Which letter is silent in "${w.word}"?`, input: 'choice', choices: options(rng, w.letter, letters), answer: w.letter, hint: 'Say the word slowly. Which letter do you not hear? Look at the start or the end.', explain: `In "${w.word}" the ${w.letter} is silent.` };
   }
   if (level === 1) {
@@ -202,6 +209,16 @@ function homophones(level: number, rng: Rng): Question {
 
 const SYN: [string, string][] = bank.SYN as [string, string][];
 const ANT: [string, string][] = bank.ANT as [string, string][];
+/** Close-in-meaning groups used only to keep wrong choices fair. */
+const NEAR: string[][] = [['up', 'above'], ['down', 'below'], ['last', 'end', 'finish'], ['take', 'grab', 'snatch'], ['sad', 'unhappy'], ['happy', 'glad'], ['weak', 'sick', 'ill'], ['asleep', 'sleepy', 'tired'], ['afraid', 'scared', 'shy', 'timid'], ['cold', 'chilly'], ['hot', 'warm'], ['big', 'large', 'tall'], ['small', 'tiny', 'short'], ['quiet', 'silent', 'soft'], ['shut', 'close'], ['near', 'close'], ['start', 'begin', 'first']];
+
+/** Words that mean about the same as `w`, including `w`. */
+function near(w: string): string[] {
+  const groups = [...SYN, ...NEAR];
+  const out = new Set([w]);
+  for (let pass = 0; pass < 2; pass++) for (const g of groups) if (g.some((x) => out.has(x))) g.forEach((x) => out.add(x));
+  return [...out];
+}
 
 function synonyms(level: number, rng: Rng): Question {
   const anti = level === 1 || (level === 2 && rng() < 0.5);
@@ -210,16 +227,17 @@ function synonyms(level: number, rng: Rng): Question {
   const [w, ans] = rng() < 0.5 ? [a, b] : [b, a];
   const others = shuffle(rng, [...SYN, ...ANT].flat().filter((x) => x !== w && x !== ans)).slice(0, 6);
   // Keep the other word of each pair out so there is only one right answer.
-  const pairs = [...SYN, ...ANT].filter(([x, y]) => x === w || y === w).flat();
-  const kind = anti ? 'antonym (opposite)' : 'synonym (means the same)';
+  // Leave out anything close in meaning to either word, so only one choice is right.
+  const pairs = [...near(w), ...near(ans), ...ANT.filter(([x, y]) => near(w).includes(x) || near(w).includes(y)).flat().flatMap(near)];
+  const kind = anti ? 'an antonym (opposite)' : 'a synonym (means the same)';
   return {
     key: `syn-${anti ? 'a' : 's'}-${w}`,
-    prompt: `Which word is an ${kind} of "${w}"?`,
+    prompt: `Which word is ${kind} of "${w}"?`,
     input: 'choice',
     choices: options(rng, ans, others.filter((o) => !pairs.includes(o))),
     answer: ans,
     hint: anti ? 'An antonym means the opposite.' : 'A synonym means the same or almost the same.',
-    explain: `"${ans}" is an ${anti ? 'antonym' : 'synonym'} of "${w}".`,
+    explain: `"${ans}" is ${anti ? 'an antonym' : 'a synonym'} of "${w}".`,
   };
 }
 
@@ -229,8 +247,10 @@ const ABBR: [string, string][] = bank.ABBR as [string, string][];
 
 function abbreviations(_level: number, rng: Rng): Question {
   const [long, short] = pick(rng, ABBR);
-  const others = ABBR.filter((x) => x[1] !== short).map((x) => x[1]);
-  return { key: `abbr-${long}`, prompt: `What is the short form (abbreviation) of "${long}"?`, input: 'choice', choices: options(rng, short, others), answer: short, hint: 'Abbreviations are short ways to write words. Many use the first letters and end with a period.', explain: `${long} → ${short}` };
+  const kind = (a: string) => (/^[a-z]/.test(a) ? 'unit' : /^[A-Z]{2}$/.test(a) ? 'place' : /^(Mon|Tues|Wed|Thurs|Fri|Sat|Sun|Jan|Feb|Mar|Apr|Aug|Sept|Oct|Nov|Dec)/.test(a) ? 'date' : 'other');
+  const same = ABBR.filter((x) => x[1] !== short && kind(x[1]) === kind(short)).map((x) => x[1]);
+  const others = same.length >= 3 ? same : ABBR.filter((x) => x[1] !== short).map((x) => x[1]);
+  return { key: `abbr-${long}`, prompt: `What is the short form (abbreviation) of "${long}"?`, input: 'choice', choices: options(rng, short, others), answer: short, hint: 'Abbreviations are short ways to write words. Many use the first letters and end with a period. Metric units like cm and kg have no period.', explain: `${long} → ${short}` };
 }
 
 // ---------- Word lists ----------
@@ -244,7 +264,7 @@ function wordList(level: number, rng: Rng, ctx: GenContext): Question {
     const w = pick(rng, mine);
     return hearAndSpell(w, undefined, `list-${w}`, 'This word is on your spelling list. Say it slowly and spell each sound.');
   }
-  const [w, s] = pick(rng, level === 0 ? GRADE3_WORDS.slice(0, 40) : GRADE3_WORDS);
+  const [w, s] = pick(rng, level === 0 ? GRADE3_WORDS.slice(0, 60) : GRADE3_WORDS.slice(30));
   return hearAndSpell(w, s, `word-${w}`, 'Say it slowly. Break it into chunks and spell each chunk.');
 }
 

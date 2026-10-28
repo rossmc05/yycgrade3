@@ -2,7 +2,7 @@
  "PLURAL_HINTS": [
   "Most words add s. Words ending in s, x, sh or ch add es.",
   "If a consonant comes before the y, change y to i and add es. If a vowel comes before the y, just add s.",
-  "For many words ending in f or fe, change the f to v and add es: leaf → leaves. But some just add s: roof → roofs, cliff → cliffs.",
+  "For many words ending in f or fe, change the f to v and add es: leaf → leaves. A few just add s: roof → roofs.",
   "Some words change in a special way (mouse → mice), some stay the same (one moose, two moose), and words ending in o add s or es (potatoes, pianos)."
  ],
  "ENDING_HINTS": [
@@ -16,7 +16,7 @@
    "don't"
   ],
   [
-   "can not",
+   "cannot",
    "can't"
   ],
   [
@@ -190,10 +190,6 @@
   [
    "where is",
    "where's"
-  ],
-  [
-   "must not",
-   "mustn't"
   ]
  ],
  "PREFIX_MEANING": {
@@ -295,7 +291,7 @@
    "word": "subway",
    "prefix": "sub",
    "base": "way",
-   "meaning": "a train that runs under the ground"
+   "meaning": "a path or train under the ground"
   },
   {
    "word": "submarine",
@@ -382,12 +378,6 @@
    "meaning": "start again"
   },
   {
-   "word": "recount",
-   "prefix": "re",
-   "base": "count",
-   "meaning": "count again"
-  },
-  {
    "word": "revisit",
    "prefix": "re",
    "base": "visit",
@@ -397,19 +387,13 @@
    "word": "rewind",
    "prefix": "re",
    "base": "wind",
-   "meaning": "wind back again"
+   "meaning": "wind back"
   },
   {
    "word": "reload",
    "prefix": "re",
    "base": "load",
    "meaning": "load again"
-  },
-  {
-   "word": "recheck",
-   "prefix": "re",
-   "base": "check",
-   "meaning": "check again"
   },
   {
    "word": "unfair",
@@ -556,34 +540,16 @@
    "meaning": "lead wrongly"
   },
   {
-   "word": "subzero",
-   "prefix": "sub",
-   "base": "zero",
-   "meaning": "below zero"
-  },
-  {
    "word": "subtitle",
    "prefix": "sub",
    "base": "title",
    "meaning": "words under a picture or film"
   },
   {
-   "word": "subsoil",
-   "prefix": "sub",
-   "base": "soil",
-   "meaning": "the soil under the top layer"
-  },
-  {
    "word": "supermarket",
    "prefix": "super",
    "base": "market",
    "meaning": "a very large food store"
-  },
-  {
-   "word": "supersize",
-   "prefix": "super",
-   "base": "size",
-   "meaning": "an extra big size"
   },
   {
    "word": "superpower",
@@ -596,18 +562,6 @@
    "prefix": "non",
    "base": "sense",
    "meaning": "words that make no sense"
-  },
-  {
-   "word": "nonliving",
-   "prefix": "non",
-   "base": "living",
-   "meaning": "not living"
-  },
-  {
-   "word": "nonstick",
-   "prefix": "non",
-   "base": "stick",
-   "meaning": "food will not stick to it"
   },
   {
    "word": "invisible",
@@ -819,11 +773,6 @@
    "doing": "boxes"
   },
   {
-   "base": "report",
-   "word": "reporter",
-   "doing": "reports the news"
-  },
-  {
    "base": "travel",
    "word": "traveller",
    "doing": "travels"
@@ -854,46 +803,6 @@
    "doing": "pitches the ball in baseball"
   },
   {
-   "base": "sculpt",
-   "word": "sculptor",
-   "doing": "makes sculptures"
-  },
-  {
-   "base": "conduct",
-   "word": "conductor",
-   "doing": "leads an orchestra"
-  },
-  {
-   "base": "collect",
-   "word": "collector",
-   "doing": "collects things"
-  },
-  {
-   "base": "instruct",
-   "word": "instructor",
-   "doing": "teaches a skill, like swimming"
-  },
-  {
-   "base": "survive",
-   "word": "survivor",
-   "doing": "survives something hard"
-  },
-  {
-   "base": "narrate",
-   "word": "narrator",
-   "doing": "tells a story"
-  },
-  {
-   "base": "translate",
-   "word": "translator",
-   "doing": "changes words into another language"
-  },
-  {
-   "base": "decorate",
-   "word": "decorator",
-   "doing": "decorates rooms"
-  },
-  {
    "base": "violin",
    "word": "violinist",
    "doing": "plays the violin"
@@ -902,31 +811,6 @@
    "base": "cartoon",
    "word": "cartoonist",
    "doing": "draws cartoons"
-  },
-  {
-   "base": "novel",
-   "word": "novelist",
-   "doing": "writes novels"
-  },
-  {
-   "base": "harp",
-   "word": "harpist",
-   "doing": "plays the harp"
-  },
-  {
-   "base": "journal",
-   "word": "journalist",
-   "doing": "writes news stories"
-  },
-  {
-   "base": "organ",
-   "word": "organist",
-   "doing": "plays the organ"
-  },
-  {
-   "base": "cello",
-   "word": "cellist",
-   "doing": "plays the cello"
   }
  ],
  "LY": [
@@ -1930,16 +1814,15 @@
    ]
   },
   {
-   "s": "We ___ the canoe across the lake.",
+   "s": "We ___ the boat with two oars.",
    "a": "rowed",
    "c": [
     "road",
-    "rode",
     "rowed"
    ]
   },
   {
-   "s": "Wave good___ to Grandma.",
+   "s": "Say ___ to Grandma at the door.",
    "a": "bye",
    "c": [
     "by",
@@ -2187,7 +2070,7 @@
    ]
   },
   {
-   "s": "I scored ___ goal in the game.",
+   "s": "I scored ___ goal and my brother scored two.",
    "a": "one",
    "c": [
     "one",
@@ -2400,6 +2283,150 @@
    "c": [
     "one",
     "won"
+   ]
+  },
+  {
+   "s": "There is a ___ in my sock.",
+   "a": "hole",
+   "c": [
+    "hole",
+    "whole"
+   ]
+  },
+  {
+   "s": "I ate the ___ pizza by myself!",
+   "a": "whole",
+   "c": [
+    "hole",
+    "whole"
+   ]
+  },
+  {
+   "s": "The ___ flew on a broom.",
+   "a": "witch",
+   "c": [
+    "which",
+    "witch"
+   ]
+  },
+  {
+   "s": "___ hat is yours?",
+   "a": "Which",
+   "c": [
+    "Which",
+    "Witch"
+   ]
+  },
+  {
+   "s": "The ___ landed at the Calgary airport.",
+   "a": "plane",
+   "c": [
+    "plane",
+    "plain"
+   ]
+  },
+  {
+   "s": "The ___ letter carrier brought a box.",
+   "a": "mail",
+   "c": [
+    "mail",
+    "male"
+   ]
+  },
+  {
+   "s": "I brushed my ___ before school.",
+   "a": "hair",
+   "c": [
+    "hair",
+    "hare"
+   ]
+  },
+  {
+   "s": "A ___ looks like a big rabbit.",
+   "a": "hare",
+   "c": [
+    "hair",
+    "hare"
+   ]
+  },
+  {
+   "s": "A ___ ran across the field.",
+   "a": "deer",
+   "c": [
+    "dear",
+    "deer"
+   ]
+  },
+  {
+   "s": "The toys are on ___ at the store.",
+   "a": "sale",
+   "c": [
+    "sale",
+    "sail"
+   ]
+  },
+  {
+   "s": "The boat has a big white ___.",
+   "a": "sail",
+   "c": [
+    "sale",
+    "sail"
+   ]
+  },
+  {
+   "s": "Can I have a ___ of cake?",
+   "a": "piece",
+   "c": [
+    "piece",
+    "peace"
+   ]
+  },
+  {
+   "s": "Press the ___ to stop the bike.",
+   "a": "brake",
+   "c": [
+    "brake",
+    "break"
+   ]
+  },
+  {
+   "s": "Be careful not to ___ the glass.",
+   "a": "break",
+   "c": [
+    "brake",
+    "break"
+   ]
+  },
+  {
+   "s": "My ___ is coming to visit from Edmonton.",
+   "a": "aunt",
+   "c": [
+    "ant",
+    "aunt"
+   ]
+  },
+  {
+   "s": "An ___ carried a crumb.",
+   "a": "ant",
+   "c": [
+    "ant",
+    "aunt"
+   ]
+  },
+  {
+   "s": "The kite flew ___ in the sky.",
+   "a": "high",
+   "c": [
+    "hi",
+    "high"
+   ]
+  },
+  {
+   "s": "The horse has a long ___.",
+   "a": "mane",
+   "c": [
+    "main",
+    "mane"
    ]
   }
  ],
@@ -2689,14 +2716,6 @@
    "Sat."
   ],
   [
-   "Drive",
-   "Dr."
-  ],
-  [
-   "Mistress",
-   "Mrs."
-  ],
-  [
    "Mount",
    "Mt."
   ],
@@ -2803,6 +2822,18 @@
   [
    "September",
    "Sept."
+  ],
+  [
+   "Trail",
+   "Tr."
+  ],
+  [
+   "Place",
+   "Pl."
+  ],
+  [
+   "Court",
+   "Ct."
   ]
  ],
  "GRADE3_WORDS": [
@@ -2957,6 +2988,326 @@
   [
    "heard",
    "I heard a loud noise."
+  ],
+  [
+   "centre",
+   "We met in the centre of the field."
+  ],
+  [
+   "metre",
+   "The table is one metre long."
+  ],
+  [
+   "litre",
+   "Mom bought a litre of milk."
+  ],
+  [
+   "theatre",
+   "We saw a play at the theatre."
+  ],
+  [
+   "grey",
+   "The sky is grey today."
+  ],
+  [
+   "honour",
+   "It is an honour to carry the flag."
+  ],
+  [
+   "travelled",
+   "We travelled to Banff by car."
+  ],
+  [
+   "cancelled",
+   "Practice was cancelled because of snow."
+  ],
+  [
+   "harbour",
+   "The boats are in the harbour."
+  ],
+  [
+   "behaviour",
+   "The class had great behaviour today."
+  ],
+  [
+   "above",
+   "The plane flew above the clouds."
+  ],
+  [
+   "across",
+   "We walked across the bridge."
+  ],
+  [
+   "almost",
+   "I am almost finished."
+  ],
+  [
+   "also",
+   "I also like hockey."
+  ],
+  [
+   "another",
+   "Can I have another cookie?"
+  ],
+  [
+   "around",
+   "We ran around the rink."
+  ],
+  [
+   "away",
+   "The bird flew away."
+  ],
+  [
+   "became",
+   "The caterpillar became a butterfly."
+  ],
+  [
+   "better",
+   "My cold is better today."
+  ],
+  [
+   "between",
+   "Sit between Sam and Ava."
+  ],
+  [
+   "birthday",
+   "My birthday is in June."
+  ],
+  [
+   "brother",
+   "My brother is ten."
+  ],
+  [
+   "build",
+   "Let's build a snow fort."
+  ],
+  [
+   "carry",
+   "Can you carry this box?"
+  ],
+  [
+   "children",
+   "The children played outside."
+  ],
+  [
+   "city",
+   "Calgary is a big city."
+  ],
+  [
+   "clothes",
+   "Put your clothes away."
+  ],
+  [
+   "during",
+   "Be quiet during the movie."
+  ],
+  [
+   "early",
+   "I woke up early."
+  ],
+  [
+   "eight",
+   "I have eight crayons."
+  ],
+  [
+   "everyone",
+   "Everyone loves recess."
+  ],
+  [
+   "field",
+   "The cows are in the field."
+  ],
+  [
+   "finally",
+   "We finally got there."
+  ],
+  [
+   "first",
+   "I was first in line."
+  ],
+  [
+   "found",
+   "I found my mitten."
+  ],
+  [
+   "going",
+   "We are going skating."
+  ],
+  [
+   "happened",
+   "What happened at school?"
+  ],
+  [
+   "heavy",
+   "The box is heavy."
+  ],
+  [
+   "hour",
+   "The movie is one hour long."
+  ],
+  [
+   "instead",
+   "I had juice instead of milk."
+  ],
+  [
+   "knew",
+   "I knew the answer."
+  ],
+  [
+   "laugh",
+   "That joke made me laugh."
+  ],
+  [
+   "light",
+   "Turn on the light."
+  ],
+  [
+   "listen",
+   "Please listen to the story."
+  ],
+  [
+   "live",
+   "We live in Calgary."
+  ],
+  [
+   "money",
+   "I saved my money."
+  ],
+  [
+   "mountain",
+   "We hiked up a mountain."
+  ],
+  [
+   "myself",
+   "I made lunch by myself."
+  ],
+  [
+   "often",
+   "We often go to the park."
+  ],
+  [
+   "once",
+   "Once upon a time there was a dragon."
+  ],
+  [
+   "other",
+   "Where is my other boot?"
+  ],
+  [
+   "outside",
+   "Let's play outside."
+  ],
+  [
+   "please",
+   "Please pass the salt."
+  ],
+  [
+   "pretty",
+   "The flowers are pretty."
+  ],
+  [
+   "ready",
+   "Are you ready to go?"
+  ],
+  [
+   "really",
+   "I really like pizza."
+  ],
+  [
+   "school",
+   "I walk to school."
+  ],
+  [
+   "sister",
+   "My sister likes to draw."
+  ],
+  [
+   "something",
+   "I heard something outside."
+  ],
+  [
+   "sometimes",
+   "Sometimes it snows in May."
+  ],
+  [
+   "special",
+   "Today is a special day."
+  ],
+  [
+   "started",
+   "The game started at noon."
+  ],
+  [
+   "story",
+   "Read me a story."
+  ],
+  [
+   "sure",
+   "Are you sure?"
+  ],
+  [
+   "their",
+   "The kids put on their skates."
+  ],
+  [
+   "there",
+   "Put the box over there."
+  ],
+  [
+   "though",
+   "It was cold, though the sun was out."
+  ],
+  [
+   "thousand",
+   "A thousand people came to the game."
+  ],
+  [
+   "tomorrow",
+   "We will go tomorrow."
+  ],
+  [
+   "tried",
+   "I tried my best."
+  ],
+  [
+   "until",
+   "Wait until the bell rings."
+  ],
+  [
+   "usually",
+   "I usually walk to school."
+  ],
+  [
+   "water",
+   "Drink some water."
+  ],
+  [
+   "where",
+   "Where is my hat?"
+  ],
+  [
+   "which",
+   "Which one do you want?"
+  ],
+  [
+   "whole",
+   "I ate the whole apple."
+  ],
+  [
+   "write",
+   "Write your name here."
+  ],
+  [
+   "young",
+   "The puppy is very young."
+  ],
+  [
+   "your",
+   "Is this your coat?"
+  ],
+  [
+   "year",
+   "Next year I will be in grade four."
   ]
  ],
  "PLURALS": [
@@ -3158,11 +3509,6 @@
   {
    "one": "elf",
    "many": "elves",
-   "rule": 2
-  },
-  {
-   "one": "scarf",
-   "many": "scarves",
    "rule": 2
   },
   {
@@ -3406,18 +3752,8 @@
    "rule": 1
   },
   {
-   "one": "hoof",
-   "many": "hooves",
-   "rule": 2
-  },
-  {
    "one": "self",
    "many": "selves",
-   "rule": 2
-  },
-  {
-   "one": "wharf",
-   "many": "wharves",
    "rule": 2
   },
   {
@@ -3446,78 +3782,13 @@
    "rule": 2
   },
   {
-   "one": "puff",
-   "many": "puffs",
-   "rule": 2
-  },
-  {
-   "one": "reef",
-   "many": "reefs",
-   "rule": 2
-  },
-  {
    "one": "safe",
    "many": "safes",
    "rule": 2
   },
   {
-   "one": "sniff",
-   "many": "sniffs",
-   "rule": 2
-  },
-  {
-   "one": "belief",
-   "many": "beliefs",
-   "rule": 2
-  },
-  {
-   "one": "proof",
-   "many": "proofs",
-   "rule": 2
-  },
-  {
-   "one": "cuff",
-   "many": "cuffs",
-   "rule": 2
-  },
-  {
-   "one": "muff",
-   "many": "muffs",
-   "rule": 2
-  },
-  {
-   "one": "gulf",
-   "many": "gulfs",
-   "rule": 2
-  },
-  {
    "one": "ox",
    "many": "oxen",
-   "rule": 3
-  },
-  {
-   "one": "trout",
-   "many": "trout",
-   "rule": 3
-  },
-  {
-   "one": "salmon",
-   "many": "salmon",
-   "rule": 3
-  },
-  {
-   "one": "shrimp",
-   "many": "shrimp",
-   "rule": 3
-  },
-  {
-   "one": "elk",
-   "many": "elk",
-   "rule": 3
-  },
-  {
-   "one": "aircraft",
-   "many": "aircraft",
    "rule": 3
   },
   {
@@ -3584,26 +3855,6 @@
    "one": "igloo",
    "many": "igloos",
    "rule": 3
-  },
-  {
-   "one": "cod",
-   "many": "cod",
-   "rule": 3
-  },
-  {
-   "one": "sheriff",
-   "many": "sheriffs",
-   "rule": 2
-  },
-  {
-   "one": "bluff",
-   "many": "bluffs",
-   "rule": 2
-  },
-  {
-   "one": "whiff",
-   "many": "whiffs",
-   "rule": 2
   },
   {
    "one": "crutch",
@@ -3907,12 +4158,6 @@
    "rule": 0
   },
   {
-   "base": "spell",
-   "ing": "spelling",
-   "ed": "spelled",
-   "rule": 0
-  },
-  {
    "base": "pack",
    "ing": "packing",
    "ed": "packed",
@@ -3922,12 +4167,6 @@
    "base": "float",
    "ing": "floating",
    "ed": "floated",
-   "rule": 0
-  },
-  {
-   "base": "learn",
-   "ing": "learning",
-   "ed": "learned",
    "rule": 0
   },
   {
@@ -4205,6 +4444,24 @@
    "ing": "scraping",
    "ed": "scraped",
    "rule": 1
+  },
+  {
+   "base": "brush",
+   "ing": "brushing",
+   "ed": "brushed",
+   "rule": 0
+  },
+  {
+   "base": "plant",
+   "ing": "planting",
+   "ed": "planted",
+   "rule": 0
+  },
+  {
+   "base": "cheer",
+   "ing": "cheering",
+   "ed": "cheered",
+   "rule": 0
   }
  ]
 }

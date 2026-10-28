@@ -46,7 +46,7 @@ function sorter(rng: Rng, id: string, prompt: (x: string) => string, groups: Rec
     choices: Object.keys(groups),
     answer: group,
     hint,
-    explain: `${thing[0].toUpperCase() + thing.slice(1)}: ${group}.`,
+    explain: `${thing[0].toUpperCase() + thing.slice(1)}: ${group}. ${hint}`,
   };
 }
 
@@ -62,7 +62,7 @@ function states(level: number, rng: Rng): Question {
   if (level === 0) return sorter(rng, 'state', (x) => `Is ${x} a solid, a liquid, or a gas?`, STATES, 'Solids keep their shape. Liquids pour. Gases spread out to fill a space.');
   if (level === 1 && rng() < 0.6) return sorter(rng, 'change', (x) => `Which change of state is this: ${x}?`, CHANGE_NAMES, 'Melting: solid to liquid. Freezing: liquid to solid. Evaporation: liquid to gas. Condensation: gas to liquid.');
   if (level === 2 && rng() < 0.3) return sorter(rng, 'change', (x) => `Which change of state is this: ${x}?`, CHANGE_NAMES, 'Melting: solid to liquid. Freezing: liquid to solid. Evaporation: liquid to gas. Condensation: gas to liquid.');
-  return ask(rng, 'statefact', pick(rng, level === 1 ? STATE_FACTS.slice(0, 7) : STATE_FACTS.slice(7)));
+  return ask(rng, 'statefact', pick(rng, level === 1 ? STATE_FACTS.slice(0, 11) : STATE_FACTS.slice(11)));
 }
 
 // ---------- Water cycle (3M1.5) ----------
@@ -105,7 +105,7 @@ function forces(level: number, rng: Rng): Question {
   if (level === 0 && rng() < 0.7) return sorter(rng, 'pp', (x) => `Is ${x} a push or a pull?`, PUSH_PULL, 'A push moves something away from you. A pull brings it toward you.');
   if (level === 1 && rng() < 0.4) return sorter(rng, 'fk', (x) => `Which force is at work: ${x}?`, bank.FORCE_KIND, 'Friction rubs, gravity pulls down, magnets attract some metals, stretchy things spring back, and tight ropes have tension.');
   if (level === 2 && rng() < 0.5) return sorter(rng, 'mk', (x) => `Which simple machine is ${x}?`, bank.MACHINE_KIND, 'A lever turns on a point. A ramp is an inclined plane. A wheel turns on an axle. A pulley uses a rope over a wheel. A wedge pushes things apart.');
-  return ask(rng, 'force', pick(rng, level === 0 ? FORCES.slice(0, 6) : level === 1 ? FORCES : MACHINES));
+  return ask(rng, 'force', pick(rng, level === 0 ? [0, 1, 2, 5].map((i) => FORCES[i]) : level === 1 ? FORCES : MACHINES));
 }
 
 // ---------- Living systems (3LS1) ----------
@@ -169,9 +169,15 @@ function patternNext(rng: Rng): Question {
     input: 'choice',
     choices: shuffle(rng, [...new Set(unit)]),
     answer,
-    hint: `Find the part that repeats: ${unit.join(' ')}.`,
+    hint: 'Look for the group that repeats. Say it out loud as you point.',
     explain: `The pattern repeats ${unit.join(' ')}, so next is ${answer}.`,
   };
+}
+
+// ---------- Scientific methods ----------
+
+function method(_level: number, rng: Rng): Question {
+  return ask(rng, 'sm', pick(rng, bank.SCI_METHOD as Item[]));
 }
 
 // ---------- Skill list ----------
@@ -187,7 +193,7 @@ export const SCIENCE_SKILLS: Skill[] = [
     id: 'sci.water', subject: S, name: 'The Water Cycle', icon: '🌧️', blurb: 'Evaporation, condensation, precipitation', strand: 'Matter',
     outcome: 'The water on Earth moves continuously in a cycle.',
     learn: ['☀️ The sun heats water in lakes and oceans, and it evaporates into water vapour.', '☁️ High in the sky the vapour cools and condenses into clouds.', '🌧️ Water falls as rain, snow or hail. This is precipitation.', '🏞️ It collects in rivers, lakes, oceans and the ground, and the cycle starts again.'],
-    levels: ['Water facts', 'Put the cycle in order'], generate: waterCycle,
+    levels: ['Water facts', 'Parts of the cycle and order'], generate: waterCycle,
   },
   {
     id: 'sci.materials', subject: S, name: 'Materials and Changes', icon: '🧱', blurb: 'Natural, processed, reversible, permanent', strand: 'Matter',
@@ -198,7 +204,7 @@ export const SCIENCE_SKILLS: Skill[] = [
   {
     id: 'sci.forces', subject: S, name: 'Forces and Machines', icon: '🏒', blurb: 'Pushes, pulls, friction and simple machines', strand: 'Energy',
     outcome: 'Forces can affect properties and movement of objects; simple machines change the strength and direction of forces.',
-    learn: ['👉 A force is a push or a pull.', '🛑 Things stay still, or keep moving, until a force acts on them.', '🧽 Friction is a force that slows things when surfaces rub. Ice has very little friction.', '🛝 Simple machines make work easier: levers, wheels and axles, and inclined planes (ramps).'],
+    learn: ['👉 A force is a push or a pull.', '🛑 Things stay still, or keep moving, until a force acts on them.', '🧽 Friction is a force that slows things when surfaces rub. Ice has very little friction.', '🪢 A tight rope pulls with tension. A stretched band snaps back with elastic force. Gravity pulls everything down.', '🛝 Simple machines make work easier: levers, wheels and axles, inclined planes (ramps), pulleys (a rope over a wheel) and wedges (a thin edge that splits things).'],
     levels: ['Push or pull', 'Kinds of forces', 'Simple machines'], generate: forces,
   },
   {
@@ -210,13 +216,19 @@ export const SCIENCE_SKILLS: Skill[] = [
   {
     id: 'sci.earth', subject: S, name: 'Earth and Dinosaurs', icon: '🦖', blurb: 'Changing land, glaciers, fossils and soil', strand: 'Earth Systems',
     outcome: 'Earth’s surface changes over time; its layers explain its history.',
-    learn: ['⛰️ Earth’s surface changes slowly (mountains wear down, rivers move) and suddenly (landslides, floods, earthquakes).', '🧊 Glaciers in the Rockies feed Alberta rivers. Water and wind carved the badlands.', '🦴 Rock layers build up over time. Lower layers are older.', '🦖 Paleontologists dig up fossils. Alberta has amazing sites like Dinosaur Provincial Park and the Royal Tyrrell Museum.'],
-    levels: ['Changing land', 'Fossils and soil', 'How fossils form'], generate: earth,
+    learn: ['⛰️ Earth’s surface changes slowly (mountains wear down, rivers move) and suddenly (landslides, floods, earthquakes).', '🧊 Snow and glaciers in the Rockies feed Alberta rivers. Water and wind carved the badlands.', '🦴 Rock layers build up over time. Lower layers are older.', '🦖 Paleontologists dig up fossils. Alberta has amazing sites like Dinosaur Provincial Park and the Royal Tyrrell Museum.'],
+    levels: ['Changing land', 'Fossils and soil', 'How land and fossils form'], generate: earth,
   },
   {
     id: 'sci.coding', subject: S, name: 'Think Like a Coder', icon: '🤖', blurb: 'Steps, patterns and debugging', strand: 'Computer Science',
     outcome: 'Computational thinking is a problem-solving process that uses creativity.',
     learn: ['🧩 Break a big job into small steps.', '📋 An algorithm is a list of steps in the right order.', '🔁 Look for patterns that repeat.', '🐞 If something goes wrong, go back and find the step to fix. That is debugging.'],
     levels: ['Put steps in order', 'Coding ideas'], generate: coding,
+  },
+  {
+    id: 'sci.method', subject: S, name: 'Be a Scientist', icon: '🔬', blurb: 'Predict, test fairly, measure and share', strand: 'Scientific Methods',
+    outcome: 'Scientists ask questions, make predictions, do fair tests, record evidence and share conclusions.',
+    learn: ['❓ Start with a question you can test.', '🤔 Make a prediction: what do you think will happen?', '⚖️ In a fair test, change only one thing and keep the rest the same.', '📏 Measure with tools: a ruler, a thermometer, a balance. Write down what you see.', '📊 Show results in a table or graph, then say what you learned. That is your conclusion.'],
+    levels: ['Investigate'], generate: method,
   },
 ];

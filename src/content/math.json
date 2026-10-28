@@ -1,27 +1,25 @@
 {
  "FINITE": [
   "a countdown from 10 to 0",
-  "the days of the week",
   "the pages in a book",
-  "the months in a year",
   "the players on a hockey team",
   "2, 4, 6, 8, 10 and stop",
   "the letters of the alphabet",
-  "the numbers on a clock face",
   "counting the students in your class",
   "100, 90, 80, …, 0",
-  "the days in a week from Monday to Sunday",
   "counting down from 20 to 1 at a rocket launch",
   "the numbers on a hockey scoreboard clock from 20:00 to 0:00",
   "the floors in an elevator from 1 to 10",
   "the 5 fingers on one hand",
-  "the seasons: winter, spring, summer, fall",
   "the numbers from 1 to 1000",
   "5, 10, 15, 20, 25 and stop",
   "the cards in one deck",
   "the stops on a bus route",
   "the colours of a rainbow",
-  "the steps on a staircase"
+  "the steps on a staircase",
+  "the numbers from 1 to 50",
+  "the floors in a 20-storey building, from 1 to 20",
+  "the players on a soccer team, numbered 1 to 11"
  ],
  "INFINITE": [
   "the counting numbers 1, 2, 3, …",
@@ -163,7 +161,7 @@
    "a": "p.m."
   },
   {
-   "p": "School starts at 8:30. Is that a.m. or p.m.?",
+   "p": "School starts at 8:30 in the morning. Is that a.m. or p.m.?",
    "a": "a.m."
   },
   {
@@ -179,7 +177,7 @@
    "a": "p.m."
   },
   {
-   "p": "The bus picks you up at 8:05. Is that a.m. or p.m.?",
+   "p": "The bus picks you up at 8:05 before school. Is that a.m. or p.m.?",
    "a": "a.m."
   },
   {
@@ -213,10 +211,6 @@
    "a": "centimetres"
   },
   {
-   "p": "Which unit would you use to measure the height of a door?",
-   "a": "metres"
-  },
-  {
    "p": "Which unit would you use to measure the thickness of a coin?",
    "a": "millimetres"
   },
@@ -235,10 +229,6 @@
   {
    "p": "Which unit would you use to measure the length of a swimming pool?",
    "a": "metres"
-  },
-  {
-   "p": "Which unit would you use to measure the length of a ladybug?",
-   "a": "millimetres"
   },
   {
    "p": "Which unit would you use to measure the length of your shoe?",
@@ -265,10 +255,6 @@
    "a": "millimetres"
   },
   {
-   "p": "Which unit would you use to measure the length of a hockey stick?",
-   "a": "centimetres"
-  },
-  {
    "p": "Which unit would you use to measure the height of the Calgary Tower?",
    "a": "metres"
   },
@@ -277,16 +263,8 @@
    "a": "metres"
   },
   {
-   "p": "Which unit would you use to measure the length of a paper clip?",
-   "a": "centimetres"
-  },
-  {
    "p": "Which unit would you use to measure the thickness of a fingernail?",
    "a": "millimetres"
-  },
-  {
-   "p": "Which unit would you use to measure the height of your desk?",
-   "a": "centimetres"
   },
   {
    "p": "Which unit would you use to measure the length of a bus?",
@@ -303,10 +281,6 @@
   {
    "p": "Which unit would you use to measure the length of a toboggan hill?",
    "a": "metres"
-  },
-  {
-   "p": "Which unit would you use to measure the width of a button?",
-   "a": "millimetres"
   },
   {
    "p": "Which unit would you use to measure the length of a skate blade?",
@@ -335,6 +309,46 @@
   {
    "p": "Which unit would you use to measure the length of your arm?",
    "a": "centimetres"
+  },
+  {
+   "p": "Which unit would you use to measure the length of a flea?",
+   "a": "millimetres"
+  },
+  {
+   "p": "Which unit would you use to measure the thickness of a credit card?",
+   "a": "millimetres"
+  },
+  {
+   "p": "Which unit would you use to measure the length of a grain of sand?",
+   "a": "millimetres"
+  },
+  {
+   "p": "Which unit would you use to measure the length of your thumb?",
+   "a": "centimetres"
+  },
+  {
+   "p": "Which unit would you use to measure the length of a spoon?",
+   "a": "centimetres"
+  },
+  {
+   "p": "Which unit would you use to measure the width of a phone?",
+   "a": "centimetres"
+  },
+  {
+   "p": "Which unit would you use to measure the length of a football field?",
+   "a": "metres"
+  },
+  {
+   "p": "Which unit would you use to measure the height of a flagpole?",
+   "a": "metres"
+  },
+  {
+   "p": "Which unit would you use to measure the length of a river canoe?",
+   "a": "metres"
+  },
+  {
+   "p": "Which unit would you use to measure the length of a whale?",
+   "a": "metres"
   }
  ],
  "GEO_PROPS": [
@@ -541,15 +555,6 @@
    ]
   },
   {
-   "p": "The letter E has how many right angles?",
-   "a": "4",
-   "c": [
-    "2",
-    "3",
-    "4"
-   ]
-  },
-  {
    "p": "Which capital letter has no straight lines?",
    "a": "O",
    "c": [
@@ -584,15 +589,6 @@
     "parallel",
     "perpendicular",
     "curved"
-   ]
-  },
-  {
-   "p": "How many right angles does the letter L have?",
-   "a": "1",
-   "c": [
-    "0",
-    "1",
-    "2"
    ]
   },
   {
@@ -737,10 +733,6 @@
    "a": "yes"
   },
   {
-   "p": "Your mitten print in the snow and your mitten are mirror images. Is that a reflection?",
-   "a": "yes"
-  },
-  {
    "p": "You slide a book across your desk. Does it change shape?",
    "a": "no"
   },
@@ -771,10 +763,6 @@
   {
    "p": "The letter p flipped like a mirror looks like q. True? (yes or no)",
    "a": "yes"
-  },
-  {
-   "p": "Does sliding a shape make it heavier?",
-   "a": "no"
   },
   {
    "p": "Can a turn make a shape face a different way?",
@@ -927,7 +915,7 @@
    "a": "want"
   },
   {
-   "p": "Is milk for breakfast a need or a want?",
+   "p": "Is a healthy breakfast a need or a want?",
    "a": "need"
   },
   {
