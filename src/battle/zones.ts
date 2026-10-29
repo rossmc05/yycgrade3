@@ -8,6 +8,9 @@ export interface Zone {
   /** What the hero throws, by attack kind. */
   attack: { hit: string; special: string; specialName: string };
   intro: string;
+  /** Story battles: the backdrop, and the boss's own art. */
+  scene?: string;
+  bossArt?: { e: string; filter: string };
 }
 
 export const ZONES: Partial<Record<SubjectId, Zone>> = {

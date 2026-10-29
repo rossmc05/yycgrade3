@@ -16,10 +16,13 @@ import { BattleStage, type StageEvent } from '../battle/BattleStage';
 import { Celebrate } from '../battle/fx';
 import { useMusic, type Theme } from '../battle/music';
 import { MonsterArt } from '../battle/Art';
-import { applyTurn, startBattle, type Battle } from '../battle/engine';
+import { applyTurn, battleOver, startBattle, type Battle } from '../battle/engine';
 import { gearById, perksOf } from '../collect/gear';
 import { DUPLICATE_COINS, palById, rollPal, type Pal } from '../collect/pals';
 import { PalReveal } from '../collect/PalReveal';
+import { Cutscene } from '../story/Cutscene';
+import { STORY_ZONES, storyOf, winCrystal, type Zone4 } from '../story/story';
+import { storyZone } from '../story/zones';
 import { setSound, sfx } from '../battle/sfx';
 import { dailySubject, zoneFor } from '../battle/zones';
 
@@ -45,16 +48,24 @@ export function Play(props: { subjectId: string; target: string }) {
 function Session({ subjectId, target, again }: { subjectId: string; target: string; again: () => void }) {
   const { profile, data, setData, updateProfile } = useStore();
   const subject = findSubject(subjectId);
+  const story = target === 'boss' || target === 'final';
   const pool: Skill[] = useMemo(
     () => {
+      // Story battles use the quests already started (the boss tests what he has practised).
+      if (story) {
+        const zones = target === 'final' ? STORY_ZONES : [subjectId];
+        const all = ALL_SKILLS.filter((k) => zones.includes(k.subject as Zone4));
+        const started = all.filter((k) => profile?.skills[k.id]?.history.length);
+        return started.length >= 3 ? started : all.slice(0, 6);
+      }
       if (subjectId !== 'all') return subject?.skills ?? [];
       // The daily warm-up is one subject a day, rotating (or within the parent's focus list).
       return findSubject(dailySubject(Date.now(), data.settings.focus))?.skills ?? [];
     },
     [subjectId, subject, data.settings.focus],
   );
-  const single = target !== 'mix' ? findSkill(target) : undefined;
-  const len = data.settings.sessionLength;
+  const single = target !== 'mix' && !story ? findSkill(target) : undefined;
+  const len = story ? (target === 'final' ? 15 : 12) : data.settings.sessionLength;
 
   // Plan once per session, from the profile as it was when the session started.
   const [plan] = useState<Planned[]>(() => {
@@ -74,13 +85,15 @@ function Session({ subjectId, target, again }: { subjectId: string; target: stri
   const [showLearn, setShowLearn] = useState(() => !!single?.learn && !profile?.skills[single.id]?.history.length);
 
   // Battle mode: one zone per session, from the session's subject.
-  const zone = data.settings.battle === false ? undefined : zoneFor(plan[0]?.skill.subject ?? 'typing');
-  const [battle, setBattle] = useState<Battle>(() => startBattle(plan.length, zone?.monsters ?? ['x'], Math.random));
+  const zone = story ? storyZone(target === 'final' ? 'final' : (subjectId as Zone4)) : data.settings.battle === false ? undefined : zoneFor(plan[0]?.skill.subject ?? 'typing');
+  // A story boss needs about 7 right answers in 10 to beat.
+  const [battle, setBattle] = useState<Battle>(() => startBattle(plan.length, zone?.monsters ?? ['x'], Math.random, story ? { hitsToWin: Math.ceil(plan.length * 0.7) } : undefined));
+  const [scene, setScene] = useState<string | null>(null);
   const [stageEvent, setStageEvent] = useState<StageEvent | null>(null);
   const eventId = useRef(0);
   const soundOn = data.settings.sound !== false;
   // Zone music during the battle; it stops at the victory screen for the fanfare.
-  useMusic(zone && !finished ? (zone.subject as Theme) : undefined);
+  useMusic(zone && !finished ? (story ? 'boss' : (zone.subject as Theme)) : undefined);
   useEffect(() => setSound(soundOn), [soundOn]);
 
   const onResult = (r: 'right1' | 'wrong1' | 'right2' | 'wrong2', seconds: number) => {
@@ -129,12 +142,23 @@ function Session({ subjectId, target, again }: { subjectId: string; target: stri
     if (outcome.newlyMastered) setMastered((m) => [...m, step.skill.name]);
     const all = [...results, { skillId: step.skill.id, correct: firstTry }];
     setResults(all);
-    if (index + 1 >= plan.length) {
+    // A story boss beaten early ends the battle early.
+    if (index + 1 >= plan.length || (story && battleOver(battle))) {
       // Coins dropped by monsters in battle mode.
       if (zone) nextProfile = { ...nextProfile, coins: nextProfile.coins + battle.coins };
       // A pal turns up after any battle where a monster was beaten.
       const beat = battle.foes.filter((f) => f.end === 'defeated' || f.hp === 0);
-      const pal = zone && beat.length ? rollPal(zone.subject, beat.some((f) => f.boss), Math.random) : undefined;
+      const pal = zone && beat.length && !story ? rollPal(zone.subject, beat.some((f) => f.boss), Math.random) : undefined;
+      if (story && beat.length) {
+        // Story win: a crystal for a zone boss, the ending for the Baron.
+        if (target === 'final') {
+          nextProfile = { ...nextProfile, coins: nextProfile.coins + 100, story: { ...storyOf(nextProfile), champion: storyOf(nextProfile).champion ?? now } };
+          setScene('ending');
+        } else {
+          nextProfile = { ...winCrystal(nextProfile, subjectId as Zone4), coins: nextProfile.coins + 30 };
+          setScene('crystal');
+        }
+      }
       if (pal) {
         const had = nextProfile.pals?.[pal.id] ?? 0;
         nextProfile = { ...nextProfile, pals: { ...nextProfile.pals, [pal.id]: had + 1 }, coins: nextProfile.coins + (had ? DUPLICATE_COINS : 0) };
@@ -184,19 +208,23 @@ function Session({ subjectId, target, again }: { subjectId: string; target: stri
     const beaten = battle.foes.filter((f) => f.end === 'defeated');
     return (
       <main className="page">
+        {scene && <Cutscene id={scene} onDone={() => setScene(null)} />}
         <TopBar back={back} />
         <section className={`card center summary victory zone-${zone.subject}`}>
           {!data.settings.classicLook && beaten.length > 0 && <Celebrate big={beaten.length === battle.foes.length} />}
           <div className="victory-hero">
             <AvatarArt look={lookOf(profile)} size={140} background={false} />
           </div>
-          <h1>{beaten.length === battle.foes.length ? 'Victory!' : beaten.length ? 'Battle won!' : 'They got away!'}</h1>
+          <h1>{beaten.length === battle.foes.length ? 'Victory!' : beaten.length ? 'Battle won!' : story ? 'So close!' : 'They got away!'}</h1>
+          {story && beaten.length > 0 && target !== 'final' && <p className="good"><Icon e="💎" /> You won back the {zone.name} crystal! (+30 coins)</p>}
+          {story && beaten.length > 0 && target === 'final' && <p className="good"><Icon e="🏆" /> You beat Baron Blizzard! You are a Grade 3 Champion! (+100 coins)</p>}
+          {story && !beaten.length && <p className="muted">{battle.foes[0]?.name} got away. Practise more quests, then try again. You need about 7 right answers out of 10.</p>}
           <p className="muted">{zone.name}</p>
           {found && <PalReveal pal={found.pal} isNew={found.isNew} />}
           <div className="beaten-row">
             {battle.foes.map((f, i) => (
               <div key={i} className={`beaten ${f.end}`}>
-                <MonsterArt subject={zone.subject} kind={f.kind} hurt size={70} />
+                <MonsterArt subject={zone.subject} kind={f.kind} hurt size={70} art={f.boss ? zone.bossArt : undefined} />
                 <small>{f.name}</small>
                 <small className={f.end === 'defeated' ? 'good' : 'muted'}>{f.end === 'defeated' ? 'Defeated' : 'Got away'}</small>
               </div>

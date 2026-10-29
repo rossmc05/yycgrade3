@@ -129,6 +129,8 @@ export interface Profile {
   /** Gear bought, and what is worn in each slot. */
   gear?: string[];
   gearOn?: { weapon?: string; charm?: string };
+  /** Story progress: crystals won and cutscenes seen. */
+  story?: { crystals: ('math' | 'spelling' | 'grammar' | 'science')[]; seen: string[]; champion?: number };
 }
 
 export interface Settings {

@@ -83,7 +83,7 @@ export function BattleStage({ zone, battle, event, look, buddy, weapon }: { zone
 
   return (
     <section ref={stage} className={`battle-stage zone-${subject} ${kind === 'special' && classic ? 'quake' : ''}`} aria-label={`${zone.name} battle`}>
-      {classic ? <SceneArt subject={subject} /> : <ZoneScene id={subject} battle />}
+      {classic && !zone.scene ? <SceneArt subject={subject} /> : <ZoneScene id={zone.scene ?? subject} battle />}
       {!classic && <FxLayer ref={fx} />}
       {!classic && heroAttacks && <div className={`hit-flash ${kind}`} />}
       <div className="battle-hud">
@@ -111,9 +111,9 @@ export function BattleStage({ zone, battle, event, look, buddy, weapon }: { zone
         </div>
         {heroAttacks && <span key={`p-${event!.id}`} className={`projectile ${kind}`}>{classic ? projectile : <Sprite e={projectile} size="1em" />}</span>}
         {foe && (
-          <div key={`foe-${shown}`} className={`foe enter ${foe.boss ? 'boss' : ''} ${leaving ? leaving : ''}`}>
+          <div key={`foe-${shown}`} className={`foe enter ${foe.boss ? 'boss' : ''} ${zone.bossArt ? 'story-boss' : ''} ${leaving ? leaving : ''}`}>
             <div key={`f-${event?.id ?? 0}`} className={`foe-body ${heroAttacks ? 'hurt' : ''} ${monsterAttacks ? 'pounce' : ''}`}>
-              <MonsterArt subject={subject} kind={foe.kind} hurt={heroAttacks || !!leaving} size={foe.boss ? 180 : 150} />
+              <MonsterArt subject={subject} kind={foe.kind} hurt={heroAttacks || !!leaving} size={foe.boss ? 180 : 150} art={foe.boss ? zone.bossArt : undefined} />
             </div>
             {heroAttacks && event!.damage > 0 && <span key={`d-${event!.id}`} className={`dmg ${kind}`}>−{event!.damage}</span>}
             {kind === 'miss' && event!.heal > 0 && <span key={`h-${event!.id}`} className="dmg heal">+{event!.heal}</span>}

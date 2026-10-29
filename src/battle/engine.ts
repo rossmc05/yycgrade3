@@ -26,6 +26,8 @@ export interface Battle {
   coins: number;
   crits: number;
   specials: number;
+  /** Story bosses: right answers needed to win (no automatic last-question finish). */
+  hitsToWin?: number;
 }
 
 export interface TurnEvent {
@@ -42,8 +44,8 @@ export const CRIT_SECONDS = 8;
 export const COMBO_FOR_SPECIAL = 3;
 
 /** Plan a fight for a session of `questions` questions: 3 foes (fewer for short sessions), the last a boss. */
-export function startBattle(questions: number, names: string[], rng: () => number): Battle {
-  const count = Math.max(1, Math.min(3, Math.floor(questions / 3)));
+export function startBattle(questions: number, names: string[], rng: () => number, boss?: { hitsToWin: number }): Battle {
+  const count = boss ? 1 : Math.max(1, Math.min(3, Math.floor(questions / 3)));
   const regular = names.slice(0, -1);
   const picks: number[] = [];
   for (let i = 0; i < count - 1; i++) {
@@ -58,7 +60,7 @@ export function startBattle(questions: number, names: string[], rng: () => numbe
     const maxHp = Math.round(per * (boss ? 14 : 10));
     return { kind, name: names[kind], maxHp, hp: maxHp, boss };
   });
-  return { foes, current: 0, combo: 0, coins: 0, crits: 0, specials: 0 };
+  return { foes, current: 0, combo: 0, coins: 0, crits: 0, specials: 0, ...boss };
 }
 
 /** Questions this foe should take, out of those left in the session (including this one). */
@@ -73,7 +75,7 @@ export function applyTurn(b: Battle, outcome: Outcome, seconds: number, question
   const foe = foes[b.current];
   const turns = share(b, questionsLeft);
   const last = turns === 1;
-  const base = Math.ceil(foe.hp / turns);
+  const base = b.hitsToWin ? Math.ceil(foe.maxHp / b.hitsToWin) : Math.ceil(foe.hp / turns);
   let kind: HitKind;
   let damage = 0;
   let heal = 0;
@@ -99,7 +101,7 @@ export function applyTurn(b: Battle, outcome: Outcome, seconds: number, question
   } else if (outcome === 'block') {
     combo = 0;
     kind = 'block';
-    damage = last ? foe.hp : Math.max(1, Math.ceil(base * 0.6));
+    damage = last && !b.hitsToWin ? foe.hp : Math.max(1, Math.ceil(base * 0.6));
   } else {
     combo = 0;
     kind = last ? 'flee' : 'miss';
@@ -107,7 +109,8 @@ export function applyTurn(b: Battle, outcome: Outcome, seconds: number, question
   }
 
   // The boss must last until the final question, so the session never runs out of monster.
-  if (b.current === foes.length - 1 && !last) damage = Math.min(damage, foe.hp - (turns - 1));
+  // (Story bosses are different: beat them early and the battle ends early.)
+  if (b.current === foes.length - 1 && !last && !b.hitsToWin) damage = Math.min(damage, foe.hp - (turns - 1));
   foe.hp = Math.max(0, Math.min(foe.maxHp, foe.hp - damage + heal));
   let finished = false;
   let coins = 0;
@@ -115,14 +118,14 @@ export function applyTurn(b: Battle, outcome: Outcome, seconds: number, question
     foe.end = 'defeated';
     finished = true;
     coins = (foe.boss ? 15 : 8) + (perks.coins ?? 0);
-  } else if (kind === 'flee') {
+  } else if (kind === 'flee' || (last && b.hitsToWin)) {
     foe.end = 'fled';
     finished = true;
     coins = 2;
   }
   const current = finished ? Math.min(b.current + 1, foes.length - 1) : b.current;
   return {
-    battle: { foes, current: finished && b.current === foes.length - 1 ? b.current : current, combo, coins: b.coins + coins, crits, specials },
+    battle: { ...b, foes, current: finished && b.current === foes.length - 1 ? b.current : current, combo, coins: b.coins + coins, crits, specials },
     event: { kind, damage, heal, finished, coins },
   };
 }

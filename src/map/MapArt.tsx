@@ -123,6 +123,13 @@ export function MapArt3D({ open, today }: { open: Record<string, boolean>; today
       <ellipse cx="500" cy="336" rx="80" ry="44" fill="#e7d3a8" stroke="#c4a76a" strokeWidth="4" />
       {/* scenery, back to front */}
       {[...SCENERY].sort((a, b) => a.y - b.y).map((b, i) => <SvgSprite key={i} {...b} />)}
+      {/* Baron Blizzard's fortress, frozen until all four crystals are won */}
+      <g className="fortress" style={{ filter: 'hue-rotate(190deg) saturate(0.6) brightness(1.15)' }}>
+        <ellipse cx="520" cy="138" rx="80" ry="22" fill="#f1f5f9" />
+        <SvgSprite e="🏰" x={520} y={140} s={96} />
+      </g>
+      <SvgSprite e="❄️" x={462} y={112} s={28} shadow={false} className="wander w1" />
+      <SvgSprite e="❄️" x={580} y={100} s={22} shadow={false} className="wander w2" />
       {/* clouds over closed zones */}
       {PLACES.filter((p) => !open[p.id]).map((p) => (
         <g key={`fog-${p.id}`} className="fog">

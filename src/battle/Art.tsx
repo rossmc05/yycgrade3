@@ -255,8 +255,8 @@ const FOES: Partial<Record<SubjectId, { e: string; filter: string }[]>> = {
   ],
 };
 
-function Foe3D({ subject, kind, hurt, size }: { subject: SubjectId; kind: number; hurt: boolean; size: number }) {
-  const f = FOES[subject]?.[kind] ?? { e: '👾', filter: 'none' };
+function Foe3D({ subject, kind, hurt, size, art }: { subject: SubjectId; kind: number; hurt: boolean; size: number; art?: { e: string; filter: string } }) {
+  const f = art ?? FOES[subject]?.[kind] ?? { e: '👾', filter: 'none' };
   return (
     <span className={`foe3d ${hurt ? 'hurt3d' : ''}`} style={{ width: size, height: size }} aria-hidden="true">
       <span className="foe3d-shadow" />
@@ -268,9 +268,9 @@ function Foe3D({ subject, kind, hurt, size }: { subject: SubjectId; kind: number
   );
 }
 
-export function MonsterArt({ subject, kind, hurt = false, size = 160 }: { subject: SubjectId; kind: number; hurt?: boolean; size?: number }) {
+export function MonsterArt({ subject, kind, hurt = false, size = 160, art }: { subject: SubjectId; kind: number; hurt?: boolean; size?: number; art?: { e: string; filter: string } }) {
   const { data } = useStore();
-  if (!data.settings.classicLook) return <Foe3D subject={subject} kind={kind} hurt={hurt} size={size} />;
+  if (!data.settings.classicLook || art) return <Foe3D subject={subject} kind={art ? 3 : kind} hurt={hurt} size={size} art={art} />;
   return (
     <svg className="monster-art" width={size} height={size} viewBox="0 0 160 165" aria-hidden="true">
       <ellipse cx="80" cy="150" rx="56" ry="9" fill="#00000033" />

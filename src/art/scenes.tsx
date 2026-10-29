@@ -7,6 +7,7 @@ const SCENES: Record<string, { sky: string; ground: string; art: [string, number
   math: { sky: 'linear-gradient(#7dd3fc, #e0f2fe)', ground: '#65a30d', art: [['⛰️', 40, 130], ['🏔️', 54, 150], ['🌲', 70, 80], ['🐐', 77, 70]] },
   spelling: { sky: 'linear-gradient(#4c1d95, #a78bfa)', ground: '#0f766e', art: [['🛖', 42, 110], ['🌾', 56, 80], ['🐊', 64, 90], ['🍄', 76, 64]] },
   grammar: { sky: 'linear-gradient(#334155, #94a3b8)', ground: '#374151', art: [['🏭', 42, 130], ['⚙️', 58, 70], ['🔩', 66, 70], ['🚧', 77, 64]] },
+  fortress: { sky: 'linear-gradient(#0f172a, #7dd3fc)', ground: '#e0f2fe', art: [['🏰', 40, 130], ['🧊', 56, 70], ['❄️', 66, 60], ['🏔️', 74, 120]] },
   science: { sky: 'linear-gradient(#fb923c, #fde68a)', ground: '#ea580c', art: [['🌋', 42, 140], ['🌵', 58, 80], ['🪨', 68, 70], ['🦴', 78, 56]] },
 };
 

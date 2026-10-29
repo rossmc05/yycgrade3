@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useStore } from '../engine/store';
 import { ac } from './sfx';
 
-export type Theme = 'map' | 'math' | 'spelling' | 'grammar' | 'science';
+export type Theme = 'map' | 'math' | 'spelling' | 'grammar' | 'science' | 'boss';
 
 interface Song {
   bpm: number;
@@ -41,6 +41,11 @@ const SONGS: Record<Theme, Song> = {
     melody: [64, 67, 71, 67, 74, 71, 69, 67, 64, 67, 71, 76, 74, 71, 69, 71, 72, 71, 69, 67, 69, 67, 66, 64, 66, 67, 69, 71, 64, 0, 64, 0],
     bass: [40, 40, 36, 36, 38, 38, 35, 35, 40, 40, 36, 36, 38, 38, 40, 40],
   },
+  boss: {
+    bpm: 150, lead: 'sawtooth',
+    melody: [57, 60, 64, 60, 65, 64, 60, 57, 56, 59, 64, 59, 65, 64, 59, 56, 57, 60, 64, 69, 68, 64, 65, 64, 62, 60, 59, 56, 57, 0, 57, 0],
+    bass: [33, 33, 33, 33, 32, 32, 32, 32, 33, 33, 29, 29, 28, 28, 33, 33],
+  },
 };
 
 const hz = (m: number) => 440 * 2 ** ((m - 69) / 12);
@@ -73,7 +78,7 @@ function tick() {
   while (nextAt < a.currentTime + 0.15) {
     const i = step % song.melody.length;
     const m = song.melody[i];
-    if (m) note(a, master, hz(m), nextAt, eighth * 0.9, song.lead, song.lead === 'square' ? 0.18 : 0.32);
+    if (m) note(a, master, hz(m), nextAt, eighth * 0.9, song.lead, song.lead === 'triangle' ? 0.32 : song.lead === 'sawtooth' ? 0.12 : 0.18);
     if (i % 2 === 0) {
       const b = song.bass[(i / 2) % song.bass.length];
       note(a, master, hz(b), nextAt, eighth * 1.8, 'triangle', 0.4);

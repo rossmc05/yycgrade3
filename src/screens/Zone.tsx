@@ -1,6 +1,9 @@
+import { useState } from 'react';
 import { ZoneScene } from '../art/scenes';
+import { Cutscene } from '../story/Cutscene';
+import { BOSS_STARS, BOSSES, hasCrystal, type Zone4 } from '../story/story';
 import { useMusic, type Theme } from '../battle/music';
-import { Icon } from '../art/sprite';
+import { Icon, Sprite } from '../art/sprite';
 import { SceneArt } from '../battle/Art';
 import { TopBar } from '../components/TopBar';
 import { useStore } from '../engine/store';
@@ -13,6 +16,7 @@ const STATE_LABEL = { locked: 'Locked', open: 'Open', review: 'Rematch!', done: 
 
 export function Zone({ subjectId }: { subjectId: string }) {
   const { profile, data } = useStore();
+  const [scene, setScene] = useState<string | null>(null);
   const classic = !!data.settings.classicLook;
   const place = placeOf(subjectId);
   useMusic(['math', 'spelling', 'grammar', 'science'].includes(subjectId) ? (subjectId as Theme) : undefined);
@@ -47,6 +51,9 @@ export function Zone({ subjectId }: { subjectId: string }) {
           <span>⭐ {stars} / {list.length * 3}</span>
         </div>
       </section>
+
+      {scene && <Cutscene id={scene} onDone={() => { setScene(null); go('play', subjectId, 'boss'); }} />}
+      {BOSSES[subjectId as Zone4] && <BossCard zone={subjectId as Zone4} stars={stars} won={hasCrystal(profile, subjectId)} onFight={() => setScene(`boss-${subjectId}`)} />}
 
       <section className="card guide-row">
         <span className="guide-face">{place.guide && <Icon e={place.guide.icon} size="1em" />}</span>
@@ -88,5 +95,26 @@ export function Zone({ subjectId }: { subjectId: string }) {
       <p className="muted small center-text">Win battles to earn stars. Each quest you level up opens a new one on the trail.</p>
       <button className="link center-text" onClick={() => go('subject', subjectId)}>Lessons and practice list</button>
     </main>
+  );
+}
+
+function BossCard({ zone, stars, won, onFight }: { zone: Zone4; stars: number; won: boolean; onFight: () => void }) {
+  const b = BOSSES[zone];
+  const ready = stars >= BOSS_STARS;
+  return (
+    <section className={`boss-card ${won ? 'won' : ''}`}>
+      <span className="boss-face" style={{ filter: ready || won ? b.filter : 'brightness(0) opacity(0.5)' }}><Sprite e={b.e} size="100%" /></span>
+      <div>
+        <h2>{won ? <><Icon e="💎" /> Crystal won back!</> : `Boss: ${ready ? b.name : '???'}`}</h2>
+        <p>
+          {won
+            ? `You beat ${b.name}. You can fight again for practice.`
+            : ready
+              ? `${b.name} is guarding a Chinook Crystal. Get about 7 of every 10 answers right to win it back!`
+              : `Earn ${BOSS_STARS - stars} more stars on the quest trail to face this zone's boss.`}
+        </p>
+      </div>
+      {(ready || won) && <button className="btn primary big" onClick={onFight}><Icon e="⚔️" /> {won ? 'Rematch' : 'Fight the boss'}</button>}
+    </section>
   );
 }

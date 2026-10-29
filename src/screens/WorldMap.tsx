@@ -12,6 +12,8 @@ import { ClassicMapArt, H, MapArt3D, MapClouds, W } from '../map/MapArt';
 import { Icon, Sprite } from '../art/sprite';
 import { go } from '../router';
 import { palById } from '../collect/pals';
+import { Cutscene } from '../story/Cutscene';
+import { BOSSES, finalOpen, hasCrystal, markSeen, nextStep, STORY_ZONES, storyOf } from '../story/story';
 import { findSubject } from '../subjects';
 
 const SPEED = 0.55; // map units per millisecond
@@ -44,12 +46,13 @@ function saveAt(profileId: string, at: PlaceId) {
 }
 
 export function WorldMap() {
-  const { profile, data } = useStore();
+  const { profile, data, updateProfile } = useStore();
   const [at, setAt] = useState<PlaceId>(() => (profile ? loadAt(profile.id) : 'village'));
   const [pos, setPos] = useState(() => placeOf(at)!);
   const [dur, setDur] = useState(0);
   const [walking, setWalking] = useState(false);
   const [face, setFace] = useState(1);
+  const [scene, setScene] = useState<string | null>(() => (profile && !storyOf(profile).seen.includes('intro') ? 'intro' : null));
   const [card, setCard] = useState<PlaceId | null>(null);
   const timers = useRef<number[]>([]);
 
@@ -131,9 +134,30 @@ export function WorldMap() {
         </button>
       </section>
 
+      <StoryBar onStory={() => setScene('intro')} />
+      {scene && (
+        <Cutscene
+          id={scene}
+          onDone={() => {
+            updateProfile((p) => markSeen(p, scene));
+            setScene(null);
+            if (scene === 'final-intro') go('play', 'all', 'final');
+          }}
+        />
+      )}
+
       <div className="map-frame">
         {classic ? <ClassicMapArt open={open} today={today} /> : <MapArt3D open={open} today={today} />}
         {!classic && <MapClouds />}
+        <button
+          className={`map-place fortress-btn ${finalOpen(profile) ? '' : 'locked'}`}
+          style={{ left: '52%', top: '25.5%' }}
+          onClick={() => (finalOpen(profile) ? setScene('final-intro') : setScene(null))}
+          title="Blizzard Fortress"
+        >
+          {finalOpen(profile) ? 'Blizzard Fortress' : '🔒 Blizzard Fortress'}
+          {!finalOpen(profile) && <small>Win back all 4 crystals</small>}
+        </button>
         {PLACES.map((p) => (
           <button
             key={p.id}
@@ -207,6 +231,27 @@ function PlaceCard({ place, open, onEnter, onClose }: { place: Place; open: bool
         <button className="btn ghost" onClick={onClose}>Not now</button>
         {open && <button className="btn primary" onClick={onEnter} autoFocus>Enter {place.name}</button>}
       </div>
+    </section>
+  );
+}
+
+/** The story so far: crystals won and what to do next. */
+function StoryBar({ onStory }: { onStory: () => void }) {
+  const { profile } = useStore();
+  if (!profile) return null;
+  const now = Date.now();
+  const starsIn = (z: string) => quests(findSubject(z)?.skills ?? [], profile, now).reduce((n, q) => n + q.stars, 0);
+  return (
+    <section className="story-bar" aria-label="Story">
+      <span className="crystals" aria-label={`${storyOf(profile).crystals.length} of 4 crystals`}>
+        {STORY_ZONES.map((z) => (
+          <span key={z} className={hasCrystal(profile, z) ? '' : 'off'} style={{ filter: hasCrystal(profile, z) ? BOSSES[z].crystal : undefined }} title={placeOf(z)?.name}>
+            <Sprite e="💎" size={30} />
+          </span>
+        ))}
+      </span>
+      <p>{nextStep(profile, starsIn)}</p>
+      <button className="btn ghost" onClick={onStory}><Icon e="📜" /> Story</button>
     </section>
   );
 }
