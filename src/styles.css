@@ -483,3 +483,49 @@ button.center-text { display: block; margin: 8px auto; }
   .map-place small { display: none; }
   .map-spot small { display: none; }
 }
+.pictograph { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.pictograph table { border-collapse: collapse; }
+.pictograph th { text-align: right; padding: 4px 10px; font-size: 0.95rem; border-right: 3px solid var(--ink); }
+.pictograph td { padding: 4px 8px; text-align: left; border-bottom: 1px solid var(--grid); }
+.pictograph .sprite { margin-right: 2px; }
+.picto-key { margin: 4px 0 0; font-weight: 800; background: var(--hint-soft); padding: 4px 12px; border-radius: 99px; }
+
+/* ---------- Pals and gear ---------- */
+.book-head { display: flex; gap: 18px; align-items: center; }
+.book-head > div { flex: 1; }
+.book-head h1 { margin: 0; }
+.pal-grid, .gear-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin: 8px 0 18px; }
+.pal-slot { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 8px; border-radius: 18px; border: 3px solid var(--rare-c, #94a3b8); background: var(--card); color: var(--ink); box-shadow: 0 4px 0 var(--rare-c, #94a3b8); }
+.pal-slot strong { font-size: 0.9rem; text-align: center; line-height: 1.15; }
+.pal-slot small { color: var(--muted); font-weight: 700; }
+.pal-slot.missing .sprite { filter: brightness(0) opacity(0.25); }
+.pal-slot.missing { box-shadow: none; border-style: dashed; }
+.pal-slot.found:hover { transform: translateY(-3px); }
+.pal-slot.is-buddy { outline: 4px solid #22c55e; outline-offset: 2px; }
+.buddy-tag { position: absolute; top: -10px; right: -6px; background: #22c55e; color: #fff; font-size: 0.7rem; font-weight: 800; padding: 2px 8px; border-radius: 99px; }
+.common { --rare-c: #94a3b8; }
+.rare { --rare-c: #3b82f6; }
+.epic { --rare-c: #a855f7; }
+.legendary { --rare-c: #f59e0b; }
+.gear-item { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 10px; border-radius: 18px; background: var(--card); box-shadow: var(--shadow); text-align: center; }
+.gear-item small { color: var(--muted); font-weight: 700; min-height: 2.4em; }
+.gear-item.wearing { outline: 4px solid #22c55e; outline-offset: 2px; }
+.gear-item .btn { padding: 8px 14px; font-size: 0.95rem; }
+
+.pal-reveal { display: flex; align-items: center; gap: 16px; justify-content: center; margin: 10px auto 14px; padding: 12px 18px; border-radius: 20px; border: 3px solid var(--rare-c); background: color-mix(in srgb, var(--rare-c) 14%, var(--card)); max-width: 460px; text-align: left; animation: pop 0.5s 0.6s backwards; }
+.pal-reveal strong { display: block; font-size: 1.15rem; }
+.pal-reveal .rarity { font-weight: 900; color: var(--rare-c); text-transform: uppercase; letter-spacing: 0.06em; }
+.pal-reveal p { margin: 2px 0 0; }
+.pal-card { position: relative; display: grid; place-items: center; width: 116px; height: 116px; flex-shrink: 0; }
+.pal-card .sprite { position: relative; animation: pal-pop 0.8s 0.7s cubic-bezier(0.2, 1.6, 0.4, 1) backwards; filter: drop-shadow(0 8px 4px rgba(0, 0, 0, 0.25)); }
+@keyframes pal-pop { from { transform: scale(0) rotate(-30deg); } }
+.pal-shine { position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(from 0deg, transparent, var(--rare-c), transparent 30%, var(--rare-c), transparent 60%, var(--rare-c), transparent 90%); opacity: 0.45; animation: spin 6s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.pal-new { position: absolute; top: -4px; right: -10px; background: #ef4444; color: #fff; font-weight: 900; font-size: 0.75rem; padding: 2px 8px; border-radius: 99px; transform: rotate(12deg); }
+
+.battle-buddy { position: absolute; left: 78%; bottom: 0; width: 42%; animation: bob 1.1s ease-in-out infinite; }
+.battle-buddy.cheer { animation: cheer 0.6s ease-out 2; }
+@keyframes cheer { 50% { transform: translateY(-40%) rotate(-12deg); } }
+.map-buddy { position: absolute; left: 70%; bottom: 0; width: 45%; pointer-events: none; }
+.map-hero.walking .map-buddy { animation: walk 0.3s ease-in-out infinite alternate-reverse; }
+@media (prefers-reduced-motion: reduce) { .pal-shine, .battle-buddy, .pal-card .sprite { animation: none !important; } }

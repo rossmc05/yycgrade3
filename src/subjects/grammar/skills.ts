@@ -224,6 +224,79 @@ function agreement(_level: number, rng: Rng): Question {
   };
 }
 
+// ---------- Verb tense ----------
+
+// [base verb, past tense, the rest of the sentence]
+const REGULAR: [string, string, string][] = [
+  ['walk', 'walked', 'the dog'], ['play', 'played', 'hockey'], ['paint', 'painted', 'a picture'], ['bake', 'baked', 'muffins'], ['clean', 'cleaned', 'the room'],
+  ['kick', 'kicked', 'the ball'], ['watch', 'watched', 'a movie'], ['help', 'helped', 'Grandpa'], ['jump', 'jumped', 'in the leaves'], ['plant', 'planted', 'seeds'],
+  ['climb', 'climbed', 'the hill'], ['cook', 'cooked', 'supper'], ['visit', 'visited', 'the zoo'], ['wash', 'washed', 'the dishes'], ['pick', 'picked', 'berries'],
+  ['shovel', 'shovelled', 'the snow'], ['skate', 'skated', 'on the pond'], ['carry', 'carried', 'the box'], ['stop', 'stopped', 'at the corner'], ['hop', 'hopped', 'over the log'],
+];
+const IRREGULAR: [string, string, string][] = [
+  ['go', 'went', 'to school'], ['eat', 'ate', 'an apple'], ['run', 'ran', 'to the park'], ['see', 'saw', 'a moose'], ['make', 'made', 'a snowman'],
+  ['write', 'wrote', 'a story'], ['swim', 'swam', 'in the lake'], ['ride', 'rode', 'a bike'], ['sing', 'sang', 'a song'], ['drink', 'drank', 'some milk'],
+  ['find', 'found', 'a rock'], ['take', 'took', 'the bus'], ['throw', 'threw', 'the ball'], ['catch', 'caught', 'the ball'], ['build', 'built', 'a fort'],
+  ['draw', 'drew', 'a horse'], ['fly', 'flew', 'a kite'], ['bring', 'brought', 'a lunch'], ['buy', 'bought', 'a toque'], ['win', 'won', 'the game'],
+  ['wear', 'wore', 'mittens'], ['feed', 'fed', 'the cat'], ['drive', 'drove', 'to Banff'], ['sleep', 'slept', 'in a tent'], ['give', 'gave', 'a gift'],
+];
+const ONE = ['Mia', 'Liam', 'My sister', 'Our teacher', 'Noah', 'Ava'];
+const MANY = ['We', 'They', 'The kids', 'My friends'];
+const PAST_WORDS = ['Yesterday,', 'Last night,', 'Last week,'];
+const NOW_WORDS = ['Every day,', 'Every morning,', 'On Saturdays,'];
+const LATER_WORDS = ['Tomorrow,', 'Next week,', 'Later today,'];
+
+/** Present tense for one person: runs, watches, carries, goes. */
+function presentOne(v: string): string {
+  if (/(s|sh|ch|x|o)$/.test(v)) return `${v}es`;
+  if (/[^aeiou]y$/.test(v)) return `${v.slice(0, -1)}ies`;
+  return `${v}s`;
+}
+/** A wrong past tense a child might write: goed, runned, catched. */
+function overRegular(v: string): string {
+  if (v.endsWith('e')) return `${v}d`;
+  if (/[^aeiou][aeiou][bdgmnpt]$/.test(v)) return `${v}${v.slice(-1)}ed`;
+  return `${v}ed`;
+}
+
+function tense(level: number, rng: Rng): Question {
+  const verbs = level === 1 ? REGULAR : level === 2 ? IRREGULAR : [...REGULAR, ...IRREGULAR];
+  const [base, past, rest] = pick(rng, verbs);
+  const many = rng() < 0.4;
+  const who = pick(rng, many ? MANY : ONE);
+  const present = many ? base : presentOne(base);
+  const future = `will ${base}`;
+  const forms = { past, present, future };
+  const lower = (w: string) => (/^(We|They|My|Our|The)\b/.test(w) ? w[0].toLowerCase() + w.slice(1) : w);
+  if (level === 0) {
+    const t = pick(rng, ['past', 'present', 'future'] as const);
+    return {
+      key: `tense-which-${who}-${base}-${t}`,
+      prompt: `Is this sentence in the past, present or future? "${who} ${forms[t]} ${rest}."`,
+      say: `${who} ${forms[t]} ${rest}.`,
+      input: 'choice',
+      choices: ['past', 'present', 'future'],
+      answer: t,
+      hint: 'Past already happened (walked, went). Present is happening now or every day (walks). Future has not happened yet (will walk).',
+      explain: `"${forms[t]}" is ${t} tense.`,
+    };
+  }
+  const t = level === 3 ? pick(rng, ['past', 'present', 'future'] as const) : 'past';
+  const when = pick(rng, t === 'past' ? PAST_WORDS : t === 'present' ? NOW_WORDS : LATER_WORDS);
+  const ans = forms[t];
+  const wrong = level === 2 ? [overRegular(base), present, future, base] : [present, future, past, base, overRegular(base)];
+  return {
+    key: `tense-fill-${when}-${who}-${base}`,
+    prompt: `Choose the verb that fits: ${when} ${lower(who)} _____ ${rest}.`,
+    say: `${when} ${lower(who)} blank ${rest}.`,
+    input: 'choice',
+    choices: options(rng, ans, wrong),
+    answer: ans,
+    hint: `"${when.replace(',', '')}" tells you when it happens. ${t === 'past' ? 'It already happened.' : t === 'present' ? 'It happens again and again.' : 'It has not happened yet.'}`,
+    explain: `${when} ${lower(who)} ${ans} ${rest}.`,
+  };
+}
+
 // ---------- Similes ----------
 
 const SIMILES = bank.SIMILES;
@@ -250,6 +323,7 @@ export const GRAMMAR_SKILLS: Skill[] = [
   { id: 'gram.parts', subject: S, name: 'Parts of Speech', icon: '🧱', blurb: 'Nouns, verbs, adjectives and more', strand: 'Grammar', outcome: OUT, levels: ['Nouns and verbs', 'Adjectives', 'Adverbs', 'Prepositions and pronouns', 'All mixed'], generate: partsOfSpeech },
   { id: 'gram.subject', subject: S, name: 'Subject and Predicate', icon: '✂️', blurb: 'Who it is about and what they do', strand: 'Grammar', outcome: OUT, levels: ['Find the subject', 'Subject or predicate'], generate: subjectPredicate },
   { id: 'gram.agreement', subject: S, name: 'Verb Agreement', icon: '🤝', blurb: 'The dog runs, the dogs run', strand: 'Grammar', outcome: OUT, levels: ['Make it match'], generate: agreement },
+  { id: 'gram.tense', subject: S, name: 'Verb Tense', icon: '⏳', blurb: 'Past, present and future', strand: 'Grammar', outcome: OUT, levels: ['Past, present or future?', 'Past tense with -ed', 'Tricky past tense', 'Pick the right tense'], generate: tense },
   { id: 'gram.conjunctions', subject: S, name: 'Joining Words', icon: '🔗', blurb: 'and, but, or, so', strand: 'Grammar', outcome: OUT, levels: ['Conjunctions'], generate: conjunctions },
   { id: 'gram.types', subject: S, name: 'Sentence Types', icon: '❓', blurb: 'Statements, questions, commands', strand: 'Capitals and punctuation', outcome: OUT, levels: ['End marks', 'Four kinds of sentences'], generate: sentenceTypes },
   { id: 'gram.capitals', subject: S, name: 'Capital Letters', icon: '🔠', blurb: 'Names, places, days and months', strand: 'Capitals and punctuation', outcome: OUT, levels: ['Pick the right one', 'Trickier choices', 'Find the missing capital'], generate: capitals },

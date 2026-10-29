@@ -186,6 +186,82 @@ function silent(level: number, rng: Rng): Question {
   return hearAndSpell(w.word, w.sentence, `snd-spell-${w.word}`, w.hint);
 }
 
+// ---------- Vowel teams (3P1) ----------
+
+/** Words by vowel team. 'ow*' and 'oo' sound groups are kept apart: snow (ow) and cow (ow*). */
+const TEAMS: Record<string, string[]> = {
+  ai: ['rain', 'train', 'paint', 'snail', 'wait', 'chain', 'brain', 'nail', 'tail', 'mail'],
+  ay: ['play', 'day', 'stay', 'tray', 'clay', 'spray', 'away', 'crayon', 'today', 'may'],
+  ee: ['tree', 'green', 'sleep', 'sheep', 'cheese', 'bee', 'feet', 'queen', 'sweet', 'wheel'],
+  ea: ['team', 'leaf', 'dream', 'clean', 'peach', 'eat', 'beach', 'meat', 'read', 'seat'],
+  oa: ['boat', 'coat', 'toast', 'soap', 'goat', 'float', 'coach', 'oak', 'loaf', 'road'],
+  ow: ['snow', 'grow', 'blow', 'yellow', 'window', 'show', 'elbow', 'slow', 'bowl', 'throw'],
+  oo: ['moon', 'spoon', 'food', 'school', 'room', 'boot', 'pool', 'tooth', 'goose', 'zoo'],
+  igh: ['night', 'light', 'bright', 'high', 'fight', 'tight', 'flight', 'right', 'might', 'sight'],
+  ie: ['pie', 'tie', 'cried', 'fried', 'tried', 'dried', 'spied', 'lie'],
+  ou: ['cloud', 'house', 'mouse', 'shout', 'round', 'mouth', 'count', 'proud'],
+  'ow*': ['cow', 'town', 'brown', 'crown', 'owl', 'flower', 'clown', 'growl'],
+  oi: ['coin', 'soil', 'point', 'boil', 'voice', 'noise', 'join', 'oil'],
+  oy: ['boy', 'toy', 'joy', 'enjoy', 'oyster', 'royal', 'annoy', 'cowboy'],
+};
+/** Other spellings of the same sound, used to make wrong choices. x_e means x, then the consonants, then a silent e. */
+const SAME_SOUND: Record<string, string[]> = {
+  ai: ['ay', 'a_e'], ay: ['ai', 'ey'], ee: ['ea', 'e_e'], ea: ['ee', 'e_e'], oa: ['ow', 'o_e'], ow: ['oa', 'oe'],
+  oo: ['ew', 'u_e', 'ue'], igh: ['ie', 'i_e'], ie: ['igh', 'y'], ou: ['ow'], 'ow*': ['ou'], oi: ['oy'], oy: ['oi'],
+};
+/** Words whose other spelling is also a real word (meet, rode, write...), so "which spelling?" would be unfair. */
+const SOUND_ALIKE = new Set(['tail', 'mail', 'feet', 'queen', 'sweet', 'wheel', 'team', 'beach', 'meat', 'read', 'seat', 'road', 'slow', 'bowl', 'throw', 'right', 'might', 'sight', 'lie', 'tie', 'may', 'day', 'flower', 'boil', 'oil', 'pie']);
+
+const teamOf = (word: string) => Object.keys(TEAMS).find((t) => TEAMS[t].includes(word))!;
+const letters = (team: string) => team.replace('*', '');
+
+function respell(word: string, team: string, alt: string): string {
+  const t = letters(team);
+  const at = word.indexOf(t);
+  const pre = word.slice(0, at);
+  const post = word.slice(at + t.length);
+  if (!alt.endsWith('_e')) return pre + alt + post;
+  const cons = post.match(/^[^aeiouy]+/)?.[0];
+  return cons ? pre + alt[0] + cons + 'e' + post.slice(cons.length) : pre + alt[0] + post + 'e';
+}
+
+function vowelTeams(level: number, rng: Rng): Question {
+  const all = Object.values(TEAMS).flat();
+  if (level === 0) {
+    const word = pick(rng, all);
+    const team = teamOf(word);
+    const ans = letters(team);
+    const wrong = [...new Set(Object.keys(TEAMS).map(letters))].filter((t) => !word.includes(t));
+    return {
+      key: `vt-find-${word}`,
+      prompt: `Which vowel team is in "${word}"?`,
+      say: word,
+      input: 'choice',
+      choices: options(rng, ans, wrong),
+      answer: ans,
+      hint: 'A vowel team is two or three letters that make one sound together, like ai in rain or ee in tree.',
+      explain: `"${word}" has the ${ans} team.`,
+    };
+  }
+  const fair = all.filter((w) => !SOUND_ALIKE.has(w));
+  const word = pick(rng, fair);
+  const team = teamOf(word);
+  if (level === 1) {
+    const wrong = [...new Set(SAME_SOUND[team].map((a) => respell(word, team, a)))].filter((w) => w !== word);
+    return {
+      key: `vt-pick-${word}`,
+      prompt: '🔊 Which spelling is right?',
+      say: word,
+      input: 'choice',
+      choices: shuffle(rng, [word, ...wrong]),
+      answer: word,
+      hint: `Listen for the vowel sound. This word uses the ${letters(team)} team.`,
+      explain: `It is spelled ${word}, with ${letters(team)}.`,
+    };
+  }
+  return hearAndSpell(word, undefined, `vt-spell-${word}`, `Listen for the vowel sound. This word uses the ${letters(team)} team.`);
+}
+
 // ---------- Homophones (3V1) ----------
 
 const HOMOPHONES: { s: string; a: string; c: string[] }[] = bank.HOMOPHONES as { s: string; a: string; c: string[] }[];
@@ -285,5 +361,6 @@ export const SPELLING_SKILLS: Skill[] = [
   { id: 'spell.compounds', subject: S, name: 'Compound Words', icon: '🧩', blurb: 'snow + man = snowman', strand: 'Vocabulary: Word parts', outcome: OUT_VOCAB, levels: ['Split it', 'Join it', 'Hear and spell'], generate: compounds },
   { id: 'spell.homophones', subject: S, name: 'Homophones', icon: '👂', blurb: 'there, their, they’re', strand: 'Vocabulary: Word meaning', outcome: OUT_VOCAB, levels: ['Pairs', 'Tricky trios', 'All'], generate: homophones },
   { id: 'spell.synonyms', subject: S, name: 'Synonyms and Antonyms', icon: '🔄', blurb: 'Same and opposite', strand: 'Vocabulary: Word meaning', outcome: OUT_VOCAB, levels: ['Synonyms', 'Antonyms', 'Mixed'], generate: synonyms },
+  { id: 'spell.vowels', subject: S, name: 'Vowel Teams', icon: '🚣', blurb: 'rain, tree, boat, night', strand: 'Phonics', outcome: OUT_PHON, levels: ['Find the vowel team', 'Which spelling is right?', 'Hear and spell'], generate: vowelTeams },
   { id: 'spell.silent', subject: S, name: 'Silent Letters and Tricky Sounds', icon: '🤫', blurb: 'know, write, lamb, phone', strand: 'Phonics', outcome: OUT_PHON, levels: ['Find the silent letter', 'Spell silent-letter words', 'ph, gh, igh, str, spl'], generate: silent },
 ];

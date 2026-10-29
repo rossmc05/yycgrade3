@@ -148,6 +148,7 @@ function money(level: number, rng: Rng): Question {
       explain: `${coins.map((c) => `$${COIN_VALUE[c] / 100}`).join(' + ')} = $${total}.`,
     };
   }
+  if (level === 4) return moneyCents(rng);
   // Level 3: can you afford it / change from a purchase.
   if (rng() < 0.5) {
     const [a, b] = [int(rng, 2, 15), int(rng, 2, 15)];
@@ -174,6 +175,27 @@ function money(level: number, rng: Rng): Question {
     answer: String(paid - price),
     hint: `Count up from $${price} to $${paid}.`,
     explain: `$${paid} − $${price} = $${paid - price}.`,
+  };
+}
+
+/** "$3.45" from 345 cents. */
+export const dollars = (cents: number) => `$${Math.floor(cents / 100)}.${pad2(cents % 100)}`;
+
+function moneyCents(rng: Rng): Question {
+  const count = int(rng, 3, 7);
+  const coins = Array.from({ length: count }, (_, i) => pick(rng, i === 0 ? ['loonie', 'toonie'] : ['toonie', 'loonie', 'quarter', 'dime', 'nickel', 'quarter', 'dime']))
+    .sort((x, y) => COIN_VALUE[y] - COIN_VALUE[x]);
+  const total = coins.reduce((t, c) => t + COIN_VALUE[c], 0);
+  const ans = dollars(total);
+  return {
+    key: `money-cents-${coins.join('.')}`,
+    prompt: 'How much money is this?',
+    visual: { kind: 'coins', coins },
+    input: 'choice',
+    choices: options(rng, ans, [dollars(total + 5), dollars(total - 5), dollars(total + 10), dollars(Math.max(5, total - 100)), dollars(total + 100), dollars(total - 10)]),
+    answer: ans,
+    hint: 'Count the dollars first (toonies are $2, loonies $1). Then count the cents and write them after the dot.',
+    explain: `${coins.map((c) => (COIN_VALUE[c] >= 100 ? `$${COIN_VALUE[c] / 100}` : `${COIN_VALUE[c]}¢`)).join(' + ')} = ${ans}.`,
   };
 }
 
@@ -391,7 +413,32 @@ export function fractionName(n: number, d: number): string {
   return `${NUMWORD[n]} ${n === 1 ? NAMES[d][0] : NAMES[d][1]}`;
 }
 
+const SET_ITEMS: [string, string][] = [
+  ['apples', 'red'], ['marbles', 'blue'], ['cupcakes', 'chocolate'], ['crayons', 'broken'], ['fish', 'orange'], ['balloons', 'green'],
+  ['hockey cards', 'goalies'], ['buttons', 'round'], ['cookies', 'oatmeal'], ['kids', 'wearing toques'], ['cars', 'electric'], ['flowers', 'yellow'],
+];
+
+function fractionOfSet(rng: Rng): Question {
+  const d = pick(rng, [2, 3, 4, 5, 6]);
+  const groups = int(rng, 2, d <= 3 ? 6 : 4);
+  const total = d * groups;
+  const n = int(rng, 1, d - 1);
+  const [things, kind] = pick(rng, SET_ITEMS);
+  const part = groups * n;
+  const not = rng() < 0.3;
+  const ans = not ? total - part : part;
+  return {
+    key: `frac-set-${total}-${n}/${d}-${things}-${not}`,
+    prompt: `There are ${total} ${things}. ${n}/${d} of them are ${kind}. How many are ${not ? `not ${kind}` : kind}?`,
+    input: 'number',
+    answer: String(ans),
+    hint: `Split the ${total} ${things} into ${d} equal groups. Each group has ${groups}. Then take ${n} of the groups.`,
+    explain: `${total} ÷ ${d} = ${groups} in each group. ${n} groups make ${part}${not ? `, so ${total} − ${part} = ${ans} are not ${kind}` : ''}.`,
+  };
+}
+
 function fractions(level: number, rng: Rng): Question {
+  if (level === 6) return fractionOfSet(rng);
   const d = pick(rng, level === 0 ? [2, 3, 4] : DENOMS);
   if (level === 0 && rng() < 0.5) return fractionStory(rng, d);
   if (level <= 1) {
@@ -679,6 +726,7 @@ function time(level: number, rng: Rng): Question {
     const q = pick(rng, bank.AM_PM);
     return { key: `time-ampm-${q.p}`, prompt: q.p, input: 'choice', choices: ['a.m.', 'p.m.'], answer: q.a, hint: 'a.m. is from midnight to noon. p.m. is from noon to midnight.', explain: `It is ${q.a}.` };
   }
+  if (level === 5) return elapsed(rng);
   // Level 4: 24-hour time.
   const h24 = int(rng, 0, 23);
   const m = pick(rng, [0, 15, 30, 45]);
@@ -706,6 +754,40 @@ function time(level: number, rng: Rng): Question {
     answer: t24,
     hint: 'For p.m. times after 12:59, add 12 to the hour. Midnight is 00:00.',
     explain: `${t12} is ${t24}.`,
+  };
+}
+
+const ACTIVITIES = ['Hockey practice', 'A swimming lesson', 'The movie', 'Piano practice', 'The school play', 'A soccer game', 'Baking cookies', 'The bus ride to Banff', 'A trip to the Calgary Zoo', 'Skating at the rink', 'A library visit', 'Building a snow fort'];
+
+const span = (min: number) => (min < 60 ? `${min} minutes` : `${Math.floor(min / 60)} h ${pad2(min % 60)} min`.replace(' 00 min', ''));
+const clock = (min: number) => `${Math.floor(min / 60) % 12 || 12}:${pad2(min % 60)}`;
+
+function elapsed(rng: Rng): Question {
+  const start = int(rng, 1, 9) * 60 + int(rng, 0, 11) * 5;
+  const len = int(rng, 3, 30) * 5 + (rng() < 0.4 ? 60 : 0);
+  const end = start + len;
+  const what = pick(rng, ACTIVITIES);
+  if (rng() < 0.5) {
+    const ans = span(len);
+    return {
+      key: `time-elapsed-${start}-${len}-${what}`,
+      prompt: `${what} starts at ${clock(start)} and ends at ${clock(end)}. How long does it last?`,
+      input: 'choice',
+      choices: options(rng, ans, [span(len + 5), span(Math.max(5, len - 5)), span(len + 60), span(len + 10), span(Math.abs(len - 60) || 15)]),
+      answer: ans,
+      hint: `Count on from ${clock(start)}: first to the next hour, then the minutes left.`,
+      explain: `From ${clock(start)} to ${clock(end)} is ${ans}.`,
+    };
+  }
+  const ans = clock(end);
+  return {
+    key: `time-ends-${start}-${len}-${what}`,
+    prompt: `${what} starts at ${clock(start)} and lasts ${span(len)}. What time does it end?`,
+    input: 'choice',
+    choices: options(rng, ans, [clock(end + 5), clock(end - 5), clock(end + 60), clock(end - 60), clock(end + 10)]),
+    answer: ans,
+    hint: 'Add the hours first, then the minutes. 60 minutes make a new hour.',
+    explain: `${clock(start)} + ${span(len)} = ${ans}.`,
   };
 }
 
@@ -816,9 +898,78 @@ function geometry(level: number, rng: Rng): Question {
     const q = pick(rng, bank.GEO_PROPS);
     return { key: `geo-prop-${q.p}`, prompt: q.p, input: 'choice', choices: shuffle(rng, q.c), answer: q.a, hint: 'A right angle is a square corner, like the letter L. Parallel lines are like train tracks.', explain: `The answer is ${q.a}.` };
   }
+  if (level === 4) return solids(rng);
   // Transformations keep shape and size.
   const q = pick(rng, bank.GEO_TRANS);
   return { key: `geo-trans-${q.p}`, prompt: q.p, input: 'choice', choices: ['yes', 'no'], answer: q.a, hint: 'Slides, turns and flips move a shape but never change its size or shape.', explain: 'Translations, rotations and reflections keep side lengths and angles the same.' };
+}
+
+interface Solid { name: string; faces?: number; edges?: number; vertices?: number; rolls: boolean; things: string[] }
+const SOLIDS: Solid[] = [
+  { name: 'cube', faces: 6, edges: 12, vertices: 8, rolls: false, things: ['a die', 'an ice cube', 'a sugar cube', 'a building block'] },
+  { name: 'rectangular prism', faces: 6, edges: 12, vertices: 8, rolls: false, things: ['a cereal box', 'a brick', 'a juice box', 'a shoebox'] },
+  { name: 'triangular prism', faces: 5, edges: 9, vertices: 6, rolls: false, things: ['a tent', 'a wedge of cheese', 'a roof on a barn'] },
+  { name: 'square pyramid', faces: 5, edges: 8, vertices: 5, rolls: false, things: ['the pyramids in Egypt', 'a pyramid-shaped paperweight'] },
+  { name: 'triangular pyramid', faces: 4, edges: 6, vertices: 4, rolls: false, things: ['a four-sided game die', 'a pyramid tea bag'] },
+  { name: 'cylinder', rolls: true, things: ['a soup can', 'a hockey puck', 'a glue stick', 'a paper towel roll'] },
+  { name: 'cone', rolls: true, things: ['an ice cream cone', 'a traffic pylon', 'a party hat'] },
+  { name: 'sphere', rolls: true, things: ['a soccer ball', 'a globe', 'an orange', 'a marble'] },
+];
+
+function solids(rng: Rng): Question {
+  const kind = pick(rng, ['thing', 'thing', 'count', 'count', 'which', 'roll'] as const);
+  const names = SOLIDS.map((x) => x.name);
+  if (kind === 'thing') {
+    const sh = pick(rng, SOLIDS);
+    const thing = pick(rng, sh.things);
+    return {
+      key: `solid-thing-${thing}`,
+      prompt: `What 3-D shape is ${thing} like?`,
+      input: 'choice',
+      choices: options(rng, sh.name, names),
+      answer: sh.name,
+      hint: 'Look at its faces. Are they squares, rectangles or triangles? Is any part curved?',
+      explain: `${thing[0].toUpperCase()}${thing.slice(1)} is shaped like a ${sh.name}.`,
+    };
+  }
+  const flat = SOLIDS.filter((x) => x.faces);
+  if (kind === 'count') {
+    const sh = pick(rng, flat);
+    const part = pick(rng, ['faces', 'edges', 'vertices'] as const);
+    return {
+      key: `solid-count-${sh.name}-${part}`,
+      prompt: `How many ${part} does a ${sh.name} have?`,
+      input: 'number',
+      answer: String(sh[part]),
+      hint: 'Faces are the flat sides. Edges are where two faces meet. Vertices are the corners.',
+      explain: `A ${sh.name} has ${sh.faces} faces, ${sh.edges} edges and ${sh.vertices} vertices.`,
+    };
+  }
+  if (kind === 'which') {
+    const n = pick(rng, [4, 5, 6] as const);
+    const fits = flat.filter((x) => x.faces === n);
+    const ans = pick(rng, fits);
+    const others = flat.filter((x) => x.faces !== n).map((x) => x.name);
+    return {
+      key: `solid-which-${n}-${ans.name}`,
+      prompt: `Which 3-D shape has ${n} faces?`,
+      input: 'choice',
+      choices: options(rng, ans.name, others, 3),
+      answer: ans.name,
+      hint: 'Count the flat faces: top, bottom and all the sides.',
+      explain: `A ${ans.name} has ${n} faces.`,
+    };
+  }
+  const sh = pick(rng, SOLIDS);
+  return {
+    key: `solid-roll-${sh.name}`,
+    prompt: `Can a ${sh.name} roll?`,
+    input: 'choice',
+    choices: ['yes', 'no'],
+    answer: sh.rolls ? 'yes' : 'no',
+    hint: 'A shape can roll if it has a curved surface.',
+    explain: sh.rolls ? `A ${sh.name} has a curved surface, so it can roll.` : `A ${sh.name} has only flat faces, so it slides instead of rolling.`,
+  };
 }
 
 // ---------- Statistics ----------
@@ -830,7 +981,42 @@ const GRAPHS = [
   { title: 'Goals scored', labels: ['Game 1', 'Game 2', 'Game 3', 'Game 4'] },
 ];
 
+const PICTO = [
+  { title: 'Apples picked', labels: ['Ana', 'Ben', 'Cole', 'Dev'], icon: '🍎' },
+  { title: 'Books read', labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'], icon: '📚' },
+  { title: 'Goals scored', labels: ['Flames', 'Oilers', 'Jets', 'Canucks'], icon: '🥅' },
+  { title: 'Snowy days', labels: ['Nov', 'Dec', 'Jan', 'Feb'], icon: '❄️' },
+  { title: 'Birds we saw', labels: ['Mon', 'Tue', 'Wed', 'Thu'], icon: '🐦' },
+];
+
+/** Pictographs and bar graphs where one symbol or one grid line stands for more than 1. */
+function scaledGraph(level: number, rng: Rng): Question {
+  const pic = level === 4;
+  const step = pic ? pick(rng, [2, 5, 10]) : pick(rng, [2, 5, 10]);
+  const g = pic ? pick(rng, PICTO) : pick(rng, GRAPHS);
+  const counts = g.labels.map(() => int(rng, 1, pic ? 6 : 8));
+  const values = counts.map((c) => c * step);
+  const visual = pic
+    ? { kind: 'pictograph' as const, title: g.title, labels: g.labels, counts, icon: (g as (typeof PICTO)[number]).icon, each: step }
+    : { kind: 'bar-graph' as const, title: g.title, labels: g.labels, values, step };
+  const i = int(rng, 0, 3);
+  const j = (i + 1 + int(rng, 0, 2)) % 4;
+  const kind = pick(rng, ['read', 'read', 'more', 'total'] as const);
+  const base = `stat-${pic ? 'pic' : 'scaled'}-${g.title}-${step}-${counts.join('.')}`;
+  const read = pic ? `Each symbol stands for ${step}.` : `Each line on the side counts by ${step}.`;
+  if (kind === 'read' || counts[i] === counts[j]) {
+    return { key: `${base}-r${i}`, prompt: `How many for ${g.labels[i]}?`, visual, input: 'number', answer: String(values[i]), hint: `${read} Count by ${step}s.`, explain: `${g.labels[i]} has ${counts[i]} × ${step} = ${values[i]}.` };
+  }
+  if (kind === 'more') {
+    const [a, b] = values[i] >= values[j] ? [i, j] : [j, i];
+    return { key: `${base}-m${a}${b}`, prompt: `How many more for ${g.labels[a]} than ${g.labels[b]}?`, visual, input: 'number', answer: String(values[a] - values[b]), hint: `${read} Find both amounts, then subtract.`, explain: `${values[a]} − ${values[b]} = ${values[a] - values[b]}.` };
+  }
+  const total = values.reduce((x, y) => x + y, 0);
+  return { key: `${base}-t`, prompt: 'How many altogether?', visual, input: 'number', answer: String(total), hint: `${read} Find each amount, then add.`, explain: `${values.join(' + ')} = ${total}.` };
+}
+
 function statistics(level: number, rng: Rng): Question {
+  if (level >= 4) return scaledGraph(level, rng);
   const g = pick(rng, GRAPHS);
   const values = g.labels.map(() => int(rng, 1, level === 0 ? 8 : 12));
   const visual = { kind: 'bar-graph' as const, title: g.title, labels: g.labels, values };
@@ -934,7 +1120,7 @@ export const MATH_SKILLS: Skill[] = [
   {
     id: 'math.money', subject: S, name: 'Money', icon: '🪙', blurb: 'Count Canadian coins and bills',
     strand: 'Number: Place Value', outcome: 'Students interpret place value within 100 000 (money values).',
-    levels: ['Nickels and dimes', 'Add quarters', 'Loonies, toonies and bills', 'Making change'], generate: money,
+    levels: ['Nickels and dimes', 'Add quarters', 'Loonies, toonies and bills', 'Making change', 'Dollars and cents'], generate: money,
   },
   {
     id: 'math.add-sub', subject: S, name: 'Add and Subtract', icon: '➕', blurb: 'Within 1000, with regrouping',
@@ -959,7 +1145,7 @@ export const MATH_SKILLS: Skill[] = [
   {
     id: 'math.fractions', subject: S, name: 'Fractions', icon: '🍕', blurb: 'Parts of one whole',
     strand: 'Number: Fractions', outcome: 'Students interpret fractions in relation to one whole.',
-    levels: ['Halves, thirds, fourths', 'Up to twelfths', 'Compare: same bottom', 'Compare: same top', 'Number line', 'Close to 0, 1/2 or 1'], generate: fractions,
+    levels: ['Halves, thirds, fourths', 'Up to twelfths', 'Compare: same bottom', 'Compare: same top', 'Number line', 'Close to 0, 1/2 or 1', 'Fraction of a group'], generate: fractions,
   },
   {
     id: 'math.equations', subject: S, name: 'Equations', icon: '🟰', blurb: 'Find the missing number',
@@ -974,7 +1160,7 @@ export const MATH_SKILLS: Skill[] = [
   {
     id: 'math.time', subject: S, name: 'Telling Time', icon: '⏰', blurb: 'Clocks, a.m., p.m. and 24-hour time',
     strand: 'Time', outcome: 'Students tell time using clocks.',
-    levels: ['Hour and half hour', 'Five minutes', 'To the minute', 'Minutes, a.m. and p.m.', '24-hour clock'], generate: time,
+    levels: ['Hour and half hour', 'Five minutes', 'To the minute', 'Minutes, a.m. and p.m.', '24-hour clock', 'How long? (elapsed time)'], generate: time,
   },
   {
     id: 'math.length', subject: S, name: 'Length and Perimeter', icon: '📏', blurb: 'mm, cm, m and around the edge',
@@ -982,14 +1168,14 @@ export const MATH_SKILLS: Skill[] = [
     levels: ['Choose a unit', 'Convert units', 'Perimeter', 'Missing side'], generate: length,
   },
   {
-    id: 'math.geometry', subject: S, name: 'Shapes and Angles', icon: '🔷', blurb: 'Polygons, right angles, flips and turns',
+    id: 'math.geometry', subject: S, name: 'Shapes and Angles', icon: '🔷', blurb: 'Polygons, angles, flips and 3-D shapes',
     strand: 'Geometry and Measurement: Angles', outcome: 'Students relate geometric properties to shape. Students interpret angles.',
-    levels: ['Name polygons', 'Regular or irregular', 'Parallel, perpendicular, right angles', 'Slides, turns and flips'], generate: geometry,
+    levels: ['Name polygons', 'Regular or irregular', 'Parallel, perpendicular, right angles', 'Slides, turns and flips', '3-D shapes'], generate: geometry,
   },
   {
-    id: 'math.statistics', subject: S, name: 'Graphs', icon: '📊', blurb: 'Read bar graphs',
+    id: 'math.statistics', subject: S, name: 'Graphs', icon: '📊', blurb: 'Bar graphs and pictographs',
     strand: 'Statistics', outcome: 'Students interpret and explain representations of data.',
-    levels: ['Read a bar', 'Most', 'How many more', 'Total'], generate: statistics,
+    levels: ['Read a bar', 'Most', 'How many more', 'Total', 'Pictographs', 'Bar graphs that count by 2, 5 or 10'], generate: statistics,
   },
   {
     id: 'math.financial', subject: S, name: 'Money Smarts', icon: '🐷', blurb: 'Needs, wants and saving',

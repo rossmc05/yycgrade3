@@ -7,6 +7,7 @@ import { Home } from './screens/Home';
 import { World } from './screens/World';
 import { WorldMap } from './screens/WorldMap';
 import { Zone } from './screens/Zone';
+import { GearShop, PalBook } from './screens/Collection';
 import { Parent } from './screens/Parent';
 import { Play } from './screens/Play';
 import { Title } from './screens/Title';
@@ -38,6 +39,8 @@ export function App() {
   if (page === 'avatar') return <AvatarStudio />;
   if (page === 'world') return <World />;
   if (page === 'arcade') return <Arcade />;
+  if (page === 'book') return <PalBook />;
+  if (page === 'gear') return <GearShop />;
   if (page === 'game' && a) return <GameScreen key={a} id={a} />;
   if (page === 'zone' && a) return <Zone key={a} subjectId={a} />;
   if (page === 'menu' || data.settings.battle === false) return <Home />;

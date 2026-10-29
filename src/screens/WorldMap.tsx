@@ -11,6 +11,7 @@ import { guideLine, isOpen, neighbour, placeOf, PLACES, quests, route, type Plac
 import { ClassicMapArt, H, MapArt3D, MapClouds, W } from '../map/MapArt';
 import { Icon, Sprite } from '../art/sprite';
 import { go } from '../router';
+import { palById } from '../collect/pals';
 import { findSubject } from '../subjects';
 
 const SPEED = 0.55; // map units per millisecond
@@ -20,6 +21,8 @@ const VILLAGE_SPOTS = [
   { id: 'avatar', label: 'Avatar Studio', icon: '🎨', x: 575, y: 280, to: () => go('avatar') },
   { id: 'rewards', label: 'Trophy Room', icon: '🏆', x: 420, y: 385, to: () => go('rewards') },
   { id: 'world', label: 'My World', icon: '🏡', x: 585, y: 385, to: () => go('world') },
+  { id: 'book', label: 'Pal Book', icon: '📖', x: 655, y: 335, to: () => go('book') },
+  { id: 'gear', label: 'Gear Shop', icon: '⚒️', x: 500, y: 430, to: () => go('gear') },
 ];
 
 function loadAt(profileId: string): PlaceId {
@@ -162,6 +165,7 @@ export function WorldMap() {
           <div className="hero-flip" style={{ transform: `scaleX(${face})` }}>
             <AvatarArt look={lookOf(profile)} size={64} background={false} />
           </div>
+          {!classic && palById(profile.buddy) && <span className="map-buddy"><Sprite e={palById(profile.buddy)!.e} size="100%" /></span>}
         </div>
         {cardPlace && <PlaceCard place={cardPlace} open={open[cardPlace.id]} onEnter={() => enter(cardPlace.id)} onClose={() => setCard(null)} />}
       </div>
@@ -179,7 +183,7 @@ function PlaceCard({ place, open, onEnter, onClose }: { place: Place; open: bool
     return (
       <section className="card place-card" role="dialog" aria-label={place.name}>
         <strong>🏘️ Home Village</strong>
-        <p>Visit the Arcade, the Avatar Studio, the Trophy Room or My World. Tap a building!</p>
+        <p>Visit the Arcade, the Avatar Studio, the Trophy Room, My World, the Pal Book or the Gear Shop. Tap a building!</p>
         <button className="btn ghost" onClick={onClose}>OK</button>
       </section>
     );

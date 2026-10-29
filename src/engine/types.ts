@@ -12,7 +12,8 @@ export type Visual =
   | { kind: 'fraction-bar'; parts: number; shaded: number }
   | { kind: 'fraction-compare'; a: [number, number]; b: [number, number] }
   | { kind: 'coins'; coins: string[] }
-  | { kind: 'bar-graph'; title: string; labels: string[]; values: number[] }
+  | { kind: 'bar-graph'; title: string; labels: string[]; values: number[]; /** Grid lines count by this (default 1). */ step?: number }
+  | { kind: 'pictograph'; title: string; labels: string[]; counts: number[]; icon: string; each: number }
   | { kind: 'polygon'; sides: number; labels?: string[]; regular: boolean; rightAngles?: boolean }
   | { kind: 'balance'; left: string; right: string }
   | { kind: 'number-line'; denominator: number; mark: number }
@@ -121,6 +122,13 @@ export interface Profile {
   games?: Record<string, { best: number; plays: number }>;
   /** Built avatar; older saves only have the emoji `avatar`. */
   look?: Look;
+  /** Pals found, with how many times each was found. */
+  pals?: Record<string, number>;
+  /** The pal that follows the hero. */
+  buddy?: string;
+  /** Gear bought, and what is worn in each slot. */
+  gear?: string[];
+  gearOn?: { weapon?: string; charm?: string };
 }
 
 export interface Settings {

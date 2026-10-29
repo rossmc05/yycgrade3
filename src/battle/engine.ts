@@ -2,6 +2,8 @@
 // last monster falls on the last question when he keeps answering, and a miss never
 // ends the game: a monster only heals a little, or runs away at the end of its turn.
 
+import type { Perks } from '../collect/gear';
+
 export type Outcome = 'first' | 'block' | 'miss';
 export type HitKind = 'hit' | 'crit' | 'special' | 'block' | 'miss' | 'flee';
 
@@ -65,7 +67,8 @@ function share(b: Battle, questionsLeft: number): number {
   return Math.max(1, Math.round(questionsLeft / foesLeft));
 }
 
-export function applyTurn(b: Battle, outcome: Outcome, seconds: number, questionsLeft: number): { battle: Battle; event: TurnEvent } {
+export function applyTurn(b: Battle, outcome: Outcome, seconds: number, questionsLeft: number, perks: Perks = {}): { battle: Battle; event: TurnEvent } {
+  const boost = perks.damage ?? 1;
   const foes = b.foes.map((f) => ({ ...f }));
   const foe = foes[b.current];
   const turns = share(b, questionsLeft);
@@ -82,16 +85,16 @@ export function applyTurn(b: Battle, outcome: Outcome, seconds: number, question
     combo += 1;
     if (combo >= COMBO_FOR_SPECIAL) {
       kind = 'special';
-      damage = Math.ceil(base * 2);
+      damage = Math.ceil(base * 2 * boost);
       combo = 0;
       specials += 1;
-    } else if (seconds < CRIT_SECONDS) {
+    } else if (seconds < (perks.critSeconds ?? CRIT_SECONDS)) {
       kind = 'crit';
-      damage = Math.ceil(base * 1.5);
+      damage = Math.ceil(base * 1.5 * boost);
       crits += 1;
     } else {
       kind = 'hit';
-      damage = base;
+      damage = Math.ceil(base * boost);
     }
   } else if (outcome === 'block') {
     combo = 0;
@@ -100,7 +103,7 @@ export function applyTurn(b: Battle, outcome: Outcome, seconds: number, question
   } else {
     combo = 0;
     kind = last ? 'flee' : 'miss';
-    heal = last ? 0 : Math.min(foe.maxHp - foe.hp, Math.ceil(foe.maxHp * 0.08));
+    heal = last || perks.noHeal ? 0 : Math.min(foe.maxHp - foe.hp, Math.ceil(foe.maxHp * 0.08));
   }
 
   // The boss must last until the final question, so the session never runs out of monster.
@@ -111,7 +114,7 @@ export function applyTurn(b: Battle, outcome: Outcome, seconds: number, question
   if (foe.hp === 0) {
     foe.end = 'defeated';
     finished = true;
-    coins = foe.boss ? 15 : 8;
+    coins = (foe.boss ? 15 : 8) + (perks.coins ?? 0);
   } else if (kind === 'flee') {
     foe.end = 'fled';
     finished = true;

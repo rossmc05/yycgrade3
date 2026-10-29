@@ -1,4 +1,5 @@
 import type { ReactElement } from 'react';
+import { Sprite } from '../art/sprite';
 import type { Visual } from '../engine/types';
 
 const INK = 'var(--ink)';
@@ -25,7 +26,9 @@ export function VisualView({ v }: { v: Visual }) {
     case 'coins':
       return <Coins coins={v.coins} />;
     case 'bar-graph':
-      return <BarGraph title={v.title} labels={v.labels} values={v.values} />;
+      return <BarGraph title={v.title} labels={v.labels} values={v.values} step={v.step} />;
+    case 'pictograph':
+      return <Pictograph title={v.title} labels={v.labels} counts={v.counts} icon={v.icon} each={v.each} />;
     case 'polygon':
       return <Polygon sides={v.sides} labels={v.labels} regular={v.regular} />;
     case 'balance':
@@ -149,8 +152,28 @@ function Coins({ coins }: { coins: string[] }) {
   );
 }
 
-function BarGraph({ title, labels, values }: { title: string; labels: string[]; values: number[] }) {
-  const max = Math.max(12, ...values);
+function Pictograph({ title, labels, counts, icon, each }: { title: string; labels: string[]; counts: number[]; icon: string; each: number }) {
+  return (
+    <div className="pictograph" role="img" aria-label={`Pictograph: ${title}. Each ${icon} means ${each}.`}>
+      <strong>{title}</strong>
+      <table>
+        <tbody>
+          {labels.map((l, i) => (
+            <tr key={l}>
+              <th>{l}</th>
+              <td>{Array.from({ length: counts[i] }, (_, k) => <Sprite key={k} e={icon} size="1.6em" />)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p className="picto-key">Key: <Sprite e={icon} size="1.4em" /> = {each}</p>
+    </div>
+  );
+}
+
+function BarGraph({ title, labels, values, step = 1 }: { title: string; labels: string[]; values: number[]; step?: number }) {
+  const lines = Math.max(12, ...values.map((v) => Math.ceil(v / step)));
+  const max = lines * step;
   const h = 200;
   const left = 34;
   const bw = 52;
@@ -162,12 +185,12 @@ function BarGraph({ title, labels, values }: { title: string; labels: string[]; 
       <text x={width / 2} y="14" textAnchor="middle" fontSize="15" fontWeight="700" fill={INK}>
         {title}
       </text>
-      {Array.from({ length: max + 1 }, (_, i) => (
-        <g key={i}>
-          <line x1={left} x2={width - 6} y1={y(i)} y2={y(i)} stroke="var(--grid)" strokeWidth="1" />
-          {i % 2 === 0 && (
-            <text x={left - 6} y={y(i) + 4} textAnchor="end" fontSize="12" fill={INK}>
-              {i}
+      {Array.from({ length: lines + 1 }, (_, k) => (
+        <g key={k}>
+          <line x1={left} x2={width - 6} y1={y(k * step)} y2={y(k * step)} stroke="var(--grid)" strokeWidth="1" />
+          {(step > 1 || k % 2 === 0) && (
+            <text x={left - 6} y={y(k * step) + 4} textAnchor="end" fontSize={step > 1 ? 10 : 12} fill={INK}>
+              {k * step}
             </text>
           )}
         </g>

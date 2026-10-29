@@ -31,7 +31,7 @@ const WORDS: Partial<Record<StageEvent['kind'], string>> = {
   attack: 'Ouch!',
 };
 
-export function BattleStage({ zone, battle, event, look }: { zone: Zone; battle: Battle; event: StageEvent | null; look: Look }) {
+export function BattleStage({ zone, battle, event, look, buddy, weapon }: { zone: Zone; battle: Battle; event: StageEvent | null; look: Look; buddy?: string; weapon?: string }) {
   const subject = zone.subject as SubjectId;
   // Keep showing a beaten monster for a moment before the next one walks in.
   const [shown, setShown] = useState(battle.current);
@@ -79,7 +79,7 @@ export function BattleStage({ zone, battle, event, look }: { zone: Zone; battle:
   const heroAttacks = kind === 'hit' || kind === 'crit' || kind === 'special' || kind === 'block';
   const monsterAttacks = kind === 'attack' || kind === 'miss';
   const hpPct = foe ? (foe.hp / foe.maxHp) * 100 : 0;
-  const projectile = kind === 'special' ? zone.attack.special : kind === 'block' ? '🛡️' : zone.attack.hit;
+  const projectile = kind === 'special' ? zone.attack.special : kind === 'block' ? '🛡️' : !classic && weapon && weapon !== '🪵' ? weapon : zone.attack.hit;
 
   return (
     <section ref={stage} className={`battle-stage zone-${subject} ${kind === 'special' && classic ? 'quake' : ''}`} aria-label={`${zone.name} battle`}>
@@ -106,6 +106,7 @@ export function BattleStage({ zone, battle, event, look }: { zone: Zone; battle:
       <div className="fighters">
         <div key={`hero-${event?.id ?? 0}`} className={`hero ${heroAttacks ? 'lunge' : ''} ${monsterAttacks ? 'shake' : ''}`}>
           <AvatarArt look={look} size={150} background={false} />
+          {buddy && !classic && <span className={`battle-buddy ${kind === 'special' ? 'cheer' : ''}`}><Sprite e={buddy} size="100%" /></span>}
           {kind === 'block' && <span className="shield">{classic ? '🛡️' : <Sprite e="🛡️" size="1em" />}</span>}
         </div>
         {heroAttacks && <span key={`p-${event!.id}`} className={`projectile ${kind}`}>{classic ? projectile : <Sprite e={projectile} size="1em" />}</span>}

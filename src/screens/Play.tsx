@@ -16,6 +16,9 @@ import { Celebrate } from '../battle/fx';
 import { useMusic, type Theme } from '../battle/music';
 import { MonsterArt } from '../battle/Art';
 import { applyTurn, startBattle, type Battle } from '../battle/engine';
+import { gearById, perksOf } from '../collect/gear';
+import { DUPLICATE_COINS, palById, rollPal, type Pal } from '../collect/pals';
+import { PalReveal } from '../collect/PalReveal';
 import { setSound, sfx } from '../battle/sfx';
 import { dailySubject, zoneFor } from '../battle/zones';
 
@@ -65,6 +68,7 @@ function Session({ subjectId, target, again }: { subjectId: string; target: stri
   const [levelUps, setLevelUps] = useState<string[]>([]);
   const [mastered, setMastered] = useState<string[]>([]);
   const [badges, setBadges] = useState<BadgeDef[]>([]);
+  const [found, setFound] = useState<{ pal: Pal; isNew: boolean } | null>(null);
   const [finished, setFinished] = useState(false);
   const [showLearn, setShowLearn] = useState(() => !!single?.learn && !profile?.skills[single.id]?.history.length);
 
@@ -87,7 +91,7 @@ function Session({ subjectId, target, again }: { subjectId: string; target: stri
       return;
     }
     const outcome = r === 'right1' ? 'first' : r === 'right2' ? 'block' : 'miss';
-    const t = applyTurn(battle, outcome, seconds, plan.length - index);
+    const t = applyTurn(battle, outcome, seconds, plan.length - index, perksOf(profile?.gearOn));
     setBattle(t.battle);
     setStageEvent({ id: eventId.current, ...t.event, foe: battle.current });
   };
@@ -127,6 +131,14 @@ function Session({ subjectId, target, again }: { subjectId: string; target: stri
     if (index + 1 >= plan.length) {
       // Coins dropped by monsters in battle mode.
       if (zone) nextProfile = { ...nextProfile, coins: nextProfile.coins + battle.coins };
+      // A pal turns up after any battle where a monster was beaten.
+      const beat = battle.foes.filter((f) => f.end === 'defeated' || f.hp === 0);
+      const pal = zone && beat.length ? rollPal(zone.subject, beat.some((f) => f.boss), Math.random) : undefined;
+      if (pal) {
+        const had = nextProfile.pals?.[pal.id] ?? 0;
+        nextProfile = { ...nextProfile, pals: { ...nextProfile.pals, [pal.id]: had + 1 }, coins: nextProfile.coins + (had ? DUPLICATE_COINS : 0) };
+        setFound({ pal, isNew: !had });
+      }
       const checked = checkBadges(closeReviews(nextProfile, all, wasDue, now), ALL_SKILLS, now);
       nextProfile = checked.profile;
       setBadges(checked.won);
@@ -179,6 +191,7 @@ function Session({ subjectId, target, again }: { subjectId: string; target: stri
           </div>
           <h1>{beaten.length === battle.foes.length ? 'Victory!' : beaten.length ? 'Battle won!' : 'They got away!'}</h1>
           <p className="muted">{zone.name}</p>
+          {found && <PalReveal pal={found.pal} isNew={found.isNew} />}
           <div className="beaten-row">
             {battle.foes.map((f, i) => (
               <div key={i} className={`beaten ${f.end}`}>
@@ -262,7 +275,7 @@ function Session({ subjectId, target, again }: { subjectId: string; target: stri
       </div>
       {zone && (
         <>
-          <BattleStage zone={zone} battle={battle} event={stageEvent} look={lookOf(profile)} />
+          <BattleStage zone={zone} battle={battle} event={stageEvent} look={lookOf(profile)} buddy={palById(profile.buddy)?.e} weapon={gearById(profile.gearOn?.weapon)?.e} />
           <button className="sound-toggle" onClick={() => setData((d) => ({ ...d, settings: { ...d.settings, sound: !soundOn } }))} aria-label={soundOn ? 'Turn sound off' : 'Turn sound on'}>
             {soundOn ? '🔊' : '🔇'}
           </button>
