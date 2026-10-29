@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
+import { Sprite } from '../art/sprite';
+import { sfx } from '../battle/sfx';
 import { VisualView } from '../components/Visuals';
 import { newSkillState, status } from '../engine/adaptive';
 import { int, pick, shuffle } from '../engine/random';
@@ -6,6 +8,13 @@ import { speak } from '../engine/speech';
 import { useStore } from '../engine/store';
 import type { Question } from '../engine/types';
 import { Keypad, normalize } from '../screens/Play';
+import { BattleStage, type StageEvent } from '../battle/BattleStage';
+import { COMBO_FOR_SPECIAL, type Battle } from '../battle/engine';
+import { ZONES } from '../battle/zones';
+import { lookOf } from '../avatar/catalog';
+import { palById } from '../collect/pals';
+import { gearById } from '../collect/gear';
+import type { SubjectId } from '../engine/types';
 import { MATH_SKILLS } from '../subjects/math/skills';
 import { GameShell, type GameProps } from './GameShell';
 
@@ -21,7 +30,13 @@ function fact(op: Op): { text: string; answer: number } {
   return op === '×' ? { text: `${a} × ${b}`, answer: a * b } : { text: `${a * b} ÷ ${a}`, answer: b };
 }
 
-function FactRaceRound({ end, op }: GameProps & { op: Op }) {
+function FactRaceRound({ end, fx, op }: GameProps & { op: Op }) {
+  const { profile, data } = useStore();
+  const classic = !!data.settings.classicLook;
+  const ghost = profile?.games?.[`fact-race-${op}`]?.best ?? 0;
+  const finish = Math.max(26, ghost + 4);
+  const [streak, setStreak] = useState(0);
+  const [turbo, setTurbo] = useState(0);
   const [left, setLeft] = useState(60);
   const [q, setQ] = useState(() => fact(op));
   const [value, setValue] = useState('');
@@ -46,9 +61,15 @@ function FactRaceRound({ end, op }: GameProps & { op: Op }) {
     if (Number(v) === q.answer) {
       setScore((s) => s + 1);
       setFlash('ok');
+      const st = streak + 1;
+      setStreak(st);
+      const x = 0.06 + Math.min(score + 1, finish) / finish * 0.86;
+      if (st % 5 === 0) { setTurbo(st); fx('special', x, 0.32); sfx.special(); } else { fx('hit', x, 0.32, '#facc15'); sfx.coin(); }
     } else {
       setMisses((m) => m + 1);
       setFlash('bad');
+      setStreak(0);
+      sfx.ouch();
     }
     setTimeout(() => setFlash(''), 200);
     setValue('');
@@ -65,12 +86,22 @@ function FactRaceRound({ end, op }: GameProps & { op: Op }) {
     return () => window.removeEventListener('keydown', on);
   });
 
+  const pos = (n: number) => `${4 + (Math.min(n, finish) / finish) * 86}%`;
   return (
     <div className="center">
       <div className="race-bar">
         <span className="timer" style={{ ['--pct' as string]: `${(left / 60) * 100}%` }}>⏱️ {Math.max(left, 0)}s</span>
+        {!classic && streak >= 2 && <span className="streak">🔥 {streak} in a row</span>}
         <span className="race-score">⚡ {score}</span>
       </div>
+      {!classic && (
+        <div className="race-track" aria-hidden="true">
+          <div className="finish-line" />
+          {ghost > 0 && <div className="lane"><span className="racer ghost" style={{ left: pos((ghost * (60 - left)) / 60) }}><Sprite e="🏎️" size={56} /></span><small className="lane-tag">Your best: {ghost}</small></div>}
+          <div className="lane"><span key={turbo} className={`racer me ${turbo && turbo === streak ? 'turbo' : ''}`} style={{ left: pos(score) }}><Sprite e="🏎️" size={64} /></span></div>
+          {turbo > 0 && turbo === streak && <div key={`t${turbo}`} className="turbo-word">TURBO!</div>}
+        </div>
+      )}
       <h2 className={`fact ${flash}`}>{q.text} = <span className="answer-value">{value || '?'}</span></h2>
       <Keypad value={value} setValue={setValue} onEnter={() => submit()} />
     </div>
@@ -96,22 +127,30 @@ export function FactRace() {
 
 // ---------- Boss Battle: answer questions to defeat the monster ----------
 
-const BOSSES = [
-  { name: 'Gloop the Slime', icon: '🟢', hp: 8 },
-  { name: 'Count Fangula', icon: '🧛', hp: 10 },
-  { name: 'Robo-Rex', icon: '🤖', hp: 12 },
-  { name: 'The Number Dragon', icon: '🐲', hp: 14 },
+// Each tier is a zone's boss, fought with math.
+const BOSSES: { zone: SubjectId; hp: number }[] = [
+  { zone: 'math', hp: 8 },
+  { zone: 'spelling', hp: 10 },
+  { zone: 'grammar', hp: 12 },
+  { zone: 'science', hp: 14 },
 ];
 
 function BossRound({ end }: GameProps) {
   const { profile } = useStore();
   const [bossIdx] = useState(() => Math.min(BOSSES.length - 1, Math.floor((profile?.games?.['boss']?.plays ?? 0) / 2)));
-  const boss = BOSSES[bossIdx];
-  const [hp, setHp] = useState(boss.hp);
+  const tier = BOSSES[bossIdx];
+  const zone = ZONES[tier.zone]!;
+  const bossName = zone.monsters[zone.monsters.length - 1];
+  const [battle, setBattle] = useState<Battle>(() => ({
+    foes: [{ kind: zone.monsters.length - 1, name: bossName, maxHp: tier.hp, hp: tier.hp, boss: true }],
+    current: 0, combo: 0, coins: 0, crits: 0, specials: 0,
+  }));
+  const [event, setEvent] = useState<StageEvent | null>(null);
   const [hearts, setHearts] = useState(3);
-  const [hit, setHit] = useState<'' | 'boss' | 'me'>('');
   const [value, setValue] = useState('');
   const [answered, setAnswered] = useState(0);
+  const [locked, setLocked] = useState(false);
+  const eventId = useRef(0);
   // Questions come from skills he has practised, at his level, so the boss fits him.
   const pool = MATH_SKILLS.filter((s) => status(profile?.skills[s.id]) !== 'new');
   const skills = pool.length >= 2 ? pool : MATH_SKILLS.slice(4, 8);
@@ -124,46 +163,55 @@ function BossRound({ end }: GameProps) {
     return MATH_SKILLS[6].generate(0, Math.random, { spellingList: [] });
   };
   const [q, setQ] = useState<Question>(nextQ);
+  const asked = useRef(Date.now());
 
   const answer = (a: string) => {
+    if (locked) return;
     const ok = q.input === 'choice' ? a === q.answer : normalize(a) === normalize(q.answer);
     setAnswered((n) => n + 1);
+    const foe = battle.foes[0];
     if (ok) {
-      setHp((h) => h - 1);
-      setHit('boss');
-      if (hp - 1 <= 0) {
-        setTimeout(() => end(hearts * 5 + boss.hp, `You beat ${boss.name} with ${hearts} ❤️ left!`), 600);
+      // Three in a row is a special move; a fast answer is a critical hit.
+      const combo = battle.combo + 1;
+      const fast = (Date.now() - asked.current) / 1000 < 8;
+      const kind = combo >= COMBO_FOR_SPECIAL ? 'special' : fast ? 'crit' : 'hit';
+      const damage = Math.min(foe.hp, kind === 'hit' ? 1 : 2);
+      const hp = foe.hp - damage;
+      setBattle({ ...battle, combo: kind === 'special' ? 0 : combo, foes: [{ ...foe, hp, end: hp <= 0 ? 'defeated' : undefined }] });
+      setEvent({ id: ++eventId.current, kind, damage, heal: 0, finished: hp <= 0, coins: 0, foe: 0 });
+      if (hp <= 0) {
+        setLocked(true);
+        setTimeout(() => end(hearts * 5 + tier.hp, `You beat ${bossName} with ${hearts} ❤️ left!`), 1800);
         return;
       }
     } else {
+      setBattle({ ...battle, combo: 0 });
+      setEvent({ id: ++eventId.current, kind: 'attack', damage: 0, heal: 0, finished: false, coins: 0, foe: 0 });
       setHearts((h) => h - 1);
-      setHit('me');
       speak(`The answer was ${q.answer}`);
       if (hearts - 1 <= 0) {
-        setTimeout(() => end(boss.hp - hp, `${boss.name} won this time. You hit it ${boss.hp - hp} times.`), 900);
+        setLocked(true);
+        setTimeout(() => end(tier.hp - foe.hp, `${bossName} won this time. You did ${tier.hp - foe.hp} damage.`), 1400);
         return;
       }
     }
-    setTimeout(() => setHit(''), 500);
     setValue('');
     setQ(nextQ());
+    asked.current = Date.now();
   };
 
   return (
     <div className="center boss">
-      <div className="boss-top">
-        <div className={`boss-face ${hit === 'boss' ? 'ouch' : ''}`}>{boss.icon}</div>
-        <div className="boss-info">
-          <strong>{boss.name}</strong>
-          <div className="hp"><span style={{ width: `${(hp / boss.hp) * 100}%` }} /></div>
-          <span className={`hearts ${hit === 'me' ? 'ouch' : ''}`}>{'❤️'.repeat(Math.max(hearts, 0))}{'🖤'.repeat(3 - Math.max(hearts, 0))}</span>
-        </div>
+      <BattleStage zone={zone} battle={battle} event={event} look={lookOf(profile!)} buddy={palById(profile?.buddy)?.e} weapon={gearById(profile?.gearOn?.weapon)?.e} />
+      <div className="boss-hearts" aria-label={`${hearts} hearts left`}>
+        {[0, 1, 2].map((i) => <Sprite key={i} e={i < hearts ? '❤️' : '🖤'} size={34} className={i === hearts && event?.kind === 'attack' ? 'heart-lost' : ''} />)}
+        <span className="muted small">Boss {bossIdx + 1} of {BOSSES.length} · answered {answered}</span>
       </div>
       <h2 className="prompt">{q.prompt}</h2>
       {q.visual && <div className="visual-wrap"><VisualView v={q.visual} /></div>}
       {q.input === 'choice' ? (
         <div className="choices">
-          {(q.choices ?? []).map((c) => <button key={c} className="choice" onClick={() => answer(c)}>{c}</button>)}
+          {(q.choices ?? []).map((c) => <button key={c} className="choice" disabled={locked} onClick={() => answer(c)}>{c}</button>)}
         </div>
       ) : (
         <>
@@ -171,14 +219,13 @@ function BossRound({ end }: GameProps) {
           <Keypad value={value} setValue={setValue} onEnter={() => value && answer(value)} />
         </>
       )}
-      <p className="muted small">Questions answered: {answered}</p>
     </div>
   );
 }
 
 export function BossBattle() {
   return (
-    <GameShell gameId="boss" subject="math" title="Boss Battle" icon="⚔️" scoreLabel="points" rules={['Every right answer hits the boss.', 'Every wrong answer costs you a heart. You have 3.', 'Questions come from the math skills you have practised.', 'Beat a boss twice to meet a tougher one!']}>
+    <GameShell gameId="boss" subject="math" title="Boss Battle" icon="⚔️" scoreLabel="points" theme="boss" rules={['Every right answer hits the boss. Fast answers are critical hits!', 'Three in a row unleashes a special move.', 'Every wrong answer costs you a heart. You have 3.', 'Play twice to meet a tougher boss!']}>
       {(p) => <BossRound {...p} />}
     </GameShell>
   );
@@ -197,7 +244,12 @@ const COINS: { id: string; value: number }[] = [
 
 const money = (c: number) => (c >= 100 ? `$${(c / 100).toFixed(2)}` : `${c}¢`);
 
-function StoreRound({ end }: GameProps) {
+const CUSTOMERS = ['🧒', '👵', '👨‍🍳', '🧑‍🚒', '👮', '🧑‍🎤', '🤠', '🧑‍🚀'];
+
+function StoreRound({ end, fx }: GameProps) {
+  const { data } = useStore();
+  const classic = !!data.settings.classicLook;
+  const [faces] = useState(() => shuffle(Math.random, CUSTOMERS));
   const [round, setRound] = useState(0);
   const [score, setScore] = useState(0);
   const [paid, setPaid] = useState<string[]>([]);
@@ -209,12 +261,15 @@ function StoreRound({ end }: GameProps) {
   const total = paid.reduce((t, c) => t + COINS.find((x) => x.id === c)!.value, 0);
   const showTotal = round < 3;
 
-  const add = (id: string) => setPaid((p) => [...p, id]);
+  const add = (id: string) => { sfx.coin(); setPaid((p) => [...p, id]); };
   const pay = () => {
     if (total === item.price) {
       setScore((s) => s + 1);
       setMsg(`✅ Perfect! ${money(item.price)} exactly.`);
+      fx('coins', 0.5, 0.3);
+      sfx.fanfare();
     } else {
+      sfx.ouch();
       setMsg(total > item.price ? `Too much! You gave ${money(total)}. It costs ${money(item.price)}.` : `Not enough. You gave ${money(total)}. It costs ${money(item.price)}.`);
     }
     setTimeout(() => {
@@ -228,7 +283,15 @@ function StoreRound({ end }: GameProps) {
   return (
     <div className="center store">
       <p className="muted">Customer {round + 1} of {ROUNDS}</p>
-      <div className="store-item"><span className="big-emoji">{item.icon}</span><div><strong>{item.name}</strong><div className="price-tag">{money(item.price)}</div></div></div>
+      {classic ? (
+        <div className="store-item"><span className="big-emoji">{item.icon}</span><div><strong>{item.name}</strong><div className="price-tag">{money(item.price)}</div></div></div>
+      ) : (
+        <div key={round} className="store-counter">
+          <span className="customer"><Sprite e={faces[round % faces.length]} size={84} /></span>
+          <span className="speech-bubble">I'd like the {item.name.toLowerCase()}, please!</span>
+          <span className="store-goods"><Sprite e={item.icon} size={92} /><span className="price-tag">{money(item.price)}</span></span>
+        </div>
+      )}
       <p>Tap coins to pay exactly {money(item.price)}.</p>
       <div className="visual-wrap">{paid.length ? <VisualView v={{ kind: 'coins', coins: paid }} /> : <span className="muted">Your hand is empty</span>}</div>
       {showTotal && <p className="score">You have given: {money(total)}</p>}

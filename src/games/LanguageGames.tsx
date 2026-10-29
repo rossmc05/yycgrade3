@@ -1,8 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
+import { Sprite } from '../art/sprite';
+import { FxLayer, type FxHandle } from '../battle/fx';
+import { sfx } from '../battle/sfx';
 import { pick, shuffle } from '../engine/random';
 import { speak } from '../engine/speech';
 import { useStore } from '../engine/store';
 import { LetterKeys, normalize } from '../screens/Play';
+import { AvatarArt } from '../avatar/AvatarArt';
+import { lookOf } from '../avatar/catalog';
 import { parseTagged } from '../subjects/grammar/skills';
 import { GRADE3_WORDS } from '../subjects/spelling/skills';
 import { LESSONS } from '../subjects/typing/lessons';
@@ -15,8 +20,31 @@ moon cake milk game play team fast slow cold warm hill sled snack apple green bl
 
 interface Drop { id: number; word: string; x: number; y: number; speed: number }
 
+/** Calgary's skyline, with the Calgary Tower, along the bottom of the sky. */
+function Skyline() {
+  const blocks = [[0, 40, 46], [44, 60, 30], [100, 34, 64], [130, 50, 40], [200, 40, 80], [236, 56, 54], [300, 30, 96], [326, 46, 60], [380, 60, 36], [440, 36, 70], [470, 54, 50], [530, 40, 84], [566, 34, 44]];
+  return (
+    <svg className="skyline" viewBox="0 0 600 110" preserveAspectRatio="none" aria-hidden="true">
+      {blocks.map(([x, w, h], i) => (
+        <g key={i}>
+          <rect x={x} y={110 - h} width={w} height={h} fill={i % 2 ? '#1e293b' : '#334155'} />
+          {Array.from({ length: Math.floor(h / 14) }, (_, r) => <rect key={r} x={x + 6} y={116 - h + r * 14} width={w - 12} height="4" fill="#fde68a" opacity={(i + r) % 3 ? 0.55 : 0.15} />)}
+        </g>
+      ))}
+      <path d="M268 110 L272 30 L262 26 L262 16 L290 16 L290 26 L280 30 L284 110Z" fill="#475569" />
+      <rect x="258" y="10" width="36" height="8" rx="3" fill="#dc2626" />
+      <rect x="274" y="0" width="4" height="10" fill="#94a3b8" />
+    </svg>
+  );
+}
+
 function FallingRound({ end }: GameProps) {
-  const { profile } = useStore();
+  const { profile, data } = useStore();
+  const classic = !!data.settings.classicLook;
+  const fx = useRef<FxHandle>(null);
+  const sky = useRef<HTMLDivElement>(null);
+  const [zap, setZap] = useState<{ id: number; x: number; y: number } | null>(null);
+  const [wave, setWave] = useState(1);
   // Only use letters he has learned in Type Rocket so far.
   const unlocked = LESSONS.filter((_, i) => i === 0 || (profile?.typing?.[LESSONS[i - 1].id]?.stars ?? 0) >= 1);
   const keys = unlocked[unlocked.length - 1].keys || 'abcdefghijklmnopqrstuvwxyz';
@@ -35,9 +63,15 @@ function FallingRound({ end }: GameProps) {
       tick.current++;
       setDrops((ds) => {
         let lost = 0;
-        const moved = ds.map((d) => ({ ...d, y: d.y + d.speed })).filter((d) => (d.y > 100 ? (lost++, false) : true));
-        if (lost) setLives((l) => l - lost);
+        const moved = ds.map((d) => ({ ...d, y: d.y + d.speed })).filter((d) => (d.y > (classic ? 100 : 82) ? (lost++, fx.current?.burst('poof', d.x / 100, 0.85, '#f97316'), false) : true));
+        if (lost) {
+          setLives((l) => l - lost);
+          sfx.defeat();
+          const el = sky.current;
+          if (el && !classic) { el.classList.remove('shake-m'); void el.offsetWidth; el.classList.add('shake-m'); }
+        }
         const level = 1 + Math.floor(tick.current / 150);
+        setWave(level);
         if (tick.current % Math.max(25, 60 - level * 6) === 0 && moved.length < 5) {
           moved.push({ id: next.current++, word: pick(Math.random, pool), x: 8 + Math.random() * 70, y: 0, speed: 0.25 + level * 0.06 });
         }
@@ -65,6 +99,9 @@ function FallingRound({ end }: GameProps) {
         if (hit) {
           setDrops((ds) => ds.filter((d) => d.id !== hit.id));
           setScore((s) => s + 1);
+          setZap({ id: hit.id, x: hit.x, y: hit.y + 6 });
+          fx.current?.burst('crit', hit.x / 100, hit.y / 100 + 0.06);
+          sfx.crit();
           return '';
         }
         // Start over if no falling word begins with what was typed.
@@ -77,14 +114,22 @@ function FallingRound({ end }: GameProps) {
 
   return (
     <div>
-      <div className="race-bar"><span>{'❤️'.repeat(Math.max(lives, 0))}</span><span className="race-score">⚡ {score}</span></div>
-      <div className="sky-box">
+      <div className="race-bar"><span>{'❤️'.repeat(Math.max(lives, 0))}</span>{!classic && <span className="wave">Wave {wave}</span>}<span className="race-score">⚡ {score}</span></div>
+      <div ref={sky} className={`sky-box ${classic ? '' : 'meteor-sky'}`}>
         {drops.map((d) => (
-          <span key={d.id} className="drop" style={{ left: `${d.x}%`, top: `${d.y}%` }}>
-            {d.word.startsWith(typed) && typed ? <><b>{typed}</b>{d.word.slice(typed.length)}</> : d.word}
+          <span key={d.id} className={`drop ${classic ? '' : 'meteor'} ${typed && d.word.startsWith(typed) ? 'target' : ''}`} style={{ left: `${d.x}%`, top: `${d.y}%` }}>
+            {!classic && <Sprite e="☄️" size={54} className="rock" />}
+            <span className="word">{d.word.startsWith(typed) && typed ? <><b>{typed}</b>{d.word.slice(typed.length)}</> : d.word}</span>
           </span>
         ))}
-        <div className="ground">🏙️🏠🏡🏘️🏠🏡</div>
+        {classic ? <div className="ground">🏙️🏠🏡🏘️🏠🏡</div> : (
+          <>
+            <Skyline />
+            {zap && <svg key={zap.id} className="laser" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="96" x2={zap.x} y2={zap.y} /></svg>}
+            <span className="cannon"><Sprite e="🛸" size={60} /></span>
+            <FxLayer ref={fx} />
+          </>
+        )}
       </div>
       <p className="center typed-now">{typed || '…'}</p>
     </div>
@@ -101,8 +146,9 @@ export function FallingWords() {
 
 // ---------- Spelling Bee ----------
 
-function BeeRound({ end }: GameProps) {
-  const { profile } = useStore();
+function BeeRound({ end, fx }: GameProps) {
+  const { profile, data } = useStore();
+  const classic = !!data.settings.classicLook;
   const [words] = useState(() => {
     const mine = (profile?.spellingList ?? []).map((w) => w.trim().toLowerCase()).filter((w) => /^[a-z']+$/.test(w));
     const all = [...mine.map((w) => [w, ''] as [string, string]), ...shuffle(Math.random, GRADE3_WORDS)];
@@ -123,7 +169,7 @@ function BeeRound({ end }: GameProps) {
     const s2 = strikes + (ok ? 0 : 1);
     const sc = score + (ok ? 1 : 0);
     setMsg(ok ? '🐝 Correct!' : `❌ It's spelled ${w.split('').join('-')}`);
-    if (ok) setScore(sc); else setStrikes(s2);
+    if (ok) { setScore(sc); fx('crit', 0.5, 0.22); sfx.coin(); } else { setStrikes(s2); sfx.ouch(); }
     setTimeout(() => {
       setMsg('');
       setValue('');
@@ -145,6 +191,12 @@ function BeeRound({ end }: GameProps) {
   return (
     <div className="center">
       <div className="race-bar"><span>Word {i + 1}</span><span>{'❌'.repeat(strikes)}{'⚪'.repeat(3 - strikes)}</span><span className="race-score">🐝 {score}</span></div>
+      {!classic && (
+        <div className="hive" aria-hidden="true">
+          {words.map((_, k) => <span key={k} className={`hcell ${k < score ? 'honey' : ''} ${k === score ? 'next' : ''}`} />)}
+          <span className="hive-bee" style={{ left: `${((Math.min(score, words.length - 1) + 0.5) / words.length) * 100}%` }}><Sprite e="🐝" size={46} /></span>
+        </div>
+      )}
       <button className="btn ghost big" onClick={say}>🔊 Hear the word</button>
       {sentence && <p className="muted">{sentence.replace(new RegExp(`\\b${w}\\b`, 'i'), '_____')}</p>}
       <div className="answer-box"><span className="answer-value word">{value || '?'}</span></div>
@@ -174,7 +226,9 @@ const LADDERS: { steps: string[]; clues: string[] }[] = [
   { steps: ['puck', 'duck', 'luck', 'lock', 'rock'], clues: ['A bird that quacks', 'Good ___!', 'Use a key to open it', 'A stone'] },
 ];
 
-function LadderRound({ end }: GameProps) {
+function LadderRound({ end, fx }: GameProps) {
+  const { profile, data } = useStore();
+  const classic = !!data.settings.classicLook;
   const [ladders] = useState(() => shuffle(Math.random, LADDERS).slice(0, 3));
   const [li, setLi] = useState(0);
   const [step, setStep] = useState(1);
@@ -191,6 +245,8 @@ function LadderRound({ end }: GameProps) {
     const v = normalize(value);
     if (v === want) {
       setScore((s) => s + 1);
+      sfx.coin();
+      fx(step + 1 >= lad.steps.length ? 'special' : 'hit', 0.5, 0.45);
       setMsg('');
       setValue('');
       if (step + 1 >= lad.steps.length) {
@@ -201,6 +257,7 @@ function LadderRound({ end }: GameProps) {
     }
     const diff = v.length === prev.length ? v.split('').filter((c, k) => c !== prev[k]).length : 99;
     setMisses((m) => m + 1);
+    sfx.ouch();
     setMsg(diff !== 1 ? `Change just one letter of "${prev}".` : `"${v}" is one letter different, but it doesn't match the clue. Try again!`);
     setValue('');
   };
@@ -218,9 +275,13 @@ function LadderRound({ end }: GameProps) {
   return (
     <div className="center">
       <p className="muted">Ladder {li + 1} of {ladders.length}: get from <b>{lad.steps[0]}</b> to <b>{lad.steps[lad.steps.length - 1]}</b></p>
-      <div className="ladder">
+      <div className={`ladder ${classic ? '' : 'wood'}`}>
         {lad.steps.map((w, k) => (
-          <div key={k} className={`rung ${k < step ? 'done' : k === step ? 'now' : ''}`}>{k < step || k === lad.steps.length - 1 ? w : k === step ? (value || '?') : '•'.repeat(w.length)}</div>
+          <div key={k} className={`rung ${k < step ? 'done' : k === step ? 'now' : ''}`}>
+            {k < step || k === lad.steps.length - 1 ? w : k === step ? (value || '?') : '•'.repeat(w.length)}
+            {!classic && k === step - 1 && profile && <span className="climber"><AvatarArt look={lookOf(profile)} size={54} background={false} /></span>}
+            {!classic && k === lad.steps.length - 1 && <span className="goal-star"><Sprite e="⭐" size={34} /></span>}
+          </div>
         ))}
       </div>
       <p className="score">💡 {lad.clues[step - 1]}</p>
@@ -256,7 +317,7 @@ const WORDS_BY_TAG: Record<string, string[]> = {
 const TAG_NAME: Record<string, string> = { n: 'noun', v: 'verb (past tense)', a: 'adjective', av: 'adverb' };
 const TAG_HELP: Record<string, string> = { n: 'a person, place, animal or thing', v: 'an action word', a: 'a describing word', av: 'a word that tells how (often ends in -ly)' };
 
-function StoryRound({ end }: GameProps) {
+function StoryRound({ end, fx }: GameProps) {
   const [story] = useState(() => pick(Math.random, STORIES));
   const blanks = [...story.text.matchAll(/\{(n|v|a|av)\}/g)].map((m) => m[1]);
   const [filled, setFilled] = useState<string[]>([]);
@@ -275,10 +336,13 @@ function StoryRound({ end }: GameProps) {
   const choose = (c: { w: string; t: string }) => {
     if (c.t !== tag) {
       setMisses((m) => m + 1);
+      sfx.ouch();
       setMsg(`"${c.w}" is ${c.t === 'av' ? 'an adverb' : c.t === 'a' ? 'an adjective' : `a ${TAG_NAME[c.t].split(' ')[0]}`}. We need ${tag === 'a' || tag === 'av' ? 'an' : 'a'} ${TAG_NAME[tag]}: ${TAG_HELP[tag]}.`);
       return;
     }
     setMsg('');
+    sfx.coin();
+    fx('hit', 0.5, 0.35, '#f472b6');
     setFilled((f) => [...f, c.w]);
   };
 
@@ -330,7 +394,7 @@ const BUILD = [
   'Dinosaurs lived in Alberta long ago.', 'Please close the door.', 'The sun is very bright today.',
 ].map((t) => parseTagged(t).plain);
 
-function BuildRound({ end }: GameProps) {
+function BuildRound({ end, fx }: GameProps) {
   const [list] = useState(() => shuffle(Math.random, BUILD).slice(0, 5));
   const [i, setI] = useState(0);
   const [picked, setPicked] = useState<number[]>([]);
@@ -353,6 +417,7 @@ function BuildRound({ end }: GameProps) {
       const built = next.map((x) => words[x]).join(' ');
       const ok = built === sentence;
       setMsg(ok ? '✅ Great sentence!' : `The sentence is: "${sentence}"`);
+      if (ok) { sfx.special(); fx('special', 0.5, 0.25); } else sfx.ouch();
       setTimeout(() => {
         setMsg('');
         const sc = score + (ok ? 1 : 0);
@@ -369,7 +434,7 @@ function BuildRound({ end }: GameProps) {
       <p className="built">{picked.map((k) => words[k]).join(' ') || '…'}</p>
       <div className="word-chips">
         {order.map((k) => (
-          <button key={k} className="choice" disabled={picked.includes(k) || !!msg} onClick={() => tap(k)}>{words[k]}</button>
+          <button key={k} className="choice brick" disabled={picked.includes(k) || !!msg} onClick={() => { sfx.block(); tap(k); }}>{words[k]}</button>
         ))}
       </div>
       {msg ? <p className="feedback hint">{msg}</p> : <button className="link" onClick={() => setPicked([])}>Start over</button>}

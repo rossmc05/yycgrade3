@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { Icon } from '../art/sprite';
+import { sfx } from '../battle/sfx';
 import { GameShell, type GameProps } from './GameShell';
 
 // ---------- Water Lab: heat and cool water to see changes of state ----------
@@ -18,7 +20,7 @@ function stateAt(t: number): 'solid' | 'liquid' | 'gas' {
   return t <= 0 ? (t < 0 ? 'solid' : 'liquid') : t >= 100 ? 'gas' : 'liquid';
 }
 
-function WaterRound({ end }: GameProps) {
+function WaterRound({ end, fx }: GameProps) {
   const [temp, setTemp] = useState(20);
   const [done, setDone] = useState<string[]>([]);
   const [note, setNote] = useState('Move the slider to heat or cool the water.');
@@ -30,6 +32,8 @@ function WaterRound({ end }: GameProps) {
     if (newly.length) {
       setDone((d) => [...d, ...newly.map((x) => x.id)]);
       setNote(`✅ ${newly[0].text}!`);
+      sfx.special();
+      fx('crit', 0.3, 0.25);
     } else if (stateAt(t) !== stateAt(temp)) {
       setNote(stateAt(t) === 'solid' ? '❄️ Freezing! Liquid water turned into solid ice.' : stateAt(t) === 'gas' ? '♨️ Boiling! Water evaporates into steam, a gas.' : stateAt(temp) === 'solid' ? '💧 Melting! Ice turned into liquid water.' : '🌫️ Condensing! Steam cooled into liquid water.');
     }
@@ -102,7 +106,7 @@ const CHALLENGES = [
   { id: 'target', text: 'Land the puck between 4 m and 6 m', check: (d: number) => d >= 4 && d <= 6 },
 ];
 
-function SlideRound({ end }: GameProps) {
+function SlideRound({ end, fx }: GameProps) {
   const [surface, setSurface] = useState(SURFACES[0]);
   const [push, setPush] = useState(2);
   const [predict, setPredict] = useState<string | null>(null);
@@ -125,7 +129,11 @@ function SlideRound({ end }: GameProps) {
       if ((predict === 'farther') === farther) setPredictScore((p) => p + 1);
     }
     setPredict(null);
-    if (newly.length) setDone((x) => [...x, ...newly]);
+    sfx.whoosh();
+    if (newly.length) {
+      setDone((x) => [...x, ...newly]);
+      setTimeout(() => { sfx.special(); fx('special', 0.04 + (Math.min(d, 40) / 40) * 0.88, 0.1); }, 900);
+    }
   };
 
   useEffect(() => {
@@ -137,7 +145,8 @@ function SlideRound({ end }: GameProps) {
   return (
     <div className="lab">
       <div className="rink-track" style={{ background: surface.color }}>
-        <span className="stick">🏒</span>
+        <span className="stick"><Icon e="🏒" size="1.6em" /></span>
+        <span className="rink-goal"><Icon e="🥅" size="2.2em" /></span>
         <span key={anim} className="puck-dot" style={{ ['--to' as string]: `${pos * 88}%`, ['--dur' as string]: `${0.6 + pos * 1.6}s` }} />
         {[10, 20, 30, 40].map((m) => <span key={m} className="mark" style={{ left: `${4 + (m / max) * 88}%` }}>{m} m</span>)}
       </div>
