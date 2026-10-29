@@ -1,3 +1,4 @@
+import { Icon } from '../art/sprite';
 import { TopBar } from '../components/TopBar';
 import { dayKey, isReviewDue, status } from '../engine/adaptive';
 import { useStore } from '../engine/store';
@@ -46,7 +47,7 @@ export function Home() {
               onClick={() => s.ready && go('subject', s.id)}
               disabled={!s.ready}
             >
-              <span className="tile-icon">{s.icon}</span>
+              <span className="tile-icon"><Icon e={s.icon} size="1em" /></span>
               <span className="tile-name">{s.name}</span>
               <span className="tile-tag">{s.tagline}</span>
               <span className="tile-meta">{!s.ready ? 'Coming soon' : s.id === 'typing' ? `${Object.values(profile.typing ?? {}).reduce((n, r) => n + r.stars, 0)} of ${LESSONS.length * 3} stars` : `${mastered} of ${s.skills.length} skills mastered`}</span>
@@ -54,7 +55,7 @@ export function Home() {
           );
         })}
         <button className="subject-tile" style={{ ['--tile' as string]: '#9333ea' }} onClick={() => go('arcade')}>
-          <span className="tile-icon">🕹️</span>
+          <span className="tile-icon"><Icon e="🕹️" size="1em" /></span>
           <span className="tile-name">Game Arcade</span>
           <span className="tile-tag">Fact races, boss battles, spelling bee and more</span>
           <span className="tile-meta">10 games</span>

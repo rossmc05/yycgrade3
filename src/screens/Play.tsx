@@ -1,3 +1,4 @@
+import { Icon } from '../art/sprite';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { TopBar } from '../components/TopBar';
 import { VisualView } from '../components/Visuals';
@@ -213,7 +214,7 @@ function Session({ subjectId, target, again }: { subjectId: string; target: stri
             <div className="badge-row">
               {badges.map((b) => (
                 <div key={b.id} className="badge earned pop">
-                  <span className="badge-icon">{b.icon}</span>
+                  <span className="badge-icon"><Icon e={b.icon} size="1em" /></span>
                   <span>{b.name}</span>
                 </div>
               ))}
@@ -234,7 +235,7 @@ function Session({ subjectId, target, again }: { subjectId: string; target: stri
       <main className="page">
         <TopBar back={back} />
         <section className="card center summary">
-          <div className="big-emoji">{right === results.length ? '🏆' : right >= results.length * 0.7 ? '🌟' : '💪'}</div>
+          <div className="big-emoji"><Icon e={right === results.length ? '🏆' : right >= results.length * 0.7 ? '🌟' : '💪'} size="1em" /></div>
           <h1>Session complete!</h1>
           <p className="score">
             {right} of {results.length} right on the first try
@@ -246,7 +247,7 @@ function Session({ subjectId, target, again }: { subjectId: string; target: stri
             <div className="badge-row">
               {badges.map((b) => (
                 <div key={b.id} className="badge earned pop">
-                  <span className="badge-icon">{b.icon}</span>
+                  <span className="badge-icon"><Icon e={b.icon} size="1em" /></span>
                   <span>{b.name}</span>
                 </div>
               ))}

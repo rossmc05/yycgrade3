@@ -1,4 +1,8 @@
+import { Icon } from '../art/sprite';
 import { AvatarArt } from '../avatar/AvatarArt';
+import { useMusic } from '../battle/music';
+import { palById, PALS } from '../collect/pals';
+import { MapClouds, SvgSprite } from '../map/MapArt';
 import { lookOf } from '../avatar/catalog';
 import { TopBar } from '../components/TopBar';
 import { status } from '../engine/adaptive';
@@ -78,7 +82,7 @@ export function featuresOf(g: Progress): Feature[] {
   ];
 }
 
-function Scene({ f, profile }: { f: Record<string, Feature>; profile: Profile }) {
+function ClassicScene({ f, profile }: { f: Record<string, Feature>; profile: Profile }) {
   const st = (id: string) => f[id]?.stage ?? 0;
   const tower = (x: number, stage: number, color: string, roof: string, label: string) => {
     if (!stage) return <g key={label}><rect x={x} y={318} width="70" height="12" rx="3" fill="#a3a3a3" opacity="0.6" /><text x={x + 35} y={312} textAnchor="middle" fontSize="11" fill="#475569">{label}</text></g>;
@@ -171,8 +175,110 @@ function Scene({ f, profile }: { f: Record<string, Feature>; profile: Profile })
   );
 }
 
+/** What each building looks like at each stage (1 to 6). */
+const BUILDS: Record<string, string[]> = {
+  math: ['🏗️', '🛖', '🏠', '🏫', '🏯', '🏰'],
+  spelling: ['🏗️', '⛺', '🛖', '🏠', '🏡', '🏛️'],
+  grammar: ['🏗️', '🛖', '🏠', '🏪', '🏬', '🏭'],
+  science: ['🏗️', '⛺', '🛖', '🏠', '🏢', '🏟️'],
+};
+
+/** Where found pals wander, in front of everything. */
+const PAL_SPOTS: [number, number][] = [[250, 418], [560, 430], [60, 440], [430, 446], [720, 446], [300, 440], [520, 404], [770, 400], [20, 400], [640, 444]];
+
+function Scene3D({ f, profile }: { f: Record<string, Feature>; profile: Profile }) {
+  const st = (id: string) => f[id]?.stage ?? 0;
+  const label = (x: number, text: string, done: boolean) => (
+    <g>
+      <rect x={x - 48} y={338} width="96" height="18" rx="9" fill={done ? '#facc15' : '#fff'} stroke="#1e1b4b" strokeWidth="2" />
+      <text x={x} y={351} textAnchor="middle" fontSize="11" fontWeight="700" fill="#1e1b4b">{text}</text>
+    </g>
+  );
+  const building = (id: string, x: number, name: string) => {
+    const stage = st(id);
+    const art = stage ? BUILDS[id][stage - 1] : '🚧';
+    const size = stage ? 62 + stage * 13 : 44;
+    return (
+      <g key={id}>
+        <SvgSprite e={art} x={x} y={334} s={size} />
+        {stage >= 6 && <SvgSprite e="🚩" x={x + size * 0.3} y={334 - size * 0.8} s={34} shadow={false} />}
+        {label(x, name, stage >= 6)}
+      </g>
+    );
+  };
+  const trees = [[40, 300, '🌲'], [700, 300, '🌳'], [748, 318, '🌲'], [18, 330, '🌳'], [780, 340, '🌲'], [660, 318, '🌲']].slice(0, st('trees')) as [number, number, string][];
+  const flowers = Array.from({ length: st('flowers') * 4 }, (_, i) => [455 + (i % 7) * 22 + (i % 2) * 6, 392 + Math.floor(i / 7) * 16]);
+  const rocket = st('rocket');
+  const have = PALS.filter((p) => profile.pals?.[p.id] && p.id !== profile.buddy).slice(0, PAL_SPOTS.length);
+  const buddy = palById(profile.buddy);
+  return (
+    <div className="world-frame">
+      <svg viewBox="0 0 800 450" className="world-scene world-3d" role="img" aria-label="Your world">
+        <defs>
+          <linearGradient id="w3-sky" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stopColor="#38bdf8" /><stop offset="1" stopColor="#e0f2fe" /></linearGradient>
+          <linearGradient id="w3-grass" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stopColor="#a3e635" /><stop offset="1" stopColor="#22c55e" /></linearGradient>
+        </defs>
+        <rect width="800" height="450" fill="url(#w3-sky)" />
+        <SvgSprite e="☀️" x={720} y={100} s={80} shadow={false} />
+        {st('rainbow') > 0 && <g opacity="0.85"><SvgSprite e="🌈" x={430} y={250} s={180} shadow={false} /></g>}
+        <SvgSprite e="⛰️" x={110} y={300} s={190} crop={0.22} shadow={false} />
+        <SvgSprite e="🏔️" x={300} y={300} s={230} crop={0.22} shadow={false} />
+        <SvgSprite e="⛰️" x={520} y={300} s={170} crop={0.22} shadow={false} flip />
+        <SvgSprite e="🏔️" x={700} y={300} s={200} crop={0.22} shadow={false} flip />
+        <path d="M0 296 Q200 280 400 296 T800 292 V450 H0Z" fill="url(#w3-grass)" />
+        <path d="M380 450 Q400 400 400 340" stroke="#fcd34d" strokeWidth="30" fill="none" strokeLinecap="round" />
+        <path d="M380 450 Q400 400 400 340" stroke="#fef3c7" strokeWidth="5" fill="none" strokeDasharray="3 14" strokeLinecap="round" />
+        {trees.map(([x, y, e], i) => <SvgSprite key={i} e={e} x={x} y={y + 40} s={64} flip={i % 2 === 1} />)}
+        {building('math', 85, 'Math Tower')}
+        {building('spelling', 190, 'Word Library')}
+        {building('grammar', 480, 'Grammar Garage')}
+        {building('science', 610, 'Science Dome')}
+        <g>
+          <ellipse cx="320" cy="332" rx="36" ry="8" fill="#64748b" />
+          {rocket > 0 ? (
+            <g className={rocket >= 5 ? 'rocket-ready' : ''}>
+              <g transform={`rotate(-45 320 ${330 - rocket * 4 - 40})`}>
+                <SvgSprite e="🚀" x={320} y={330 - rocket * 4} s={48 + rocket * 8} shadow={false} />
+              </g>
+            </g>
+          ) : (
+            <SvgSprite e="🚧" x={320} y={334} s={40} />
+          )}
+          {label(320, 'Rocket Pad', rocket >= 5)}
+        </g>
+        {st('pond') > 0 && (
+          <g>
+            <ellipse cx="140" cy="402" rx="84" ry="28" fill="#0284c7" />
+            <ellipse cx="140" cy="398" rx="76" ry="22" fill="#38bdf8" />
+            <SvgSprite e="🪷" x={100} y={404} s={30} shadow={false} />
+            {st('pond') >= 2 && <><SvgSprite e="🦆" x={150} y={404} s={40} shadow={false} /><SvgSprite e="🦆" x={185} y={398} s={30} shadow={false} flip /></>}
+          </g>
+        )}
+        {st('rink') > 0 && (
+          <g>
+            <rect x="600" y="372" width="150" height="62" rx="28" fill="#f8fafc" stroke="#dc2626" strokeWidth="3" />
+            <line x1="675" y1="372" x2="675" y2="434" stroke="#dc2626" strokeWidth="3" />
+            <circle cx="675" cy="403" r="12" fill="none" stroke="#2563eb" strokeWidth="2" />
+            <SvgSprite e="🏒" x={640} y={420} s={38} shadow={false} />
+            <SvgSprite e="⛸️" x={715} y={422} s={34} shadow={false} />
+          </g>
+        )}
+        {st('dino') > 0 && <><SvgSprite e="🦕" x={250} y={400} s={70} /><SvgSprite e="🦴" x={290} y={400} s={28} shadow={false} /></>}
+        {flowers.map(([x, y], i) => <SvgSprite key={i} e={['🌷', '🌼', '🌸', '🌻'][i % 4]} x={x} y={y + 8} s={22} shadow={false} />)}
+        {have.map((p, i) => <SvgSprite key={p.id} e={p.e} x={PAL_SPOTS[i][0]} y={PAL_SPOTS[i][1]} s={46} flip={i % 2 === 0} className={`wander w${i % 3}`} />)}
+        <g transform="translate(352 318)">
+          <AvatarArt look={lookOf(profile)} size={96} background={false} />
+        </g>
+        {buddy && <SvgSprite e={buddy.e} x={462} y={428} s={50} className="wander w1" />}
+      </svg>
+      <MapClouds />
+    </div>
+  );
+}
+
 export function World() {
-  const { profile } = useStore();
+  const { profile, data } = useStore();
+  useMusic('map');
   if (!profile) return null;
   const features = featuresOf(progressOf(profile));
   const byId = Object.fromEntries(features.map((x) => [x.id, x]));
@@ -182,15 +288,15 @@ export function World() {
     <main className="page">
       <TopBar back={() => go('rewards')} />
       <section className="card world">
-        <h1>🏡 {profile.name}'s World</h1>
+        <h1><Icon e="🏡" /> {profile.name}'s World</h1>
         <p className="muted">Your world grows as you learn. {built} of {total} pieces built.</p>
-        <Scene f={byId} profile={profile} />
+        {data.settings.classicLook ? <ClassicScene f={byId} profile={profile} /> : <Scene3D f={byId} profile={profile} />}
       </section>
       <h2>What can I build next?</h2>
       <div className="feature-grid">
         {features.map((x) => (
           <div key={x.id} className={`feature ${x.stage >= x.maxStage ? 'done' : x.stage ? 'started' : ''}`}>
-            <span className="feature-icon">{x.icon}</span>
+            <span className="feature-icon"><Icon e={x.icon} size="1em" /></span>
             <span className="feature-name">{x.name}</span>
             <span className="level-dots">{Array.from({ length: x.maxStage }, (_, i) => <span key={i} className={i < x.stage ? 'on' : ''} />)}</span>
             <span className="muted small">{x.next}</span>

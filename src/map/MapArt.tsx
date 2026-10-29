@@ -6,7 +6,7 @@ import { PLACES, placeOf } from './world';
 export const W = 1000;
 export const H = 640;
 
-type Bit = { e: string; x: number; y: number; s: number; flip?: boolean; shadow?: boolean; /** Share of the art's bottom to cut off. */ crop?: number };
+export type Bit = { e: string; x: number; y: number; s: number; flip?: boolean; shadow?: boolean; /** Share of the art's bottom to cut off. */ crop?: number };
 
 /** Scenery sprites: x is the centre, y is where the sprite stands, s is its size. */
 const SCENERY: Bit[] = [
@@ -55,11 +55,11 @@ const GROUND: Record<string, { rx: number; ry: number; fill: string; dy?: number
 
 const pathD = (x: number, y: number) => `M500 330 Q${(500 + x) / 2 + (y < 330 ? 40 : -40)} ${(330 + y) / 2} ${x} ${y}`;
 
-function Sprite({ e, x, y, s, flip, shadow = true, crop = 0 }: Bit) {
+export function SvgSprite({ e, x, y, s, flip, shadow = true, crop = 0, className }: Bit & { className?: string }) {
   const url = artUrl(e);
   const h = s * (1 - crop);
   return (
-    <g>
+    <g className={className}>
       {shadow && <ellipse cx={x} cy={y - s * 0.04} rx={s * 0.42} ry={s * 0.1} fill="#14532d" opacity="0.28" />}
       {url ? (
         <svg x={x - s / 2} y={y - h} width={s} height={h} viewBox={`0 0 ${s} ${h}`} overflow="hidden">
@@ -122,20 +122,20 @@ export function MapArt3D({ open, today }: { open: Record<string, boolean>; today
       {/* village square */}
       <ellipse cx="500" cy="336" rx="80" ry="44" fill="#e7d3a8" stroke="#c4a76a" strokeWidth="4" />
       {/* scenery, back to front */}
-      {[...SCENERY].sort((a, b) => a.y - b.y).map((b, i) => <Sprite key={i} {...b} />)}
+      {[...SCENERY].sort((a, b) => a.y - b.y).map((b, i) => <SvgSprite key={i} {...b} />)}
       {/* clouds over closed zones */}
       {PLACES.filter((p) => !open[p.id]).map((p) => (
         <g key={`fog-${p.id}`} className="fog">
           <ellipse cx={p.x} cy={p.y - 10} rx="150" ry="110" fill="#f8fafc" opacity="0.92" filter="url(#m3-fog)" />
           {[[-70, -30, 120], [40, -60, 140], [-10, 30, 130], [80, 20, 110]].map(([dx, dy, s], i) => (
-            <Sprite key={i} e="☁️" x={p.x + dx} y={p.y + dy + s / 2} s={s} shadow={false} />
+            <SvgSprite key={i} e="☁️" x={p.x + dx} y={p.y + dy + s / 2} s={s} shadow={false} />
           ))}
         </g>
       ))}
       {quest && (
         <g transform={`translate(${quest.x + 75} ${quest.y - 105})`}>
           <g className="quest-mark">
-            <Sprite e="❗" x={0} y={28} s={56} shadow={false} />
+            <SvgSprite e="❗" x={0} y={28} s={56} shadow={false} />
           </g>
         </g>
       )}

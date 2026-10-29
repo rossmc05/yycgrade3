@@ -1,3 +1,4 @@
+import { Icon } from '../art/sprite';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { TopBar } from '../components/TopBar';
 import { logActivity } from '../engine/progress';
@@ -17,7 +18,7 @@ export function TypingHome() {
     <main className="page">
       <TopBar back={() => go('')} />
       <section className="subject-head" style={{ ['--tile' as string]: '#0891b2' }}>
-        <span className="tile-icon">🚀</span>
+        <span className="tile-icon"><Icon e="🚀" size="1em" /></span>
         <div>
           <h1>Type Rocket</h1>
           <p className="muted">Keep your fingers on the home row: left hand on A S D F, right hand on J K L ;. Feel the bumps on F and J.</p>
@@ -30,7 +31,7 @@ export function TypingHome() {
           const unlocked = i === 0 || (results[LESSONS[i - 1].id]?.stars ?? 0) >= 1;
           return (
             <button key={l.id} className={`skill-card ${r?.stars === 3 ? 'mastered' : ''}`} disabled={!unlocked} style={unlocked ? undefined : { opacity: 0.45 }} onClick={() => go('type', l.id)}>
-              <span className="skill-icon">{unlocked ? '⌨️' : '🔒'}</span>
+              <span className="skill-icon"><Icon e={unlocked ? '⌨️' : '🔒'} size="1em" /></span>
               <span className="skill-name">{i + 1}. {l.name}</span>
               <span className="stars">{[1, 2, 3].map((s) => (s <= (r?.stars ?? 0) ? '⭐' : '☆')).join('')}</span>
               <span className="skill-blurb">{r ? `Best: ${r.bestWpm} words a minute, ${Math.round(r.bestAccuracy * 100)}% correct` : `Goal: ${l.targetWpm} words a minute`}</span>
@@ -121,7 +122,7 @@ function Run({ lesson, again }: { lesson: Lesson; again: () => void }) {
         </div>
         {result ? (
           <div className="center summary">
-            <div className="big-emoji">{result.stars === 3 ? '🚀' : result.stars === 2 ? '🌟' : '👍'}</div>
+            <div className="big-emoji"><Icon e={result.stars === 3 ? '🚀' : result.stars === 2 ? '🌟' : '👍'} size="1em" /></div>
             <h1>{[1, 2, 3].map((s) => (s <= result.stars ? '⭐' : '☆')).join('')}</h1>
             <p className="score">{result.wpm} words a minute · {Math.round(result.accuracy * 100)}% correct</p>
             <p className="xp-gain">+{result.xp} XP</p>

@@ -1,3 +1,4 @@
+import { Icon } from '../art/sprite';
 import { TopBar } from '../components/TopBar';
 import { isReviewDue, status, topLevelAccuracy } from '../engine/adaptive';
 import { useStore } from '../engine/store';
@@ -17,7 +18,7 @@ export function SubjectScreen({ subjectId }: { subjectId: string }) {
     <main className="page">
       <TopBar back={() => go('')} />
       <section className="subject-head" style={{ ['--tile' as string]: subject.color }}>
-        <span className="tile-icon">{subject.icon}</span>
+        <span className="tile-icon"><Icon e={subject.icon} size="1em" /></span>
         <div>
           <h1>{subject.name}</h1>
           <p className="muted">Pick a skill, or let the mix choose for you.</p>
@@ -42,7 +43,7 @@ export function SubjectScreen({ subjectId }: { subjectId: string }) {
                 const due = isReviewDue(st, now);
                 return (
                   <button key={s.id} className={`skill-card ${stat}`} onClick={() => go('play', subject.id, s.id)}>
-                    <span className="skill-icon">{s.icon}</span>
+                    <span className="skill-icon"><Icon e={s.icon} size="1em" /></span>
                     <span className="skill-name">{s.name}</span>
                     <span className="skill-blurb">{s.blurb}</span>
                     <span className="level-dots" aria-label={`Level ${lvl + 1} of ${s.levels.length}`}>
