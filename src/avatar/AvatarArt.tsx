@@ -1,16 +1,18 @@
 import { useId } from 'react';
+import { useStore } from '../engine/store';
+import { Avatar3D } from './Avatar3D';
 import { colorOf, part, type Look } from './catalog';
 
 const OUTLINE = '#2b2340';
 
 /** Darken a #rrggbb colour by a fraction, for shading. */
-function shade(hex: string, by: number): string {
+export function shade(hex: string, by: number): string {
   const n = parseInt(hex.slice(1), 16);
   const f = (c: number) => Math.max(0, Math.min(255, Math.round(c * (1 - by))));
   return `#${[(n >> 16) & 255, (n >> 8) & 255, n & 255].map((c) => f(c).toString(16).padStart(2, '0')).join('')}`;
 }
 
-function Background({ id, clip }: { id: string; clip: string }) {
+export function Background({ id, clip }: { id: string; clip: string }) {
   const common = { clipPath: `url(#${clip})` };
   switch (id) {
     case 'bg-mountains':
@@ -74,14 +76,14 @@ function Background({ id, clip }: { id: string; clip: string }) {
   }
 }
 
-function HairBack({ style, color }: { style: string; color: string }) {
+export function HairBack({ style, color }: { style: string; color: string }) {
   if (style === 'hair-long') return <path d="M50 92 Q48 40 100 38 Q152 40 150 92 L154 165 Q130 172 120 150 L80 150 Q70 172 46 165Z" fill={color} />;
   if (style === 'hair-ponytail') return <path d="M140 70 Q178 70 172 120 Q168 150 150 160 Q160 125 140 100Z" fill={color} />;
   if (style === 'hair-afro') return <circle cx="100" cy="78" r="62" fill={color} />;
   return null;
 }
 
-function HairFront({ style, color }: { style: string; color: string }) {
+export function HairFront({ style, color }: { style: string; color: string }) {
   switch (style) {
     case 'hair-short':
     case 'hair-long':
@@ -161,7 +163,7 @@ function Eyes({ style }: { style: string }) {
   }
 }
 
-function Mouth({ style }: { style: string }) {
+export function Mouth({ style }: { style: string }) {
   switch (style) {
     case 'mouth-grin':
       return <path d="M84 120 Q100 140 116 120 Z" fill="#7f1d1d" stroke={OUTLINE} strokeWidth="3" strokeLinejoin="round" />;
@@ -179,7 +181,7 @@ function Mouth({ style }: { style: string }) {
   }
 }
 
-function Top({ style, color, number }: { style: string; color: string; number: number }) {
+export function Top({ style, color, number }: { style: string; color: string; number: number }) {
   const dark = shade(color, 0.25);
   const body = 'M40 220 Q40 168 70 158 Q100 150 130 158 Q160 168 160 220Z';
   switch (style) {
@@ -242,7 +244,7 @@ function Top({ style, color, number }: { style: string; color: string; number: n
   }
 }
 
-function Hat({ style, color }: { style: string; color: string }) {
+export function Hat({ style, color }: { style: string; color: string }) {
   switch (style) {
     case 'hat-cap':
       return (
@@ -302,6 +304,15 @@ function Hat({ style, color }: { style: string; color: string }) {
           <text x="108" y="26" fontSize="10" fill="#fde047">★</text>
         </g>
       );
+    case 'hat-cowboy':
+      return (
+        <g>
+          <ellipse cx="100" cy="66" rx="68" ry="12" fill="#f8fafc" />
+          <path d="M66 64 Q64 26 84 24 Q100 34 116 24 Q136 26 134 64Z" fill="#f8fafc" />
+          <path d="M66 58 Q100 66 134 58 L134 64 Q100 72 66 64Z" fill="#b45309" />
+          <ellipse cx="100" cy="66" rx="68" ry="12" fill="none" stroke="#cbd5e1" strokeWidth="2" />
+        </g>
+      );
     case 'hat-crown':
       return (
         <g>
@@ -325,7 +336,7 @@ function Hat({ style, color }: { style: string; color: string }) {
   }
 }
 
-function FaceGear({ style, color }: { style: string; color: string }) {
+export function FaceGear({ style, color }: { style: string; color: string }) {
   switch (style) {
     case 'face-glasses':
       return (
@@ -364,7 +375,13 @@ function FaceGear({ style, color }: { style: string; color: string }) {
   }
 }
 
-export function AvatarArt({ look, size = 120, background = true }: { look: Look; size?: number; background?: boolean }) {
+/** The hero: 3D-style art, or the original flat art in the classic look. `full` draws the whole body. */
+export function AvatarArt(props: { look: Look; size?: number; background?: boolean; full?: boolean }) {
+  const { data } = useStore();
+  return data.settings.classicLook ? <FlatAvatar {...props} /> : <Avatar3D {...props} />;
+}
+
+function FlatAvatar({ look, size = 120, background = true }: { look: Look; size?: number; background?: boolean }) {
   const uid = useId().replace(/:/g, '');
   const skin = colorOf(look.skin, '#f5c9a0');
   const hair = colorOf(look.hairColor, '#5b3a1e');

@@ -256,3 +256,14 @@ body.game .progress-track span { border: 2px solid var(--edge); }
 .boss-card .btn.primary { background: linear-gradient(180deg, #f87171, #dc2626); }
 .fortress-btn { position: absolute; transform: translate(-50%, -50%); z-index: 2; }
 .foe.story-boss { width: 42%; max-width: 250px; } .foe.story-boss .foe3d-body { filter: drop-shadow(0 0 14px rgba(125, 211, 252, 0.9)); }
+
+/* ---------- 3D hero ---------- */
+.avatar-3d .blink { animation: blink-eye 5s infinite; transform-box: fill-box; }
+@keyframes blink-eye { 0%, 94%, 100% { transform: scaleY(1); } 96% { transform: scaleY(0.1); } }
+.avatar-3d .breathe { animation: breathe 2.6s ease-in-out infinite; transform-origin: 100px 300px; }
+@keyframes breathe { 50% { transform: scaleY(1.015); } }
+.avatar-3d .pet-bob { animation: bob 1.4s ease-in-out infinite; }
+.avatar-3d .flame { animation: flame 0.15s linear infinite alternate; transform-box: fill-box; transform-origin: top; }
+@keyframes flame { to { transform: scaleY(1.4); } }
+.studio-preview .avatar-3d.full { max-width: 100%; height: auto; }
+@media (prefers-reduced-motion: reduce) { .avatar-3d .blink, .avatar-3d .breathe, .avatar-3d .pet-bob, .avatar-3d .flame { animation: none !important; } }

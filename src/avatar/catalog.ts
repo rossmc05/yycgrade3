@@ -1,15 +1,17 @@
 // Everything a player can put on their avatar, and what it costs to unlock.
 
-export type Slot = 'skin' | 'hair' | 'hairColor' | 'eyes' | 'mouth' | 'top' | 'topColor' | 'hat' | 'face' | 'pet' | 'bg';
+export type Slot = 'skin' | 'hair' | 'hairColor' | 'eyes' | 'eyeColor' | 'mouth' | 'top' | 'topColor' | 'shoes' | 'hat' | 'face' | 'pet' | 'bg';
 
 export interface Look {
   skin: string;
   hair: string;
   hairColor: string;
   eyes: string;
+  eyeColor: string;
   mouth: string;
   top: string;
   topColor: string;
+  shoes: string;
   hat: string;
   face: string;
   pet: string;
@@ -44,6 +46,9 @@ export const PARTS: Part[] = [
   { id: 'hc-purple', slot: 'hairColor', name: 'Galaxy purple', cost: 40, color: '#8b5cf6' },
   ...free('eyes', [['eyes-round', 'Round'], ['eyes-happy', 'Happy'], ['eyes-wink', 'Wink'], ['eyes-sleepy', 'Sleepy']]),
   { id: 'eyes-stars', slot: 'eyes', name: 'Star eyes', cost: 100 },
+  ...free('eyeColor', [['ec-brown', 'Brown', '#5b3a1e'], ['ec-blue', 'Blue', '#2563eb'], ['ec-green', 'Green', '#15803d'], ['ec-hazel', 'Hazel', '#8a6a2a'], ['ec-grey', 'Grey', '#64748b']]),
+  { id: 'ec-gold', slot: 'eyeColor', name: 'Gold', cost: 60, color: '#eab308' },
+  { id: 'ec-purple', slot: 'eyeColor', name: 'Purple', cost: 60, color: '#7c3aed' },
   ...free('mouth', [['mouth-smile', 'Smile'], ['mouth-grin', 'Big grin'], ['mouth-open', 'Wow'], ['mouth-tongue', 'Silly']]),
   ...free('top', [['top-tshirt', 'T-shirt'], ['top-hoodie', 'Hoodie']]),
   { id: 'top-jersey', slot: 'top', name: 'Hockey jersey', cost: 80 },
@@ -51,6 +56,12 @@ export const PARTS: Part[] = [
   { id: 'top-cape', slot: 'top', name: 'Superhero cape', cost: 200, minLevel: 4 },
   { id: 'top-space', slot: 'top', name: 'Space suit', cost: 300, minLevel: 5 },
   ...free('topColor', [['tc-blue', 'Blue', '#2563eb'], ['tc-red', 'Red', '#dc2626'], ['tc-green', 'Green', '#16a34a'], ['tc-orange', 'Orange', '#ea580c'], ['tc-purple', 'Purple', '#7c3aed'], ['tc-black', 'Black', '#1f2937'], ['tc-yellow', 'Yellow', '#eab308'], ['tc-teal', 'Teal', '#0d9488']]),
+  { id: 'shoes-sneakers', slot: 'shoes', name: 'Sneakers', cost: 0 },
+  { id: 'shoes-boots', slot: 'shoes', name: 'Winter boots', cost: 0 },
+  { id: 'shoes-cowboy', slot: 'shoes', name: 'Cowboy boots', cost: 80 },
+  { id: 'shoes-skates', slot: 'shoes', name: 'Hockey skates', cost: 150 },
+  { id: 'shoes-rocket', slot: 'shoes', name: 'Rocket boots', cost: 400, minLevel: 6 },
+  { id: 'hat-cowboy', slot: 'hat', name: 'Stampede hat', cost: 120 },
   { id: 'hat-none', slot: 'hat', name: 'No hat', cost: 0 },
   { id: 'hat-cap', slot: 'hat', name: 'Ball cap', cost: 40 },
   { id: 'hat-toque', slot: 'hat', name: 'Toque', cost: 60 },
@@ -88,9 +99,11 @@ export const SLOTS: { slot: Slot; label: string; icon: string }[] = [
   { slot: 'hair', label: 'Hair', icon: '💇' },
   { slot: 'hairColor', label: 'Hair colour', icon: '🎨' },
   { slot: 'eyes', label: 'Eyes', icon: '👀' },
+  { slot: 'eyeColor', label: 'Eye colour', icon: '🔵' },
   { slot: 'mouth', label: 'Mouth', icon: '😄' },
   { slot: 'top', label: 'Outfit', icon: '👕' },
   { slot: 'topColor', label: 'Outfit colour', icon: '🖍️' },
+  { slot: 'shoes', label: 'Shoes', icon: '👟' },
   { slot: 'hat', label: 'Hats', icon: '🧢' },
   { slot: 'face', label: 'Face gear', icon: '🕶️' },
   { slot: 'pet', label: 'Pets', icon: '🐾' },
@@ -98,8 +111,8 @@ export const SLOTS: { slot: Slot; label: string; icon: string }[] = [
 ];
 
 export const DEFAULT_LOOK: Look = {
-  skin: 'skin-2', hair: 'hair-short', hairColor: 'hc-brown', eyes: 'eyes-round', mouth: 'mouth-smile', top: 'top-tshirt',
-  topColor: 'tc-blue', hat: 'hat-none', face: 'face-none', pet: 'pet-none', bg: 'bg-sky', number: 9,
+  skin: 'skin-2', hair: 'hair-short', hairColor: 'hc-brown', eyes: 'eyes-round', eyeColor: 'ec-brown', mouth: 'mouth-smile', top: 'top-tshirt',
+  topColor: 'tc-blue', shoes: 'shoes-sneakers', hat: 'hat-none', face: 'face-none', pet: 'pet-none', bg: 'bg-sky', number: 9,
 };
 
 export const part = (id: string): Part | undefined => PARTS.find((p) => p.id === id);

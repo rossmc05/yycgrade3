@@ -213,7 +213,7 @@ function Session({ subjectId, target, again }: { subjectId: string; target: stri
         <section className={`card center summary victory zone-${zone.subject}`}>
           {!data.settings.classicLook && beaten.length > 0 && <Celebrate big={beaten.length === battle.foes.length} />}
           <div className="victory-hero">
-            <AvatarArt look={lookOf(profile)} size={140} background={false} />
+            <AvatarArt look={lookOf(profile)} size={120} background={false} full />
           </div>
           <h1>{beaten.length === battle.foes.length ? 'Victory!' : beaten.length ? 'Battle won!' : story ? 'So close!' : 'They got away!'}</h1>
           {story && beaten.length > 0 && target !== 'final' && <p className="good"><Icon e="💎" /> You won back the {zone.name} crystal! (+30 coins)</p>}

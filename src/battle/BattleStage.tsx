@@ -105,7 +105,7 @@ export function BattleStage({ zone, battle, event, look, buddy, weapon }: { zone
 
       <div className="fighters">
         <div key={`hero-${event?.id ?? 0}`} className={`hero ${heroAttacks ? 'lunge' : ''} ${monsterAttacks ? 'shake' : ''}`}>
-          <AvatarArt look={look} size={150} background={false} />
+          <AvatarArt look={look} size={150} background={false} full />
           {buddy && !classic && <span className={`battle-buddy ${kind === 'special' ? 'cheer' : ''}`}><Sprite e={buddy} size="100%" /></span>}
           {kind === 'block' && <span className="shield">{classic ? '🛡️' : <Sprite e="🛡️" size="1em" />}</span>}
         </div>

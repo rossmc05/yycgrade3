@@ -266,8 +266,8 @@ function Scene3D({ f, profile }: { f: Record<string, Feature>; profile: Profile 
         {st('dino') > 0 && <><SvgSprite e="🦕" x={250} y={400} s={70} /><SvgSprite e="🦴" x={290} y={400} s={28} shadow={false} /></>}
         {flowers.map(([x, y], i) => <SvgSprite key={i} e={['🌷', '🌼', '🌸', '🌻'][i % 4]} x={x} y={y + 8} s={22} shadow={false} />)}
         {have.map((p, i) => <SvgSprite key={p.id} e={p.e} x={PAL_SPOTS[i][0]} y={PAL_SPOTS[i][1]} s={46} flip={i % 2 === 0} className={`wander w${i % 3}`} />)}
-        <g transform="translate(352 318)">
-          <AvatarArt look={lookOf(profile)} size={96} background={false} />
+        <g transform="translate(360 290)">
+          <AvatarArt look={lookOf(profile)} size={84} background={false} full />
         </g>
         {buddy && <SvgSprite e={buddy.e} x={462} y={428} s={50} className="wander w1" />}
       </svg>

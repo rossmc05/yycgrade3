@@ -6,7 +6,7 @@ import { playerLevel } from '../engine/rewards';
 import { useStore } from '../engine/store';
 import { go } from '../router';
 
-const COLOUR_SLOTS: Slot[] = ['skin', 'hairColor', 'topColor'];
+const COLOUR_SLOTS: Slot[] = ['skin', 'hairColor', 'eyeColor', 'topColor'];
 
 export function AvatarStudio() {
   const { profile, updateProfile } = useStore();
@@ -38,7 +38,7 @@ export function AvatarStudio() {
       <TopBar back={() => go('rewards')} />
       <div className="studio">
         <section className="card studio-preview">
-          <AvatarArt look={preview} size={220} />
+          <AvatarArt look={preview} size={200} full />
           <h2>{profile.name}</h2>
           <p className="muted">🪙 {profile.coins} coins · Level {level}</p>
           {pending && (
@@ -82,7 +82,7 @@ export function AvatarStudio() {
                   {COLOUR_SLOTS.includes(slot) ? (
                     <span className="swatch" style={{ background: it.color }} />
                   ) : (
-                    <AvatarArt look={{ ...look, [it.slot]: it.id }} size={84} background={slot === 'bg'} />
+                    <AvatarArt look={{ ...look, [it.slot]: it.id }} size={84} background={slot === 'bg'} full={slot === 'shoes'} />
                   )}
                   <span className="part-name">{it.name}</span>
                   <span className="part-price">{on ? '✓ Wearing' : owned ? 'Yours' : locked ? `🔒 Level ${it.minLevel}` : `🪙 ${it.cost}`}</span>

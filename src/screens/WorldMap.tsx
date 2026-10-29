@@ -187,7 +187,7 @@ export function WorldMap() {
           style={{ left: `${(pos.x / W) * 100}%`, top: `${(pos.y / H) * 100}%`, transitionDuration: `${dur}ms` }}
         >
           <div className="hero-flip" style={{ transform: `scaleX(${face})` }}>
-            <AvatarArt look={lookOf(profile)} size={64} background={false} />
+            <AvatarArt look={lookOf(profile)} size={64} background={false} full />
           </div>
           {!classic && palById(profile.buddy) && <span className="map-buddy"><Sprite e={palById(profile.buddy)!.e} size="100%" /></span>}
         </div>
