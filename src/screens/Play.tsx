@@ -12,6 +12,8 @@ import { ALL_SKILLS, findSkill, findSubject } from '../subjects';
 import { AvatarArt } from '../avatar/AvatarArt';
 import { lookOf } from '../avatar/catalog';
 import { BattleStage, type StageEvent } from '../battle/BattleStage';
+import { Celebrate } from '../battle/fx';
+import { useMusic, type Theme } from '../battle/music';
 import { MonsterArt } from '../battle/Art';
 import { applyTurn, startBattle, type Battle } from '../battle/engine';
 import { setSound, sfx } from '../battle/sfx';
@@ -72,6 +74,8 @@ function Session({ subjectId, target, again }: { subjectId: string; target: stri
   const [stageEvent, setStageEvent] = useState<StageEvent | null>(null);
   const eventId = useRef(0);
   const soundOn = data.settings.sound !== false;
+  // Zone music during the battle; it stops at the victory screen for the fanfare.
+  useMusic(zone && !finished ? (zone.subject as Theme) : undefined);
   useEffect(() => setSound(soundOn), [soundOn]);
 
   const onResult = (r: 'right1' | 'wrong1' | 'right2' | 'wrong2', seconds: number) => {
@@ -169,6 +173,7 @@ function Session({ subjectId, target, again }: { subjectId: string; target: stri
       <main className="page">
         <TopBar back={back} />
         <section className={`card center summary victory zone-${zone.subject}`}>
+          {!data.settings.classicLook && beaten.length > 0 && <Celebrate big={beaten.length === battle.foes.length} />}
           <div className="victory-hero">
             <AvatarArt look={lookOf(profile)} size={140} background={false} />
           </div>

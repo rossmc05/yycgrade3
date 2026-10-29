@@ -207,6 +207,10 @@ function Settings() {
         <input type="checkbox" checked={data.settings.sound !== false} onChange={(e) => set({ sound: e.target.checked })} />
       </label>
       <label className="field inline">
+        <span>Music</span>
+        <input type="checkbox" checked={data.settings.music !== false} onChange={(e) => set({ music: e.target.checked })} />
+      </label>
+      <label className="field inline">
         <span>Classic look (the original flat art, no title screen)</span>
         <input type="checkbox" checked={!!data.settings.classicLook} onChange={(e) => set({ classicLook: e.target.checked })} />
       </label>

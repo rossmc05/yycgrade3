@@ -1,4 +1,6 @@
 import { useId } from 'react';
+import { Sprite } from '../art/sprite';
+import { useStore } from '../engine/store';
 import type { SubjectId } from '../engine/types';
 
 const INK = '#2b2340';
@@ -225,7 +227,50 @@ function Fossil({ kind, hurt }: { kind: number; hurt: boolean }) {
   );
 }
 
+/** 3D monsters: one creature per zone, tinted for each kind; the boss wears a crown. */
+const FOES: Partial<Record<SubjectId, { e: string; filter: string }[]>> = {
+  math: [
+    { e: '🗿', filter: 'none' },
+    { e: '🗿', filter: 'sepia(1) hue-rotate(160deg) saturate(3) brightness(1.15)' },
+    { e: '🗿', filter: 'sepia(1) hue-rotate(50deg) saturate(2.5)' },
+    { e: '🗿', filter: 'sepia(0.7) saturate(1.6) brightness(0.9)' },
+  ],
+  spelling: [
+    { e: '🦠', filter: 'none' },
+    { e: '🦠', filter: 'hue-rotate(150deg)' },
+    { e: '🦠', filter: 'hue-rotate(80deg)' },
+    { e: '🦠', filter: 'hue-rotate(200deg) saturate(1.4)' },
+  ],
+  grammar: [
+    { e: '🤖', filter: 'none' },
+    { e: '🤖', filter: 'hue-rotate(200deg)' },
+    { e: '🤖', filter: 'hue-rotate(100deg)' },
+    { e: '🤖', filter: 'sepia(0.5) hue-rotate(-30deg) saturate(2)' },
+  ],
+  science: [
+    { e: '🦖', filter: 'sepia(1) saturate(0.6) brightness(1.15)' },
+    { e: '🦕', filter: 'sepia(1) saturate(0.6) brightness(1.15)' },
+    { e: '🐉', filter: 'sepia(1) saturate(0.7) brightness(1.1)' },
+    { e: '🦖', filter: 'sepia(1) saturate(1.2) hue-rotate(-20deg)' },
+  ],
+};
+
+function Foe3D({ subject, kind, hurt, size }: { subject: SubjectId; kind: number; hurt: boolean; size: number }) {
+  const f = FOES[subject]?.[kind] ?? { e: '👾', filter: 'none' };
+  return (
+    <span className={`foe3d ${hurt ? 'hurt3d' : ''}`} style={{ width: size, height: size }} aria-hidden="true">
+      <span className="foe3d-shadow" />
+      <span className="foe3d-body" style={{ filter: f.filter }}>
+        <Sprite e={f.e} size="100%" />
+      </span>
+      {kind === 3 && <span className="foe3d-crown"><Sprite e="👑" size="100%" /></span>}
+    </span>
+  );
+}
+
 export function MonsterArt({ subject, kind, hurt = false, size = 160 }: { subject: SubjectId; kind: number; hurt?: boolean; size?: number }) {
+  const { data } = useStore();
+  if (!data.settings.classicLook) return <Foe3D subject={subject} kind={kind} hurt={hurt} size={size} />;
   return (
     <svg className="monster-art" width={size} height={size} viewBox="0 0 160 165" aria-hidden="true">
       <ellipse cx="80" cy="150" rx="56" ry="9" fill="#00000033" />

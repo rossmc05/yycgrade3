@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { AvatarArt } from '../avatar/AvatarArt';
 import { lookOf } from '../avatar/catalog';
 import { dailySubject } from '../battle/zones';
+import { useMusic } from '../battle/music';
 import { sfx } from '../battle/sfx';
 import { TopBar } from '../components/TopBar';
 import { dayKey } from '../engine/adaptive';
@@ -50,6 +51,7 @@ export function WorldMap() {
   const timers = useRef<number[]>([]);
 
   useEffect(() => () => timers.current.forEach(clearTimeout), []);
+  useMusic('map');
   if (!profile) return null;
 
   const classic = !!data.settings.classicLook;

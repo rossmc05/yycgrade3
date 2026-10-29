@@ -9,7 +9,7 @@ export function setSound(on: boolean) {
   else ctx?.resume().catch(() => {});
 }
 
-function ac(): AudioContext | null {
+export function ac(): AudioContext | null {
   if (!enabled) return null;
   if (!ctx) {
     try {
