@@ -1,3 +1,4 @@
+import { Icon, Sprite } from '../art/sprite';
 import { SceneArt } from '../battle/Art';
 import { TopBar } from '../components/TopBar';
 import { useStore } from '../engine/store';
@@ -9,7 +10,8 @@ import { findSubject } from '../subjects';
 const STATE_LABEL = { locked: 'Locked', open: 'Open', review: 'Rematch!', done: 'Cleared' } as const;
 
 export function Zone({ subjectId }: { subjectId: string }) {
-  const { profile } = useStore();
+  const { profile, data } = useStore();
+  const classic = !!data.settings.classicLook;
   const place = placeOf(subjectId);
   const subject = findSubject(subjectId);
   if (!profile || !place || !subject || place.id === 'village') return null;
@@ -36,7 +38,7 @@ export function Zone({ subjectId }: { subjectId: string }) {
     <main className={`page zone-page zone-${subjectId}`}>
       <TopBar back={back} />
       <section className="zone-banner">
-        <SceneArt subject={subjectId as SubjectId} />
+        {classic ? <SceneArt subject={subjectId as SubjectId} /> : <ZoneScene id={subjectId} />}
         <div className="zone-title">
           <h1>{place.name}</h1>
           <span>⭐ {stars} / {list.length * 3}</span>
@@ -44,7 +46,7 @@ export function Zone({ subjectId }: { subjectId: string }) {
       </section>
 
       <section className="card guide-row">
-        <span className="guide-face">{place.guide?.icon}</span>
+        <span className="guide-face">{place.guide && <Icon e={place.guide.icon} size="1em" />}</span>
         <div className="speech">
           <small>{place.guide?.name}</small>
           <p>{guideLine(place, list)}</p>
@@ -83,5 +85,26 @@ export function Zone({ subjectId }: { subjectId: string }) {
       <p className="muted small center-text">Win battles to earn stars. Each quest you level up opens a new one on the trail.</p>
       <button className="link center-text" onClick={() => go('subject', subjectId)}>Lessons and practice list</button>
     </main>
+  );
+}
+
+const SCENES: Record<string, { sky: string; ground: string; art: [string, number, number][] }> = {
+  math: { sky: 'linear-gradient(#7dd3fc, #e0f2fe)', ground: '#65a30d', art: [['⛰️', 40, 130], ['🏔️', 54, 150], ['🌲', 70, 80], ['🐐', 77, 70]] },
+  spelling: { sky: 'linear-gradient(#4c1d95, #a78bfa)', ground: '#0f766e', art: [['🛖', 42, 110], ['🌾', 56, 80], ['🐊', 64, 90], ['🍄', 76, 64]] },
+  grammar: { sky: 'linear-gradient(#334155, #94a3b8)', ground: '#374151', art: [['🏭', 42, 130], ['⚙️', 58, 70], ['🤖', 66, 96], ['🚧', 77, 64]] },
+  science: { sky: 'linear-gradient(#fb923c, #fde68a)', ground: '#ea580c', art: [['🌋', 42, 140], ['🌵', 58, 80], ['🦖', 66, 100], ['🦴', 78, 56]] },
+};
+
+function ZoneScene({ id }: { id: string }) {
+  const sc = SCENES[id];
+  if (!sc) return null;
+  return (
+    <div className="zone-scene" style={{ '--sky': sc.sky, '--ground': sc.ground } as React.CSSProperties} aria-hidden="true">
+      {sc.art.map(([e, left, size], i) => (
+        <span key={i} style={{ position: 'absolute', left: `${left}%`, bottom: '8%' }}>
+          <Sprite e={e} size={size} />
+        </span>
+      ))}
+    </div>
   );
 }

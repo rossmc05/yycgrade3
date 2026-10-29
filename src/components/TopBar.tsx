@@ -1,9 +1,11 @@
+import { Icon } from '../art/sprite';
 import { AvatarArt } from '../avatar/AvatarArt';
 import { lookOf } from '../avatar/catalog';
 import { liveStreak, playerLevel } from '../engine/rewards';
 import type { Profile } from '../engine/types';
 import { useStore } from '../engine/store';
 import { go } from '../router';
+import { FullScreenButton } from './FullScreen';
 
 export function Avatar({ profile, size = 48, background = true }: { profile: Profile; size?: number; background?: boolean }) {
   return (
@@ -35,8 +37,9 @@ export function TopBar({ back }: { back?: () => void }) {
           <span style={{ width: `${(lvl.into / lvl.need) * 100}%` }} />
         </span>
       </button>
-      <span className="stat" title="Coins">🪙 {profile.coins}</span>
-      <span className="stat" title="Day streak">🔥 {streak}</span>
+      <span className="stat" title="Coins"><Icon e="🪙" /> {profile.coins}</span>
+      <span className="stat" title="Day streak"><Icon e="🔥" /> {streak}</span>
+      <FullScreenButton />
     </header>
   );
 }

@@ -2,7 +2,10 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';
 import { StoreProvider } from './engine/store';
+import '@fontsource/fredoka/latin-500.css';
+import '@fontsource/fredoka/latin-700.css';
 import './styles.css';
+import './game.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

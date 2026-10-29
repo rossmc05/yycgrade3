@@ -27,7 +27,7 @@ export function Profiles() {
 
   return (
     <main className="page center">
-      <h1 className="brand">⭐ Grade 3 Studio</h1>
+      <h1 className="brand">⭐ Grade 3 Quest</h1>
       {!adding ? (
         <>
           <h2>Who's learning today?</h2>

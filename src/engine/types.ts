@@ -134,6 +134,8 @@ export interface Settings {
   battle?: boolean;
   /** Game sound effects (on unless turned off). */
   sound?: boolean;
+  /** The original flat look, without the 3D art and title screen. */
+  classicLook?: boolean;
 }
 
 export interface AppData {

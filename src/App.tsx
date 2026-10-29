@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useStore } from './engine/store';
 import { useRoute } from './router';
 import { Arcade, GameScreen } from './screens/Arcade';
@@ -8,6 +9,7 @@ import { WorldMap } from './screens/WorldMap';
 import { Zone } from './screens/Zone';
 import { Parent } from './screens/Parent';
 import { Play } from './screens/Play';
+import { Title } from './screens/Title';
 import { Profiles } from './screens/Profiles';
 import { Rewards } from './screens/Rewards';
 import { SubjectScreen } from './screens/SubjectScreen';
@@ -16,6 +18,15 @@ import { TypingHome, TypingLesson } from './screens/Typing';
 export function App() {
   const { profile, data } = useStore();
   const [page, a, b] = useRoute();
+  const classic = !!data.settings.classicLook;
+  // The title screen shows once each time the game is opened.
+  const [started, setStarted] = useState(false);
+
+  useEffect(() => {
+    document.body.classList.toggle('game', !classic);
+  }, [classic]);
+
+  if (!classic && !started && page !== 'parent') return <Title onStart={() => setStarted(true)} />;
 
   if (page === 'parent') return <Parent />;
   if (!profile || page === 'profiles') return <Profiles />;
