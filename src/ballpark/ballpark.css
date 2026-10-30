@@ -260,3 +260,45 @@ a.btn { text-decoration: none; display: inline-block; }
 .chase-row .muted { color: #fef3c7; }
 .chase-row .binder-slot { flex: 0 0 auto; width: 110px; }
 .binder-slot.empty.chase .mini-card.blank { background: #1f2937; border-color: #b45309; color: #fde68a; }
+
+/* Pro Shop */
+.shop-front { position: relative; display: grid; grid-template-columns: 1fr auto; gap: 14px 18px; align-items: center; padding: 34px 20px 18px; border-radius: 22px; overflow: hidden; color: #fff;
+  background: linear-gradient(160deg, #0f2a4a, #123c69 55%, #0b1f38); box-shadow: 0 10px 28px rgba(2, 6, 23, 0.35); margin-bottom: 8px; }
+.shop-awning { position: absolute; inset: 0 0 auto 0; height: 22px; background: repeating-linear-gradient(90deg, #dc2626 0 28px, #f8fafc 28px 56px);
+  -webkit-mask: radial-gradient(14px 10px at 14px 100%, transparent 98%, #000) 0 0 / 28px 100%; mask: radial-gradient(14px 10px at 14px 100%, transparent 98%, #000) 0 0 / 28px 100%; }
+.shop-sign h1 { margin: 0; font-size: 2.1rem; letter-spacing: 0.04em; text-transform: uppercase; text-shadow: 0 3px 0 #0b1f38; }
+.shop-sign p { margin: 4px 0 0; color: #cbd5e1; font-weight: 700; }
+.shop-wallet { display: flex; align-items: baseline; gap: 6px; background: #fde68a; color: #78350f; padding: 8px 16px; border-radius: 999px; font-weight: 900; box-shadow: inset 0 -3px 0 #f59e0b; }
+.shop-wallet b { font-size: 1.5rem; }
+.shop-loadout { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+.loadout-slot { background: rgba(255, 255, 255, 0.1); border: 2px solid rgba(255, 255, 255, 0.18); border-radius: 14px; padding: 6px 4px; display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 0; }
+.loadout-slot small { font-size: 0.68rem; font-weight: 800; color: #e2e8f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.loadout-slot.empty span { height: 44px; display: grid; place-items: center; font-size: 1.4rem; color: rgba(255, 255, 255, 0.4); }
+.gear-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
+.gear-item { background: var(--card); border-radius: 18px; box-shadow: var(--shadow); overflow: hidden; display: flex; flex-direction: column; border: 3px solid transparent; transition: transform 0.15s; }
+.gear-item:hover { transform: translateY(-2px); }
+.gear-item.on { border-color: #16a34a; }
+.gear-stage { position: relative; display: grid; place-items: center; padding: 14px 0 6px;
+  background: radial-gradient(circle at 50% 60%, color-mix(in srgb, var(--g2) 28%, #fff) 0, color-mix(in srgb, var(--g1) 22%, #e2e8f0) 70%); }
+.gear-item.locked .gear-stage .gear-art { filter: saturate(0.6); opacity: 0.85; }
+.gear-tier { position: absolute; top: 8px; left: 8px; font-size: 0.68rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.06em; padding: 2px 8px; border-radius: 999px; background: #e2e8f0; color: #334155; }
+.gear-tier.t-pro { background: #dbeafe; color: #1d4ed8; }
+.gear-tier.t-elite { background: linear-gradient(90deg, #111827, #b45309); color: #fde68a; }
+.gear-on { position: absolute; top: 8px; right: 8px; font-size: 0.7rem; font-weight: 900; padding: 2px 8px; border-radius: 999px; background: #16a34a; color: #fff; }
+.gear-info { padding: 10px 14px 4px; flex: 1; text-align: left; }
+.gear-brand { display: block; font-size: 0.72rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted, #64748b); }
+.gear-info strong { display: block; font-size: 1.1rem; line-height: 1.2; }
+.gear-info p { margin: 6px 0 0; font-size: 0.85rem; font-weight: 700; color: var(--muted, #475569); }
+.gear-item .btn { margin: 10px 14px 14px; }
+.gear-item .btn.buy:disabled { opacity: 1; background: #e2e8f0; color: #64748b; box-shadow: none; }
+@media (max-width: 640px) {
+  .shop-front { grid-template-columns: 1fr; padding-top: 30px; }
+  .shop-wallet { justify-self: start; }
+  .gear-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .gear-info strong { font-size: 0.98rem; }
+  .gear-info p { font-size: 0.78rem; }
+  .gear-item .btn { margin: 8px 10px 10px; font-size: 0.85rem; }
+}
+.gear-need { margin: -6px 14px 12px; font-weight: 800; color: var(--muted, #64748b); font-size: 0.75rem; text-align: center; }
+.pro-shop .gear-item { padding: 0; align-items: stretch; text-align: left; }
+.pro-shop .gear-stage { align-self: stretch; }
