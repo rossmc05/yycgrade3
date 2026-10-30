@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { newSkillState, recordAnswer } from '../src/engine/adaptive';
 import { seeded } from '../src/engine/random';
 import { newProfile } from '../src/engine/storage';
-import { cardKey, chances, PARALLELS, RANK, rollCard } from '../src/ballpark/cards';
+import { CHASE, cardKey, chances, chaseChance, PARALLELS, RANK, rollCard } from '../src/ballpark/cards';
 import { addCard, ballLookOf, newBall, payout, rankOf, RANKS } from '../src/ballpark/data';
 import { derbyHit, derbyLuck, derbyTotal, FENCE } from '../src/ballpark/derby';
 import { advance, bat, newGame, pitch, RUN_RULE, tierLevel, winLuck, type Game } from '../src/ballpark/game';
@@ -118,6 +118,9 @@ describe('ballpark cards and economy', () => {
   it('has unique players and six parallels from Base to Autograph', () => {
     expect(new Set(PLAYERS.map((p) => p.id)).size).toBe(PLAYERS.length);
     expect(PLAYERS.length).toBeGreaterThanOrEqual(74);
+    // About ten legends, all from 1995 on, plus the one chase card.
+    expect(PLAYERS.filter((p) => p.legend && !p.chase).length).toBe(10);
+    expect(PLAYERS.filter((p) => p.chase).map((p) => p.name)).toEqual(['Babe Ruth']);
     expect(PARALLELS.map((p) => p.id)).toEqual(['base', 'rare', 'refractor', 'relic', 'diamond', 'auto']);
     expect(PARALLELS.reduce((n, p) => n + p.weight, 0)).toBe(100);
   });
@@ -128,9 +131,23 @@ describe('ballpark cards and economy', () => {
     const rare = (luck: number) => Array.from({ length: 3000 }, () => rollCard(rng, luck)).filter((c) => c.parallel !== 'base').length;
     expect(rare(2)).toBeGreaterThan(rare(0));
     for (let i = 0; i < 200; i++) expect(RANK[rollCard(rng, 0, 'refractor').parallel]).toBeGreaterThanOrEqual(RANK.refractor);
-    const numbered = rollCard(() => 0.999, 0);
+    const numbered = rollCard(() => 0.999, 0, 'base', false);
     expect(numbered.parallel).toBe('auto');
     expect(numbered.serial).toBeLessThanOrEqual(25);
+  });
+
+  it('has a 1/1 Babe Ruth autograph chase card that is rare and never pulled twice', () => {
+    expect(rollCard(() => 0, 0)).toEqual({ player: CHASE, parallel: 'auto', serial: 1 });
+    expect(rollCard(() => 0, 0, 'base', false).player.chase).toBeFalsy();
+    expect(chaseChance(3)).toBeGreaterThan(chaseChance(0));
+    expect(chaseChance(3)).toBeLessThan(0.01);
+    const rng = seeded(5);
+    for (let i = 0; i < 2000; i++) {
+      const c = rollCard(rng, 1);
+      if (c.player.chase) expect(c.parallel).toBe('auto');
+    }
+    const owned = addCard(newBall(), { player: CHASE, parallel: 'auto', serial: 1 }, 1).ball;
+    for (let i = 0; i < 50; i++) expect(payout(owned, 0, 0, 3, 0, () => 0, i).payout.pulls[0].player.chase).toBeFalsy();
   });
 
   it('trades in repeat cards for coins', () => {

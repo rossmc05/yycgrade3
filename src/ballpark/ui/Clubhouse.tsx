@@ -18,12 +18,13 @@ export function Clubhouse() {
   if (!profile) return null;
   const b = ballOf(profile);
   const r = rankOf(b.xp);
-  const players = new Set(Object.keys(b.cards).map((k) => k.split(':')[0])).size;
+  const set = PLAYERS.filter((p) => !p.chase);
+  const players = set.filter((p) => Object.keys(b.cards).some((k) => k.startsWith(`${p.id}:`))).length;
   const next = RANKS[r.index + 1];
   const spots: Spot[] = [
     { id: 'game', label: 'Play Ball', sub: 'Win to earn a card', e: '🏟️', x: 50, y: 40, size: 22, to: 'game' },
     { id: 'derby', label: 'Home Run Derby', sub: b.derby.plays ? `Best ${b.derby.bestFeet} ft` : 'Always earns a card', e: '💥', x: 17, y: 52, size: 12, to: 'derby' },
-    { id: 'binder', label: 'Card Shop', sub: `${players}/${PLAYERS.length} players`, e: '🃏', x: 83, y: 52, size: 12, to: 'binder' },
+    { id: 'binder', label: 'Card Shop', sub: `${players}/${set.length} players`, e: '🃏', x: 83, y: 52, size: 12, to: 'binder' },
     { id: 'shop', label: 'Pro Shop', sub: `🪙 ${b.coins}`, e: '🏪', x: 28, y: 82, size: 12, to: 'shop' },
     { id: 'locker', label: 'Locker Room', sub: 'Your uniform', e: '👕', x: 72, y: 82, size: 11, to: 'locker' },
   ];

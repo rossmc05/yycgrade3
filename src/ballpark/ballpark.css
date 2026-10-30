@@ -250,3 +250,13 @@ a.btn { text-decoration: none; display: inline-block; }
 .swatches { display: flex; flex-wrap: wrap; gap: 8px; }
 .swatch { width: 40px; height: 40px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 2px var(--edge, #1e1b4b); }
 .swatch.on { box-shadow: 0 0 0 4px #facc15, 0 0 0 6px var(--edge, #1e1b4b); }
+
+/* The Babe Ruth 1/1 chase card */
+.bcard-face.chase { border-color: #b45309; box-shadow: 0 0 0 2px #fde68a inset, 0 0 18px rgba(251, 191, 36, 0.7); }
+.bcard-face.chase .bcard-art { filter: sepia(0.55); }
+.bcard-chase { position: absolute; top: 6px; right: 6px; background: #fde68a; color: #111827; font-weight: 900; font-size: 0.7rem; padding: 2px 6px; border-radius: 999px; }
+.chase-row { display: flex; gap: 16px; align-items: center; background: linear-gradient(135deg, #111827, #3b2a0a); color: #fde68a; border-radius: 18px; padding: 14px 16px; margin: 12px 0; }
+.chase-row .strand { color: #fde68a; margin: 0 0 4px; }
+.chase-row .muted { color: #fef3c7; }
+.chase-row .binder-slot { flex: 0 0 auto; width: 110px; }
+.binder-slot.empty.chase .mini-card.blank { background: #1f2937; border-color: #b45309; color: #fde68a; }
