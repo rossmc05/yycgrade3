@@ -8,6 +8,13 @@ import { PLAYERS, type Player } from '../players';
 import { BallBar } from './BallBar';
 import { BallCard, CardFront } from './Card';
 
+const canadian = (p: Player) => p.city === 'Toronto' || p.city === 'Montreal' || !!p.canada;
+const GROUPS = [
+  { name: 'Toronto, Montreal and Canada', has: canadian },
+  { name: "Today's stars", has: (p: Player) => !canadian(p) && !p.legend },
+  { name: 'Legends', has: (p: Player) => !canadian(p) && !!p.legend },
+];
+
 /** Every player, with the best parallel of each you have. Tap one to see all your versions of it. */
 export function Binder() {
   const { profile } = useStore();
@@ -34,21 +41,30 @@ export function Binder() {
           </div>
         </div>
       </section>
-      <div className="binder-grid">
-        {PLAYERS.map((p) => {
-          const top = best(p);
-          return top ? (
-            <button key={p.id} className="binder-slot" onClick={() => { setOpen(p); setView(top); }} aria-label={`${p.name}, best card ${top}`}>
-              <span className="mini-card"><CardFront player={p} parallel={top} serial={b.cards[cardKey(p.id, top)]?.serial} /></span>
-              {owned(p).length > 1 && <span className="have-n">{owned(p).length} kinds</span>}
-            </button>
-          ) : (
-            <div key={p.id} className="binder-slot empty" aria-label="Not collected yet">
-              <span className="mini-card blank"><span>?</span><small>{p.pos} · {p.city}</small></span>
+      {GROUPS.map((g) => {
+        const list = PLAYERS.filter(g.has);
+        const got = list.filter((p) => owned(p).length).length;
+        return (
+          <section key={g.name}>
+            <h2 className="strand">{g.name} <small>{got}/{list.length}</small></h2>
+            <div className="binder-grid">
+              {list.map((p) => {
+                const top = best(p);
+                return top ? (
+                  <button key={p.id} className="binder-slot" onClick={() => { setOpen(p); setView(top); }} aria-label={`${p.name}, best card ${top}`}>
+                    <span className="mini-card"><CardFront player={p} parallel={top} serial={b.cards[cardKey(p.id, top)]?.serial} /></span>
+                    {owned(p).length > 1 && <span className="have-n">{owned(p).length} kinds</span>}
+                  </button>
+                ) : (
+                  <div key={p.id} className="binder-slot empty" aria-label="Not collected yet">
+                    <span className="mini-card blank"><span>?</span><small>{p.pos} · {p.city}</small></span>
+                  </div>
+                );
+              })}
             </div>
-          );
-        })}
-      </div>
+          </section>
+        );
+      })}
       {open && view && (
         <div className="card-modal" role="dialog" aria-label={open.name} onClick={() => setOpen(null)}>
           <div className="card-modal-inner" onClick={(e) => e.stopPropagation()}>

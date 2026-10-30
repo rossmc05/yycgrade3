@@ -9,6 +9,7 @@ import { go, useRoute } from '../router';
 import { Binder } from './ui/Binder';
 import { Clubhouse } from './ui/Clubhouse';
 import { Derby } from './ui/Derby';
+import { LockerRoom } from './ui/LockerRoom';
 import { PlayBall } from './ui/PlayBall';
 import { TitleScene } from './ui/TitleScene';
 import { ProShop } from './ui/ProShop';
@@ -32,6 +33,7 @@ export function BallApp() {
   if (page === 'derby') return <Derby />;
   if (page === 'binder') return <Binder />;
   if (page === 'shop') return <ProShop />;
+  if (page === 'locker') return <LockerRoom />;
   return <Clubhouse />;
 }
 

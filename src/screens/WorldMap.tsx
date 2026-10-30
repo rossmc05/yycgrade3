@@ -130,9 +130,12 @@ export function WorldMap() {
           <div className="goal-bar small"><span style={{ width: `${Math.min(100, (doneToday / goal) * 100)}%` }} /></div>
           <small className="muted">{doneToday >= goal ? 'Daily goal done! 🎉' : `${doneToday} of ${goal} questions today`}</small>
         </div>
-        <button className="btn primary" onClick={() => walkTo(today, () => go('play', 'all', 'mix'))}>
-          <Icon e="⚔️" /> Today's quest: {placeOf(today)?.name}
-        </button>
+        <div className="map-actions">
+          <button className="btn primary" onClick={() => walkTo(today, () => go('play', 'all', 'mix'))}>
+            <Icon e="⚔️" /> Today's quest: {placeOf(today)?.name}
+          </button>
+          <a className="btn ballpark-btn" href="./ballpark.html"><Icon e="⚾" /> Ballpark</a>
+        </div>
       </section>
 
       <StoryBar onStory={() => setScene('intro')} />

@@ -359,3 +359,7 @@ body.game .built { background: #fff7ed; border: 3px dashed #fdba74; border-radiu
 /* Puck Slide */
 .rink-goal { position: absolute; right: 0.5%; top: 50%; transform: translateY(-50%); }
 body.game .rink-track { border-color: var(--edge); box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.5); background-image: linear-gradient(90deg, transparent calc(50% - 2px), #dc2626 calc(50% - 2px) calc(50% + 2px), transparent calc(50% + 2px)) !important; }
+
+/* Shortcut to the ballpark app from the map */
+.map-head > .map-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: flex-end; max-width: none; flex: 0 1 auto; min-width: 0; }
+.ballpark-btn { text-decoration: none; background: linear-gradient(180deg, #3b82f6 0%, #1e3a8a 100%); color: #fff; text-shadow: 0 2px 0 rgba(0, 0, 0, 0.3); }

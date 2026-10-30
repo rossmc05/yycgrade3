@@ -3,7 +3,7 @@
 import { useMemo, useRef, useState } from 'react';
 import { Icon } from '../../art/sprite';
 import { AvatarArt } from '../../avatar/AvatarArt';
-import { colorOf, lookOf } from '../../avatar/catalog';
+import { colorOf } from '../../avatar/catalog';
 import { Celebrate, FxLayer, type FxHandle } from '../../battle/fx';
 import { useMusic } from '../../battle/music';
 import { sfx } from '../../battle/sfx';
@@ -12,7 +12,7 @@ import { useStore } from '../../engine/store';
 import type { Question, Skill, SubjectId } from '../../engine/types';
 import { go } from '../../router';
 import { RANK } from '../cards';
-import { ballOf, payout, type Payout } from '../data';
+import { ballOf, payout, type Payout, ballLookOf } from '../data';
 import { bat, newGame, pitch, PITCHES, resultCoins, SWINGS, tierLevel, winLuck, type Game, type Pitch, type Play, type Swing } from '../game';
 import { ballPerks } from '../gear';
 import { playerById, type Player } from '../players';
@@ -111,7 +111,7 @@ function Match({ subjects, innings, team, again }: { subjects: SubjectId[]; inni
   }, []);
 
   if (!profile) return null;
-  const look = lookOf(profile);
+  const look = ballLookOf(profile);
   const myColor = colorOf(look.topColor, '#2563eb');
   const myTeam = `${profile.name}'s Sluggers`;
   const batting = game.half === 'bottom';

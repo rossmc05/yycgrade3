@@ -3,7 +3,7 @@ import { newSkillState, recordAnswer } from '../src/engine/adaptive';
 import { seeded } from '../src/engine/random';
 import { newProfile } from '../src/engine/storage';
 import { cardKey, chances, PARALLELS, RANK, rollCard } from '../src/ballpark/cards';
-import { addCard, newBall, payout, rankOf, RANKS } from '../src/ballpark/data';
+import { addCard, ballLookOf, newBall, payout, rankOf, RANKS } from '../src/ballpark/data';
 import { derbyHit, derbyLuck, derbyTotal, FENCE } from '../src/ballpark/derby';
 import { advance, bat, newGame, pitch, RUN_RULE, tierLevel, winLuck, type Game } from '../src/ballpark/game';
 import { BALL_GEAR, ballPerks } from '../src/ballpark/gear';
@@ -117,6 +117,7 @@ describe('ballpark derby', () => {
 describe('ballpark cards and economy', () => {
   it('has unique players and six parallels from Base to Autograph', () => {
     expect(new Set(PLAYERS.map((p) => p.id)).size).toBe(PLAYERS.length);
+    expect(PLAYERS.length).toBeGreaterThanOrEqual(74);
     expect(PARALLELS.map((p) => p.id)).toEqual(['base', 'rare', 'refractor', 'relic', 'diamond', 'auto']);
     expect(PARALLELS.reduce((n, p) => n + p.weight, 0)).toBe(100);
   });
@@ -191,5 +192,17 @@ describe('ballpark questions use the shared learning engine', () => {
     const plan = planSkills(p, ['math', 'science'], 20, seeded(4), Date.now());
     expect(plan.length).toBe(20);
     expect(new Set(plan.map((s) => s.subject))).toEqual(new Set(['math', 'science']));
+  });
+});
+
+describe('ballpark look', () => {
+  it('keeps the Quest face and hair with a baseball uniform', () => {
+    const p = { ...newProfile('Sam', '🦊'), look: { ...ballLookOf(newProfile('x', 'y')), hair: 'hair-spiky', top: 'top-hoodie', hat: 'hat-crown', pet: 'pet-dog' } };
+    const l = ballLookOf(p);
+    expect(l.hair).toBe('hair-spiky');
+    expect(l.top).toBe('top-baseball');
+    expect(l.hat).toBe('hat-cap');
+    expect(l.pet).toBe('pet-none');
+    expect(ballLookOf({ ...p, ball: { ...newBall(), look: { ...newBall().look, hat: 'hat-batting' } } }).hat).toBe('hat-batting');
   });
 });

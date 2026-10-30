@@ -1,9 +1,9 @@
 import { Icon } from '../../art/sprite';
 import { FullScreenButton } from '../../components/FullScreen';
-import { Avatar } from '../../components/TopBar';
+import { AvatarArt } from '../../avatar/AvatarArt';
 import { useStore } from '../../engine/store';
 import { go } from '../../router';
-import { ballOf, rankOf, RANKS } from '../data';
+import { ballLookOf, ballOf, rankOf, RANKS } from '../data';
 
 /** The ballpark's top bar: back, rank and XP, ballpark coins. */
 export function BallBar({ back }: { back?: () => void }) {
@@ -16,7 +16,7 @@ export function BallBar({ back }: { back?: () => void }) {
       {back ? (
         <button className="icon-btn" onClick={back} aria-label="Back">←</button>
       ) : (
-        <button className="icon-btn" onClick={() => go('players')} aria-label="Switch player"><Avatar profile={profile} size={40} /></button>
+        <button className="icon-btn" onClick={() => go('players')} aria-label="Switch player"><span className="avatar" style={{ width: 40, height: 44 }}><AvatarArt look={ballLookOf(profile)} size={40} /></span></button>
       )}
       <span className="level-pill" title={`${b.xp} XP`}>
         <span className="level-num"><Icon e={RANKS[r.index].e} /> {RANKS[r.index].name}</span>

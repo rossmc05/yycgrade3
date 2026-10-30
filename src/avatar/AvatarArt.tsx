@@ -204,6 +204,21 @@ export function Top({ style, color, number }: { style: string; color: string; nu
           <text x="100" y="194" textAnchor="middle" fontSize="22" fontWeight="900" fill="#fff" stroke={dark} strokeWidth="1">{number}</text>
         </g>
       );
+    case 'top-baseball':
+    case 'top-pinstripe': {
+      const pin = style === 'top-pinstripe';
+      const trim = pin ? color : '#fff';
+      return (
+        <g>
+          <path d={body} fill={pin ? '#f8fafc' : color} />
+          {pin && [54, 66, 78, 90, 110, 122, 134, 146].map((x) => <line key={x} x1={x} y1={x < 70 || x > 130 ? 172 : 160} x2={x} y2="220" stroke={color} strokeWidth="1.6" opacity="0.8" />)}
+          <path d="M84 156 L100 172 L116 156" fill="none" stroke={trim} strokeWidth="4" />
+          <path d="M100 172 V220" stroke={trim} strokeWidth="2.5" />
+          {[182, 196, 210].map((y) => <circle key={y} cx="105" cy={y} r="2" fill={trim} />)}
+          <text x="130" y="200" textAnchor="middle" fontSize="20" fontWeight="900" fill={pin ? color : '#fff'} stroke={pin ? '#fff' : dark} strokeWidth="1">{number}</text>
+        </g>
+      );
+    }
     case 'top-labcoat':
       return (
         <g>
@@ -252,6 +267,24 @@ export function Hat({ style, color }: { style: string; color: string }) {
           <path d="M52 78 Q52 36 100 36 Q148 36 148 78Z" fill={color} />
           <path d="M100 74 Q150 70 176 82 Q150 88 100 82Z" fill={shade(color, 0.3)} />
           <circle cx="100" cy="38" r="4" fill={shade(color, 0.3)} />
+        </g>
+      );
+    case 'hat-backwards':
+      return (
+        <g>
+          <path d="M52 78 Q52 36 100 36 Q148 36 148 78Z" fill={color} />
+          <path d="M62 66 Q38 64 24 74 Q40 82 64 76Z" fill={shade(color, 0.3)} />
+          <circle cx="100" cy="38" r="4" fill={shade(color, 0.3)} />
+        </g>
+      );
+    case 'hat-batting':
+      return (
+        <g>
+          <path d="M48 90 Q46 32 100 32 Q154 32 152 90Z" fill={color} />
+          <path d="M100 82 Q148 78 170 88 Q148 94 100 88Z" fill={shade(color, 0.3)} />
+          <path d="M48 84 Q42 116 64 122 Q74 114 70 86Z" fill={color} />
+          <circle cx="58" cy="102" r="5" fill={shade(color, 0.35)} />
+          <path d="M70 46 Q90 38 110 40" stroke="#fff" strokeWidth="5" strokeLinecap="round" fill="none" opacity="0.45" />
         </g>
       );
     case 'hat-toque':
@@ -363,6 +396,13 @@ export function FaceGear({ style, color }: { style: string; color: string }) {
           <line x1="100" y1="86" x2="100" y2="114" stroke="#0e7490" strokeWidth="2" />
         </g>
       );
+    case 'face-eyeblack':
+      return (
+        <g stroke="#111827" strokeWidth="5" strokeLinecap="round">
+          <path d="M71 116 L91 116" />
+          <path d="M109 116 L129 116" />
+        </g>
+      );
     case 'face-paint':
       return (
         <g>
@@ -405,7 +445,7 @@ function FlatAvatar({ look, size = 120, background = true }: { look: Look; size?
         <circle cx="100" cy="96" r="48" fill={skin} />
         <circle cx="72" cy="116" r="7" fill="#f87171" opacity="0.35" />
         <circle cx="128" cy="116" r="7" fill="#f87171" opacity="0.35" />
-        <HairFront style={look.hat === 'hat-helmet' || look.hat === 'hat-toque' ? 'hair-none' : look.hair} color={hair} />
+        <HairFront style={look.hat === 'hat-helmet' || look.hat === 'hat-toque' || look.hat === 'hat-batting' ? 'hair-none' : look.hair} color={hair} />
         <Eyes style={look.eyes} />
         <Mouth style={look.mouth} />
         <FaceGear style={look.face} color={top} />
