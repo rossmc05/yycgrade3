@@ -2,17 +2,17 @@ import { useState } from 'react';
 import { useMusic } from '../../battle/music';
 import { useStore } from '../../engine/store';
 import { go } from '../../router';
-import { CHASE, cardKey, PARALLELS, RANK, type Parallel } from '../cards';
+import { CHASE, cardKey, isOneOfOne, oneOfOneParallel, parallelOf, PARALLELS, RANK, ROOKIES, type Parallel } from '../cards';
 import { ballOf } from '../data';
 import { PLAYERS, type Player } from '../players';
 import { BallBar } from './BallBar';
 import { BallCard, CardFront } from './Card';
 
 const GROUPS = [
-  { name: "Today's stars", has: (p: Player) => !p.legend },
+  { name: "Today's stars", has: (p: Player) => !p.legend && !p.rookie },
   { name: 'Legends', has: (p: Player) => !!p.legend && !p.chase },
 ];
-const SET = PLAYERS.filter((p) => !p.chase);
+const SET = PLAYERS.filter((p) => !isOneOfOne(p));
 
 /** Every player, with the best parallel of each you have. Tap one to see all your versions of it. */
 export function Binder() {
@@ -56,6 +56,23 @@ export function Binder() {
           <p className="muted small">{hasChase ? 'You found it! A signed Babe Ruth, and the only one ever made.' : 'Somewhere out there is one signed Babe Ruth card, numbered 1 of 1. Any card you win might be it. Luck from big wins and the Lucky Cap help.'}</p>
         </div>
       </section>
+      <section className="chase-row super-row">
+        <div>
+          <h2 className="strand">Rookie Superfractors <small>{ROOKIES.filter((p) => b.cards[cardKey(p.id, 'super')]).length}/{ROOKIES.length}</small></h2>
+          <p className="muted small">The top rookies of 2025, each in one rainbow-gold Superfractor numbered 1 of 1. Rarer than an Autograph.</p>
+          <div className="super-slots">
+            {ROOKIES.map((p) => b.cards[cardKey(p.id, 'super')] ? (
+              <button key={p.id} className="binder-slot super" onClick={() => { setOpen(p); setView('super'); }} aria-label={`${p.name} Superfractor`}>
+                <span className="mini-card"><CardFront player={p} parallel="super" serial={1} /></span>
+              </button>
+            ) : (
+              <div key={p.id} className="binder-slot empty super" aria-label="Superfractor not found yet">
+                <span className="mini-card blank"><span>🌈</span><small>{p.pos} · 1 of 1</small></span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
       {GROUPS.map((g) => {
         const list = PLAYERS.filter(g.has);
         const got = list.filter((p) => owned(p).length).length;
@@ -85,7 +102,7 @@ export function Binder() {
           <div className="card-modal-inner" onClick={(e) => e.stopPropagation()}>
             <BallCard key={view} player={open} parallel={view} serial={b.cards[cardKey(open.id, view)]?.serial} big />
             <div className="par-legend">
-              {(open.chase ? PARALLELS.filter((par) => par.id === 'auto') : PARALLELS).map((par) => {
+              {(isOneOfOne(open) ? [parallelOf(oneOfOneParallel(open))] : PARALLELS).map((par) => {
                 const c = b.cards[cardKey(open.id, par.id)];
                 return (
                   <button key={par.id} className={`par-chip p-${par.id} ${view === par.id ? 'sel' : ''}`} disabled={!c} onClick={() => setView(par.id)}>

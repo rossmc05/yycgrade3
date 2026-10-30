@@ -18,7 +18,7 @@ export function Clubhouse() {
   if (!profile) return null;
   const b = ballOf(profile);
   const r = rankOf(b.xp);
-  const set = PLAYERS.filter((p) => !p.chase);
+  const set = PLAYERS.filter((p) => !p.chase && !p.rookie);
   const players = set.filter((p) => Object.keys(b.cards).some((k) => k.startsWith(`${p.id}:`))).length;
   const next = RANKS[r.index + 1];
   const spots: Spot[] = [

@@ -16,6 +16,10 @@ export interface Player {
   legend?: boolean;
   /** The one chase card: only ever pulled as a 1/1 Autograph. */
   chase?: boolean;
+  /** A top 2025 rookie: only ever pulled as a 1/1 Superfractor. */
+  rookie?: boolean;
+  /** A rookie Superfractor that is also signed. */
+  signed?: boolean;
   /** Canadian connection, shown with a maple leaf. */
   canada?: boolean;
   /** Card ratings out of 99 (made up for the game): contact, power, speed, or for pitchers velocity, control, stamina. */
@@ -128,6 +132,13 @@ export const PLAYERS: Player[] = [
   P('rivera', 'Mariano Rivera', 'New York', NYY, [90, 99, 70], 'Saved 652 games with his cutter. The first player voted into the Hall of Fame by every voter.', { legend: true }),
   P('rjohnson', 'Randy Johnson', 'Arizona', ARI, [98, 85, 92], 'Nicknamed "the Big Unit." At 6 feet 10 inches, he won five Cy Young awards.', { legend: true }),
   P('kershaw', 'Clayton Kershaw', 'Los Angeles', LAD, [86, 95, 85], 'Won the Cy Young award three times. Famous for his big curveball.', { legend: true }),
+  // Top 2025 rookies: 1/1 Superfractors only
+  H('kurtz', 'Nick Kurtz', '1B', 'Sacramento', ['#003831', '#efb21e'], [86, 95, 35], 'The 2025 American League Rookie of the Year. Once hit 4 home runs in one game!', { rookie: true }),
+  H('baldwin', 'Drake Baldwin', 'C', 'Atlanta', ATL, [86, 84, 30], 'The 2025 National League Rookie of the Year, as a catcher for Atlanta.', { rookie: true }),
+  H('anthony', 'Roman Anthony', 'OF', 'Boston', BOS, [88, 84, 70], 'One of the top prospects in baseball when Boston called him up in 2025.', { rookie: true }),
+  H('jwilson', 'Jacob Wilson', 'SS', 'Sacramento', ['#003831', '#efb21e'], [95, 60, 60], 'Almost never strikes out. His dad Jack was a big-league shortstop too.', { rookie: true }),
+  P('horton', 'Cade Horton', 'Chicago', CHC, [88, 88, 85], 'A Chicago rookie pitcher who was a Rookie of the Year finalist in 2025.', { rookie: true }),
+  P('schlittler', 'Cam Schlittler', 'New York', NYY, [94, 86, 82], 'A New York rookie with a 100 mph fastball. Struck out 12 in a 2025 playoff win over Boston.', { rookie: true, signed: true }),
   // The chase card
   H('ruth', 'Babe Ruth', 'OF', 'New York', NYY_RUTH, [90, 99, 40], 'The most famous baseball player ever. Hit 714 home runs. This signed card is one of a kind!', { legend: true, chase: true }),
 ];
