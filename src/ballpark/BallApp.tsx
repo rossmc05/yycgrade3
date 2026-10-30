@@ -1,7 +1,6 @@
 // Big League Brains: the baseball app. Same players, questions and learning records as Grade 3 Quest.
 
 import { useEffect, useState } from 'react';
-import { Sprite } from '../art/sprite';
 import { sfx } from '../battle/sfx';
 import { canFullScreen, toggleFullScreen } from '../components/FullScreen';
 import { Avatar } from '../components/TopBar';
@@ -11,6 +10,7 @@ import { Binder } from './ui/Binder';
 import { Clubhouse } from './ui/Clubhouse';
 import { Derby } from './ui/Derby';
 import { PlayBall } from './ui/PlayBall';
+import { TitleScene } from './ui/TitleScene';
 import { ProShop } from './ui/ProShop';
 
 const SEEN = 'g3-ballpark-started';
@@ -49,11 +49,7 @@ function BallTitle({ onStart }: { onStart: () => void }) {
   });
   return (
     <main className="title-screen ball-title">
-      <div className="ball-lights" aria-hidden="true">{[0, 1, 2, 3].map((i) => <span key={i} />)}</div>
-      <div className="title-scene" aria-hidden="true">
-        <Sprite e="🏟️" size="min(46vw, 380px)" className="t-stadium" />
-        <Sprite e="⚾" size="min(14vw, 110px)" className="t-ball" />
-      </div>
+      <TitleScene />
       <div className="title-logo">
         <h1><span>Big League</span> Brains</h1>
         <p>Answer right, hit it out of the park!</p>
