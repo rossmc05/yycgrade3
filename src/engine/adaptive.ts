@@ -56,16 +56,24 @@ export interface RecordResult {
 /**
  * Apply one answer to a skill's state. `firstTry` is false when the child
  * needed a hint; that counts as a miss for difficulty and mastery.
+ * `asked` is the level the question came from when a game picked an easier or
+ * harder one: an easy one right, or a hard one wrong, doesn't move the level.
  */
-export function recordAnswer(skill: Skill, prev: SkillState, q: Question, firstTry: boolean, now: number): RecordResult {
+export function recordAnswer(skill: Skill, prev: SkillState, q: Question, firstTry: boolean, now: number, asked?: number): RecordResult {
   const key = q.key;
   const s: SkillState = { ...prev, history: [...prev.history], missed: [...prev.missed] };
-  const attempt: Attempt = { t: now, correct: firstTry, level: s.level, key };
+  const level = asked ?? s.level;
+  const attempt: Attempt = { t: now, correct: firstTry, level, key };
   s.history.push(attempt);
   if (s.history.length > 300) s.history = s.history.slice(-300);
 
   let levelChange: -1 | 0 | 1 = 0;
   const top = skill.levels.length - 1;
+  const counts = level === s.level || (level > s.level && firstTry) || (level < s.level && !firstTry);
+  if (!counts) {
+    if (firstTry) s.missed = s.missed.filter((m) => m.key !== key);
+    return { state: s, levelChange, newlyMastered: false };
+  }
 
   // Results at the current level since it last changed, kept across sessions.
   const recent = [...(s.recent ?? []), firstTry].slice(-5);

@@ -60,6 +60,12 @@ export function Home() {
           <span className="tile-tag">Fact races, boss battles, spelling bee and more</span>
           <span className="tile-meta">10 games</span>
         </button>
+        <a className="subject-tile" style={{ ['--tile' as string]: '#1e3a8a' }} href="./ballpark.html">
+          <span className="tile-icon"><Icon e="⚾" size="1em" /></span>
+          <span className="tile-name">Big League Brains</span>
+          <span className="tile-tag">Baseball: answer right to get hits, pitch outs and win player cards</span>
+          <span className="tile-meta">Play ball!</span>
+        </a>
         <button className="subject-tile" style={{ ['--tile' as string]: '#0f766e' }} onClick={() => go('avatar')}>
           <span className="tile-icon">🎨</span>
           <span className="tile-name">Avatar Studio</span>

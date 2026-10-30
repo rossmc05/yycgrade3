@@ -13,9 +13,9 @@ export interface AnswerOutcome {
  * Apply one finished question to the profile.
  * firstTry: right with no hint. solved: right on the second try, after the hint.
  */
-export function applyAnswer(p: Profile, skill: Skill, q: Question, firstTry: boolean, solved: boolean, seconds: number, now: number): AnswerOutcome {
+export function applyAnswer(p: Profile, skill: Skill, q: Question, firstTry: boolean, solved: boolean, seconds: number, now: number, asked?: number): AnswerOutcome {
   const prev = p.skills[skill.id] ?? newSkillState();
-  const { state, levelChange, newlyMastered } = recordAnswer(skill, prev, q, firstTry, now);
+  const { state, levelChange, newlyMastered } = recordAnswer(skill, prev, q, firstTry, now, asked);
   const xp = firstTry ? XP_FIRST_TRY : solved ? XP_WITH_HINT : 1;
   const key = dayKey(now);
   const day = p.days[key] ?? { questions: 0, correct: 0, seconds: 0, bySubject: {} };
