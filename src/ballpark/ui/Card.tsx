@@ -54,14 +54,16 @@ export function CardBack({ player, parallel }: { player: Player; parallel: Paral
   );
 }
 
-/** A card that flips over when tapped. */
+/**
+ * A card that flips over when tapped. Only one side is drawn at a time (some tablets
+ * show both sides of a 3D flip at once), with a quick turn animation between them.
+ */
 export function BallCard({ player, parallel, serial, big }: { player: Player; parallel: Parallel; serial?: number; big?: boolean }) {
   const [flipped, setFlipped] = useState(false);
   return (
-    <button className={`bcard ${big ? 'big' : ''} ${flipped ? 'flipped' : ''}`} onClick={() => setFlipped((f) => !f)} aria-label={`${player.name}, ${parallelOf(parallel).name} card. Tap to flip.`}>
-      <span className="bcard-inner">
-        <CardFront player={player} parallel={parallel} serial={serial} />
-        <CardBack player={player} parallel={parallel} />
+    <button className={`bcard ${big ? 'big' : ''}`} onClick={() => setFlipped((f) => !f)} aria-label={`${player.name}, ${parallelOf(parallel).name} card. Tap to flip.`}>
+      <span key={flipped ? 'back' : 'front'} className="bcard-inner turn">
+        {flipped ? <CardBack player={player} parallel={parallel} /> : <CardFront player={player} parallel={parallel} serial={serial} />}
       </span>
     </button>
   );

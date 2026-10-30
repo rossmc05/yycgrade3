@@ -16,9 +16,10 @@ import { ballOf, payout, type Payout } from '../data';
 import { bat, newGame, pitch, PITCHES, resultCoins, SWINGS, tierLevel, winLuck, type Game, type Pitch, type Play, type Swing } from '../game';
 import { ballPerks } from '../gear';
 import { playerById, type Player } from '../players';
-import { ask, BALL_SUBJECTS, levelOf, planSkills, recordBall, XP_RIGHT, XP_WRONG } from '../questions';
+import { ask, levelOf, planSkills, recordBall, XP_RIGHT, XP_WRONG } from '../questions';
 import { OPPONENTS, type Team } from '../teams';
 import { Ask } from './Ask';
+import { ALL_SUBJECTS, SubjectPicker } from './SubjectPicker';
 import { BallBar } from './BallBar';
 import { CardReveal } from './Card';
 import { Field, OnField, SPOTS, TheirPlayer } from './Field';
@@ -49,11 +50,10 @@ export function PlayBall() {
 }
 
 function Setup({ onStart }: { onStart: (s: { subjects: SubjectId[]; innings: number; team: Team }) => void }) {
-  const [subjects, setSubjects] = useState<SubjectId[]>(BALL_SUBJECTS.map((s) => s.id));
+  const [subjects, setSubjects] = useState<SubjectId[]>(ALL_SUBJECTS);
   const [innings, setInnings] = useState(3);
   const [team] = useState(() => OPPONENTS[Math.floor(Math.random() * OPPONENTS.length)]);
   useMusic('ballpark');
-  const toggle = (id: SubjectId) => setSubjects((s) => (s.includes(id) ? (s.length > 1 ? s.filter((x) => x !== id) : s) : [...s, id]));
   return (
     <main className="page ballpark">
       <BallBar back={() => go('')} />
@@ -61,13 +61,7 @@ function Setup({ onStart }: { onStart: (s: { subjects: SubjectId[]; innings: num
         <h1>Play Ball!</h1>
         <p className="muted">Today you play the <strong>{team.name}</strong>. You pitch first, then you bat.</p>
         <h3>Questions from</h3>
-        <div className="subject-chips">
-          {BALL_SUBJECTS.map((s) => (
-            <button key={s.id} className={`subject-chip ${subjects.includes(s.id) ? 'on' : ''}`} style={{ ['--tile' as string]: s.color }} onClick={() => toggle(s.id)} aria-pressed={subjects.includes(s.id)}>
-              <Icon e={s.icon} /> {s.name}
-            </button>
-          ))}
-        </div>
+        <SubjectPicker value={subjects} onChange={setSubjects} />
         <h3>How long?</h3>
         <div className="subject-chips">
           {[3, 6].map((n) => (

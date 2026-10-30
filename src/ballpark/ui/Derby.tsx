@@ -15,8 +15,9 @@ import { ballOf, payout, type Payout } from '../data';
 import { DERBY_SWINGS, derbyCoins, derbyHit, derbyLuck, derbyTotal, FENCE, type DerbyHit } from '../derby';
 import { SWINGS, tierLevel, type Swing } from '../game';
 import { ballPerks } from '../gear';
-import { ask, BALL_SUBJECTS, levelOf, planSkills, recordBall, XP_RIGHT, XP_WRONG } from '../questions';
+import { ask, levelOf, planSkills, recordBall, XP_RIGHT, XP_WRONG } from '../questions';
 import { Ask } from './Ask';
+import { ALL_SUBJECTS, SubjectPicker } from './SubjectPicker';
 import { BallBar } from './BallBar';
 import { CardReveal } from './Card';
 import { Field, OnField, SPOTS, TheirPlayer } from './Field';
@@ -33,11 +34,10 @@ export function Derby() {
 
 function DerbySetup({ onStart }: { onStart: (s: SubjectId[]) => void }) {
   const { profile } = useStore();
-  const [subjects, setSubjects] = useState<SubjectId[]>(BALL_SUBJECTS.map((s) => s.id));
+  const [subjects, setSubjects] = useState<SubjectId[]>(ALL_SUBJECTS);
   useMusic('ballpark');
   if (!profile) return null;
   const best = ballOf(profile).derby;
-  const toggle = (id: SubjectId) => setSubjects((s) => (s.includes(id) ? (s.length > 1 ? s.filter((x) => x !== id) : s) : [...s, id]));
   return (
     <main className="page ballpark">
       <BallBar back={() => go('')} />
@@ -45,13 +45,7 @@ function DerbySetup({ onStart }: { onStart: (s: SubjectId[]) => void }) {
         <h1><Icon e="💥" /> Home Run Derby</h1>
         <p className="muted">Ten swings. Harder questions hit the ball farther. The fence is {FENCE} feet away. Your score is the total feet of your home runs.</p>
         <h3>Questions from</h3>
-        <div className="subject-chips">
-          {BALL_SUBJECTS.map((s) => (
-            <button key={s.id} className={`subject-chip ${subjects.includes(s.id) ? 'on' : ''}`} style={{ ['--tile' as string]: s.color }} onClick={() => toggle(s.id)} aria-pressed={subjects.includes(s.id)}>
-              <Icon e={s.icon} /> {s.name}
-            </button>
-          ))}
-        </div>
+        <SubjectPicker value={subjects} onChange={setSubjects} />
         {best.plays > 0 && <p className="muted">Your best: {best.bestFeet} ft ({best.bestHrs} home runs). Longest: {best.longest} ft.</p>}
         <p>Every derby earns a collector card. More home runs make a rarer card likelier!</p>
         <button className="btn primary big" onClick={() => { sfx.unlock(); onStart(subjects); }}>💥 Start the derby</button>
