@@ -115,7 +115,26 @@ export const DEFAULT_LOOK: Look = {
   topColor: 'tc-blue', shoes: 'shoes-sneakers', hat: 'hat-none', face: 'face-none', pet: 'pet-none', bg: 'bg-sky', number: 9,
 };
 
-export const part = (id: string): Part | undefined => PARTS.find((p) => p.id === id);
+/** Baseball-only parts, for the ballpark's Locker Room (not sold in the Avatar Studio). Costs are ballpark coins. */
+export const BALL_PARTS: Part[] = [
+  { id: 'top-baseball', slot: 'top', name: 'Baseball jersey', cost: 0 },
+  { id: 'top-pinstripe', slot: 'top', name: 'Pinstripes', cost: 120 },
+  ...free('topColor', [
+    ['bc-royal', 'Royal blue', '#134a8e'], ['bc-navy', 'Navy', '#0c2340'], ['bc-red', 'Red', '#c8102e'], ['bc-black', 'Black', '#1f2937'],
+    ['bc-green', 'Green', '#0f5132'], ['bc-orange', 'Orange', '#df4601'], ['bc-powder', 'Powder blue', '#5b9bd5'], ['bc-purple', 'Purple', '#4c1d95'],
+    ['bc-maroon', 'Maroon', '#7f1d1d'], ['bc-teal', 'Teal', '#00706b'],
+  ]),
+  { id: 'hat-cap', slot: 'hat', name: 'Ball cap', cost: 0 },
+  { id: 'hat-batting', slot: 'hat', name: 'Batting helmet', cost: 0 },
+  { id: 'hat-backwards', slot: 'hat', name: 'Backwards cap', cost: 60 },
+  { id: 'face-none', slot: 'face', name: 'Nothing', cost: 0 },
+  { id: 'face-eyeblack', slot: 'face', name: 'Eye black', cost: 40 },
+  { id: 'face-sunglasses', slot: 'face', name: 'Sunglasses', cost: 80 },
+  { id: 'shoes-cleats', slot: 'shoes', name: 'Cleats', cost: 0 },
+  { id: 'shoes-goldcleats', slot: 'shoes', name: 'Gold cleats', cost: 150 },
+];
+
+export const part = (id: string): Part | undefined => PARTS.find((p) => p.id === id) ?? BALL_PARTS.find((p) => p.id === id);
 export const colorOf = (id: string, fallback: string) => part(id)?.color ?? fallback;
 
 /** A player's look, with old saves (emoji avatar + equipped list) carried over. */

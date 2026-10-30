@@ -43,8 +43,13 @@ export function chances(luck: number): number[] {
   return PARALLELS.map((p, i) => (i === 0 ? p.weight - shift : p.weight + shift * extra[i]));
 }
 
-/** A random card. `atLeast` turns anything below that parallel into it. */
-export function rollCard(rng: () => number, luck = 0, atLeast: Parallel = 'base'): Pull {
+/** The one-of-one chase card, and its chance per pull: 1 in 400, plus a little for each point of luck. */
+export const CHASE = PLAYERS.find((p) => p.chase)!;
+export const chaseChance = (luck: number) => 0.0025 + 0.0015 * Math.max(0, Math.min(3, luck));
+
+/** A random card. `atLeast` turns anything below that parallel into it. Pass `chase: false` once the chase card is owned. */
+export function rollCard(rng: () => number, luck = 0, atLeast: Parallel = 'base', chase = true): Pull {
+  if (chase && rng() < chaseChance(luck)) return { player: CHASE, parallel: 'auto', serial: 1 };
   const w = chances(luck);
   let r = rng() * w.reduce((a, b) => a + b, 0);
   let i = 0;
@@ -54,10 +59,13 @@ export function rollCard(rng: () => number, luck = 0, atLeast: Parallel = 'base'
   }
   const parallel = PARALLELS[Math.max(i, RANK[atLeast])];
   // Legends turn up a little less often than today's stars.
-  const pool = PLAYERS.flatMap((p) => (p.legend ? [p] : [p, p]));
+  const pool = PLAYERS.flatMap((p) => (p.chase ? [] : p.legend ? [p] : [p, p]));
   const player = pool[Math.floor(rng() * pool.length)];
   const serial = parallel.printRun ? 1 + Math.floor(rng() * parallel.printRun) : undefined;
   return { player, parallel: parallel.id, serial };
 }
+
+/** Print run for a card: the chase card is a 1/1. */
+export const printRunOf = (player: Player, parallel: Parallel) => (player.chase ? 1 : parallelOf(parallel).printRun);
 
 export const cardKey = (playerId: string, parallel: Parallel) => `${playerId}:${parallel}`;

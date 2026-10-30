@@ -1,7 +1,7 @@
 // A collector card: front with the player and the parallel's finish, back with ratings and a fact.
 
 import { useState } from 'react';
-import { parallelOf, type Parallel } from '../cards';
+import { parallelOf, printRunOf, type Parallel } from '../cards';
 import { RATING_NAMES, type Player } from '../players';
 import { Figure } from './Figure';
 
@@ -9,9 +9,10 @@ const skinOf = (id: string) => [...id].reduce((n, c) => n + c.charCodeAt(0), 0);
 
 export function CardFront({ player, parallel, serial }: { player: Player; parallel: Parallel; serial?: number }) {
   const def = parallelOf(parallel);
+  const run = printRunOf(player, parallel);
   const [c1, c2] = player.colors;
   return (
-    <div className={`bcard-face front p-${parallel}`} style={{ ['--c1' as string]: c1, ['--c2' as string]: c2 }}>
+    <div className={`bcard-face front p-${parallel} ${player.chase ? 'chase' : ''}`} style={{ ['--c1' as string]: c1, ['--c2' as string]: c2 }}>
       <div className="bcard-art">
         <div className="bcard-stadium" />
         <Figure color={c1} trim={c2} pose={player.role === 'pitcher' ? 'pitch' : 'bat'} skin={skinOf(player.id)} size={150} />
@@ -20,14 +21,15 @@ export function CardFront({ player, parallel, serial }: { player: Player; parall
         {(parallel === 'refractor' || parallel === 'diamond') && <span className="shine" aria-hidden="true" />}
         <span className="bcard-pos">{player.pos}</span>
         {player.canada && <span className="bcard-maple" title="Canadian connection">🍁</span>}
+        {player.chase && <span className="bcard-chase">1 of 1</span>}
       </div>
       <div className="bcard-name">
         <strong>{player.name}</strong>
         <small>{player.city}{player.legend ? ' · Legend' : ''}</small>
       </div>
       <div className="bcard-foot">
-        <span className="par">{def.name}</span>
-        {serial !== undefined && def.printRun && <span className="serial">{serial}/{def.printRun}</span>}
+        <span className="par">{player.chase ? 'Chase Autograph' : def.name}</span>
+        {serial !== undefined && run && <span className="serial">{serial}/{run}</span>}
       </div>
     </div>
   );
@@ -49,7 +51,7 @@ export function CardBack({ player, parallel }: { player: Player; parallel: Paral
         ))}
       </div>
       <p>{player.fact}</p>
-      <small className="muted">{parallelOf(parallel).about}</small>
+      <small className="muted">{player.chase ? 'The chase card. Signed, and only one was ever made.' : parallelOf(parallel).about}</small>
     </div>
   );
 }
@@ -72,12 +74,13 @@ export function BallCard({ player, parallel, serial, big }: { player: Player; pa
 /** Pulling a card: it spins in, then shows what it is. */
 export function CardReveal({ player, parallel, serial, isNew, coins, label }: { player: Player; parallel: Parallel; serial?: number; isNew: boolean; coins: number; label?: string }) {
   const def = parallelOf(parallel);
+  const run = printRunOf(player, parallel);
   return (
     <div className={`card-reveal p-${parallel}`}>
       <div className="reveal-spin"><BallCard player={player} parallel={parallel} serial={serial} /></div>
       <div className="reveal-text">
         {label && <small className="muted">{label}</small>}
-        <small className="rarity">{def.name}{def.printRun && serial ? ` · ${serial}/${def.printRun}` : ''}</small>
+        <small className="rarity">{player.chase ? 'THE CHASE CARD' : def.name}{run && serial ? ` · ${serial}/${run}` : ''}</small>
         <strong>{isNew ? `${player.name}!` : `${player.name} again!`}</strong>
         <p className="muted small">{isNew ? 'Added to your Card Binder. Tap the card to flip it.' : `You already had this one, so you traded it for ${coins} coins.`}</p>
       </div>

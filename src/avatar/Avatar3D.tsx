@@ -74,6 +74,17 @@ function Legs({ pants, shoes }: { pants: string; shoes: string }) {
             <path d={`M${x - 16} 288 v4 M${x + 12} 288 v4`} stroke="#94a3b8" strokeWidth="3" />
           </g>
         );
+      case 'shoes-cleats':
+      case 'shoes-goldcleats': {
+        const c = shoes === 'shoes-goldcleats' ? '#eab308' : '#111827';
+        return (
+          <g>
+            <path d={`M${x - 18} 290 q0 -16 14 -20 h16 v20z`} fill={c} />
+            <path d={`M${x - 14} 284 h20`} stroke="#fff" strokeWidth="3" />
+            {[-14, -4, 6].map((d) => <rect key={d} x={x + d} y={290} width="4" height="5" fill="#9ca3af" />)}
+          </g>
+        );
+      }
       case 'shoes-rocket':
         return (
           <g>
@@ -168,7 +179,7 @@ export function Avatar3D({ look, size = 120, background = true, full = false }: 
         <g className={full ? 'breathe' : ''}>
           {full && <ellipse cx="100" cy="300" rx="62" ry="8" fill="#000" opacity="0.18" />}
           <g filter={soft}><HairBack style={look.hair} color={hair} /></g>
-          {full && <g filter={soft}><Legs pants={look.top === 'top-space' ? '#e5e7eb' : '#1e3a8a'} shoes={look.shoes} /></g>}
+          {full && <g filter={soft}><Legs pants={look.top === 'top-space' || look.top === 'top-baseball' || look.top === 'top-pinstripe' ? '#e5e7eb' : '#1e3a8a'} shoes={look.shoes} /></g>}
           {full && look.top === 'top-cape' && <path d="M60 158 Q30 230 26 280 L174 280 Q170 230 140 158Z" fill="#b91c1c" />}
           {full && <g filter={soft}><Arms sleeve={sleeve} skin={skin} cape={false} /></g>}
           <g filter={soft} transform={full ? 'translate(100 0) scale(0.86 1) translate(-100 0)' : undefined}><Top style={look.top} color={top} number={look.number} /></g>
@@ -180,7 +191,7 @@ export function Avatar3D({ look, size = 120, background = true, full = false }: 
           </g>
           <ellipse cx="70" cy="118" rx="11" ry="8" fill={`url(#cheek-${uid})`} />
           <ellipse cx="130" cy="118" rx="11" ry="8" fill={`url(#cheek-${uid})`} />
-          <g filter={soft}><HairFront style={look.hat === 'hat-helmet' || look.hat === 'hat-toque' || look.hat === 'hat-cowboy' ? 'hair-none' : look.hair} color={hair} /></g>
+          <g filter={soft}><HairFront style={look.hat === 'hat-helmet' || look.hat === 'hat-toque' || look.hat === 'hat-cowboy' || look.hat === 'hat-batting' ? 'hair-none' : look.hair} color={hair} /></g>
           <Eyes3D style={look.eyes} iris={iris} uid={uid} />
           <ellipse cx="100" cy="112" rx="4" ry="3" fill={shade(skin, 0.15)} opacity="0.6" />
           <Mouth style={look.mouth} />

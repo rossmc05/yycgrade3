@@ -1,8 +1,9 @@
 // The ballpark's part of a player's profile: its own coins, XP, gear, cards and records.
 // Answers still go through the shared learning engine, so practice counts everywhere.
 
+import { lookOf, type Look } from '../avatar/catalog';
 import type { Profile } from '../engine/types';
-import { cardKey, parallelOf, rollCard, type Parallel, type Pull } from './cards';
+import { CHASE, cardKey, parallelOf, rollCard, type Parallel, type Pull } from './cards';
 import type { BallSlot } from './gear';
 
 export interface OwnedCard {
@@ -22,7 +23,15 @@ export interface BallData {
   derby: { plays: number; bestFeet: number; bestHrs: number; longest: number };
   /** Rank reached, so a rank-up bonus card is given only once. */
   rank: number;
+  /** The ballpark look: uniform, number, headwear, face and cleats. Face, hair and skin come from Grade 3 Quest. */
+  look: BallLook;
+  /** Locker Room items bought. */
+  outfits: string[];
 }
+
+export type BallLook = Pick<Look, 'top' | 'topColor' | 'hat' | 'face' | 'shoes' | 'number'>;
+
+export const DEFAULT_BALL_LOOK: BallLook = { top: 'top-baseball', topColor: 'bc-royal', hat: 'hat-cap', face: 'face-none', shoes: 'shoes-cleats', number: 9 };
 
 export const newBall = (): BallData => ({
   xp: 0,
@@ -33,9 +42,17 @@ export const newBall = (): BallData => ({
   record: { w: 0, l: 0, t: 0 },
   derby: { plays: 0, bestFeet: 0, bestHrs: 0, longest: 0 },
   rank: 0,
+  look: DEFAULT_BALL_LOOK,
+  outfits: [],
 });
 
 export const ballOf = (p: Profile): BallData => ({ ...newBall(), ...p.ball });
+
+/** The player as they look at the ballpark: their own face and hair, in their baseball uniform. */
+export function ballLookOf(p: Profile): Look {
+  const quest = lookOf(p);
+  return { ...quest, ...DEFAULT_BALL_LOOK, number: quest.number, ...p.ball?.look, pet: 'pet-none', bg: 'bg-sky' };
+}
 
 export const RANKS = [
   { name: 'Rookie', xp: 0, e: '🧢' },
@@ -81,7 +98,7 @@ export function payout(b: BallData, xp: number, coins: number, luck: number | nu
   let ball: BallData = { ...b, xp: b.xp + xp, coins: b.coins + gained };
   const pulls: Pulled[] = [];
   const give = (luckNow: number, atLeast?: Parallel) => {
-    const r = addCard(ball, rollCard(rng, luckNow, atLeast), now);
+    const r = addCard(ball, rollCard(rng, luckNow, atLeast, !ball.cards[cardKey(CHASE.id, 'auto')]), now);
     ball = r.ball;
     pulls.push(r.pulled);
   };

@@ -3,7 +3,7 @@
 import { useMemo, useRef, useState } from 'react';
 import { Icon } from '../../art/sprite';
 import { AvatarArt } from '../../avatar/AvatarArt';
-import { lookOf } from '../../avatar/catalog';
+
 import { Celebrate, FxLayer, type FxHandle } from '../../battle/fx';
 import { useMusic } from '../../battle/music';
 import { sfx } from '../../battle/sfx';
@@ -11,7 +11,7 @@ import { stopSpeaking } from '../../engine/speech';
 import { useStore } from '../../engine/store';
 import type { Question, Skill, SubjectId } from '../../engine/types';
 import { go } from '../../router';
-import { ballOf, payout, type Payout } from '../data';
+import { ballOf, payout, type Payout, ballLookOf } from '../data';
 import { DERBY_SWINGS, derbyCoins, derbyHit, derbyLuck, derbyTotal, FENCE, type DerbyHit } from '../derby';
 import { SWINGS, tierLevel, type Swing } from '../game';
 import { ballPerks } from '../gear';
@@ -151,7 +151,7 @@ function DerbyRound({ subjects, again }: { subjects: SubjectId[]; again: () => v
       </section>
       <Field bases={[false, false, false]} play={last ? { id: n + 1, kind: last.hr ? 'hr' : last.feet ? (last.feet > 300 ? 'fly' : 'single') : 'strikeout' } : undefined} runner="#fff">
         <OnField {...SPOTS.mound} className="small"><TheirPlayer color="#475569" trim="#e2e8f0" pose="pitch" size={54} /></OnField>
-        <OnField {...SPOTS.plate}><AvatarArt look={lookOf(profile)} size={76} background={false} full /></OnField>
+        <OnField {...SPOTS.plate}><AvatarArt look={ballLookOf(profile)} size={76} background={false} full /></OnField>
         {last && last.feet > 0 && <span className={`distance ${last.hr ? 'hr' : ''}`}>{last.feet} ft{last.hr ? '!' : ''}</span>}
         <FxLayer ref={fx} />
       </Field>
