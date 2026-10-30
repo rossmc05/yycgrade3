@@ -50,7 +50,7 @@ export function chances(luck: number): number[] {
 export const CHASE = PLAYERS.find((p) => p.chase)!;
 export const chaseChance = (luck: number) => 0.0025 + 0.0015 * Math.max(0, Math.min(3, luck));
 
-/** The five 1/1 rookie Superfractors, and the chance a pull is one of them: 1 in 200, plus a little with luck. */
+/** The six 1/1 rookie Superfractors, and the chance a pull is one of them: 1 in 200, plus a little with luck. */
 export const ROOKIES = PLAYERS.filter((p) => p.rookie);
 export const superChance = (luck: number) => 0.005 + 0.002 * Math.max(0, Math.min(3, luck));
 

@@ -136,6 +136,7 @@ export const PLAYERS: Player[] = [
   H('anthony', 'Roman Anthony', 'OF', 'Boston', BOS, [88, 84, 70], 'One of the top prospects in baseball when Boston called him up in 2025.', { rookie: true }),
   H('jwilson', 'Jacob Wilson', 'SS', 'Sacramento', ['#003831', '#efb21e'], [95, 60, 60], 'Almost never strikes out. His dad Jack was a big-league shortstop too.', { rookie: true }),
   P('horton', 'Cade Horton', 'Chicago', CHC, [88, 88, 85], 'A Chicago rookie pitcher who was a Rookie of the Year finalist in 2025.', { rookie: true }),
+  P('schlittler', 'Cam Schlittler', 'New York', NYY, [94, 86, 82], 'A New York rookie with a 100 mph fastball. Struck out 12 in a 2025 playoff win over Boston.', { rookie: true }),
   // The chase card
   H('ruth', 'Babe Ruth', 'OF', 'New York', NYY_RUTH, [90, 99, 40], 'The most famous baseball player ever. Hit 714 home runs. This signed card is one of a kind!', { legend: true, chase: true }),
 ];

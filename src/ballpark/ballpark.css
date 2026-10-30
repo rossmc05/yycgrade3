@@ -315,7 +315,7 @@ a.btn { text-decoration: none; display: inline-block; }
 .card-reveal.p-super .rarity { color: #b45309; }
 .super-row { background: linear-gradient(135deg, #111827, #312e81 50%, #3b2a0a); }
 .super-row > div { flex: 1; min-width: 0; }
-.super-slots { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 10px; }
+.super-slots { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-top: 10px; }
 .super-slots .binder-slot { width: auto; }
 .binder-slot.empty.super .mini-card.blank { background: #1f2937; border-color: #a78bfa; color: #fde68a; }
 @media (max-width: 640px) { .super-slots { grid-template-columns: repeat(3, 1fr); } }

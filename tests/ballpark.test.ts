@@ -124,7 +124,7 @@ describe('ballpark cards and economy', () => {
     expect(PLAYERS.length).toBeGreaterThanOrEqual(74);
     // About ten legends, all from 1995 on, plus the one chase card.
     expect(PLAYERS.filter((p) => p.legend && !p.chase).length).toBe(10);
-    expect(ROOKIES.length).toBe(5);
+    expect(ROOKIES.length).toBe(6);
     expect(PLAYERS.filter((p) => p.chase).map((p) => p.name)).toEqual(['Babe Ruth']);
     expect(PARALLELS.map((p) => p.id)).toEqual(['base', 'rare', 'refractor', 'relic', 'diamond', 'auto']);
     expect(PARALLELS.reduce((n, p) => n + p.weight, 0)).toBe(100);
@@ -155,7 +155,7 @@ describe('ballpark cards and economy', () => {
     for (let i = 0; i < 50; i++) expect(payout(owned, 0, 0, 3, 0, () => 0, i).payout.pulls[0].player.chase).toBeFalsy();
   });
 
-  it('has five 1/1 rookie Superfractors, rarer than Autographs and never pulled twice', () => {
+  it('has six 1/1 rookie Superfractors, rarer than Autographs and never pulled twice', () => {
     for (const luck of [0, 1, 2, 3]) {
       expect(superChance(luck)).toBeLessThan(chances(luck)[5] / 100);
       expect(superChance(luck)).toBeGreaterThan(chaseChance(luck));
