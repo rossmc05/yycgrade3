@@ -87,13 +87,13 @@ export function addCard(b: BallData, pull: Pull, now: number): { ball: BallData;
 export interface Payout {
   xp: number;
   coins: number;
-  /** Cards pulled: the win or derby card, then any rank-up bonus card. */
+  /** Cards pulled: the win or derby cards, then any rank-up bonus card. */
   pulls: Pulled[];
   rankUp?: string;
 }
 
 /** Bank a finished game or derby: XP, coins (with the cap bonus), cards and a rank-up bonus card. */
-export function payout(b: BallData, xp: number, coins: number, luck: number | null, coinBonus: number, rng: () => number, now: number): { ball: BallData; payout: Payout } {
+export function payout(b: BallData, xp: number, coins: number, luck: number | null, coinBonus: number, rng: () => number, now: number, count = 1): { ball: BallData; payout: Payout } {
   const gained = Math.round(coins * (1 + coinBonus));
   let ball: BallData = { ...b, xp: b.xp + xp, coins: b.coins + gained };
   const pulls: Pulled[] = [];
@@ -102,7 +102,7 @@ export function payout(b: BallData, xp: number, coins: number, luck: number | nu
     ball = r.ball;
     pulls.push(r.pulled);
   };
-  if (luck !== null) give(luck);
+  if (luck !== null) for (let i = 0; i < count; i++) give(luck);
   const rank = rankOf(ball.xp).index;
   let rankUp: string | undefined;
   if (rank > ball.rank) {

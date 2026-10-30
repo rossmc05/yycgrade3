@@ -259,6 +259,12 @@ export function resultCoins(g: Game): number {
 }
 
 /** Card luck for a win: a blow-out or a shutout pulls better cards. No card for a loss or tie. */
+/** Cards for a win: 2, or 3 for a blowout (win by 5 or more, or a shutout). */
+export function winCards(g: Game): number {
+  if (g.result !== 'win') return 0;
+  return g.you - g.them >= 5 || g.them === 0 ? 3 : 2;
+}
+
 export function winLuck(g: Game, perks: BallPerks = {}): number | null {
   if (g.result !== 'win') return null;
   const big = g.you - g.them >= 5 || g.them === 0;

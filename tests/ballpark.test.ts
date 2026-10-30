@@ -4,8 +4,8 @@ import { seeded } from '../src/engine/random';
 import { newProfile } from '../src/engine/storage';
 import { CHASE, cardKey, chances, chaseChance, PARALLELS, RANK, rollCard } from '../src/ballpark/cards';
 import { addCard, ballLookOf, newBall, payout, rankOf, RANKS } from '../src/ballpark/data';
-import { derbyHit, derbyLuck, derbyTotal, FENCE } from '../src/ballpark/derby';
-import { advance, bat, newGame, pitch, RUN_RULE, tierLevel, winLuck, type Game } from '../src/ballpark/game';
+import { derbyCards, derbyHit, derbyLuck, derbyTotal, FENCE } from '../src/ballpark/derby';
+import { advance, bat, newGame, pitch, RUN_RULE, tierLevel, winCards, winLuck, type Game } from '../src/ballpark/game';
 import { BALL_GEAR, ballPerks } from '../src/ballpark/gear';
 import { PLAYERS } from '../src/ballpark/players';
 import { planSkills, recordBall } from '../src/ballpark/questions';
@@ -97,6 +97,9 @@ describe('ballpark game', () => {
   it('gives a card only for a win', () => {
     expect(winLuck({ ...newGame(3), over: true, result: 'loss' })).toBeNull();
     expect(winLuck({ ...newGame(3), over: true, result: 'win', you: 6, them: 0 })).toBe(1);
+    expect(winCards({ ...newGame(3), over: true, result: 'loss' })).toBe(0);
+    expect(winCards({ ...newGame(3), over: true, result: 'win', you: 4, them: 2 })).toBe(2);
+    expect(winCards({ ...newGame(3), over: true, result: 'win', you: 1, them: 0 })).toBe(3);
   });
 });
 
@@ -111,6 +114,7 @@ describe('ballpark derby', () => {
     const t = derbyTotal([{ feet: 400, hr: true }, { feet: 300, hr: false }, { feet: FENCE, hr: true }]);
     expect(t).toEqual({ hrs: 2, feet: 400 + FENCE, longest: 400 });
     expect(derbyLuck({ hrs: 10, feet: 4000, longest: 450 })).toBe(3);
+    expect([0, 4, 7].map((hrs) => derbyCards({ hrs, feet: 0, longest: 0 }))).toEqual([1, 2, 3]);
   });
 });
 
@@ -168,6 +172,7 @@ describe('ballpark cards and economy', () => {
     expect(out.payout.pulls.length).toBe(1);
     expect(RANK[out.payout.pulls[0].parallel]).toBeGreaterThanOrEqual(RANK.refractor);
     expect(rankOf(out.ball.xp).index).toBe(1);
+    expect(payout(newBall(), 0, 0, 0, 0, seeded(3), 1, 3).payout.pulls.length).toBe(3);
     // No second bonus for the same rank.
     expect(payout(out.ball, 1, 0, null, 0, seeded(2), 2).payout.pulls.length).toBe(0);
   });
