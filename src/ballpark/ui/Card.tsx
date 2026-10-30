@@ -17,7 +17,7 @@ export function CardFront({ player, parallel, serial }: { player: Player; parall
         <div className="bcard-stadium" />
         <Figure color={c1} trim={c2} pose={player.role === 'pitcher' ? 'pitch' : 'bat'} skin={skinOf(player.id)} size={150} />
         {parallel === 'relic' && <span className="relic-swatch" title="Game-worn jersey piece" />}
-        {parallel === 'auto' && <span className="auto-sig">{player.name}</span>}
+        {(parallel === 'auto' || player.signed) && <span className="auto-sig">{player.name}</span>}
         {(parallel === 'refractor' || parallel === 'diamond' || parallel === 'super') && <span className="shine" aria-hidden="true" />}
         <span className="bcard-pos">{player.pos}</span>
         {player.canada && <span className="bcard-maple" title="Canadian connection">🍁</span>}
@@ -29,7 +29,7 @@ export function CardFront({ player, parallel, serial }: { player: Player; parall
         <small>{player.city}{player.legend ? ' · Legend' : player.rookie ? ' · 2025 Rookie' : ''}</small>
       </div>
       <div className="bcard-foot">
-        <span className="par">{player.chase ? 'Chase Autograph' : def.name}</span>
+        <span className="par">{player.chase ? 'Chase Autograph' : player.signed ? 'Superfractor Auto' : def.name}</span>
         {serial !== undefined && run && <span className="serial">{serial}/{run}</span>}
       </div>
     </div>
@@ -52,7 +52,7 @@ export function CardBack({ player, parallel }: { player: Player; parallel: Paral
         ))}
       </div>
       <p>{player.fact}</p>
-      <small className="muted">{player.chase ? 'The chase card. Signed, and only one was ever made.' : player.rookie ? 'Rookie Superfractor. Swirling rainbow gold, and only one was ever made.' : parallelOf(parallel).about}</small>
+      <small className="muted">{player.chase ? 'The chase card. Signed, and only one was ever made.' : player.rookie ? `Rookie Superfractor${player.signed ? ' Autograph, signed by the player' : ''}. Swirling rainbow gold, and only one was ever made.` : parallelOf(parallel).about}</small>
     </div>
   );
 }
@@ -81,7 +81,7 @@ export function CardReveal({ player, parallel, serial, isNew, coins, label }: { 
       <div className="reveal-spin"><BallCard player={player} parallel={parallel} serial={serial} /></div>
       <div className="reveal-text">
         {label && <small className="muted">{label}</small>}
-        <small className="rarity">{player.chase ? 'THE CHASE CARD' : player.rookie ? 'ROOKIE SUPERFRACTOR' : def.name}{run && serial ? ` · ${serial}/${run}` : ''}</small>
+        <small className="rarity">{player.chase ? 'THE CHASE CARD' : player.rookie ? (player.signed ? 'ROOKIE SUPERFRACTOR AUTO' : 'ROOKIE SUPERFRACTOR') : def.name}{run && serial ? ` · ${serial}/${run}` : ''}</small>
         <strong>{isNew ? `${player.name}!` : `${player.name} again!`}</strong>
         <p className="muted small">{isNew ? 'Added to your Card Binder. Tap the card to flip it.' : `You already had this one, so you traded it for ${coins} coins.`}</p>
       </div>
