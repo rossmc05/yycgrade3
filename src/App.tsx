@@ -20,14 +20,20 @@ export function App() {
   const { profile, data } = useStore();
   const [page, a, b] = useRoute();
   const classic = !!data.settings.classicLook;
-  // The title screen shows once each time the game is opened.
-  const [started, setStarted] = useState(false);
+  // The title screen shows once each time the game is opened (not again on coming back from the ballpark).
+  const [started, setStarted] = useState(() => {
+    try { return sessionStorage.getItem('g3-started') === '1'; } catch { return false; }
+  });
+  const start = () => {
+    try { sessionStorage.setItem('g3-started', '1'); } catch { /* storage blocked */ }
+    setStarted(true);
+  };
 
   useEffect(() => {
     document.body.classList.toggle('game', !classic);
   }, [classic]);
 
-  if (!classic && !started && page !== 'parent') return <Title onStart={() => setStarted(true)} />;
+  if (!classic && !started && page !== 'parent') return <Title onStart={start} />;
 
   if (page === 'parent') return <Parent />;
   if (!profile || page === 'profiles') return <Profiles />;

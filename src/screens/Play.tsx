@@ -33,7 +33,7 @@ export function normalize(s: string): string {
   return s.trim().toLowerCase().replace(/[‘’]/g, "'").replace(/[\s,]/g, '').replace(/^\$/, '').replace(/¢$/, '');
 }
 
-type Phase = 'ask' | 'hint' | 'right' | 'shown';
+export type Phase = 'ask' | 'hint' | 'right' | 'shown';
 
 interface Result {
   skillId: string;
@@ -519,7 +519,7 @@ export function LetterKeys({ value, setValue, onEnter }: { value: string; setVal
   );
 }
 
-function OrderPicker({ q, done, phase, onSubmit }: { q: Question; done: boolean; phase: Phase; onSubmit: (a: string) => void }) {
+export function OrderPicker({ q, done, phase, onSubmit }: { q: Question; done: boolean; phase: Phase; onSubmit: (a: string) => void }) {
   const [picked, setPicked] = useState<string[]>([]);
   const items = q.choices ?? [];
   // After a wrong try, clear so the child can rebuild it.

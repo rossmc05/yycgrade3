@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useStore } from '../engine/store';
 import { ac } from './sfx';
 
-export type Theme = 'map' | 'math' | 'spelling' | 'grammar' | 'science' | 'boss';
+export type Theme = 'map' | 'math' | 'spelling' | 'grammar' | 'science' | 'boss' | 'ballpark';
 
 interface Song {
   bpm: number;
@@ -40,6 +40,11 @@ const SONGS: Record<Theme, Song> = {
     bpm: 136, lead: 'square',
     melody: [64, 67, 71, 67, 74, 71, 69, 67, 64, 67, 71, 76, 74, 71, 69, 71, 72, 71, 69, 67, 69, 67, 66, 64, 66, 67, 69, 71, 64, 0, 64, 0],
     bass: [40, 40, 36, 36, 38, 38, 35, 35, 40, 40, 36, 36, 38, 38, 40, 40],
+  },
+  ballpark: {
+    bpm: 132, lead: 'triangle',
+    melody: [72, 0, 76, 79, 84, 0, 79, 0, 81, 79, 76, 72, 74, 0, 0, 0, 72, 0, 76, 79, 84, 0, 79, 0, 81, 83, 84, 79, 76, 74, 72, 0],
+    bass: [48, 48, 52, 52, 53, 53, 55, 55, 48, 48, 52, 52, 53, 55, 48, 48],
   },
   boss: {
     bpm: 150, lead: 'sawtooth',

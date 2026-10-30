@@ -25,6 +25,7 @@ const VILLAGE_SPOTS = [
   { id: 'world', label: 'My World', icon: '🏡', x: 585, y: 385, to: () => go('world') },
   { id: 'book', label: 'Pal Book', icon: '📖', x: 655, y: 335, to: () => go('book') },
   { id: 'gear', label: 'Gear Shop', icon: '⚒️', x: 500, y: 430, to: () => go('gear') },
+  { id: 'ballpark', label: 'Ballpark', icon: '🏟️', x: 345, y: 335, to: () => { window.location.href = './ballpark.html'; } },
 ];
 
 function loadAt(profileId: string): PlaceId {
@@ -207,7 +208,7 @@ function PlaceCard({ place, open, onEnter, onClose }: { place: Place; open: bool
     return (
       <section className="card place-card" role="dialog" aria-label={place.name}>
         <strong>🏘️ Home Village</strong>
-        <p>Visit the Arcade, the Avatar Studio, the Trophy Room, My World, the Pal Book or the Gear Shop. Tap a building!</p>
+        <p>Visit the Arcade, the Avatar Studio, the Trophy Room, My World, the Pal Book, the Gear Shop or the Ballpark. Tap a building!</p>
         <button className="btn ghost" onClick={onClose}>OK</button>
       </section>
     );

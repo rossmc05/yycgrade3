@@ -1,4 +1,5 @@
 import type { Look } from '../avatar/catalog';
+import type { BallData } from '../ballpark/data';
 
 // Shared types for every subject app.
 
@@ -131,6 +132,8 @@ export interface Profile {
   gearOn?: { weapon?: string; charm?: string };
   /** Story progress: crystals won and cutscenes seen. */
   story?: { crystals: ('math' | 'spelling' | 'grammar' | 'science')[]; seen: string[]; champion?: number };
+  /** The Big League Brains ballpark: its own coins, XP, gear and cards. */
+  ball?: BallData;
 }
 
 export interface Settings {
