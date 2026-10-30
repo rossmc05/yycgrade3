@@ -12,7 +12,7 @@ import { useStore } from '../../engine/store';
 import type { Question, Skill, SubjectId } from '../../engine/types';
 import { go } from '../../router';
 import { ballOf, payout, type Payout, ballLookOf } from '../data';
-import { DERBY_SWINGS, derbyCoins, derbyHit, derbyLuck, derbyTotal, FENCE, type DerbyHit } from '../derby';
+import { DERBY_SWINGS, derbyCards, derbyCoins, derbyHit, derbyLuck, derbyTotal, FENCE, type DerbyHit } from '../derby';
 import { SWINGS, tierLevel, type Swing } from '../game';
 import { ballPerks } from '../gear';
 import { ask, levelOf, planSkills, recordBall, XP_RIGHT, XP_WRONG } from '../questions';
@@ -47,7 +47,7 @@ function DerbySetup({ onStart }: { onStart: (s: SubjectId[]) => void }) {
         <h3>Questions from</h3>
         <SubjectPicker value={subjects} onChange={setSubjects} />
         {best.plays > 0 && <p className="muted">Your best: {best.bestFeet} ft ({best.bestHrs} home runs). Longest: {best.longest} ft.</p>}
-        <p>Every derby earns a collector card. More home runs make a rarer card likelier!</p>
+        <p>Every derby earns a collector card. Hit 4 home runs for a second card and 7 for a third. More home runs make rarer cards likelier too!</p>
         <button className="btn primary big" onClick={() => { sfx.unlock(); onStart(subjects); }}>💥 Start the derby</button>
       </section>
     </main>
@@ -101,7 +101,7 @@ function DerbyRound({ subjects, again }: { subjects: SubjectId[]; again: () => v
     setAtBat(null);
     if (all.length >= DERBY_SWINGS) {
       const t = derbyTotal(all);
-      const out = payout(ball, xp, derbyCoins(t), derbyLuck(t, perks), perks.coinBonus ?? 0, Math.random, Date.now());
+      const out = payout(ball, xp, derbyCoins(t), derbyLuck(t, perks), perks.coinBonus ?? 0, Math.random, Date.now(), derbyCards(t));
       const d = out.ball.derby;
       const derby = { plays: d.plays + 1, bestFeet: Math.max(d.bestFeet, t.feet), bestHrs: Math.max(d.bestHrs, t.hrs), longest: Math.max(d.longest, t.longest) };
       updateProfile((p) => ({ ...p, ball: { ...out.ball, derby } }));
@@ -128,7 +128,7 @@ function DerbyRound({ subjects, again }: { subjects: SubjectId[]; again: () => v
           </div>
           {result.rankUp && <p className="good"><Icon e="🎉" /> You were promoted to {result.rankUp}! Here's a bonus card.</p>}
           {result.pulls.map((c, i) => (
-            <CardReveal key={i} player={c.player} parallel={c.parallel} serial={c.serial} isNew={c.isNew} coins={c.coins} label={i === 0 ? 'Derby collector card' : 'Promotion bonus'} />
+            <CardReveal key={i} player={c.player} parallel={c.parallel} serial={c.serial} isNew={c.isNew} coins={c.coins} label={i < derbyCards(total) ? `Derby card ${i + 1} of ${derbyCards(total)}` : 'Promotion bonus'} />
           ))}
           <div className="row">
             <button className="btn ghost" onClick={() => go('')}>Clubhouse</button>

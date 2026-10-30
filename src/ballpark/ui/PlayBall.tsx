@@ -13,7 +13,7 @@ import type { Question, Skill, SubjectId } from '../../engine/types';
 import { go } from '../../router';
 import { RANK } from '../cards';
 import { ballOf, payout, type Payout, ballLookOf } from '../data';
-import { bat, newGame, pitch, PITCHES, resultCoins, SWINGS, tierLevel, winLuck, type Game, type Pitch, type Play, type Swing } from '../game';
+import { bat, newGame, pitch, PITCHES, resultCoins, SWINGS, tierLevel, winCards, winLuck, type Game, type Pitch, type Play, type Swing } from '../game';
 import { ballPerks } from '../gear';
 import { playerById, type Player } from '../players';
 import { ask, levelOf, planSkills, recordBall, XP_RIGHT, XP_WRONG } from '../questions';
@@ -73,7 +73,7 @@ function Setup({ onStart }: { onStart: (s: { subjects: SubjectId[]; innings: num
         <ul className="rules">
           <li>At bat, pick a swing. Harder questions hit farther: single, double, triple or home run. A wrong answer is an out.</li>
           <li>Pitching, a right answer gets the batter out. Harder pitches are surer outs. A wrong answer gives up a hit.</li>
-          <li>Win the game to earn a collector card!</li>
+          <li>Win to earn 2 collector cards. Win by 5 or more, or hold them scoreless, for 3!</li>
         </ul>
         <button className="btn primary big" onClick={() => { sfx.unlock(); onStart({ subjects, innings, team }); }}>⚾ Play ball!</button>
       </section>
@@ -153,7 +153,7 @@ function Match({ subjects, innings, team, again }: { subjects: SubjectId[]; inni
     if (g.over) {
       const earned = xp;
       const coins = g.coins + resultCoins(g);
-      const out = payout(ball, earned, coins, winLuck(g, perks), perks.coinBonus ?? 0, Math.random, Date.now());
+      const out = payout(ball, earned, coins, winLuck(g, perks), perks.coinBonus ?? 0, Math.random, Date.now(), winCards(g));
       const rec = { ...ball.record };
       if (g.result === 'win') rec.w += 1; else if (g.result === 'loss') rec.l += 1; else rec.t += 1;
       updateProfile((pr) => ({ ...pr, ball: { ...out.ball, record: rec } }));
@@ -269,9 +269,9 @@ function Final({ game, payout: pay, myTeam, team, again }: { game: Game; payout:
           <div><strong>+{pay.coins}</strong><span>coins</span></div>
         </div>
         {pay.rankUp && <p className="good"><Icon e="🎉" /> You were promoted to {pay.rankUp}! Here's a bonus card.</p>}
-        {!win && <p className="muted">Win a game to earn a collector card. Try a Home Run Derby too: every derby earns a card!</p>}
+        {!win && <p className="muted">Win a game to earn 2 collector cards, or 3 for a big win. Try a Home Run Derby too: every derby earns at least one card!</p>}
         {pay.pulls.map((c, i) => (
-          <CardReveal key={i} player={c.player} parallel={c.parallel} serial={c.serial} isNew={c.isNew} coins={c.coins} label={i === 0 && win ? 'Winner\'s card' : 'Promotion bonus'} />
+          <CardReveal key={i} player={c.player} parallel={c.parallel} serial={c.serial} isNew={c.isNew} coins={c.coins} label={win && i < winCards(game) ? `Winner's card ${i + 1} of ${winCards(game)}` : 'Promotion bonus'} />
         ))}
         <div className="row">
           <button className="btn ghost" onClick={() => go('')}>Clubhouse</button>

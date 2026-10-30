@@ -22,8 +22,8 @@ export function Clubhouse() {
   const players = set.filter((p) => Object.keys(b.cards).some((k) => k.startsWith(`${p.id}:`))).length;
   const next = RANKS[r.index + 1];
   const spots: Spot[] = [
-    { id: 'game', label: 'Play Ball', sub: 'Win to earn a card', e: '🏟️', x: 50, y: 40, size: 22, to: 'game' },
-    { id: 'derby', label: 'Home Run Derby', sub: b.derby.plays ? `Best ${b.derby.bestFeet} ft` : 'Always earns a card', e: '💥', x: 17, y: 52, size: 12, to: 'derby' },
+    { id: 'game', label: 'Play Ball', sub: 'Win to earn 2 to 3 cards', e: '🏟️', x: 50, y: 40, size: 22, to: 'game' },
+    { id: 'derby', label: 'Home Run Derby', sub: b.derby.plays ? `Best ${b.derby.bestFeet} ft` : 'Earns 1 to 3 cards', e: '💥', x: 17, y: 52, size: 12, to: 'derby' },
     { id: 'binder', label: 'Card Shop', sub: `${players}/${set.length} players`, e: '🃏', x: 83, y: 52, size: 12, to: 'binder' },
     { id: 'shop', label: 'Pro Shop', sub: `🪙 ${b.coins}`, e: '🏪', x: 28, y: 82, size: 12, to: 'shop' },
     { id: 'locker', label: 'Locker Room', sub: 'Your uniform', e: '👕', x: 72, y: 82, size: 11, to: 'locker' },
@@ -97,7 +97,7 @@ export function Clubhouse() {
         <ul>
           <li><b>XP</b>: 10 for every right answer, 2 for trying. XP moves you up from Rookie to Hall of Famer, and every promotion gives a bonus card (Refractor or better).</li>
           <li><b>Coins</b>: hits (2 to 10), runs (2 each) and outs you pitch (2 or 3), plus 40 for a win, 20 for a tie or 15 for a loss. A derby pays 10, plus 3 a home run. A card you already have trades in for coins.</li>
-          <li><b>Cards</b>: one for every win (blow-outs and shutouts pull better cards), and one after every Home Run Derby.</li>
+          <li><b>Cards</b>: 2 for every win, or 3 for a blow-out or shutout (and big wins pull rarer cards). A Home Run Derby gives 1 card, 2 at 4 home runs and 3 at 7.</li>
         </ul>
       </details>
       <div className="row">

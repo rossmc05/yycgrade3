@@ -34,6 +34,9 @@ export function derbyTotal(hits: DerbyHit[]): DerbyTotal {
 export const derbyCoins = (t: DerbyTotal) => 10 + 3 * t.hrs;
 
 /** The collector card always comes; more home runs make a rarer one likelier. */
+/** Cards for a derby: 1, plus 1 at 4 home runs and 1 more at 7. */
+export const derbyCards = (t: DerbyTotal) => 1 + (t.hrs >= 4 ? 1 : 0) + (t.hrs >= 7 ? 1 : 0);
+
 export function derbyLuck(t: DerbyTotal, perks: BallPerks = {}): number {
   const base = t.hrs >= DERBY_SWINGS ? 3 : t.hrs >= 7 ? 2 : t.hrs >= 4 ? 1 : 0;
   return Math.min(3, base + (perks.luck ?? 0));
