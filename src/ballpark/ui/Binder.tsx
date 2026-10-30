@@ -8,11 +8,9 @@ import { PLAYERS, type Player } from '../players';
 import { BallBar } from './BallBar';
 import { BallCard, CardFront } from './Card';
 
-const canadian = (p: Player) => p.city === 'Toronto' || p.city === 'Montreal' || !!p.canada;
 const GROUPS = [
-  { name: 'Toronto and Canada', has: canadian },
-  { name: "Today's stars", has: (p: Player) => !canadian(p) && !p.legend },
-  { name: 'Legends', has: (p: Player) => !canadian(p) && !!p.legend && !p.chase },
+  { name: "Today's stars", has: (p: Player) => !p.legend },
+  { name: 'Legends', has: (p: Player) => !!p.legend && !p.chase },
 ];
 const SET = PLAYERS.filter((p) => !p.chase);
 
