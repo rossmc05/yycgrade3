@@ -3,7 +3,7 @@
 
 import { lookOf, type Look } from '../avatar/catalog';
 import type { Profile } from '../engine/types';
-import { CHASE, cardKey, parallelOf, rollCard, type Parallel, type Pull } from './cards';
+import { cardKey, oneOfOneParallel, parallelOf, rollCard, type Parallel, type Pull } from './cards';
 import type { BallSlot } from './gear';
 
 export interface OwnedCard {
@@ -98,7 +98,7 @@ export function payout(b: BallData, xp: number, coins: number, luck: number | nu
   let ball: BallData = { ...b, xp: b.xp + xp, coins: b.coins + gained };
   const pulls: Pulled[] = [];
   const give = (luckNow: number, atLeast?: Parallel) => {
-    const r = addCard(ball, rollCard(rng, luckNow, atLeast, !ball.cards[cardKey(CHASE.id, 'auto')]), now);
+    const r = addCard(ball, rollCard(rng, luckNow, atLeast, (p) => !!ball.cards[cardKey(p.id, oneOfOneParallel(p))]), now);
     ball = r.ball;
     pulls.push(r.pulled);
   };
