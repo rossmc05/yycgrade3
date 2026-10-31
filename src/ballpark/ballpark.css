@@ -374,3 +374,82 @@ a.btn { text-decoration: none; display: inline-block; }
 .moment-row .binder-slot.empty .mini-card.blank small { font-size: 0.62rem; line-height: 1.2; padding: 0 6px; text-align: center; }
 .super-slots.wrap { grid-template-columns: repeat(4, 1fr); }
 @media (prefers-reduced-motion: reduce) { .bcard-face.msf-gold, .bcard-face.msf-ice, .bcard-face.msf-fire { animation: none; } }
+
+/* Card Binder: a dark collector's album with clear sleeves */
+.binder-page { --alb-ink: #e7e5e4; --alb-dim: #a8a29e; --alb-gold: #d6b86a; --alb-line: rgba(214, 184, 106, 0.28);
+  }
+.album-cover, .album-sec, .binder-page .card-modal-inner { font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; color: var(--alb-ink); }
+body.ballpark-body:has(.binder-page), html:has(.binder-page) { background: radial-gradient(1200px 600px at 50% -10%, #2a2723 0, transparent 70%) fixed, #121212; }
+.album-cover { position: relative; display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 10px 20px; padding: 26px 26px 20px; margin: 14px 0 18px; border-radius: 10px;
+  background: linear-gradient(160deg, #24201b, #15130f); border: 1px solid var(--alb-line); box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05) inset, 0 18px 40px rgba(0, 0, 0, 0.45); }
+.album-cover::after { content: ''; position: absolute; inset: 8px; border: 1px solid var(--alb-line); border-radius: 6px; pointer-events: none; }
+.album-title small { display: block; font-size: 0.7rem; letter-spacing: 0.32em; text-transform: uppercase; color: var(--alb-dim); }
+.album-title h1 { margin: 4px 0 0; font-family: Georgia, 'Times New Roman', serif; font-weight: 400; font-size: 2.3rem; letter-spacing: 0.02em;
+  background: linear-gradient(180deg, #f5e3a8, #c9a24d 60%, #8a6a24); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.album-count { text-align: right; line-height: 1; }
+.album-count b { display: block; font-size: 2.2rem; font-weight: 300; color: #fafaf9; font-variant-numeric: tabular-nums; }
+.album-count span { font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--alb-dim); }
+.album-bar { grid-column: 1 / -1; height: 3px; background: rgba(255, 255, 255, 0.08); border-radius: 2px; overflow: hidden; }
+.album-bar span { display: block; height: 100%; background: linear-gradient(90deg, #8a6a24, #f5e3a8); }
+.album-note { margin: 4px 0 0; font-size: 0.85rem; color: var(--alb-dim); font-weight: 400; }
+.album-cover .album-note { grid-column: 1 / -1; }
+.binder-page .par-legend { grid-column: 1 / -1; justify-content: flex-start; gap: 6px; margin-top: 4px; }
+.binder-page .par-chip { display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 4px; background: rgba(255, 255, 255, 0.04);
+  color: var(--alb-ink); font-size: 0.72rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 8px; }
+.binder-page .par-chip b { font-weight: 600; color: #fff; font-variant-numeric: tabular-nums; }
+.binder-page .par-chip i { width: 10px; height: 10px; border-radius: 2px; background: #e7e5e4; box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.4); }
+.binder-page .par-chip.p-rare i { background: #facc15; } .binder-page .par-chip.p-refractor i { background: linear-gradient(135deg, #f0abfc, #93c5fd, #86efac); }
+.binder-page .par-chip.p-relic i { background: repeating-linear-gradient(45deg, #475569 0 2px, #1f2937 2px 4px); } .binder-page .par-chip.p-diamond i { background: linear-gradient(135deg, #e0f2fe, #67e8f9); }
+.binder-page .par-chip.p-auto i { background: #111827; box-shadow: 0 0 0 1px #d6b86a; } .binder-page .par-chip.p-super i { background: linear-gradient(135deg, #f0abfc, #fde68a, #67e8f9); }
+.binder-page .par-chip.p-milestone i { background: linear-gradient(135deg, #8a6a24, #f5e3a8); }
+
+.album-sec { margin: 0 0 18px; padding: 18px 18px 20px; border-radius: 10px; background: linear-gradient(180deg, #1c1b19, #171615); border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35); }
+.album-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 0; padding-bottom: 8px; border-bottom: 1px solid var(--alb-line);
+  font-size: 0.82rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--alb-gold); }
+.album-head small { font-size: 0.78rem; font-weight: 400; letter-spacing: 0.08em; color: var(--alb-dim); font-variant-numeric: tabular-nums; }
+.album-sec > .album-note { margin: 8px 0 0; }
+.album-sleeves { display: grid; grid-template-columns: repeat(auto-fill, minmax(124px, 1fr)); min-width: 0; gap: 12px; margin-top: 14px; }
+.chase-sec { display: flex; gap: 18px; align-items: center; background: linear-gradient(135deg, #1f1a10, #15130f); border-color: var(--alb-line); }
+.chase-sec > div:last-child { flex: 1; min-width: 0; }
+.album-sleeves.solo { display: block; margin: 0; flex: 0 0 auto; width: 132px; }
+.super-sec { background: linear-gradient(135deg, #1b1a24, #171615 60%, #1d1a12); }
+
+/* Each slot is a clear plastic sleeve */
+.binder-page .binder-slot { width: 100%; box-sizing: border-box; padding: 6px; border-radius: 6px; background: linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.015) 45%, rgba(255, 255, 255, 0.04));
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.07) inset, 0 2px 6px rgba(0, 0, 0, 0.35); transition: transform 0.15s, box-shadow 0.15s; }
+.binder-page button.binder-slot:hover, .binder-page button.binder-slot:focus-visible { transform: translateY(-3px); box-shadow: 0 0 0 1px var(--alb-line) inset, 0 10px 22px rgba(0, 0, 0, 0.5); outline: none; }
+.binder-page .binder-slot::after { content: ''; position: absolute; inset: 0; border-radius: 6px; pointer-events: none;
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.07) 45%, transparent 55%); }
+.binder-page .mini-card { --w: 112px; width: var(--w); margin: 0 auto; }
+.binder-page .mini-card .bcard-face, .binder-page .card-modal .bcard-face { border-radius: 7px; box-shadow: 0 1px 0 rgba(255, 255, 255, 0.25) inset, 0 3px 10px rgba(0, 0, 0, 0.45); }
+.binder-page .mini-card.blank { border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 6px; gap: 4px; color: #78716c;
+  background: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.018) 0 6px, transparent 6px 12px), #1a1918; }
+.binder-page .mini-card.blank b { font-size: 1.25rem; font-weight: 300; letter-spacing: 0.08em; color: #a8a29e; }
+.binder-page .mini-card.blank small { font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase; line-height: 1.35; color: #78716c; font-weight: 500; }
+.binder-page .mini-card.blank.gold { color: var(--alb-gold); border-color: var(--alb-line); background: radial-gradient(circle at 50% 35%, rgba(214, 184, 106, 0.1), transparent 65%), #191714; }
+.binder-page .mini-card.blank.gold b { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--alb-gold); }
+.binder-page .mini-card.blank.gold small { color: #b3a68a; padding: 0 6px; letter-spacing: 0.06em; }
+.binder-page .mini-card.blank.prism { border-color: rgba(167, 139, 250, 0.35); background: radial-gradient(circle at 50% 35%, rgba(167, 139, 250, 0.16), transparent 65%), #18171d; }
+.binder-page .mini-card.blank.prism b { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.14em; color: #e9d5ff; }
+.binder-page .mini-card.blank.prism small { color: #8b84a3; }
+.binder-page .have-n { top: auto; bottom: -8px; right: 50%; transform: translateX(50%); background: #0c0a09; color: var(--alb-gold); border: 1px solid var(--alb-line);
+  font-size: 0.62rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 8px; border-radius: 3px; white-space: nowrap; }
+.binder-page .card-modal-inner { background: #1c1b19; color: var(--alb-ink); border: 1px solid var(--alb-line); border-radius: 12px; }
+.binder-page .card-modal-inner .muted { color: var(--alb-dim); }
+.binder-page .card-modal .par-legend { justify-content: center; }
+.binder-page .card-modal .par-chip.sel { outline: none; border-color: var(--alb-gold); background: rgba(214, 184, 106, 0.14); }
+.binder-page .card-modal .par-chip:disabled { opacity: 0.35; }
+@media (max-width: 640px) {
+  .album-cover { padding: 20px 18px 16px; }
+  .album-title h1 { font-size: 1.8rem; }
+  .album-count b { font-size: 1.7rem; }
+  .album-sec { padding: 14px 12px 16px; }
+  .album-sleeves { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .binder-page .binder-slot { padding: 4px; }
+  .binder-page .mini-card { --w: 92px; }
+  .binder-page .mini-card.blank small { font-size: 0.58rem; letter-spacing: 0.04em; }
+  .album-sleeves.solo { width: 108px; }
+}
+.binder-page .card-modal-inner .btn { background: transparent; color: var(--alb-gold); border: 1px solid var(--alb-line); box-shadow: none; border-radius: 6px; font-family: inherit; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; font-size: 0.8rem; padding: 8px 22px; }
+.binder-page .card-modal-inner .btn:hover { background: rgba(214, 184, 106, 0.1); }
