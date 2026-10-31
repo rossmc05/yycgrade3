@@ -16,8 +16,7 @@ import { ballOf, payout, type Payout, ballLookOf } from '../data';
 import { bat, newGame, pitch, PITCHES, resultCoins, SWINGS, tierLevel, hitForCycle, winCards, winLuck, type Game, type Pitch, type Play, type Swing } from '../game';
 import { ballPerks } from '../gear';
 import { playerById, type Player } from '../players';
-import { ask, levelOf, planSkills, recordBall, skillAt, XP_RIGHT, XP_WRONG } from '../questions';
-import { flagNotLearned } from '../../engine/topics';
+import { ask, levelOf, planSkills, recordBall, XP_RIGHT, XP_WRONG } from '../questions';
 import { OPPONENTS, type Team } from '../teams';
 import { Ask } from './Ask';
 import { ALL_SUBJECTS, SubjectPicker } from './SubjectPicker';
@@ -38,7 +37,6 @@ interface AtBat {
   level: number;
   clock?: number;
   choice: Swing | Pitch;
-  offset: number;
   q: Question;
 }
 
@@ -118,7 +116,7 @@ function Match({ subjects, innings, team, again }: { subjects: SubjectId[]; inni
   const myColor = colorOf(look.topColor, '#2563eb');
   const myTeam = `${profile.name}'s Sluggers`;
   const batting = game.half === 'bottom';
-  const skill = skillAt(profile, plan, n);
+  const skill = plan[n % plan.length];
   const lvl = levelOf(profile, skill);
   const up = lineup[batter % lineup.length];
 
@@ -127,16 +125,7 @@ function Match({ subjects, innings, team, again }: { subjects: SubjectId[]; inni
     setBanner(null);
     setPlay(null);
     const t = tierLevel(skill.levels.length, lvl, offset);
-    setAtBat({ skill, level: t.level, clock: t.clock, choice, offset, q: ask(profile, skill, t.level, used.current) });
-  };
-
-  // "Haven't learned this yet": no out, no answer recorded, and the topic is switched off for a grown-up to check.
-  const skip = () => {
-    if (!atBat) return;
-    updateProfile((p) => flagNotLearned(p, atBat.skill.id));
-    const s = skillAt(profile, plan, n, atBat.skill.id);
-    const t = tierLevel(s.levels.length, levelOf(profile, s), atBat.offset);
-    setAtBat({ ...atBat, skill: s, level: t.level, clock: t.clock, q: ask(profile, s, t.level, used.current) });
+    setAtBat({ skill, level: t.level, clock: t.clock, choice, q: ask(profile, skill, t.level, used.current) });
   };
 
   const onAnswer = (correct: boolean, seconds: number) => {
@@ -253,7 +242,7 @@ function Match({ subjects, innings, team, again }: { subjects: SubjectId[]; inni
       )}
 
       {atBat && (
-        <Ask key={`${n}-${atBat.q.key}`} q={atBat.q} skill={atBat.skill} level={atBat.level} clock={atBat.clock} readAloud={data.settings.readAloud} onAnswer={onAnswer} onNext={next} onSkip={skip} nextLabel={game.over ? 'See the final score →' : 'Next batter →'}>
+        <Ask key={n} q={atBat.q} skill={atBat.skill} level={atBat.level} clock={atBat.clock} readAloud={data.settings.readAloud} onAnswer={onAnswer} onNext={next} nextLabel={game.over ? 'See the final score →' : 'Next batter →'}>
           {play && (
             <p className={`play-call ${goodFor(play) ? 'good-call' : 'bad-call'}`}>
               <strong>{play.text}</strong>

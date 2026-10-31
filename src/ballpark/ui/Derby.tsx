@@ -15,8 +15,7 @@ import { ballOf, payout, type Payout, ballLookOf } from '../data';
 import { DERBY_SWINGS, derbyCards, derbyCoins, derbyHit, derbyLuck, derbyTotal, FENCE, type DerbyHit } from '../derby';
 import { SWINGS, tierLevel, type Swing } from '../game';
 import { ballPerks } from '../gear';
-import { ask, levelOf, planSkills, recordBall, skillAt, XP_RIGHT, XP_WRONG } from '../questions';
-import { flagNotLearned } from '../../engine/topics';
+import { ask, levelOf, planSkills, recordBall, XP_RIGHT, XP_WRONG } from '../questions';
 import { Ask } from './Ask';
 import { ALL_SUBJECTS, SubjectPicker } from './SubjectPicker';
 import { BallBar } from './BallBar';
@@ -61,7 +60,7 @@ function DerbyRound({ subjects, again }: { subjects: SubjectId[]; again: () => v
   const perks = useMemo(() => ballPerks(ball.gearOn), []);
   const [plan] = useState(() => planSkills(profile!, subjects, 40, Math.random, Date.now()));
   const [hits, setHits] = useState<DerbyHit[]>([]);
-  const [atBat, setAtBat] = useState<{ skill: Skill; level: number; clock?: number; swing: Swing; offset: number; q: Question } | null>(null);
+  const [atBat, setAtBat] = useState<{ skill: Skill; level: number; clock?: number; swing: Swing; q: Question } | null>(null);
   const [last, setLast] = useState<DerbyHit | null>(null);
   const [xp, setXp] = useState(0);
   const [result, setResult] = useState<Payout | null>(null);
@@ -72,7 +71,7 @@ function DerbyRound({ subjects, again }: { subjects: SubjectId[]; again: () => v
   if (!profile) return null;
 
   const n = hits.length;
-  const skill = skillAt(profile, plan, n);
+  const skill = plan[n];
   const lvl = levelOf(profile, skill);
   const total = derbyTotal(hits);
 
@@ -80,16 +79,7 @@ function DerbyRound({ subjects, again }: { subjects: SubjectId[]; again: () => v
     sfx.unlock();
     setLast(null);
     const t = tierLevel(skill.levels.length, lvl, offset);
-    setAtBat({ skill, level: t.level, clock: t.clock, swing, offset, q: ask(profile, skill, t.level, used.current) });
-  };
-
-  // "Haven't learned this yet": the swing doesn't count, and the topic is switched off for a grown-up to check.
-  const skip = () => {
-    if (!atBat) return;
-    updateProfile((p) => flagNotLearned(p, atBat.skill.id));
-    const s = skillAt(profile, plan, n, atBat.skill.id);
-    const t = tierLevel(s.levels.length, levelOf(profile, s), atBat.offset);
-    setAtBat({ ...atBat, skill: s, level: t.level, clock: t.clock, q: ask(profile, s, t.level, used.current) });
+    setAtBat({ skill, level: t.level, clock: t.clock, swing, q: ask(profile, skill, t.level, used.current) });
   };
 
   const onAnswer = (correct: boolean, seconds: number) => {
@@ -186,7 +176,7 @@ function DerbyRound({ subjects, again }: { subjects: SubjectId[]; again: () => v
         </section>
       )}
       {atBat && (
-        <Ask key={`${n}-${atBat.q.key}`} q={atBat.q} skill={atBat.skill} level={atBat.level} clock={atBat.clock} readAloud={data.settings.readAloud} onAnswer={onAnswer} onNext={next} onSkip={skip} nextLabel={n + 1 >= DERBY_SWINGS ? 'Finish the derby →' : 'Next swing →'}>
+        <Ask key={n} q={atBat.q} skill={atBat.skill} level={atBat.level} clock={atBat.clock} readAloud={data.settings.readAloud} onAnswer={onAnswer} onNext={next} nextLabel={n + 1 >= DERBY_SWINGS ? 'Finish the derby →' : 'Next swing →'}>
           {last && <p className={`play-call ${last.hr ? 'good-call' : 'bad-call'}`}><strong>{last.hr ? `HOME RUN! ${last.feet} feet!` : last.feet ? `${last.feet} feet. ${last.feet >= 300 ? 'Caught at the wall, just short!' : 'Caught in the outfield.'}` : 'Swing and a miss!'}</strong></p>}
         </Ask>
       )}

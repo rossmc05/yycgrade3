@@ -532,4 +532,3 @@ button.center-text { display: block; margin: 8px auto; }
 @media (prefers-reduced-motion: reduce) { .pal-shine, .battle-buddy, .pal-card .sprite { animation: none !important; } }
 .topic-switches { margin: 8px 0; }
 .topic-switches .chip { cursor: pointer; margin: 2px; }
-.skip-topic { display: block; margin: 10px auto 0; font-size: 0.85rem; }

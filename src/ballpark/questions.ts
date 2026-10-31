@@ -32,14 +32,6 @@ export function planSkills(p: Profile, subjects: SubjectId[], count: number, rng
   return out;
 }
 
-/** The planned skill at `i`, or the next one after it that is still switched on. */
-export function skillAt(p: Profile, plan: Skill[], i: number, not?: string): Skill {
-  for (let k = 0; k < plan.length; k++) {
-    const s = plan[(i + k) % plan.length];
-    if (!isPaused(p, s.id) && s.id !== not) return s;
-  }
-  return plan[i % plan.length];
-}
 
 export const levelOf = (p: Profile, skill: Skill) => (p.skills[skill.id] ?? newSkillState()).level;
 

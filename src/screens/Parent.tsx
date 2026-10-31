@@ -250,19 +250,17 @@ function TopicSwitches({ p }: { p: Profile }) {
   const { setData } = useStore();
   const flip = (id: string, on: boolean) =>
     setData((d) => ({ ...d, profiles: d.profiles.map((x) => (x.id === p.id ? setPaused(x, id, !on) : x)) }));
-  const flagged = p.flagged ?? [];
   return (
     <div>
       <h3>🏫 Topics taught at school so far</h3>
-      <p className="muted small">Untick anything the class hasn't covered yet and it won't come up in mixed practice or the Ballpark. {p.name} can also tap "Haven't learned this yet" on a question, which switches that topic off and marks it 🚩 here for you to check. Tick it again when it's been taught.</p>
-      {flagged.length > 0 && <p className="small"><strong>🚩 {p.name} said these are new:</strong> {flagged.map((id) => findSkill(id)?.name ?? id).join(', ')}</p>}
+      <p className="muted small">Untick anything the class hasn't covered yet and it won't come up in mixed practice or the Ballpark. Tick it again once it's been taught.</p>
       {SUBJECTS.filter((s) => s.ready && s.skills.length).map((subject) => (
         <div key={subject.id} className="topic-switches">
           <strong className="small">{subject.icon} {subject.name}</strong>
           <div className="row" style={{ justifyContent: 'flex-start', flexWrap: 'wrap' }}>
             {subject.skills.map((s) => (
               <label key={s.id} className="chip">
-                <input type="checkbox" checked={!isPaused(p, s.id)} onChange={(e) => flip(s.id, e.target.checked)} /> {s.icon} {s.name}{flagged.includes(s.id) ? ' 🚩' : ''}
+                <input type="checkbox" checked={!isPaused(p, s.id)} onChange={(e) => flip(s.id, e.target.checked)} /> {s.icon} {s.name}
               </label>
             ))}
           </div>
