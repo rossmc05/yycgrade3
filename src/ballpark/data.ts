@@ -61,13 +61,27 @@ export const RANKS = [
   { name: 'All-Star', xp: 1600, e: '🏅' },
   { name: 'MVP', xp: 3000, e: '🏆' },
   { name: 'Hall of Famer', xp: 5000, e: '👑' },
+  { name: 'Legend', xp: 7500, e: '🔥' },
+  { name: 'Retired Jersey', xp: 10500, e: '👕' },
+  { name: 'All-Time Great', xp: 14000, e: '💎' },
+  { name: 'GOAT', xp: 18000, e: '🐐' },
 ];
+
+/** XP between each GOAT star after the last named rank. Ranks never run out. */
+export const GOAT_STEP = 5000;
+
+/** Any rank by number: the named ranks, then GOAT ★2, GOAT ★3 and so on. */
+export function rankAt(index: number): { name: string; xp: number; e: string } {
+  const last = RANKS.length - 1;
+  if (index <= last) return RANKS[index];
+  const stars = index - last + 1;
+  return { name: `GOAT ★${stars}`, xp: RANKS[last].xp + (index - last) * GOAT_STEP, e: '🐐' };
+}
 
 export function rankOf(xp: number): { index: number; into: number; need: number } {
   let i = 0;
-  while (i + 1 < RANKS.length && xp >= RANKS[i + 1].xp) i++;
-  const next = RANKS[i + 1];
-  return { index: i, into: xp - RANKS[i].xp, need: next ? next.xp - RANKS[i].xp : 0 };
+  while (xp >= rankAt(i + 1).xp) i++;
+  return { index: i, into: xp - rankAt(i).xp, need: rankAt(i + 1).xp - rankAt(i).xp };
 }
 
 export interface Pulled extends Pull {
@@ -106,7 +120,7 @@ export function payout(b: BallData, xp: number, coins: number, luck: number | nu
   const rank = rankOf(ball.xp).index;
   let rankUp: string | undefined;
   if (rank > ball.rank) {
-    rankUp = RANKS[rank].name;
+    rankUp = rankAt(rank).name;
     ball = { ...ball, rank };
     give(Math.min(3, rank), 'refractor');
   }

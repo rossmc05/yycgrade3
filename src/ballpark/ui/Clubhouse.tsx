@@ -6,7 +6,7 @@ import { useMusic } from '../../battle/music';
 import { sfx } from '../../battle/sfx';
 import { useStore } from '../../engine/store';
 import { go } from '../../router';
-import { ballLookOf, ballOf, rankOf, RANKS } from '../data';
+import { ballLookOf, ballOf, rankAt, rankOf } from '../data';
 import { PLAYERS } from '../players';
 import { BallBar } from './BallBar';
 
@@ -20,7 +20,7 @@ export function Clubhouse() {
   const r = rankOf(b.xp);
   const set = PLAYERS.filter((p) => !p.chase && !p.rookie);
   const players = set.filter((p) => Object.keys(b.cards).some((k) => k.startsWith(`${p.id}:`))).length;
-  const next = RANKS[r.index + 1];
+  const next = rankAt(r.index + 1);
   const spots: Spot[] = [
     { id: 'game', label: 'Play Ball', sub: 'Win to earn 2 to 3 cards', e: '🏟️', x: 50, y: 40, size: 22, to: 'game' },
     { id: 'derby', label: 'Home Run Derby', sub: b.derby.plays ? `Best ${b.derby.bestFeet} ft` : 'Earns 1 to 3 cards', e: '💥', x: 17, y: 52, size: 12, to: 'derby' },
@@ -36,7 +36,7 @@ export function Clubhouse() {
         <div>
           <strong>{profile.name}'s Sluggers</strong>
           <div className="goal-bar small"><span style={{ width: `${r.need ? (r.into / r.need) * 100 : 100}%` }} /></div>
-          <small className="muted"><Icon e={RANKS[r.index].e} /> {RANKS[r.index].name}{next ? ` · ${next.xp - b.xp} XP to ${next.name}` : ''} · Record {b.record.w}-{b.record.l}{b.record.t ? `-${b.record.t}` : ''}</small>
+          <small className="muted"><Icon e={rankAt(r.index).e} /> {rankAt(r.index).name}{next ? ` · ${next.xp - b.xp} XP to ${next.name}` : ''} · Record {b.record.w}-{b.record.l}{b.record.t ? `-${b.record.t}` : ''}</small>
         </div>
         <button className="btn primary" onClick={() => open('game')}>⚾ Play ball!</button>
       </section>
@@ -95,7 +95,7 @@ export function Clubhouse() {
       <details className="card how">
         <summary>How you earn XP, coins and cards</summary>
         <ul>
-          <li><b>XP</b>: 10 for every right answer, 2 for trying. XP moves you up from Rookie to Hall of Famer, and every promotion gives a bonus card (Refractor or better).</li>
+          <li><b>XP</b>: 10 for every right answer, 2 for trying. XP moves you up from Rookie through MVP, Hall of Famer, Legend, Retired Jersey, All-Time Great and GOAT, then GOAT ★2, ★3 and on forever (every 5,000 XP). Every promotion gives a bonus card (Refractor or better).</li>
           <li><b>Coins</b>: hits (2 to 10), runs (2 each) and outs you pitch (2 or 3), plus 40 for a win, 20 for a tie or 15 for a loss. A derby pays 10, plus 3 a home run. A card you already have trades in for coins.</li>
           <li><b>Cards</b>: 2 for every win, or 3 for a blow-out or shutout (and big wins pull rarer cards). A Home Run Derby gives 1 card, 2 at 4 home runs and 3 at 7.</li>
         </ul>

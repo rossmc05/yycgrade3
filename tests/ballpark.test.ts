@@ -3,7 +3,7 @@ import { newSkillState, recordAnswer } from '../src/engine/adaptive';
 import { seeded } from '../src/engine/random';
 import { newProfile } from '../src/engine/storage';
 import { CHASE, cardKey, chances, chaseChance, isOneOfOne, PARALLELS, RANK, rollCard, ROOKIES, superChance } from '../src/ballpark/cards';
-import { addCard, ballLookOf, newBall, payout, rankOf, RANKS } from '../src/ballpark/data';
+import { addCard, ballLookOf, GOAT_STEP, newBall, payout, rankAt, rankOf, RANKS } from '../src/ballpark/data';
 import { derbyCards, derbyHit, derbyLuck, derbyTotal, FENCE } from '../src/ballpark/derby';
 import { advance, bat, newGame, pitch, RUN_RULE, tierLevel, winCards, winLuck, type Game } from '../src/ballpark/game';
 import { BALL_GEAR, ballPerks } from '../src/ballpark/gear';
@@ -192,6 +192,17 @@ describe('ballpark cards and economy', () => {
     expect(payout(newBall(), 0, 0, 0, 0, seeded(3), 1, 3).payout.pulls.length).toBe(3);
     // No second bonus for the same rank.
     expect(payout(out.ball, 1, 0, null, 0, seeded(2), 2).payout.pulls.length).toBe(0);
+  });
+
+  it('keeps giving ranks after GOAT, each with a bonus card', () => {
+    const goat = RANKS[RANKS.length - 1];
+    expect(rankAt(RANKS.length - 1).name).toBe('GOAT');
+    expect(rankAt(RANKS.length)).toMatchObject({ name: 'GOAT ★2', xp: goat.xp + GOAT_STEP });
+    expect(rankOf(goat.xp + 3 * GOAT_STEP + 10)).toMatchObject({ index: RANKS.length + 2, into: 10, need: GOAT_STEP });
+    const b = { ...newBall(), xp: goat.xp + GOAT_STEP - 5, rank: RANKS.length - 1 };
+    const out = payout(b, 10, 0, null, 0, seeded(4), 1);
+    expect(out.payout.rankUp).toBe('GOAT ★2');
+    expect(out.payout.pulls.length).toBe(1);
   });
 
   it('has gear with a free starting bat', () => {
