@@ -142,9 +142,9 @@ export const PLAYERS: Player[] = [
   P('horton', 'Cade Horton', 'Chicago', CHC, [88, 88, 85], 'A Chicago rookie pitcher who was a Rookie of the Year finalist in 2025.', { rookie: true }),
   P('schlittler', 'Cam Schlittler', 'New York', NYY, [94, 86, 82], 'A New York rookie with a 100 mph fastball. Struck out 12 in a 2025 playoff win over Boston.', { rookie: true, signed: true }),
   // Milestone cards: only earned by reaching a rank
-  H('aaron', 'Hank Aaron', 'OF', 'Atlanta', ATL, [94, 96, 70], 'Hit 755 home runs and never struck out 100 times in a season. Known as "Hammerin\' Hank."', { legend: true, milestone: true }),
-  H('mays', 'Willie Mays', 'OF', 'San Francisco', SF, [94, 94, 95], 'Hit 660 home runs and made one of the most famous catches ever, running away from home plate.', { legend: true, milestone: true }),
-  H('robinson', 'Jackie Robinson', '2B', 'Brooklyn', ['#005a9c', '#ef3e42'], [92, 74, 96], 'Broke baseball\'s colour barrier in 1947. His number 42 is retired by every team in baseball.', { legend: true, milestone: true }),
+  H('ohtani-rc', 'Shohei Ohtani', 'DH', 'Anaheim', ['#ba0021', '#003263'], [86, 92, 85], 'His rookie year was 2018. He hit and pitched, and won the American League Rookie of the Year.', { milestone: true }),
+  H('bautista', 'José Bautista', 'OF', 'Toronto', TOR, [80, 96, 50], 'Hit a huge 3-run home run in the 2015 playoffs and flipped his bat, one of the most famous moments in Toronto history.', { legend: true, milestone: true }),
+  H('trio', 'Ohtani · Murakami · Freeman', 'DH', 'Los Angeles · Chicago', LAD, [92, 96, 70], 'Three of the best hitters in baseball on one card, each with a jersey patch and a signature.', { milestone: true }),
   // The chase card
   H('ruth', 'Babe Ruth', 'OF', 'New York', NYY_RUTH, [90, 99, 40], 'The most famous baseball player ever. Hit 714 home runs. This signed card is one of a kind!', { legend: true, chase: true }),
 ];

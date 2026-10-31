@@ -215,7 +215,7 @@ describe('ballpark cards and economy', () => {
     const out = payout({ ...newBall(), xp: hof.xp - 5, rank: 4 }, 10, 0, null, 0, seeded(5), 1);
     expect(out.payout.rankUp).toBe('Hall of Famer');
     expect(out.payout.pulls.length).toBe(2);
-    expect(out.payout.pulls.filter((c) => c.parallel === 'milestone').map((c) => c.player.id)).toEqual(['aaron']);
+    expect(out.payout.pulls.filter((c) => c.parallel === 'milestone').map((c) => c.player.id)).toEqual(['ohtani-rc']);
     // Someone already past GOAT gets every milestone card they missed on their next game, once.
     const old = payout({ ...newBall(), xp: 30000, rank: 20 }, 0, 0, null, 0, seeded(6), 1);
     expect(old.payout.pulls.map((c) => c.player.id)).toEqual(MILESTONES.map((m) => m.player));

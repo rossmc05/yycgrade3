@@ -69,11 +69,11 @@ export const RANKS = [
 ];
 
 /** A special card for each rank past MVP, only earned by reaching that rank. */
-export type MilestoneStyle = 'vintage' | 'dynasty' | 'threads' | 'cut' | 'logoman';
+export type MilestoneStyle = 'rookieauto' | 'ruby' | 'triple' | 'cut' | 'logoman';
 export const MILESTONES: { rank: string; player: string; style: MilestoneStyle; title: string; about: string; serial?: number }[] = [
-  { rank: 'Hall of Famer', player: 'aaron', style: 'vintage', title: '1952 Style', about: 'A classic 1952-style card, like the most famous baseball card ever made.' },
-  { rank: 'Legend', player: 'mays', style: 'dynasty', title: 'Dynasty Patch Auto', about: 'A Dynasty card: a game-worn jersey patch and a signature. Only one was made.', serial: 1 },
-  { rank: 'Retired Jersey', player: 'robinson', style: 'threads', title: 'Triple Threads No. 42', about: 'A Triple Threads card with a jersey patch of number 42, retired by every team in baseball.' },
+  { rank: 'Hall of Famer', player: 'ohtani-rc', style: 'rookieauto', title: 'Rookie Auto', about: 'A signed rookie card from his first season in the big leagues.', serial: 1 },
+  { rank: 'Legend', player: 'bautista', style: 'ruby', title: 'Bat Flip Ruby Refractor', about: 'A Ruby Refractor of the famous 2015 bat flip.', serial: 1 },
+  { rank: 'Retired Jersey', player: 'trio', style: 'triple', title: 'Triple Patch Auto', about: 'A triple patch autograph: three jersey patches and three signatures on one card.', serial: 1 },
   { rank: 'All-Time Great', player: 'griffey', style: 'cut', title: 'Cut Signature', about: 'A Cut Signature card: a real signature cut out and set into the card.' },
   { rank: 'GOAT', player: 'ohtani', style: 'logoman', title: 'Logoman 1/1', about: 'A Logoman card: the logo patch from a game-worn jersey. The rarest card a collector can own.', serial: 1 },
 ];

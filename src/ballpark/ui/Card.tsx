@@ -8,6 +8,13 @@ import { Figure } from './Figure';
 
 const skinOf = (id: string) => [...id].reduce((n, c) => n + c.charCodeAt(0), 0);
 
+/** The three players on the Triple Patch Auto Milestone card. */
+const TRIO: { name: string; colors: [string, string] }[] = [
+  { name: 'Ohtani', colors: ['#005a9c', '#ef3e42'] },
+  { name: 'Murakami', colors: ['#27251f', '#c4ced4'] },
+  { name: 'Freeman', colors: ['#005a9c', '#ef3e42'] },
+];
+
 export function CardFront({ player, parallel, serial }: { player: Player; parallel: Parallel; serial?: number }) {
   const def = parallelOf(parallel);
   const ms = parallel === 'milestone' ? milestoneOf(player.id) : undefined;
@@ -17,14 +24,27 @@ export function CardFront({ player, parallel, serial }: { player: Player; parall
     <div className={`bcard-face front p-${parallel} ${ms ? `msf-${ms.style}` : ''} ${player.chase ? 'chase' : ''} ${player.rookie ? 'rookie' : ''}`} style={{ ['--c1' as string]: c1, ['--c2' as string]: c2 }}>
       <div className="bcard-art">
         <div className="bcard-stadium" />
-        <Figure color={c1} trim={c2} pose={player.role === 'pitcher' ? 'pitch' : 'bat'} skin={skinOf(player.id)} size={150} />
-        {(parallel === 'relic' || ms?.style === 'dynasty') && <span className="relic-swatch" title="Game-worn jersey piece" />}
-        {(parallel === 'auto' || player.signed || ms?.style === 'dynasty') && <span className="auto-sig">{player.name}</span>}
-        {ms?.style === 'threads' && <span className="ms-42" title="Jersey number patch">42</span>}
+        {ms?.style === 'triple' ? (
+          <span className="ms-trio">
+            {TRIO.map((t) => (
+              <span key={t.name}>
+                <Figure color={t.colors[0]} trim={t.colors[1]} skin={skinOf(t.name)} size={60} />
+                <i className="ms-patch" style={{ ['--c1' as string]: t.colors[0], ['--c2' as string]: t.colors[1] }} />
+                <b className="ms-sig">{t.name}</b>
+              </span>
+            ))}
+          </span>
+        ) : (
+          <Figure color={c1} trim={c2} pose={player.role === 'pitcher' ? 'pitch' : 'bat'} skin={skinOf(player.id)} size={150} />
+        )}
+        {parallel === 'relic' && <span className="relic-swatch" title="Game-worn jersey piece" />}
+        {(parallel === 'auto' || player.signed || ms?.style === 'rookieauto') && <span className="auto-sig">{player.name}</span>}
+        {ms?.style === 'rookieauto' && <span className="bcard-rc">RC</span>}
+        {ms?.style === 'ruby' && <span className="ms-flip" aria-hidden="true">🏏</span>}
+        {ms?.style === 'ruby' && <span className="ms-caption">Bat Flip · 2015</span>}
         {ms?.style === 'cut' && <span className="ms-cut" title="Cut signature">{player.name}</span>}
         {ms?.style === 'logoman' && <span className="ms-logoman" title="Logo patch"><svg viewBox="0 0 40 24"><rect width="40" height="24" rx="4" fill="#1d4ed8" /><path d="M20 0h16a4 4 0 0 1 4 4v16a4 4 0 0 1-4 4H20z" fill="#dc2626" /><circle cx="22" cy="6" r="2.6" fill="#fff" /><path d="M21 9 L14 20 L17 20 L22 12 L26 20 L29 20 L23 9 Z M23 10 L33 5 L34 6.5 L24 12 Z" fill="#fff" /></svg></span>}
-        {ms?.style === 'vintage' && <span className="ms-vintage-box">{player.city}</span>}
-        {(parallel === 'refractor' || parallel === 'diamond' || parallel === 'super') && <span className="shine" aria-hidden="true" />}
+        {(parallel === 'refractor' || parallel === 'diamond' || parallel === 'super' || ms?.style === 'ruby') && <span className="shine" aria-hidden="true" />}
         <span className="bcard-pos">{player.pos}</span>
         {player.canada && <span className="bcard-maple" title="Canadian connection">🍁</span>}
         {(isOneOfOne(player) || ms?.serial) && <span className="bcard-chase">1 of 1</span>}
