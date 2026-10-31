@@ -62,7 +62,7 @@ export interface Game {
   fouls: number;
   coins: number;
   plays: number;
-  stats: { hits: number; hrs: number; ks: number; right: number; asked: number };
+  stats: { hits: number; hrs: number; ks: number; right: number; asked: number; singles?: number; doubles?: number; triples?: number };
   over: boolean;
   result?: 'win' | 'loss' | 'tie';
   walkoff?: boolean;
@@ -224,7 +224,8 @@ export function bat(prev: Game, swing: Swing, correct: boolean, rng: () => numbe
   const text = n === 4
     ? stretched ? 'Inside-the-park home run! Your bat gave it extra zip!' : pick(rng, ['HOME RUN! That ball is gone!', 'HOME RUN! Way out of here!', 'Goodbye, baseball! HOME RUN!'])
     : `${['', 'Single', 'Double', 'Triple'][n]}!${stretched ? ' Your bat gave it extra zip for one more base.' : n === 1 ? ' A clean hit.' : n === 2 ? ' Into the gap!' : ' Off the wall!'}`;
-  g.stats = { ...g.stats, hits: g.stats.hits + 1, hrs: g.stats.hrs + (n === 4 ? 1 : 0) };
+  g.stats = { ...g.stats, hits: g.stats.hits + 1, hrs: g.stats.hrs + (n === 4 ? 1 : 0),
+    singles: (g.stats.singles ?? 0) + (n === 1 ? 1 : 0), doubles: (g.stats.doubles ?? 0) + (n === 2 ? 1 : 0), triples: (g.stats.triples ?? 0) + (n === 3 ? 1 : 0) };
   return finish(g, hit(g, n, fast, text, true), true);
 }
 
@@ -264,6 +265,9 @@ export function winCards(g: Game): number {
   if (g.result !== 'win') return 0;
   return g.you - g.them >= 5 || g.them === 0 ? 3 : 2;
 }
+
+/** A single, double, triple and home run by you in one game. */
+export const hitForCycle = (g: Game) => !!(g.stats.singles && g.stats.doubles && g.stats.triples && g.stats.hrs);
 
 export function winLuck(g: Game, perks: BallPerks = {}): number | null {
   if (g.result !== 'win') return null;

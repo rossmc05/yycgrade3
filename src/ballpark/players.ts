@@ -18,6 +18,8 @@ export interface Player {
   chase?: boolean;
   /** A top 2025 rookie: only ever pulled as a 1/1 Superfractor. */
   rookie?: boolean;
+  /** Only earned as a Milestone card by reaching a rank. */
+  milestone?: boolean;
   /** A rookie Superfractor that is also signed. */
   signed?: boolean;
   /** Canadian connection, shown with a maple leaf. */
@@ -139,6 +141,19 @@ export const PLAYERS: Player[] = [
   H('jwilson', 'Jacob Wilson', 'SS', 'Sacramento', ['#003831', '#efb21e'], [95, 60, 60], 'Almost never strikes out. His dad Jack was a big-league shortstop too.', { rookie: true }),
   P('horton', 'Cade Horton', 'Chicago', CHC, [88, 88, 85], 'A Chicago rookie pitcher who was a Rookie of the Year finalist in 2025.', { rookie: true }),
   P('schlittler', 'Cam Schlittler', 'New York', NYY, [94, 86, 82], 'A New York rookie with a 100 mph fastball. Struck out 12 in a 2025 playoff win over Boston.', { rookie: true, signed: true }),
+  // Milestone cards: only earned by reaching a rank
+  H('ohtani-rc', 'Shohei Ohtani', 'DH', 'Anaheim', ['#ba0021', '#003263'], [86, 92, 85], 'His rookie year was 2018. He hit and pitched, and won the American League Rookie of the Year.', { milestone: true }),
+  H('bautista', 'José Bautista', 'OF', 'Toronto', TOR, [80, 96, 50], 'Hit a huge 3-run home run in the 2015 playoffs and flipped his bat, one of the most famous moments in Toronto history.', { legend: true, milestone: true }),
+  H('trio', 'Ohtani · Murakami · Freeman', 'DH', 'Los Angeles · Chicago', LAD, [92, 96, 70], 'Three of the best hitters in baseball on one card, each with a jersey patch and a signature.', { milestone: true }),
+  // Moment cards: only earned by doing something big in a game or derby
+  H('freeman-ws', 'Freddie Freeman', '1B', 'Los Angeles', LAD, [95, 84, 50], 'Hit a walk-off grand slam in Game 1 of the 2024 World Series, the first one ever in a World Series.', { milestone: true }),
+  H('judge-hrd', 'Aaron Judge', 'OF', 'New York', NYY, [88, 99, 55], 'Won the 2017 Home Run Derby in his rookie season.', { milestone: true }),
+  H('ohtani-moon', 'Shohei Ohtani', 'DH', 'Los Angeles', LAD, [91, 99, 88], 'Hits some of the longest home runs in baseball. Some of his blasts go more than 470 feet.', { milestone: true }),
+  P('skenes-ace', 'Paul Skenes', 'Pittsburgh', PIT, [99, 85, 80], 'Started the 2024 All-Star Game as a rookie, just weeks after his first big-league game.', { milestone: true }),
+  H('ichiro-hits', 'Ichiro Suzuki', 'OF', 'Seattle', SEA, [99, 55, 95], 'Got 3,089 hits in the major leagues after starting his MLB career at 27.', { legend: true, milestone: true }),
+  H('vlad-hot', 'Vladimir Guerrero Jr.', '1B', 'Toronto', TOR, [92, 90, 45], 'Hit 48 home runs in 2021, tied for the most in baseball.', { milestone: true }),
+  H('jeter-cap', 'Derek Jeter', 'SS', 'New York', NYY, [94, 70, 80], 'The captain of New York for 12 seasons. Won five World Series.', { legend: true, milestone: true }),
+  H('master', 'Griffey · Judge', 'OF', 'Seattle · New York', SEA, [94, 97, 70], 'Two of the greatest home run hitters on one card, for completing the Today\'s Stars set.', { milestone: true }),
   // The chase card
   H('ruth', 'Babe Ruth', 'OF', 'New York', NYY_RUTH, [90, 99, 40], 'The most famous baseball player ever. Hit 714 home runs. This signed card is one of a kind!', { legend: true, chase: true }),
 ];

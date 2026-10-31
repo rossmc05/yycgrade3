@@ -65,6 +65,7 @@ function DerbyRound({ subjects, again }: { subjects: SubjectId[]; again: () => v
   const [xp, setXp] = useState(0);
   const [result, setResult] = useState<Payout | null>(null);
   const used = useRef(new Set<string>());
+  const run = useRef({ now: 0, best: 0 });
   const fx = useRef<FxHandle>(null);
   useMusic(result ? undefined : 'ballpark');
   if (!profile) return null;
@@ -84,6 +85,8 @@ function DerbyRound({ subjects, again }: { subjects: SubjectId[]; again: () => v
   const onAnswer = (correct: boolean, seconds: number) => {
     if (!atBat) return;
     const h = derbyHit(atBat.swing, correct, Math.random, perks);
+    run.current.now = correct ? run.current.now + 1 : 0;
+    run.current.best = Math.max(run.current.best, run.current.now);
     setLast(h);
     setXp((x) => x + (correct ? XP_RIGHT : XP_WRONG));
     const now = Date.now();
@@ -101,7 +104,7 @@ function DerbyRound({ subjects, again }: { subjects: SubjectId[]; again: () => v
     setAtBat(null);
     if (all.length >= DERBY_SWINGS) {
       const t = derbyTotal(all);
-      const out = payout(ball, xp, derbyCoins(t), derbyLuck(t, perks), perks.coinBonus ?? 0, Math.random, Date.now(), derbyCards(t));
+      const out = payout(ball, xp, derbyCoins(t), derbyLuck(t, perks), perks.coinBonus ?? 0, Math.random, Date.now(), derbyCards(t), { perfectDerby: t.hrs >= DERBY_SWINGS, longest: t.longest, answerRun: run.current.best });
       const d = out.ball.derby;
       const derby = { plays: d.plays + 1, bestFeet: Math.max(d.bestFeet, t.feet), bestHrs: Math.max(d.bestHrs, t.hrs), longest: Math.max(d.longest, t.longest) };
       updateProfile((p) => ({ ...p, ball: { ...out.ball, derby } }));
@@ -128,7 +131,7 @@ function DerbyRound({ subjects, again }: { subjects: SubjectId[]; again: () => v
           </div>
           {result.rankUp && <p className="good"><Icon e="🎉" /> You were promoted to {result.rankUp}! Here's a bonus card.</p>}
           {result.pulls.map((c, i) => (
-            <CardReveal key={i} player={c.player} parallel={c.parallel} serial={c.serial} isNew={c.isNew} coins={c.coins} label={i < derbyCards(total) ? `Derby card ${i + 1} of ${derbyCards(total)}` : 'Promotion bonus'} />
+            <CardReveal key={i} player={c.player} parallel={c.parallel} serial={c.serial} isNew={c.isNew} coins={c.coins} label={c.parallel === 'milestone' ? 'Special card unlocked!' : i < derbyCards(total) ? `Derby card ${i + 1} of ${derbyCards(total)}` : 'Promotion bonus'} />
           ))}
           <div className="row">
             <button className="btn ghost" onClick={() => go('')}>Clubhouse</button>
