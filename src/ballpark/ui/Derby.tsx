@@ -128,7 +128,7 @@ function DerbyRound({ subjects, again }: { subjects: SubjectId[]; again: () => v
           </div>
           {result.rankUp && <p className="good"><Icon e="🎉" /> You were promoted to {result.rankUp}! Here's a bonus card.</p>}
           {result.pulls.map((c, i) => (
-            <CardReveal key={i} player={c.player} parallel={c.parallel} serial={c.serial} isNew={c.isNew} coins={c.coins} label={i < derbyCards(total) ? `Derby card ${i + 1} of ${derbyCards(total)}` : 'Promotion bonus'} />
+            <CardReveal key={i} player={c.player} parallel={c.parallel} serial={c.serial} isNew={c.isNew} coins={c.coins} label={c.parallel === 'milestone' ? 'Milestone card unlocked!' : i < derbyCards(total) ? `Derby card ${i + 1} of ${derbyCards(total)}` : 'Promotion bonus'} />
           ))}
           <div className="row">
             <button className="btn ghost" onClick={() => go('')}>Clubhouse</button>

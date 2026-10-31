@@ -18,7 +18,7 @@ export function Clubhouse() {
   if (!profile) return null;
   const b = ballOf(profile);
   const r = rankOf(b.xp);
-  const set = PLAYERS.filter((p) => !p.chase && !p.rookie);
+  const set = PLAYERS.filter((p) => !p.chase && !p.rookie && !p.milestone);
   const players = set.filter((p) => Object.keys(b.cards).some((k) => k.startsWith(`${p.id}:`))).length;
   const next = rankAt(r.index + 1);
   const spots: Spot[] = [
@@ -95,7 +95,7 @@ export function Clubhouse() {
       <details className="card how">
         <summary>How you earn XP, coins and cards</summary>
         <ul>
-          <li><b>XP</b>: 10 for every right answer, 2 for trying. XP moves you up from Rookie through MVP, Hall of Famer, Legend, Retired Jersey, All-Time Great and GOAT, then GOAT ★2, ★3 and on forever (every 5,000 XP). Every promotion gives a bonus card (Refractor or better).</li>
+          <li><b>XP</b>: 10 for every right answer, 2 for trying. XP moves you up from Rookie through MVP, Hall of Famer, Legend, Retired Jersey, All-Time Great and GOAT, then GOAT ★2, ★3 and on forever (every 5,000 XP). Every promotion gives a bonus card (Refractor or better), and Hall of Famer, Legend, Retired Jersey, All-Time Great and GOAT each unlock a special Milestone card you can't get any other way.</li>
           <li><b>Coins</b>: hits (2 to 10), runs (2 each) and outs you pitch (2 or 3), plus 40 for a win, 20 for a tie or 15 for a loss. A derby pays 10, plus 3 a home run. A card you already have trades in for coins.</li>
           <li><b>Cards</b>: 2 for every win, or 3 for a blow-out or shutout (and big wins pull rarer cards). A Home Run Derby gives 1 card, 2 at 4 home runs and 3 at 7.</li>
         </ul>

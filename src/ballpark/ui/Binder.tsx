@@ -3,16 +3,16 @@ import { useMusic } from '../../battle/music';
 import { useStore } from '../../engine/store';
 import { go } from '../../router';
 import { CHASE, cardKey, isOneOfOne, oneOfOneParallel, parallelOf, PARALLELS, RANK, ROOKIES, type Parallel } from '../cards';
-import { ballOf } from '../data';
-import { PLAYERS, type Player } from '../players';
+import { ballOf, MILESTONES, RANKS } from '../data';
+import { playerById, PLAYERS, type Player } from '../players';
 import { BallBar } from './BallBar';
 import { BallCard, CardFront } from './Card';
 
 const GROUPS = [
   { name: "Today's stars", has: (p: Player) => !p.legend && !p.rookie },
-  { name: 'Legends', has: (p: Player) => !!p.legend && !p.chase },
+  { name: 'Legends', has: (p: Player) => !!p.legend && !p.chase && !p.milestone },
 ];
-const SET = PLAYERS.filter((p) => !isOneOfOne(p));
+const SET = PLAYERS.filter((p) => !isOneOfOne(p) && !p.milestone);
 
 /** Every player, with the best parallel of each you have. Tap one to see all your versions of it. */
 export function Binder() {
@@ -54,6 +54,27 @@ export function Binder() {
         <div>
           <h2 className="strand">The chase card</h2>
           <p className="muted small">{hasChase ? 'You found it! A signed Babe Ruth, and the only one ever made.' : 'Somewhere out there is one signed Babe Ruth card, numbered 1 of 1. Any card you win might be it. Luck from big wins and the Lucky Cap help.'}</p>
+        </div>
+      </section>
+      <section className="chase-row super-row milestone-row">
+        <div>
+          <h2 className="strand">Milestone cards <small>{MILESTONES.filter((m) => b.cards[cardKey(m.player, 'milestone')]).length}/{MILESTONES.length}</small></h2>
+          <p className="muted small">Can't be pulled from a pack. Each one unlocks when you reach that rank.</p>
+          <div className="super-slots">
+            {MILESTONES.map((m) => {
+              const p = playerById(m.player)!;
+              const xp = RANKS.find((r) => r.name === m.rank)!.xp;
+              return b.cards[cardKey(m.player, 'milestone')] ? (
+                <button key={m.player} className="binder-slot" onClick={() => { setOpen(p); setView('milestone'); }} aria-label={`${p.name} ${m.title}`}>
+                  <span className="mini-card"><CardFront player={p} parallel="milestone" serial={m.serial} /></span>
+                </button>
+              ) : (
+                <div key={m.player} className="binder-slot empty" aria-label={`Unlocks at ${m.rank}`}>
+                  <span className="mini-card blank"><span>🔒</span><small>{m.rank} · {xp.toLocaleString()} XP</small></span>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </section>
       <section className="chase-row super-row">
@@ -102,7 +123,7 @@ export function Binder() {
           <div className="card-modal-inner" onClick={(e) => e.stopPropagation()}>
             <BallCard key={view} player={open} parallel={view} serial={b.cards[cardKey(open.id, view)]?.serial} big />
             <div className="par-legend">
-              {(isOneOfOne(open) ? [parallelOf(oneOfOneParallel(open))] : PARALLELS).map((par) => {
+              {(view === 'milestone' ? [parallelOf('milestone')] : isOneOfOne(open) ? [parallelOf(oneOfOneParallel(open))] : PARALLELS).map((par) => {
                 const c = b.cards[cardKey(open.id, par.id)];
                 return (
                   <button key={par.id} className={`par-chip p-${par.id} ${view === par.id ? 'sel' : ''}`} disabled={!c} onClick={() => setView(par.id)}>

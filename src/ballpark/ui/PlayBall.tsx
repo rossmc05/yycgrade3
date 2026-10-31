@@ -271,7 +271,7 @@ function Final({ game, payout: pay, myTeam, team, again }: { game: Game; payout:
         {pay.rankUp && <p className="good"><Icon e="🎉" /> You were promoted to {pay.rankUp}! Here's a bonus card.</p>}
         {!win && <p className="muted">Win a game to earn 2 collector cards, or 3 for a big win. Try a Home Run Derby too: every derby earns at least one card!</p>}
         {pay.pulls.map((c, i) => (
-          <CardReveal key={i} player={c.player} parallel={c.parallel} serial={c.serial} isNew={c.isNew} coins={c.coins} label={win && i < winCards(game) ? `Winner's card ${i + 1} of ${winCards(game)}` : 'Promotion bonus'} />
+          <CardReveal key={i} player={c.player} parallel={c.parallel} serial={c.serial} isNew={c.isNew} coins={c.coins} label={c.parallel === 'milestone' ? 'Milestone card unlocked!' : win && i < winCards(game) ? `Winner's card ${i + 1} of ${winCards(game)}` : 'Promotion bonus'} />
         ))}
         <div className="row">
           <button className="btn ghost" onClick={() => go('')}>Clubhouse</button>

@@ -18,6 +18,8 @@ export interface Player {
   chase?: boolean;
   /** A top 2025 rookie: only ever pulled as a 1/1 Superfractor. */
   rookie?: boolean;
+  /** Only earned as a Milestone card by reaching a rank. */
+  milestone?: boolean;
   /** A rookie Superfractor that is also signed. */
   signed?: boolean;
   /** Canadian connection, shown with a maple leaf. */
@@ -139,6 +141,10 @@ export const PLAYERS: Player[] = [
   H('jwilson', 'Jacob Wilson', 'SS', 'Sacramento', ['#003831', '#efb21e'], [95, 60, 60], 'Almost never strikes out. His dad Jack was a big-league shortstop too.', { rookie: true }),
   P('horton', 'Cade Horton', 'Chicago', CHC, [88, 88, 85], 'A Chicago rookie pitcher who was a Rookie of the Year finalist in 2025.', { rookie: true }),
   P('schlittler', 'Cam Schlittler', 'New York', NYY, [94, 86, 82], 'A New York rookie with a 100 mph fastball. Struck out 12 in a 2025 playoff win over Boston.', { rookie: true, signed: true }),
+  // Milestone cards: only earned by reaching a rank
+  H('aaron', 'Hank Aaron', 'OF', 'Atlanta', ATL, [94, 96, 70], 'Hit 755 home runs and never struck out 100 times in a season. Known as "Hammerin\' Hank."', { legend: true, milestone: true }),
+  H('mays', 'Willie Mays', 'OF', 'San Francisco', SF, [94, 94, 95], 'Hit 660 home runs and made one of the most famous catches ever, running away from home plate.', { legend: true, milestone: true }),
+  H('robinson', 'Jackie Robinson', '2B', 'Brooklyn', ['#005a9c', '#ef3e42'], [92, 74, 96], 'Broke baseball\'s colour barrier in 1947. His number 42 is retired by every team in baseball.', { legend: true, milestone: true }),
   // The chase card
   H('ruth', 'Babe Ruth', 'OF', 'New York', NYY_RUTH, [90, 99, 40], 'The most famous baseball player ever. Hit 714 home runs. This signed card is one of a kind!', { legend: true, chase: true }),
 ];

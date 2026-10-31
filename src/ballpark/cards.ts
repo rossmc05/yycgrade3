@@ -2,7 +2,7 @@
 
 import { PLAYERS, type Player } from './players';
 
-export type Parallel = 'base' | 'rare' | 'refractor' | 'relic' | 'diamond' | 'auto' | 'super';
+export type Parallel = 'base' | 'rare' | 'refractor' | 'relic' | 'diamond' | 'auto' | 'super' | 'milestone';
 
 export interface ParallelDef {
   id: Parallel;
@@ -29,8 +29,11 @@ export const PARALLELS: ParallelDef[] = [
 /** The 1/1 Superfractor, only for the top 2025 rookies. Rarer than an Autograph, not as rare as Babe Ruth. */
 export const SUPER: ParallelDef = { id: 'super', name: 'Superfractor', weight: 0, printRun: 1, dupeCoins: 150, about: 'Superfractor. Swirling rainbow gold, and only one was ever made.' };
 
-export const parallelOf = (id: Parallel) => (id === 'super' ? SUPER : PARALLELS.find((p) => p.id === id)!);
-export const RANK: Record<Parallel, number> = { base: 0, rare: 1, refractor: 2, relic: 3, diamond: 4, auto: 5, super: 6 };
+/** Milestone cards are never pulled: each one unlocks when you reach a rank past MVP. */
+export const MILESTONE: ParallelDef = { id: 'milestone', name: 'Milestone', weight: 0, dupeCoins: 0, about: 'Milestone card. Can only be earned by reaching this rank.' };
+
+export const parallelOf = (id: Parallel) => (id === 'super' ? SUPER : id === 'milestone' ? MILESTONE : PARALLELS.find((p) => p.id === id)!);
+export const RANK: Record<Parallel, number> = { base: 0, rare: 1, refractor: 2, relic: 3, diamond: 4, auto: 5, super: 6, milestone: 7 };
 
 export interface Pull {
   player: Player;
@@ -78,7 +81,7 @@ export function rollCard(rng: () => number, luck = 0, atLeast: Parallel = 'base'
   }
   const parallel = PARALLELS[Math.max(i, RANK[atLeast])];
   // Legends turn up a little less often than today's stars.
-  const pool = PLAYERS.flatMap((p) => (isOneOfOne(p) ? [] : p.legend ? [p] : [p, p]));
+  const pool = PLAYERS.flatMap((p) => (isOneOfOne(p) || p.milestone ? [] : p.legend ? [p] : [p, p]));
   const player = pool[Math.floor(rng() * pool.length)];
   const serial = parallel.printRun ? 1 + Math.floor(rng() * parallel.printRun) : undefined;
   return { player, parallel: parallel.id, serial };

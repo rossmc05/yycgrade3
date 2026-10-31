@@ -320,3 +320,31 @@ a.btn { text-decoration: none; display: inline-block; }
 .binder-slot.empty.super .mini-card.blank { background: #1f2937; border-color: #a78bfa; color: #fde68a; }
 @media (max-width: 640px) { .super-slots { grid-template-columns: repeat(3, 1fr); } }
 @media (prefers-reduced-motion: reduce) { .bcard-face.p-super { animation: none; } }
+
+/* Milestone cards (earned by rank, styled after classic card types) */
+.bcard-face.p-milestone { border-color: #111827; background: #111827; }
+.bcard-face.p-milestone .bcard-foot { background: linear-gradient(90deg, #111827, #ca8a04, #111827); color: #fef3c7; }
+.par-chip.p-milestone { background: linear-gradient(90deg, #111827, #ca8a04); color: #fef3c7; }
+.card-reveal.p-milestone .rarity { color: #b45309; }
+/* 1952 style: cream border, sepia photo, team box */
+.bcard-face.msf-vintage { background: #f5ecd7; border-color: #f5ecd7; }
+.bcard-face.msf-vintage .bcard-art { filter: sepia(0.45) saturate(1.2); border: 3px solid #fff; }
+.bcard-face.msf-vintage .bcard-name { background: #f5ecd7; color: #7f1d1d; }
+.bcard-face.msf-vintage .bcard-name small { color: #7c2d12; }
+.ms-vintage-box { position: absolute; z-index: 2; left: 6%; bottom: 6%; padding: 2px 6px; background: #b91c1c; color: #fff; font-weight: 900; font-size: 0.7em; border: 2px solid #fff; transform: rotate(-4deg); }
+/* Dynasty: black and gold */
+.bcard-face.msf-dynasty { background: linear-gradient(160deg, #0b0b0b, #1f1a0e); border-color: #ca8a04; box-shadow: 0 0 0 2px #fde68a inset; }
+.bcard-face.msf-dynasty .bcard-art { background: radial-gradient(circle at 50% 40%, #3b2f12, #0b0b0b); }
+.bcard-face.msf-dynasty .bcard-name { background: #0b0b0b; color: #fde68a; }
+/* Triple Threads: a big jersey-number patch */
+.bcard-face.msf-threads { background: linear-gradient(160deg, #1e293b, #0f172a); border-color: #94a3b8; }
+.ms-42 { position: absolute; z-index: 2; right: 8%; bottom: 8%; padding: 2px 8px; font: 900 2.1em/1 'Arial Black', sans-serif; color: #fff; -webkit-text-stroke: 2px var(--c1); background: repeating-linear-gradient(0deg, #e5e7eb 0 2px, #f8fafc 2px 4px); border: 3px solid #f8fafc; border-radius: 6px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4); }
+/* Cut signature: a paper cut-out signature */
+.bcard-face.msf-cut { background: linear-gradient(160deg, #3f2d1a, #1c1917); border-color: #a16207; }
+.ms-cut { position: absolute; z-index: 2; left: 10%; right: 10%; bottom: 9%; padding: 4px 6px; background: #fef9e7; border: 2px solid #a16207; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4); font-family: 'Brush Script MT', 'Segoe Script', 'Snell Roundhand', cursive; font-size: 1.3em; color: #1e3a8a; text-align: center; white-space: nowrap; overflow: hidden; transform: rotate(-3deg); }
+/* Logoman: logo patch, red white and blue */
+.bcard-face.msf-logoman { background: linear-gradient(135deg, #1d4ed8, #f8fafc 50%, #dc2626); border-color: #1d4ed8; box-shadow: 0 0 18px rgba(29, 78, 216, 0.6); }
+.ms-logoman { position: absolute; z-index: 2; left: 8%; bottom: 8%; width: 40%; border: 3px solid #f8fafc; border-radius: 6px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45); line-height: 0; }
+.ms-logoman svg { width: 100%; height: auto; }
+.milestone-row { background: linear-gradient(135deg, #0b0b0b, #3b2f12); }
+.milestone-row .binder-slot.empty .mini-card.blank { background: #1c1917; border-color: #ca8a04; color: #fde68a; }

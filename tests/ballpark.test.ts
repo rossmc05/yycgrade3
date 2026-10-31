@@ -3,7 +3,7 @@ import { newSkillState, recordAnswer } from '../src/engine/adaptive';
 import { seeded } from '../src/engine/random';
 import { newProfile } from '../src/engine/storage';
 import { CHASE, cardKey, chances, chaseChance, isOneOfOne, PARALLELS, RANK, rollCard, ROOKIES, superChance } from '../src/ballpark/cards';
-import { addCard, ballLookOf, GOAT_STEP, newBall, payout, rankAt, rankOf, RANKS } from '../src/ballpark/data';
+import { addCard, ballLookOf, GOAT_STEP, MILESTONES, newBall, payout, rankAt, rankOf, RANKS } from '../src/ballpark/data';
 import { derbyCards, derbyHit, derbyLuck, derbyTotal, FENCE } from '../src/ballpark/derby';
 import { advance, bat, newGame, pitch, RUN_RULE, tierLevel, winCards, winLuck, type Game } from '../src/ballpark/game';
 import { BALL_GEAR, ballPerks } from '../src/ballpark/gear';
@@ -123,7 +123,7 @@ describe('ballpark cards and economy', () => {
     expect(new Set(PLAYERS.map((p) => p.id)).size).toBe(PLAYERS.length);
     expect(PLAYERS.length).toBeGreaterThanOrEqual(74);
     // About ten legends, all from 1995 on, plus the one chase card.
-    expect(PLAYERS.filter((p) => p.legend && !p.chase).length).toBe(10);
+    expect(PLAYERS.filter((p) => p.legend && !p.chase && !p.milestone).length).toBe(10);
     expect(ROOKIES.length).toBe(6);
     expect(PLAYERS.filter((p) => p.chase).map((p) => p.name)).toEqual(['Babe Ruth']);
     expect(PARALLELS.map((p) => p.id)).toEqual(['base', 'rare', 'refractor', 'relic', 'diamond', 'auto']);
@@ -202,7 +202,24 @@ describe('ballpark cards and economy', () => {
     const b = { ...newBall(), xp: goat.xp + GOAT_STEP - 5, rank: RANKS.length - 1 };
     const out = payout(b, 10, 0, null, 0, seeded(4), 1);
     expect(out.payout.rankUp).toBe('GOAT ★2');
-    expect(out.payout.pulls.length).toBe(1);
+    // The bonus card, plus the Milestone cards this test ball never collected.
+    expect(out.payout.pulls.filter((c) => c.parallel !== 'milestone').length).toBe(1);
+  });
+
+  it('unlocks a Milestone card at each rank past MVP, and never from a pull', () => {
+    expect(MILESTONES.map((m) => m.rank)).toEqual(['Hall of Famer', 'Legend', 'Retired Jersey', 'All-Time Great', 'GOAT']);
+    const rng = seeded(11);
+    for (let i = 0; i < 3000; i++) expect(['milestone'].includes(rollCard(rng, 3).parallel)).toBe(false);
+    for (let i = 0; i < 3000; i++) expect(PLAYERS.find((p) => p.id === rollCard(rng, 0).player.id)?.milestone).toBeFalsy();
+    const hof = RANKS.find((r) => r.name === 'Hall of Famer')!;
+    const out = payout({ ...newBall(), xp: hof.xp - 5, rank: 4 }, 10, 0, null, 0, seeded(5), 1);
+    expect(out.payout.rankUp).toBe('Hall of Famer');
+    expect(out.payout.pulls.length).toBe(2);
+    expect(out.payout.pulls.filter((c) => c.parallel === 'milestone').map((c) => c.player.id)).toEqual(['aaron']);
+    // Someone already past GOAT gets every milestone card they missed on their next game, once.
+    const old = payout({ ...newBall(), xp: 30000, rank: 20 }, 0, 0, null, 0, seeded(6), 1);
+    expect(old.payout.pulls.map((c) => c.player.id)).toEqual(MILESTONES.map((m) => m.player));
+    expect(payout(old.ball, 0, 0, null, 0, seeded(7), 2).payout.pulls.length).toBe(0);
   });
 
   it('has gear with a free starting bat', () => {

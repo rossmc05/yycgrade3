@@ -3,6 +3,7 @@
 
 import { lookOf, type Look } from '../avatar/catalog';
 import type { Profile } from '../engine/types';
+import { playerById } from './players';
 import { cardKey, oneOfOneParallel, parallelOf, rollCard, type Parallel, type Pull } from './cards';
 import type { BallSlot } from './gear';
 
@@ -67,6 +68,17 @@ export const RANKS = [
   { name: 'GOAT', xp: 18000, e: '🐐' },
 ];
 
+/** A special card for each rank past MVP, only earned by reaching that rank. */
+export type MilestoneStyle = 'vintage' | 'dynasty' | 'threads' | 'cut' | 'logoman';
+export const MILESTONES: { rank: string; player: string; style: MilestoneStyle; title: string; about: string; serial?: number }[] = [
+  { rank: 'Hall of Famer', player: 'aaron', style: 'vintage', title: '1952 Style', about: 'A classic 1952-style card, like the most famous baseball card ever made.' },
+  { rank: 'Legend', player: 'mays', style: 'dynasty', title: 'Dynasty Patch Auto', about: 'A Dynasty card: a game-worn jersey patch and a signature. Only one was made.', serial: 1 },
+  { rank: 'Retired Jersey', player: 'robinson', style: 'threads', title: 'Triple Threads No. 42', about: 'A Triple Threads card with a jersey patch of number 42, retired by every team in baseball.' },
+  { rank: 'All-Time Great', player: 'griffey', style: 'cut', title: 'Cut Signature', about: 'A Cut Signature card: a real signature cut out and set into the card.' },
+  { rank: 'GOAT', player: 'ohtani', style: 'logoman', title: 'Logoman 1/1', about: 'A Logoman card: the logo patch from a game-worn jersey. The rarest card a collector can own.', serial: 1 },
+];
+export const milestoneOf = (playerId: string) => MILESTONES.find((m) => m.player === playerId);
+
 /** XP between each GOAT star after the last named rank. Ranks never run out. */
 export const GOAT_STEP = 5000;
 
@@ -123,6 +135,16 @@ export function payout(b: BallData, xp: number, coins: number, luck: number | nu
     rankUp = rankAt(rank).name;
     ball = { ...ball, rank };
     give(Math.min(3, rank), 'refractor');
+  }
+  // Milestone cards for every rank reached, including ones reached before these cards existed.
+  for (const m of MILESTONES) {
+    const at = RANKS.findIndex((r) => r.name === m.rank);
+    const player = playerById(m.player);
+    if (player && rank >= at && !ball.cards[cardKey(m.player, 'milestone')]) {
+      const r = addCard(ball, { player, parallel: 'milestone', serial: m.serial }, now);
+      ball = r.ball;
+      pulls.push(r.pulled);
+    }
   }
   return { ball, payout: { xp, coins: gained, pulls, rankUp } };
 }
