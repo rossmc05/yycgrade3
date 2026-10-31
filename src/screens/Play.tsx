@@ -4,6 +4,7 @@ import { TopBar } from '../components/TopBar';
 import { VisualView } from '../components/Visuals';
 import { isReviewDue, newSkillState } from '../engine/adaptive';
 import { applyAnswer, closeReviews, freshQuestion, planMix, planSkill, type Planned } from '../engine/progress';
+import { onSkills } from '../engine/topics';
 import { checkBadges, type BadgeDef } from '../engine/rewards';
 import { speak, stopSpeaking } from '../engine/speech';
 import { useStore } from '../engine/store';
@@ -70,7 +71,7 @@ function Session({ subjectId, target, again }: { subjectId: string; target: stri
   // Plan once per session, from the profile as it was when the session started.
   const [plan] = useState<Planned[]>(() => {
     if (!profile) return [];
-    return single ? planSkill(profile, single, len) : planMix(profile, pool, len, Math.random, Date.now());
+    return single ? planSkill(profile, single, len) : planMix(profile, onSkills(profile, pool), len, Math.random, Date.now());
   });
   const [wasDue] = useState(() => new Set(pool.filter((s) => profile && isReviewDue(profile.skills[s.id], Date.now())).map((s) => s.id)));
 

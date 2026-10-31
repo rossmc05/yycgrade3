@@ -2,6 +2,7 @@
 
 import { newSkillState } from '../engine/adaptive';
 import { applyAnswer, freshQuestion, planMix } from '../engine/progress';
+import { isPaused, onSkills } from '../engine/topics';
 import type { Profile, Question, Skill, SubjectId } from '../engine/types';
 import { SUBJECTS } from '../subjects';
 
@@ -19,13 +20,25 @@ export function skillPool(subjects: SubjectId[]): Skill[] {
  */
 export function planSkills(p: Profile, subjects: SubjectId[], count: number, rng: () => number, now: number): Skill[] {
   const chosen = BALL_SUBJECTS.filter((s) => subjects.includes(s.id));
-  const groups = (chosen.length ? chosen : BALL_SUBJECTS).map((s) => planMix(p, s.skills, count, rng, now).map((x) => x.skill));
+  const picked = chosen.length ? chosen : BALL_SUBJECTS;
+  // Skip subjects whose topics are all switched off, unless that leaves nothing.
+  const open = picked.filter((s) => s.skills.some((k) => !isPaused(p, k.id)));
+  const groups = (open.length ? open : picked).map((s) => planMix(p, onSkills(p, s.skills), count, rng, now).map((x) => x.skill));
   const out: Skill[] = [];
   for (let i = 0; out.length < count; i++) {
     // Two questions in a row from a subject, then the next subject.
     out.push(groups[Math.floor(i / 2) % groups.length][i]);
   }
   return out;
+}
+
+/** The planned skill at `i`, or the next one after it that is still switched on. */
+export function skillAt(p: Profile, plan: Skill[], i: number, not?: string): Skill {
+  for (let k = 0; k < plan.length; k++) {
+    const s = plan[(i + k) % plan.length];
+    if (!isPaused(p, s.id) && s.id !== not) return s;
+  }
+  return plan[i % plan.length];
 }
 
 export const levelOf = (p: Profile, skill: Skill) => (p.skills[skill.id] ?? newSkillState()).level;

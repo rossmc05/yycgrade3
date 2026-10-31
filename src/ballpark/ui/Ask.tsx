@@ -6,7 +6,7 @@ import { speak } from '../../engine/speech';
 import type { Question, Skill } from '../../engine/types';
 import { Keypad, LetterKeys, normalize, OrderPicker, type Phase } from '../../screens/Play';
 
-export function Ask({ q, skill, level, clock, readAloud, onAnswer, onNext, nextLabel = 'Next →', children }: {
+export function Ask({ q, skill, level, clock, readAloud, onAnswer, onNext, onSkip, nextLabel = 'Next →', children }: {
   q: Question;
   skill: Skill;
   level: number;
@@ -16,6 +16,8 @@ export function Ask({ q, skill, level, clock, readAloud, onAnswer, onNext, nextL
   onAnswer: (correct: boolean, seconds: number) => void;
   onNext: () => void;
   nextLabel?: string;
+  /** "Haven't learned this yet": swap in a question from another topic, with no out. */
+  onSkip?: () => void;
   /** Shown with the feedback, e.g. what happened on the field. */
   children?: React.ReactNode;
 }) {
@@ -120,6 +122,9 @@ export function Ask({ q, skill, level, clock, readAloud, onAnswer, onNext, nextL
         </>
       )}
 
+      {!done && onSkip && (
+        <button className="btn ghost skip-topic" onClick={onSkip}>🙋 Haven't learned this yet</button>
+      )}
       {done && (
         <div className={`feedback ${phase === 'right' ? 'right' : 'shown'}`} role="status">
           {children}

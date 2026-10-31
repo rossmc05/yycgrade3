@@ -116,6 +116,10 @@ export interface Profile {
   owned: string[];
   equipped: string[];
   totalCorrect: number;
+  /** Topics switched off until they're taught at school (skill ids). */
+  paused?: string[];
+  /** Topics the player flagged with "Haven't learned this yet", for a grown-up to look at. */
+  flagged?: string[];
   /** Weekly words entered by a parent. */
   spellingList?: string[];
   typing?: Record<string, TypingResult>;

@@ -530,3 +530,6 @@ button.center-text { display: block; margin: 8px auto; }
 .map-buddy { position: absolute; left: 70%; bottom: 0; width: 45%; pointer-events: none; }
 .map-hero.walking .map-buddy { animation: walk 0.3s ease-in-out infinite alternate-reverse; }
 @media (prefers-reduced-motion: reduce) { .pal-shine, .battle-buddy, .pal-card .sprite { animation: none !important; } }
+.topic-switches { margin: 8px 0; }
+.topic-switches .chip { cursor: pointer; margin: 2px; }
+.skip-topic { display: block; margin: 10px auto 0; font-size: 0.85rem; }
