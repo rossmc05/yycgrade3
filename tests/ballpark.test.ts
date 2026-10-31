@@ -3,9 +3,9 @@ import { newSkillState, recordAnswer } from '../src/engine/adaptive';
 import { seeded } from '../src/engine/random';
 import { newProfile } from '../src/engine/storage';
 import { CHASE, cardKey, chances, chaseChance, isOneOfOne, PARALLELS, RANK, rollCard, ROOKIES, superChance } from '../src/ballpark/cards';
-import { addCard, ballLookOf, GOAT_STEP, MILESTONES, newBall, payout, rankAt, rankOf, RANKS } from '../src/ballpark/data';
+import { addCard, ballLookOf, GOAT_STEP, MILESTONES, MOMENT_CARDS, TODAYS_STARS, newBall, payout, rankAt, rankOf, RANKS } from '../src/ballpark/data';
 import { derbyCards, derbyHit, derbyLuck, derbyTotal, FENCE } from '../src/ballpark/derby';
-import { advance, bat, newGame, pitch, RUN_RULE, tierLevel, winCards, winLuck, type Game } from '../src/ballpark/game';
+import { advance, bat, hitForCycle, newGame, pitch, RUN_RULE, tierLevel, winCards, winLuck, type Game } from '../src/ballpark/game';
 import { BALL_GEAR, ballPerks } from '../src/ballpark/gear';
 import { PLAYERS } from '../src/ballpark/players';
 import { planSkills, recordBall } from '../src/ballpark/questions';
@@ -220,6 +220,33 @@ describe('ballpark cards and economy', () => {
     const old = payout({ ...newBall(), xp: 30000, rank: 20 }, 0, 0, null, 0, seeded(6), 1);
     expect(old.payout.pulls.map((c) => c.player.id)).toEqual(MILESTONES.map((m) => m.player));
     expect(payout(old.ball, 0, 0, null, 0, seeded(7), 2).payout.pulls.length).toBe(0);
+  });
+
+  it('unlocks Moment cards for big plays, once each', () => {
+    const ids = (m: Parameters<typeof payout>[8]) => payout(newBall(), 0, 0, null, 0, seeded(3), 1, 1, m).payout.pulls.map((c) => c.player.id);
+    expect(ids({})).toEqual([]);
+    expect(ids({ walkoff: true })).toEqual(['freeman-ws']);
+    expect(ids({ perfectDerby: true, longest: 512 })).toEqual(['judge-hrd', 'ohtani-moon']);
+    expect(ids({ longest: 499 })).toEqual([]);
+    expect(ids({ shutout: true, cycle: true })).toEqual(['skenes-ace', 'ichiro-hits']);
+    expect(ids({ winStreak: 4, answerRun: 9 })).toEqual([]);
+    expect(ids({ winStreak: 5, answerRun: 10 })).toEqual(['vlad-hot', 'jeter-cap']);
+    const once = payout(newBall(), 0, 0, null, 0, seeded(3), 1, 1, { walkoff: true }).ball;
+    expect(payout(once, 0, 0, null, 0, seeded(3), 2, 1, { walkoff: true }).payout.pulls).toEqual([]);
+    // Master set: one card of every player in Today's Stars.
+    let all = newBall();
+    for (const p of TODAYS_STARS) all = addCard(all, { player: p, parallel: 'base' }, 1).ball;
+    expect(payout(all, 0, 0, null, 0, seeded(3), 2).payout.pulls.map((c) => c.player.id)).toEqual(['master']);
+    expect(MOMENT_CARDS.length).toBe(8);
+    // Special cards never come from packs.
+    const rng = seeded(12);
+    for (let i = 0; i < 3000; i++) expect(rollCard(rng, 3).player.milestone).toBeFalsy();
+  });
+
+  it('spots hitting for the cycle', () => {
+    const g = newGame(3);
+    expect(hitForCycle(g)).toBe(false);
+    expect(hitForCycle({ ...g, stats: { ...g.stats, singles: 1, doubles: 2, triples: 1, hrs: 1 } })).toBe(true);
   });
 
   it('has gear with a free starting bat', () => {

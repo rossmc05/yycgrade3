@@ -30,7 +30,7 @@ export const PARALLELS: ParallelDef[] = [
 export const SUPER: ParallelDef = { id: 'super', name: 'Superfractor', weight: 0, printRun: 1, dupeCoins: 150, about: 'Superfractor. Swirling rainbow gold, and only one was ever made.' };
 
 /** Milestone cards are never pulled: each one unlocks when you reach a rank past MVP. */
-export const MILESTONE: ParallelDef = { id: 'milestone', name: 'Milestone', weight: 0, dupeCoins: 0, about: 'Milestone card. Can only be earned by reaching this rank.' };
+export const MILESTONE: ParallelDef = { id: 'milestone', name: 'Special', weight: 0, dupeCoins: 0, about: 'Special card. Can only be earned, never pulled from a pack.' };
 
 export const parallelOf = (id: Parallel) => (id === 'super' ? SUPER : id === 'milestone' ? MILESTONE : PARALLELS.find((p) => p.id === id)!);
 export const RANK: Record<Parallel, number> = { base: 0, rare: 1, refractor: 2, relic: 3, diamond: 4, auto: 5, super: 6, milestone: 7 };

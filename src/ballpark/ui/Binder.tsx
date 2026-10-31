@@ -3,13 +3,13 @@ import { useMusic } from '../../battle/music';
 import { useStore } from '../../engine/store';
 import { go } from '../../router';
 import { CHASE, cardKey, isOneOfOne, oneOfOneParallel, parallelOf, PARALLELS, RANK, ROOKIES, type Parallel } from '../cards';
-import { ballOf, MILESTONES, RANKS } from '../data';
+import { ballOf, MILESTONES, MOMENT_CARDS, RANKS } from '../data';
 import { playerById, PLAYERS, type Player } from '../players';
 import { BallBar } from './BallBar';
 import { BallCard, CardFront } from './Card';
 
 const GROUPS = [
-  { name: "Today's stars", has: (p: Player) => !p.legend && !p.rookie },
+  { name: "Today's stars", has: (p: Player) => !p.legend && !p.rookie && !p.milestone },
   { name: 'Legends', has: (p: Player) => !!p.legend && !p.chase && !p.milestone },
 ];
 const SET = PLAYERS.filter((p) => !isOneOfOne(p) && !p.milestone);
@@ -56,27 +56,30 @@ export function Binder() {
           <p className="muted small">{hasChase ? 'You found it! A signed Babe Ruth, and the only one ever made.' : 'Somewhere out there is one signed Babe Ruth card, numbered 1 of 1. Any card you win might be it. Luck from big wins and the Lucky Cap help.'}</p>
         </div>
       </section>
-      <section className="chase-row super-row milestone-row">
-        <div>
-          <h2 className="strand">Milestone cards <small>{MILESTONES.filter((m) => b.cards[cardKey(m.player, 'milestone')]).length}/{MILESTONES.length}</small></h2>
-          <p className="muted small">Can't be pulled from a pack. Each one unlocks when you reach that rank.</p>
-          <div className="super-slots">
-            {MILESTONES.map((m) => {
-              const p = playerById(m.player)!;
-              const xp = RANKS.find((r) => r.name === m.rank)!.xp;
-              return b.cards[cardKey(m.player, 'milestone')] ? (
-                <button key={m.player} className="binder-slot" onClick={() => { setOpen(p); setView('milestone'); }} aria-label={`${p.name} ${m.title}`}>
-                  <span className="mini-card"><CardFront player={p} parallel="milestone" serial={m.serial} /></span>
-                </button>
-              ) : (
-                <div key={m.player} className="binder-slot empty" aria-label={`Unlocks at ${m.rank}`}>
-                  <span className="mini-card blank"><span>🔒</span><small>{m.rank} · {xp.toLocaleString()} XP</small></span>
-                </div>
-              );
-            })}
+      {[{ name: 'Milestone cards', note: "Can't be pulled from a pack. Each one unlocks when you reach that rank.", list: MILESTONES, cls: 'milestone-row' },
+        { name: 'Moment cards', note: 'Do something big in a game or Derby to unlock these.', list: MOMENT_CARDS, cls: 'moment-row' }].map((row) => (
+        <section key={row.name} className={`chase-row super-row ${row.cls}`}>
+          <div>
+            <h2 className="strand">{row.name} <small>{row.list.filter((m) => b.cards[cardKey(m.player, 'milestone')]).length}/{row.list.length}</small></h2>
+            <p className="muted small">{row.note}</p>
+            <div className={`super-slots ${row.list.length > 6 ? 'wrap' : ''}`}>
+              {row.list.map((m) => {
+                const p = playerById(m.player)!;
+                const xp = m.rank ? RANKS.find((r) => r.name === m.rank)!.xp : 0;
+                return b.cards[cardKey(m.player, 'milestone')] ? (
+                  <button key={m.player} className="binder-slot" onClick={() => { setOpen(p); setView('milestone'); }} aria-label={`${p.name} ${m.title}`}>
+                    <span className="mini-card"><CardFront player={p} parallel="milestone" serial={m.serial} /></span>
+                  </button>
+                ) : (
+                  <div key={m.player} className="binder-slot empty" aria-label={m.how}>
+                    <span className="mini-card blank"><span>🔒</span><small>{m.rank ? `${m.rank} · ${xp.toLocaleString()} XP` : m.how}</small></span>
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      ))}
       <section className="chase-row super-row">
         <div>
           <h2 className="strand">Rookie Superfractors <small>{ROOKIES.filter((p) => b.cards[cardKey(p.id, 'super')]).length}/{ROOKIES.length}</small></h2>

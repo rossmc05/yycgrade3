@@ -13,7 +13,7 @@ import type { Question, Skill, SubjectId } from '../../engine/types';
 import { go } from '../../router';
 import { RANK } from '../cards';
 import { ballOf, payout, type Payout, ballLookOf } from '../data';
-import { bat, newGame, pitch, PITCHES, resultCoins, SWINGS, tierLevel, winCards, winLuck, type Game, type Pitch, type Play, type Swing } from '../game';
+import { bat, newGame, pitch, PITCHES, resultCoins, SWINGS, tierLevel, hitForCycle, winCards, winLuck, type Game, type Pitch, type Play, type Swing } from '../game';
 import { ballPerks } from '../gear';
 import { playerById, type Player } from '../players';
 import { ask, levelOf, planSkills, recordBall, XP_RIGHT, XP_WRONG } from '../questions';
@@ -95,6 +95,7 @@ function Match({ subjects, innings, team, again }: { subjects: SubjectId[]; inni
   const [result, setResult] = useState<Payout | null>(null);
   const [batter, setBatter] = useState(0);
   const used = useRef(new Set<string>());
+  const run = useRef({ now: 0, best: 0 });
   const fx = useRef<FxHandle>(null);
   const soundOn = data.settings.sound !== false;
   useMusic(result ? undefined : 'ballpark');
@@ -131,6 +132,8 @@ function Match({ subjects, innings, team, again }: { subjects: SubjectId[]; inni
     if (!atBat) return;
     const now = Date.now();
     const r = batting ? bat(game, atBat.choice as Swing, correct, Math.random, perks) : pitch(game, atBat.choice as Pitch, correct, Math.random, perks);
+    run.current.now = correct ? run.current.now + 1 : 0;
+    run.current.best = Math.max(run.current.best, run.current.now);
     setGame(r.game);
     setPlay(r.play);
     setXp((x) => x + (correct ? XP_RIGHT : XP_WRONG));
@@ -153,10 +156,13 @@ function Match({ subjects, innings, team, again }: { subjects: SubjectId[]; inni
     if (g.over) {
       const earned = xp;
       const coins = g.coins + resultCoins(g);
-      const out = payout(ball, earned, coins, winLuck(g, perks), perks.coinBonus ?? 0, Math.random, Date.now(), winCards(g));
+      const win = g.result === 'win';
+      const winStreak = win ? (ball.winStreak ?? 0) + 1 : 0;
+      const moments = { walkoff: win && !!g.walkoff, shutout: win && g.them === 0, cycle: hitForCycle(g), winStreak, answerRun: run.current.best };
+      const out = payout(ball, earned, coins, winLuck(g, perks), perks.coinBonus ?? 0, Math.random, Date.now(), winCards(g), moments);
       const rec = { ...ball.record };
       if (g.result === 'win') rec.w += 1; else if (g.result === 'loss') rec.l += 1; else rec.t += 1;
-      updateProfile((pr) => ({ ...pr, ball: { ...out.ball, record: rec } }));
+      updateProfile((pr) => ({ ...pr, ball: { ...out.ball, record: rec, winStreak } }));
       setResult(out.payout);
       if (g.result === 'win') sfx.fanfare();
       return;
@@ -271,7 +277,7 @@ function Final({ game, payout: pay, myTeam, team, again }: { game: Game; payout:
         {pay.rankUp && <p className="good"><Icon e="🎉" /> You were promoted to {pay.rankUp}! Here's a bonus card.</p>}
         {!win && <p className="muted">Win a game to earn 2 collector cards, or 3 for a big win. Try a Home Run Derby too: every derby earns at least one card!</p>}
         {pay.pulls.map((c, i) => (
-          <CardReveal key={i} player={c.player} parallel={c.parallel} serial={c.serial} isNew={c.isNew} coins={c.coins} label={c.parallel === 'milestone' ? 'Milestone card unlocked!' : win && i < winCards(game) ? `Winner's card ${i + 1} of ${winCards(game)}` : 'Promotion bonus'} />
+          <CardReveal key={i} player={c.player} parallel={c.parallel} serial={c.serial} isNew={c.isNew} coins={c.coins} label={c.parallel === 'milestone' ? 'Special card unlocked!' : win && i < winCards(game) ? `Winner's card ${i + 1} of ${winCards(game)}` : 'Promotion bonus'} />
         ))}
         <div className="row">
           <button className="btn ghost" onClick={() => go('')}>Clubhouse</button>
