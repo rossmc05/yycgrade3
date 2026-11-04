@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { dayKey, status, topLevelAccuracy } from '../engine/adaptive';
 import { liveStreak } from '../engine/rewards';
 import { parse } from '../engine/storage';
+import { isPaused, setPaused } from '../engine/topics';
 import { useStore } from '../engine/store';
 import type { Profile } from '../engine/types';
 import { go } from '../router';
@@ -141,6 +142,8 @@ function ProfileReport({ p }: { p: Profile }) {
         </div>
       ))}
 
+      <TopicSwitches p={p} />
+
       <SpellingList p={p} />
 
       <h3>Recent trouble spots</h3>
@@ -240,6 +243,30 @@ function Settings() {
       </div>
       {msg && <p>{msg}</p>}
     </section>
+  );
+}
+
+function TopicSwitches({ p }: { p: Profile }) {
+  const { setData } = useStore();
+  const flip = (id: string, on: boolean) =>
+    setData((d) => ({ ...d, profiles: d.profiles.map((x) => (x.id === p.id ? setPaused(x, id, !on) : x)) }));
+  return (
+    <div>
+      <h3>🏫 Topics taught at school so far</h3>
+      <p className="muted small">Untick anything the class hasn't covered yet and it won't come up in mixed practice or the Ballpark. Tick it again once it's been taught.</p>
+      {SUBJECTS.filter((s) => s.ready && s.skills.length).map((subject) => (
+        <div key={subject.id} className="topic-switches">
+          <strong className="small">{subject.icon} {subject.name}</strong>
+          <div className="row" style={{ justifyContent: 'flex-start', flexWrap: 'wrap' }}>
+            {subject.skills.map((s) => (
+              <label key={s.id} className="chip">
+                <input type="checkbox" checked={!isPaused(p, s.id)} onChange={(e) => flip(s.id, e.target.checked)} /> {s.icon} {s.name}
+              </label>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }
 

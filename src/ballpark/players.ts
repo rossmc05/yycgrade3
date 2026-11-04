@@ -153,6 +153,7 @@ export const PLAYERS: Player[] = [
   H('ichiro-hits', 'Ichiro Suzuki', 'OF', 'Seattle', SEA, [99, 55, 95], 'Got 3,089 hits in the major leagues after starting his MLB career at 27.', { legend: true, milestone: true }),
   H('vlad-hot', 'Vladimir Guerrero Jr.', '1B', 'Toronto', TOR, [92, 90, 45], 'Hit 48 home runs in 2021, tied for the most in baseball.', { milestone: true }),
   H('jeter-cap', 'Derek Jeter', 'SS', 'New York', NYY, [94, 70, 80], 'The captain of New York for 12 seasons. Won five World Series.', { legend: true, milestone: true }),
+  H('ring', 'Championship Ring', 'CHAMP', 'Ballpark League', ['#a16207', '#fde047'], [99, 99, 99], 'Only champions get a ring. Won by finishing in the top four and winning both playoff games.', { milestone: true }),
   H('master', 'Griffey · Judge', 'OF', 'Seattle · New York', SEA, [94, 97, 70], 'Two of the greatest home run hitters on one card, for completing the Today\'s Stars set.', { milestone: true }),
   // The chase card
   H('ruth', 'Babe Ruth', 'OF', 'New York', NYY_RUTH, [90, 99, 40], 'The most famous baseball player ever. Hit 714 home runs. This signed card is one of a kind!', { legend: true, chase: true }),

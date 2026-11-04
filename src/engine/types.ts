@@ -116,6 +116,8 @@ export interface Profile {
   owned: string[];
   equipped: string[];
   totalCorrect: number;
+  /** Topics switched off until they're taught at school (skill ids). */
+  paused?: string[];
   /** Weekly words entered by a parent. */
   spellingList?: string[];
   typing?: Record<string, TypingResult>;

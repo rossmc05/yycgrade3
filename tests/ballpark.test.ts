@@ -237,7 +237,7 @@ describe('ballpark cards and economy', () => {
     let all = newBall();
     for (const p of TODAYS_STARS) all = addCard(all, { player: p, parallel: 'base' }, 1).ball;
     expect(payout(all, 0, 0, null, 0, seeded(3), 2).payout.pulls.map((c) => c.player.id)).toEqual(['master']);
-    expect(MOMENT_CARDS.length).toBe(8);
+    expect(MOMENT_CARDS.length).toBe(9);
     // Special cards never come from packs.
     const rng = seeded(12);
     for (let i = 0; i < 3000; i++) expect(rollCard(rng, 3).player.milestone).toBeFalsy();

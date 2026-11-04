@@ -18,7 +18,15 @@ export function CardFront({ player, parallel, serial }: { player: Player; parall
     <div className={`bcard-face front p-${parallel} ${ms ? `msf-${ms.style}` : ''} ${player.chase ? 'chase' : ''} ${player.rookie ? 'rookie' : ''}`} style={{ ['--c1' as string]: c1, ['--c2' as string]: c2 }}>
       <div className="bcard-art">
         <div className="bcard-stadium" />
-        {ms?.crew ? (
+        {ms?.style === 'ring' ? (
+          <svg className="ms-ring" viewBox="0 0 100 100" aria-hidden="true">
+            <ellipse cx="50" cy="66" rx="30" ry="22" fill="none" stroke="#a16207" strokeWidth="9" />
+            <ellipse cx="50" cy="66" rx="30" ry="22" fill="none" stroke="#fde047" strokeWidth="4" />
+            <path d="M28 46 L36 24 L64 24 L72 46 L60 56 L40 56 Z" fill="#facc15" stroke="#a16207" strokeWidth="3" strokeLinejoin="round" />
+            <path d="M40 32 L60 32 L64 44 L50 50 L36 44 Z" fill="#1d4ed8" stroke="#fef9c3" strokeWidth="1.5" />
+            <path d="M50 34 L52 40 L58 40 L53 44 L55 50 L50 46 L45 50 L47 44 L42 40 L48 40 Z" fill="#fef9c3" />
+          </svg>
+        ) : ms?.crew ? (
           <span className="ms-trio">
             {ms.crew.map((t) => (
               <span key={t.name}>
@@ -40,7 +48,7 @@ export function CardFront({ player, parallel, serial }: { player: Player; parall
         {ms?.style === 'captain' && <span className="ms-c" title="Captain">C</span>}
         {ms?.style === 'cut' && <span className="ms-cut" title="Cut signature">{player.name}</span>}
         {ms?.style === 'logoman' && <span className="ms-logoman" title="Logo patch"><svg viewBox="0 0 40 24"><rect width="40" height="24" rx="4" fill="#1d4ed8" /><path d="M20 0h16a4 4 0 0 1 4 4v16a4 4 0 0 1-4 4H20z" fill="#dc2626" /><circle cx="22" cy="6" r="2.6" fill="#fff" /><path d="M21 9 L14 20 L17 20 L22 12 L26 20 L29 20 L23 9 Z M23 10 L33 5 L34 6.5 L24 12 Z" fill="#fff" /></svg></span>}
-        {(parallel === 'refractor' || parallel === 'diamond' || parallel === 'super' || ms?.style === 'ruby' || ms?.style === 'gold' || ms?.style === 'ice' || ms?.style === 'fire') && <span className="shine" aria-hidden="true" />}
+        {(parallel === 'refractor' || parallel === 'diamond' || parallel === 'super' || ms?.style === 'ruby' || ms?.style === 'gold' || ms?.style === 'ring' || ms?.style === 'ice' || ms?.style === 'fire') && <span className="shine" aria-hidden="true" />}
         <span className="bcard-pos">{player.pos}</span>
         {player.canada && <span className="bcard-maple" title="Canadian connection">🍁</span>}
         {(isOneOfOne(player) || ms?.serial) && <span className="bcard-chase">1 of 1</span>}

@@ -8,6 +8,7 @@ import { useStore } from '../../engine/store';
 import { go } from '../../router';
 import { ballLookOf, ballOf, rankAt, rankOf } from '../data';
 import { PLAYERS } from '../players';
+import { teamOvr } from '../squad';
 import { BallBar } from './BallBar';
 
 interface Spot { id: string; label: string; sub: string; e: string; x: number; y: number; size: number; to: string }
@@ -26,6 +27,8 @@ export function Clubhouse() {
     { id: 'derby', label: 'Home Run Derby', sub: b.derby.plays ? `Best ${b.derby.bestFeet} ft` : 'Earns 1 to 3 cards', e: '💥', x: 17, y: 52, size: 12, to: 'derby' },
     { id: 'binder', label: 'Card Shop', sub: `${players}/${set.length} players`, e: '🃏', x: 83, y: 52, size: 12, to: 'binder' },
     { id: 'shop', label: 'Pro Shop', sub: `🪙 ${b.coins}`, e: '🏪', x: 28, y: 82, size: 12, to: 'shop' },
+    { id: 'league', label: 'League', sub: b.season ? `Season ${b.season.n} · ${b.season.you.w}-${b.season.you.l}` : 'Season standings', e: '🏆', x: 83, y: 22, size: 10, to: 'league' },
+    { id: 'team', label: 'Dugout', sub: `Team ${teamOvr(b)} OVR`, e: '🧢', x: 17, y: 22, size: 10, to: 'team' },
     { id: 'locker', label: 'Locker Room', sub: 'Your uniform', e: '👕', x: 72, y: 82, size: 11, to: 'locker' },
   ];
   const open = (to: string) => { sfx.unlock(); sfx.coin(); go(to); };
@@ -97,6 +100,8 @@ export function Clubhouse() {
         <ul>
           <li><b>XP</b>: 10 for every right answer, 2 for trying. XP moves you up from Rookie through MVP, Hall of Famer, Legend, Retired Jersey, All-Time Great and GOAT, then GOAT ★2, ★3 and on forever (every 5,000 XP). Every promotion gives a bonus card (Refractor or better), and Hall of Famer, Legend, Retired Jersey, All-Time Great and GOAT each unlock a special Milestone card you can't get any other way.</li>
           <li><b>Moment cards</b>: big plays unlock special cards too: a walk-off win, a shutout win, hitting for the cycle, 5 wins in a row, 10 right answers in a row, a perfect Derby, a 500 ft home run, and collecting every player in Today's Stars.</li>
+          <li><b>Seasons</b>: play 10 season games, finish in the top 4 to make the playoffs, then win the semifinal and the final. The first title earns the Championship Ring card, and every title pays 100 coins and a bonus card. Quick games don't count in the standings.</li>
+          <li><b>Your team</b>: in the Dugout, pick 8 hitters and an ace from your cards. Each card has an overall rating (better versions rate higher). When your player is up, a right answer can stretch into an extra base, and your ace can turn a wrong answer on the mound into a strikeout.</li>
           <li><b>Coins</b>: hits (2 to 10), runs (2 each) and outs you pitch (2 or 3), plus 40 for a win, 20 for a tie or 15 for a loss. A derby pays 10, plus 3 a home run. A card you already have trades in for coins.</li>
           <li><b>Cards</b>: 2 for every win, or 3 for a blow-out or shutout (and big wins pull rarer cards). A Home Run Derby gives 1 card, 2 at 4 home runs and 3 at 7.</li>
         </ul>
