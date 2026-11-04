@@ -131,7 +131,7 @@ function Row({ c, what, onClick }: { c: TeamCard; what: string; onClick: () => v
     <button className="order-main" onClick={onClick} aria-label={`${c.player.name}. Tap to change.`}>
       <span className="order-card"><span className="mini-card"><CardFront player={c.player} parallel={c.parallel} /></span></span>
       <span className="order-name"><strong>{c.player.name}</strong><small>{c.player.pos} · {parallelOf(c.parallel).name}</small></span>
-      <span className="order-ovr"><b>{c.ovr}</b><small>+{Math.round(c.boost * 100)}% {what}</small></span>
+      <span className="order-ovr"><b>{c.ovr}</b><small>+{Math.round(c.boost * 100)}%<em> {what}</em></small></span>
     </button>
   );
 }

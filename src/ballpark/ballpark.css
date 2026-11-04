@@ -451,11 +451,11 @@ body.ballpark-body:has(.binder-page), html:has(.binder-page) { background: radia
   .binder-page .mini-card.blank small { font-size: 0.58rem; letter-spacing: 0.04em; }
   .album-sleeves.solo { width: 108px; }
 }
-.binder-page .card-modal-inner .btn { background: transparent; color: var(--alb-gold); border: 1px solid var(--alb-line); box-shadow: none; border-radius: 6px; font-family: inherit; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; font-size: 0.8rem; padding: 8px 22px; }
+body.game .binder-page .card-modal-inner .btn { background: transparent; color: var(--alb-gold); border: 1px solid var(--alb-line); box-shadow: none; border-radius: 6px; font-family: inherit; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; font-size: 0.8rem; padding: 8px 22px; }
 .binder-page .card-modal-inner .btn:hover { background: rgba(214, 184, 106, 0.1); }
 
 /* The Dugout */
-.binder-page .album-btn { grid-column: 1 / -1; justify-self: start; background: transparent; color: var(--alb-gold); border: 1px solid var(--alb-line); box-shadow: none; border-radius: 6px; font-family: inherit; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; font-size: 0.78rem; padding: 8px 16px; }
+body.game .binder-page .btn.album-btn { grid-column: 1 / -1; justify-self: start; background: transparent; color: var(--alb-gold); border: 1px solid var(--alb-line); box-shadow: none; border-radius: 6px; font-family: inherit; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; font-size: 0.78rem; padding: 8px 16px; }
 .binder-page .album-btn:hover, .binder-page .card-modal-inner .btn:hover { background: rgba(214, 184, 106, 0.1); }
 .order { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
 .order-row { display: flex; align-items: center; gap: 10px; padding: 6px 8px; border-radius: 8px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06); }
@@ -468,6 +468,7 @@ body.ballpark-body:has(.binder-page), html:has(.binder-page) { background: radia
 .order-name { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .order-name strong { font-size: 1rem; font-weight: 600; color: #fafaf9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .order-name small, .order-ovr small { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--alb-dim); }
+.order-ovr small em { font-style: normal; }
 .order-ovr { display: flex; flex-direction: column; align-items: flex-end; text-align: right; }
 .order-ovr b { font-size: 1.5rem; font-weight: 300; color: var(--alb-gold); line-height: 1; font-variant-numeric: tabular-nums; }
 .order-move { display: flex; flex-direction: column; gap: 2px; }
@@ -486,7 +487,10 @@ body.ballpark-body:has(.binder-page), html:has(.binder-page) { background: radia
 @media (max-width: 520px) {
   .order-name strong { font-size: 0.9rem; }
   .order-ovr b { font-size: 1.2rem; }
-  .order-ovr small { font-size: 0.6rem; }
+  .order-ovr small em { display: none; }
+  .order-row { gap: 8px; padding: 6px; }
+  .order-main { gap: 8px; }
+  .order-n { flex-basis: 18px; }
   .pick-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .pick-grid .mini-card { --w: 88px; }
 }
