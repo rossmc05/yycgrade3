@@ -6,6 +6,7 @@ import type { Profile } from '../engine/types';
 import { playerById, PLAYERS } from './players';
 import { cardKey, oneOfOneParallel, parallelOf, rollCard, type Parallel, type Pull } from './cards';
 import type { BallSlot } from './gear';
+import type { Season } from './season';
 import type { Squad } from './squad';
 
 export interface OwnedCard {
@@ -33,6 +34,10 @@ export interface BallData {
   outfits: string[];
   /** The team picked in the Dugout. Unset means your best cards. */
   squad?: Squad;
+  /** The season in progress, or the last one played. */
+  season?: Season;
+  /** Championships won. */
+  titles?: number;
 }
 
 export type BallLook = Pick<Look, 'top' | 'topColor' | 'hat' | 'face' | 'shoes' | 'number'>;
@@ -74,8 +79,8 @@ export const RANKS = [
 ];
 
 /** Special cards you can't pull: Milestones for ranks past MVP, and Moments for big plays. */
-export type SpecialStyle = 'rookieauto' | 'ruby' | 'crew' | 'cut' | 'logoman' | 'gold' | 'ice' | 'fire' | 'moon' | 'captain';
-export type MomentId = 'walkoff' | 'perfectDerby' | 'moonshot' | 'shutout' | 'cycle' | 'hotStreak' | 'tenStraight' | 'masterSet';
+export type SpecialStyle = 'rookieauto' | 'ruby' | 'crew' | 'cut' | 'logoman' | 'gold' | 'ice' | 'fire' | 'moon' | 'captain' | 'ring';
+export type MomentId = 'walkoff' | 'perfectDerby' | 'moonshot' | 'shutout' | 'cycle' | 'hotStreak' | 'tenStraight' | 'masterSet' | 'champion';
 export interface Special {
   player: string;
   style: SpecialStyle;
@@ -110,6 +115,7 @@ export const MOMENT_CARDS: Special[] = [
   { moment: 'tenStraight', how: 'Get 10 answers right in a row in one game or derby', player: 'jeter-cap', style: 'captain', title: 'The Captain', caption: '10 in a Row', about: 'Earned by getting 10 questions right in a row.' },
   { moment: 'masterSet', how: "Collect every player in Today's Stars", player: 'master', style: 'crew', title: 'Master Set Gold Dual', about: "Earned by collecting at least one card of every player in Today's Stars.", serial: 1,
     crew: [{ name: 'Griffey', colors: ['#0c2c56', '#005c5c'] }, { name: 'Judge', colors: ['#0c2340', '#c4ced3'] }] },
+  { moment: 'champion', how: 'Win a season championship', player: 'ring', style: 'ring', title: 'Championship Ring', caption: 'League Champions', about: 'Earned by winning the championship final at the end of a season.', serial: 1 },
 ];
 
 export const SPECIALS = [...MILESTONES, ...MOMENT_CARDS];
@@ -124,6 +130,7 @@ export interface Moments {
   longest?: number;
   winStreak?: number;
   answerRun?: number;
+  champion?: boolean;
 }
 
 /** The players in the Today's Stars binder section. */
@@ -131,6 +138,7 @@ export const TODAYS_STARS = PLAYERS.filter((p) => !p.legend && !p.rookie && !p.c
 
 function momentMet(id: MomentId, m: Moments, cards: BallData['cards']): boolean {
   switch (id) {
+    case 'champion': return !!m.champion;
     case 'walkoff': return !!m.walkoff;
     case 'perfectDerby': return !!m.perfectDerby;
     case 'moonshot': return (m.longest ?? 0) >= 500;

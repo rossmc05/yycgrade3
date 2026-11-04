@@ -358,8 +358,8 @@ a.btn { text-decoration: none; display: inline-block; }
 .milestone-row .binder-slot.empty .mini-card.blank, .moment-row .binder-slot.empty .mini-card.blank { background: #1c1917; border-color: #ca8a04; color: #fde68a; }
 
 /* Moment cards */
-.bcard-face.msf-gold { background: linear-gradient(135deg, #a16207, #fde047, #ca8a04, #fef9c3, #a16207); background-size: 300% 300%; animation: superflow 8s linear infinite; border-color: transparent; }
-.bcard-face.msf-gold .bcard-art { background: radial-gradient(circle at 50% 40%, #fef9c3, #eab308 90%); }
+.bcard-face.msf-gold, .bcard-face.msf-ring { background: linear-gradient(135deg, #a16207, #fde047, #ca8a04, #fef9c3, #a16207); background-size: 300% 300%; animation: superflow 8s linear infinite; border-color: transparent; }
+.bcard-face.msf-gold .bcard-art, .bcard-face.msf-ring .bcard-art { background: radial-gradient(circle at 50% 40%, #fef9c3, #eab308 90%); }
 .bcard-face.msf-ice { background: linear-gradient(135deg, #0c4a6e, #67e8f9, #0369a1, #e0f2fe, #0c4a6e); background-size: 300% 300%; animation: superflow 8s linear infinite; border-color: transparent; }
 .bcard-face.msf-ice .bcard-art { background: radial-gradient(circle at 50% 40%, #f0f9ff, #38bdf8 90%); }
 .bcard-face.msf-fire { background: linear-gradient(135deg, #7c2d12, #f97316, #dc2626, #fde047, #7c2d12); background-size: 300% 300%; animation: superflow 6s linear infinite; border-color: transparent; }
@@ -494,3 +494,23 @@ body.game .binder-page .btn.album-btn { grid-column: 1 / -1; justify-self: start
   .pick-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .pick-grid .mini-card { --w: 88px; }
 }
+.ms-ring { position: relative; z-index: 1; width: 78%; height: auto; margin: auto; filter: drop-shadow(0 4px 6px rgba(120, 53, 15, 0.5)); }
+
+/* League */
+.standings { width: 100%; border-collapse: collapse; margin-top: 8px; font-variant-numeric: tabular-nums; }
+.standings td { padding: 9px 6px; border-bottom: 1px solid rgba(255, 255, 255, 0.06); font-size: 0.95rem; }
+.standings tr.cut td { border-bottom: 1px solid var(--alb-gold); }
+.standings tr.you td { background: rgba(214, 184, 106, 0.1); color: #fff; font-weight: 600; }
+.st-n { width: 24px; color: var(--alb-gold); text-align: center; font-weight: 300; }
+.st-team { display: flex; align-items: center; gap: 10px; }
+.st-team i { flex: 0 0 18px; height: 18px; border-radius: 4px; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2); }
+.st-team small { margin-left: auto; font-size: 0.72rem; color: var(--alb-dim); font-weight: 400; }
+.st-rec { width: 34px; text-align: center; color: var(--alb-ink); }
+.results { list-style: none; margin: 10px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 6px; }
+.results li { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 6px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06); font-size: 0.9rem; }
+.results li b { width: 22px; height: 22px; display: grid; place-items: center; border-radius: 4px; font-size: 0.75rem; background: #44403c; color: #fff; }
+.results li.res-W b { background: #15803d; } .results li.res-L b { background: #991b1b; }
+.res-score { margin-left: auto; font-variant-numeric: tabular-nums; color: var(--alb-dim); }
+.season-note { margin: 10px auto; max-width: 520px; padding: 10px 14px; border-radius: 12px; background: #eef2ff; color: #1e1b4b; font-weight: 700; }
+.season-note.champion { background: linear-gradient(90deg, #fde047, #facc15); color: #713f12; font-size: 1.15rem; }
+.season-note.semi, .season-note.final { background: #dcfce7; color: #14532d; }

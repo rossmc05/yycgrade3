@@ -14,8 +14,9 @@ import { go } from '../../router';
 import { ballOf, payout, type Payout, ballLookOf } from '../data';
 import { bat, newGame, pitch, PITCHES, resultCoins, SWINGS, tierLevel, hitForCycle, winCards, winLuck, type Game, type Pitch, type Play, type Swing } from '../game';
 import { ballPerks } from '../gear';
-import { squadOf, type TeamCard } from '../squad';
+import { squadOf, teamOvr, type TeamCard } from '../squad';
 import { ask, levelOf, planSkills, recordBall, XP_RIGHT, XP_WRONG } from '../questions';
+import { CHAMPION_COINS, newSeason, nextOpponent, played, PLAYOFF_TEAMS, recordSeasonGame, SEASON_GAMES, stageName, standings, type Season } from '../season';
 import { OPPONENTS, type Team } from '../teams';
 import { Ask } from './Ask';
 import { ALL_SUBJECTS, SubjectPicker } from './SubjectPicker';
@@ -39,26 +40,46 @@ interface AtBat {
   q: Question;
 }
 
+interface MatchSetup { subjects: SubjectId[]; innings: number; team: Team; season: boolean }
+
 export function PlayBall() {
   const { profile } = useStore();
-  const [setup, setSetup] = useState<{ subjects: SubjectId[]; innings: number; team: Team } | null>(null);
+  const [setup, setSetup] = useState<MatchSetup | null>(null);
   const [round, setRound] = useState(0);
   if (!profile) return null;
   if (!setup) return <Setup onStart={setSetup} />;
-  return <Match key={round} {...setup} again={() => setRound((r) => r + 1)} />;
+  // A season game goes back to the setup screen, which shows the next opponent.
+  return <Match key={round} {...setup} again={() => (setup.season ? setSetup(null) : setRound((r) => r + 1))} />;
 }
 
-function Setup({ onStart }: { onStart: (s: { subjects: SubjectId[]; innings: number; team: Team }) => void }) {
+/** The season to play now: the one in progress, or a new one once the last is over. */
+export const currentSeason = (s: Season | undefined) => (!s ? newSeason(1) : s.stage === 'champion' || s.stage === 'out' ? newSeason(s.n + 1) : s);
+
+function Setup({ onStart }: { onStart: (s: MatchSetup) => void }) {
+  const { profile, updateProfile } = useStore();
   const [subjects, setSubjects] = useState<SubjectId[]>(ALL_SUBJECTS);
   const [innings, setInnings] = useState(3);
-  const [team] = useState(() => OPPONENTS[Math.floor(Math.random() * OPPONENTS.length)]);
+  const [mode, setMode] = useState<'season' | 'quick'>('season');
+  const [quick] = useState(() => OPPONENTS[Math.floor(Math.random() * OPPONENTS.length)]);
   useMusic('ballpark');
+  const ball = ballOf(profile!);
+  const season = currentSeason(ball.season);
+  const team = mode === 'season' ? OPPONENTS[nextOpponent(season)!] : quick;
+  const start = () => {
+    sfx.unlock();
+    if (mode === 'season' && season !== ball.season) updateProfile((p) => ({ ...p, ball: { ...ballOf(p), season } }));
+    onStart({ subjects, innings, team, season: mode === 'season' });
+  };
   return (
     <main className="page ballpark">
       <BallBar back={() => go('')} />
       <section className="card center setup">
         <h1>Play Ball!</h1>
-        <p className="muted">Today you play the <strong>{team.name}</strong>. You pitch first, then you bat.</p>
+        <div className="subject-chips">
+          <button className={`subject-chip ${mode === 'season' ? 'on' : ''}`} onClick={() => setMode('season')} aria-pressed={mode === 'season'}>🏆 Season {season.n} <small>{stageName(season)}</small></button>
+          <button className={`subject-chip ${mode === 'quick' ? 'on' : ''}`} onClick={() => setMode('quick')} aria-pressed={mode === 'quick'}>⚾ Quick game <small>doesn't count</small></button>
+        </div>
+        <p className="muted">{mode === 'season' && season.stage !== 'regular' ? <strong>{stageName(season)}! </strong> : null}You play the <strong>{team.name}</strong> ({team.ovr} OVR). Your team is {teamOvr(ball)} OVR. You pitch first, then you bat.</p>
         <h3>Questions from</h3>
         <SubjectPicker value={subjects} onChange={setSubjects} />
         <h3>How long?</h3>
@@ -74,13 +95,14 @@ function Setup({ onStart }: { onStart: (s: { subjects: SubjectId[]; innings: num
           <li>Pitching, a right answer gets the batter out. Harder pitches are surer outs. A wrong answer gives up a hit.</li>
           <li>Win to earn 2 collector cards. Win by 5 or more, or hold them scoreless, for 3!</li>
         </ul>
-        <button className="btn primary big" onClick={() => { sfx.unlock(); onStart({ subjects, innings, team }); }}>⚾ Play ball!</button>
+        {mode === 'season' && <p className="muted small">Play {SEASON_GAMES} games. Finish in the top {PLAYOFF_TEAMS} to make the playoffs, then win the semifinal and the final for the Championship Ring. <a href="#/league">See the standings</a></p>}
+        <button className="btn primary big" onClick={start}>⚾ Play ball!</button>
       </section>
     </main>
   );
 }
 
-function Match({ subjects, innings, team, again }: { subjects: SubjectId[]; innings: number; team: Team; again: () => void }) {
+function Match({ subjects, innings, team, season: inSeason, again }: MatchSetup & { again: () => void }) {
   const { profile, data, setData, updateProfile } = useStore();
   const ball = ballOf(profile!);
   const perks = useMemo(() => ballPerks(ball.gearOn), []);
@@ -92,6 +114,7 @@ function Match({ subjects, innings, team, again }: { subjects: SubjectId[]; inni
   const [banner, setBanner] = useState<string | null>('Top of the 1st. You are pitching!');
   const [xp, setXp] = useState(0);
   const [result, setResult] = useState<Payout | null>(null);
+  const [after, setAfter] = useState<Season | null>(null);
   const [batter, setBatter] = useState(0);
   const used = useRef(new Set<string>());
   const run = useRef({ now: 0, best: 0 });
@@ -153,11 +176,16 @@ function Match({ subjects, innings, team, again }: { subjects: SubjectId[]; inni
       const coins = g.coins + resultCoins(g);
       const win = g.result === 'win';
       const winStreak = win ? (ball.winStreak ?? 0) + 1 : 0;
-      const moments = { walkoff: win && !!g.walkoff, shutout: win && g.them === 0, cycle: hitForCycle(g), winStreak, answerRun: run.current.best };
-      const out = payout(ball, earned, coins, winLuck(g, perks), perks.coinBonus ?? 0, Math.random, Date.now(), winCards(g), moments);
+      const before = inSeason ? currentSeason(ball.season) : undefined;
+      const s = before ? recordSeasonGame(before, g.you, g.them, Math.random) : undefined;
+      const champion = s?.stage === 'champion';
+      const moments = { walkoff: win && !!g.walkoff, shutout: win && g.them === 0, cycle: hitForCycle(g), winStreak, answerRun: run.current.best, champion };
+      // Champions get 100 coins and a bonus card on top of the winner's cards.
+      const out = payout(ball, earned, coins + (champion ? CHAMPION_COINS : 0), winLuck(g, perks), perks.coinBonus ?? 0, Math.random, Date.now(), winCards(g) + (champion ? 1 : 0), moments);
       const rec = { ...ball.record };
       if (g.result === 'win') rec.w += 1; else if (g.result === 'loss') rec.l += 1; else rec.t += 1;
-      updateProfile((pr) => ({ ...pr, ball: { ...out.ball, record: rec, winStreak } }));
+      updateProfile((pr) => ({ ...pr, ball: { ...out.ball, record: rec, winStreak, ...(s ? { season: s, titles: (ball.titles ?? 0) + (champion ? 1 : 0) } : {}) } }));
+      setAfter(s ?? null);
       setResult(out.payout);
       if (g.result === 'win') sfx.fanfare();
       return;
@@ -176,7 +204,7 @@ function Match({ subjects, innings, team, again }: { subjects: SubjectId[]; inni
     }
   };
 
-  if (result) return <Final game={game} payout={result} myTeam={myTeam} team={team} again={again} />;
+  if (result) return <Final game={game} payout={result} myTeam={myTeam} team={team} season={after} again={again} />;
 
   return (
     <main className="page ballpark match">
@@ -253,8 +281,9 @@ function Match({ subjects, innings, team, again }: { subjects: SubjectId[]; inni
   );
 }
 
-function Final({ game, payout: pay, myTeam, team, again }: { game: Game; payout: Payout; myTeam: string; team: Team; again: () => void }) {
+function Final({ game, payout: pay, myTeam, team, season, again }: { game: Game; payout: Payout; myTeam: string; team: Team; season: Season | null; again: () => void }) {
   const win = game.result === 'win';
+  const cards = winCards(game) + (season?.stage === 'champion' ? 1 : 0);
   return (
     <main className="page ballpark">
       <BallBar back={() => go('')} />
@@ -271,16 +300,34 @@ function Final({ game, payout: pay, myTeam, team, again }: { game: Game; payout:
           <div><strong>+{pay.xp}</strong><span>XP</span></div>
           <div><strong>+{pay.coins}</strong><span>coins</span></div>
         </div>
+        {season && <SeasonNote s={season} myTeam={myTeam} />}
         {pay.rankUp && <p className="good"><Icon e="🎉" /> You were promoted to {pay.rankUp}! Here's a bonus card.</p>}
         {!win && <p className="muted">Win a game to earn 2 collector cards, or 3 for a big win. Try a Home Run Derby too: every derby earns at least one card!</p>}
         {pay.pulls.map((c, i) => (
-          <CardReveal key={i} player={c.player} parallel={c.parallel} serial={c.serial} isNew={c.isNew} coins={c.coins} label={c.parallel === 'milestone' ? 'Special card unlocked!' : win && i < winCards(game) ? `Winner's card ${i + 1} of ${winCards(game)}` : 'Promotion bonus'} />
+          <CardReveal key={i} player={c.player} parallel={c.parallel} serial={c.serial} isNew={c.isNew} coins={c.coins} label={c.parallel === 'milestone' ? 'Special card unlocked!' : win && i < winCards(game) ? `Winner's card ${i + 1} of ${winCards(game)}` : win && i < cards ? "Champion's bonus card" : 'Promotion bonus'} />
         ))}
         <div className="row">
           <button className="btn ghost" onClick={() => go('')}>Clubhouse</button>
-          <button className="btn primary" onClick={again}>Play again</button>
+          {season ? <button className="btn ghost" onClick={() => go('league')}>Standings</button> : null}
+          <button className="btn primary" onClick={again}>{season ? (season.stage === 'champion' || season.stage === 'out' ? 'Start next season' : 'Next game') : 'Play again'}</button>
         </div>
       </section>
     </main>
   );
+}
+
+function SeasonNote({ s, myTeam }: { s: Season; myTeam: string }) {
+  const table = standings(s, myTeam);
+  const place = table.findIndex((r) => r.you) + 1;
+  const last = s.log.at(-1);
+  const tiedPlayoff = last?.playoff && last.you === last.them;
+  const text =
+    s.stage === 'champion' ? `🏆 CHAMPIONS! ${myTeam} win Season ${s.n}!`
+    : s.stage === 'final' ? `On to the Championship Final against the ${OPPONENTS[s.opp!].name}!`
+    : s.stage === 'semi' && tiedPlayoff ? 'A tie in the playoffs means a replay. Win it to move on!'
+    : s.stage === 'semi' ? `You made the playoffs as the ${s.seed} seed! Next: the semifinal against the ${OPPONENTS[s.opp!].name}.`
+    : s.stage === 'out' && last?.playoff ? `Your season ends in the ${s.log.filter((g) => g.playoff).length > 1 ? 'final' : 'semifinal'}. Great run! Start a new season to try again.`
+    : s.stage === 'out' ? `Season over: you finished ${place}${['th', 'st', 'nd', 'rd'][place] ?? 'th'}. The top ${PLAYOFF_TEAMS} make the playoffs. Try again next season!`
+    : `Season ${s.n}: you're ${s.you.w}-${s.you.l}${s.you.t ? `-${s.you.t}` : ''}, in ${place}${['th', 'st', 'nd', 'rd'][place] ?? 'th'} place with ${SEASON_GAMES - played(s)} game${SEASON_GAMES - played(s) === 1 ? '' : 's'} left.`;
+  return <p className={`season-note ${s.stage}`}>{text}</p>;
 }
