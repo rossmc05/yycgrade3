@@ -453,3 +453,40 @@ body.ballpark-body:has(.binder-page), html:has(.binder-page) { background: radia
 }
 .binder-page .card-modal-inner .btn { background: transparent; color: var(--alb-gold); border: 1px solid var(--alb-line); box-shadow: none; border-radius: 6px; font-family: inherit; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; font-size: 0.8rem; padding: 8px 22px; }
 .binder-page .card-modal-inner .btn:hover { background: rgba(214, 184, 106, 0.1); }
+
+/* The Dugout */
+.binder-page .album-btn { grid-column: 1 / -1; justify-self: start; background: transparent; color: var(--alb-gold); border: 1px solid var(--alb-line); box-shadow: none; border-radius: 6px; font-family: inherit; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; font-size: 0.78rem; padding: 8px 16px; }
+.binder-page .album-btn:hover, .binder-page .card-modal-inner .btn:hover { background: rgba(214, 184, 106, 0.1); }
+.order { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.order-row { display: flex; align-items: center; gap: 10px; padding: 6px 8px; border-radius: 8px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06); }
+.order-n { flex: 0 0 26px; text-align: center; font-size: 1.1rem; font-weight: 300; color: var(--alb-gold); font-variant-numeric: tabular-nums; }
+.order-main { flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; background: none; border: 0; padding: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.order-card { flex: 0 0 auto; }
+.order-card .mini-card { --w: 50px; }
+.order-card .bcard-face { box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5); border-radius: 4px; }
+.you-card { width: 50px; height: 70px; display: grid; place-items: center; border-radius: 4px; background: linear-gradient(180deg, #1e3a5f, #14532d); border: 1px solid var(--alb-line); overflow: hidden; }
+.order-name { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.order-name strong { font-size: 1rem; font-weight: 600; color: #fafaf9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.order-name small, .order-ovr small { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--alb-dim); }
+.order-ovr { display: flex; flex-direction: column; align-items: flex-end; text-align: right; }
+.order-ovr b { font-size: 1.5rem; font-weight: 300; color: var(--alb-gold); line-height: 1; font-variant-numeric: tabular-nums; }
+.order-move { display: flex; flex-direction: column; gap: 2px; }
+.order-move button { width: 30px; height: 26px; border-radius: 4px; border: 1px solid rgba(255, 255, 255, 0.12); background: rgba(255, 255, 255, 0.04); color: var(--alb-ink); font-size: 0.7rem; }
+.order-move button:disabled { opacity: 0.25; }
+.order-row.empty { min-height: 84px; }
+.order-pick { flex: 1; height: 70px; border-radius: 6px; border: 1px dashed var(--alb-line); background: none; color: var(--alb-gold); font: inherit; font-size: 0.85rem; letter-spacing: 0.06em; }
+.order-pick:disabled { color: #78716c; border-color: rgba(255, 255, 255, 0.08); }
+.pick-modal { max-width: 640px; width: 100%; align-items: stretch; }
+.pick-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); gap: 10px; }
+.pick-grid .binder-slot { flex-direction: column; align-items: center; gap: 6px; }
+.pick-grid .mini-card { --w: 96px; }
+.pick-ovr { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; color: var(--alb-gold); }
+.pick-modal .row { justify-content: center; gap: 8px; }
+.star-boost { margin: 8px 0 0; font-size: 0.85rem; font-weight: 700; color: #a16207; text-align: center; }
+@media (max-width: 520px) {
+  .order-name strong { font-size: 0.9rem; }
+  .order-ovr b { font-size: 1.2rem; }
+  .order-ovr small { font-size: 0.6rem; }
+  .pick-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .pick-grid .mini-card { --w: 88px; }
+}

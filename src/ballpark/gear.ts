@@ -17,6 +17,10 @@ export interface BallPerks {
   coinBonus?: number;
   /** Better card chances. */
   luck?: number;
+  /** The card at bat: its name, and the chance a right answer goes one base farther. */
+  star?: { name: string; boost: number };
+  /** Your ace's card: the chance a wrong answer on the mound is still an out. */
+  ace?: { name: string; boost: number };
 }
 
 export interface GearArt {

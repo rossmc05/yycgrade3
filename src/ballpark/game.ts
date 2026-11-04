@@ -216,12 +216,18 @@ export function bat(prev: Game, swing: Swing, correct: boolean, rng: () => numbe
   if (!correct) return finish(g, out(g, rng, true, false), false);
   let n = SWINGS.findIndex((s) => s.id === swing) + 1;
   let stretched = false;
+  let starred = false;
   if (n < 4 && perks.extraBase && rng() < perks.extraBase) {
     n += 1;
     stretched = true;
+  } else if (n < 4 && perks.star && rng() < perks.star.boost) {
+    n += 1;
+    starred = true;
   }
   const fast = !!perks.speed && rng() < perks.speed;
-  const text = n === 4
+  const text = starred
+    ? n === 4 ? `${perks.star!.name} flies around the bases. Inside-the-park home run!` : `${['', '', 'Double', 'Triple'][n]}! ${perks.star!.name} hustles for an extra base.`
+    : n === 4
     ? stretched ? 'Inside-the-park home run! Your bat gave it extra zip!' : pick(rng, ['HOME RUN! That ball is gone!', 'HOME RUN! Way out of here!', 'Goodbye, baseball! HOME RUN!'])
     : `${['', 'Single', 'Double', 'Triple'][n]}!${stretched ? ' Your bat gave it extra zip for one more base.' : n === 1 ? ' A clean hit.' : n === 2 ? ' Into the gap!' : ' Off the wall!'}`;
   g.stats = { ...g.stats, hits: g.stats.hits + 1, hrs: g.stats.hrs + (n === 4 ? 1 : 0),
@@ -240,6 +246,11 @@ export function pitch(prev: Game, kind: Pitch, correct: boolean, rng: () => numb
       return finish(g, { ...p, coins: OUT_COINS + (kind === 'heater' ? 1 : 0) }, true);
     }
     return finish(g, hit(g, 1, false, 'A bloop single just over the infield. Good pitch, lucky hit!', false), true);
+  }
+  if (perks.ace && rng() < perks.ace.boost) {
+    g.outs += 1;
+    g.stats = { ...g.stats, ks: g.stats.ks + 1 };
+    return finish(g, { id: 0, side: 'them', kind: 'strikeout', text: `${perks.ace.name} bears down. Strikeout!`, runs: 0, reached: 0, coins: OUT_COINS }, false);
   }
   if (perks.catchChance && rng() < perks.catchChance) {
     g.outs += 1;

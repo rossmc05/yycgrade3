@@ -6,6 +6,7 @@ import type { Profile } from '../engine/types';
 import { playerById, PLAYERS } from './players';
 import { cardKey, oneOfOneParallel, parallelOf, rollCard, type Parallel, type Pull } from './cards';
 import type { BallSlot } from './gear';
+import type { Squad } from './squad';
 
 export interface OwnedCard {
   count: number;
@@ -30,6 +31,8 @@ export interface BallData {
   look: BallLook;
   /** Locker Room items bought. */
   outfits: string[];
+  /** The team picked in the Dugout. Unset means your best cards. */
+  squad?: Squad;
 }
 
 export type BallLook = Pick<Look, 'top' | 'topColor' | 'hat' | 'face' | 'shoes' | 'number'>;

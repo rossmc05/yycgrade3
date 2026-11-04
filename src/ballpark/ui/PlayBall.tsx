@@ -11,11 +11,10 @@ import { stopSpeaking } from '../../engine/speech';
 import { useStore } from '../../engine/store';
 import type { Question, Skill, SubjectId } from '../../engine/types';
 import { go } from '../../router';
-import { RANK } from '../cards';
 import { ballOf, payout, type Payout, ballLookOf } from '../data';
 import { bat, newGame, pitch, PITCHES, resultCoins, SWINGS, tierLevel, hitForCycle, winCards, winLuck, type Game, type Pitch, type Play, type Swing } from '../game';
 import { ballPerks } from '../gear';
-import { playerById, type Player } from '../players';
+import { squadOf, type TeamCard } from '../squad';
 import { ask, levelOf, planSkills, recordBall, XP_RIGHT, XP_WRONG } from '../questions';
 import { OPPONENTS, type Team } from '../teams';
 import { Ask } from './Ask';
@@ -100,16 +99,9 @@ function Match({ subjects, innings, team, again }: { subjects: SubjectId[]; inni
   const soundOn = data.settings.sound !== false;
   useMusic(result ? undefined : 'ballpark');
 
-  // Your batting order: you lead off, then your best hitter cards.
-  const lineup = useMemo<(Player | null)[]>(() => {
-    const best = new Map<string, number>();
-    for (const key of Object.keys(ball.cards)) {
-      const [id, par] = key.split(':');
-      best.set(id, Math.max(best.get(id) ?? -1, RANK[par as keyof typeof RANK]));
-    }
-    const hitters = [...best.entries()].map(([id, r]) => ({ p: playerById(id), r })).filter((x) => x.p?.role === 'hitter').sort((a, b) => b.r - a.r).slice(0, 8);
-    return [null, ...hitters.map((x) => x.p!)];
-  }, []);
+  // Your batting order: you lead off, then the cards in your Dugout lineup. Your ace pitches.
+  const squad = useMemo(() => squadOf(ball), []);
+  const lineup = useMemo<(TeamCard | null)[]>(() => [null, ...squad.lineup], []);
 
   if (!profile) return null;
   const look = ballLookOf(profile);
@@ -119,6 +111,9 @@ function Match({ subjects, innings, team, again }: { subjects: SubjectId[]; inni
   const skill = plan[n % plan.length];
   const lvl = levelOf(profile, skill);
   const up = lineup[batter % lineup.length];
+  const atBatPerks = batting
+    ? { ...perks, star: up ? { name: up.player.name, boost: up.boost } : undefined }
+    : { ...perks, ace: squad.ace ? { name: squad.ace.player.name, boost: squad.ace.boost } : undefined };
 
   const choose = (choice: Swing | Pitch, offset: number) => {
     sfx.unlock();
@@ -131,7 +126,7 @@ function Match({ subjects, innings, team, again }: { subjects: SubjectId[]; inni
   const onAnswer = (correct: boolean, seconds: number) => {
     if (!atBat) return;
     const now = Date.now();
-    const r = batting ? bat(game, atBat.choice as Swing, correct, Math.random, perks) : pitch(game, atBat.choice as Pitch, correct, Math.random, perks);
+    const r = batting ? bat(game, atBat.choice as Swing, correct, Math.random, atBatPerks) : pitch(game, atBat.choice as Pitch, correct, Math.random, atBatPerks);
     run.current.now = correct ? run.current.now + 1 : 0;
     run.current.best = Math.max(run.current.best, run.current.now);
     setGame(r.game);
@@ -191,7 +186,7 @@ function Match({ subjects, innings, team, again }: { subjects: SubjectId[]; inni
         {batting ? (
           <>
             <OnField {...SPOTS.mound} className="small"><TheirPlayer color={team.colors[0]} trim={team.colors[1]} pose="pitch" size={54} /></OnField>
-            <OnField {...SPOTS.plate}>{up ? <Figure color={myColor} trim="#fff" pose="bat" skin={batter} size={84} /> : <AvatarArt look={look} size={76} background={false} full />}</OnField>
+            <OnField {...SPOTS.plate}>{up ? <Figure color={myColor} trim="#fff" pose="bat" skin={[...up.player.id].reduce((n, c) => n + c.charCodeAt(0), 0)} size={84} /> : <AvatarArt look={look} size={76} background={false} full />}</OnField>
           </>
         ) : (
           <>
@@ -207,7 +202,7 @@ function Match({ subjects, innings, team, again }: { subjects: SubjectId[]; inni
         <section className="card choose">
           {banner && <p className="banner">{banner}</p>}
           <p className="at-bat">
-            {batting ? <>Now batting: <strong>{up ? up.name : profile.name}</strong></> : <>You're pitching to the {team.name}.</>}
+            {batting ? <>Now batting: <strong>{up ? up.player.name : profile.name}</strong></> : <>You're pitching to the {team.name}.</>}
             <span className="chip">{skill.icon} {skill.name}</span>
           </p>
           {batting ? (
@@ -237,6 +232,8 @@ function Match({ subjects, innings, team, again }: { subjects: SubjectId[]; inni
               })}
             </div>
           )}
+          {batting && up && <p className="star-boost">⭐ {up.player.name} · {up.ovr} OVR: a right answer has a {Math.round(up.boost * 100)}% chance of an extra base</p>}
+          {!batting && squad.ace && <p className="star-boost">⭐ Your ace {squad.ace.player.name} · {squad.ace.ovr} OVR: {Math.round(squad.ace.boost * 100)}% chance to escape a wrong answer with a strikeout</p>}
           {batting && game.fouls > 0 && <p className="muted small">🛡️ {game.fouls} foul ball{game.fouls > 1 ? 's' : ''} left this game</p>}
         </section>
       )}
