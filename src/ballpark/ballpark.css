@@ -566,3 +566,5 @@ body.game .binder-page .btn.album-btn.claim { background: linear-gradient(90deg,
 .binder-page .card-reveal .reveal-text .muted { color: var(--alb-dim); }
 .binder-page .card-reveal.p-weekly .rarity { color: #cbd5e1; }
 .binder-page .card-reveal.p-refractor .rarity { color: #c4b5fd; }
+.gear-tier.t-legend { background: linear-gradient(90deg, #4c1d95, #a855f7); color: #f5f3ff; }
+.gear-tier.t-hall { background: linear-gradient(90deg, #a16207, #fde047, #a16207); color: #1c1917; }
