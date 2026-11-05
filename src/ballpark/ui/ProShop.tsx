@@ -12,8 +12,8 @@ const TIERS = ['Starter', 'Pro', 'Elite', 'Legend', 'Hall of Fame'];
 const tierOf = (g: BallGear) => {
   const list = BALL_GEAR.filter((x) => x.slot === g.slot);
   const i = list.indexOf(g);
-  // Bats go all the way up by price. In other rows the top item is Elite.
-  if (g.slot === 'bat') return TIERS[g.cost >= 2000 ? 4 : g.cost >= 1000 ? 3 : g.cost >= 450 ? 2 : g.cost > 0 ? 1 : 0];
+  // Bats and gloves go all the way up by price. In other rows the top item is Elite.
+  if (g.slot === 'bat' || g.slot === 'glove') return TIERS[g.cost >= 2000 ? 4 : g.cost >= 1000 ? 3 : g.cost >= 450 ? 2 : g.cost > 0 ? 1 : 0];
   return i === list.length - 1 && i > 0 ? 'Elite' : TIERS[Math.min(i, 1)];
 };
 
