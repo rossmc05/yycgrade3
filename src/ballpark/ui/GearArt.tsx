@@ -1,4 +1,4 @@
-// Pro Shop gear drawn in our own style: bats, gloves, cleats, helmets and caps. No brand logos.
+// Pro Shop gear: product photos where we have them, otherwise drawn in our own style.
 
 import type { BallGear } from '../gear';
 
@@ -11,6 +11,7 @@ const FINISH = {
 export function GearArt({ g, size = 96 }: { g: BallGear; size?: number }) {
   const { c1, c2, finish, guard } = g.art;
   const id = `ga-${g.id}`;
+  if (g.photo) return <img src={`./gear/${g.id}.webp`} width={size} height={size} alt={`${g.brand} ${g.name}`} className="gear-art gear-photo" loading="lazy" />;
   return (
     <svg viewBox="0 0 100 100" width={size} height={size} role="img" aria-label={`${g.brand} ${g.name}`} className="gear-art">
       <defs>

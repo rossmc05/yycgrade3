@@ -568,3 +568,6 @@ body.game .binder-page .btn.album-btn.claim { background: linear-gradient(90deg,
 .binder-page .card-reveal.p-refractor .rarity { color: #c4b5fd; }
 .gear-tier.t-legend { background: linear-gradient(90deg, #4c1d95, #a855f7); color: #f5f3ff; }
 .gear-tier.t-hall { background: linear-gradient(90deg, #a16207, #fde047, #a16207); color: #1c1917; }
+.gear-photo { display: block; object-fit: contain; border-radius: 10px; background: #fff; }
+.gear-stage .gear-photo { width: 150px; height: 150px; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.18); }
+.loadout-slot .gear-photo { border-radius: 6px; }

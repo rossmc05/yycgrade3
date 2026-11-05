@@ -43,24 +43,26 @@ export interface BallGear {
   does: string;
   perks: BallPerks;
   art: GearArt;
+  /** A product photo in public/gear, shown instead of the drawing. */
+  photo?: boolean;
 }
 
 export const SLOT_NAME: Record<BallSlot, string> = { bat: 'Bats', glove: 'Gloves', cleats: 'Cleats', helmet: 'Batting helmets', cap: 'Caps' };
 
-/** Real gear names, drawn in our own style with no logos. Ids stay the same so saved gear keeps working. */
+/** Real gear names. Bats use product photos Ross supplied; the rest are drawn in our own style. Ids stay the same so saved gear keeps working. */
 export const BALL_GEAR: BallGear[] = [
-  { id: 'bat-wood', brand: 'Louisville Slugger', name: 'Genuine Ash', slot: 'bat', cost: 0, does: 'Your first bat.', perks: {}, art: { c1: '#d6a86a', c2: '#1f2937', finish: 'wood' } },
-  { id: 'bat-maple', brand: 'Marucci', name: 'CATX Composite', slot: 'bat', cost: 80, does: '10% of hits go one base farther. +10 ft in the Derby', perks: { extraBase: 0.1, derbyFeet: 10 }, art: { c1: '#111827', c2: '#dc2626', finish: 'metal' } },
-  { id: 'bat-alloy', brand: 'Easton', name: 'Hype Fire', slot: 'bat', cost: 220, does: '20% of hits go one base farther. +20 ft in the Derby', perks: { extraBase: 0.2, derbyFeet: 20 }, art: { c1: '#f97316', c2: '#111827', finish: 'metal' } },
-  { id: 'bat-pro', brand: 'Rawlings', name: 'Icon', slot: 'bat', cost: 450, does: '30% of hits go one base farther. +30 ft in the Derby', perks: { extraBase: 0.3, derbyFeet: 30 }, art: { c1: '#e5e7eb', c2: '#1d4ed8', finish: 'metal' } },
-  { id: 'bat-gold', brand: 'Victus', name: 'Pro Reserve Maple', slot: 'bat', cost: 800, does: '40% of hits go one base farther. +45 ft in the Derby', perks: { extraBase: 0.4, derbyFeet: 45 }, art: { c1: '#eab308', c2: '#111827', finish: 'gold' } },
+  { id: 'bat-wood', brand: 'Louisville Slugger', name: 'Genuine Ash', slot: 'bat', cost: 0, does: 'Your first bat.', perks: {}, art: { c1: '#d6a86a', c2: '#1f2937', finish: 'wood' }, photo: true },
+  { id: 'bat-maple', brand: 'Marucci', name: 'CATX Composite', slot: 'bat', cost: 80, does: '10% of hits go one base farther. +10 ft in the Derby', perks: { extraBase: 0.1, derbyFeet: 10 }, art: { c1: '#111827', c2: '#dc2626', finish: 'metal' }, photo: true },
+  { id: 'bat-alloy', brand: 'Easton', name: 'Hype Fire', slot: 'bat', cost: 220, does: '20% of hits go one base farther. +20 ft in the Derby', perks: { extraBase: 0.2, derbyFeet: 20 }, art: { c1: '#f97316', c2: '#111827', finish: 'metal' }, photo: true },
+  { id: 'bat-pro', brand: 'Rawlings', name: 'Icon', slot: 'bat', cost: 450, does: '30% of hits go one base farther. +30 ft in the Derby', perks: { extraBase: 0.3, derbyFeet: 30 }, art: { c1: '#e5e7eb', c2: '#1d4ed8', finish: 'metal' }, photo: true },
+  { id: 'bat-gold', brand: 'Victus', name: 'Pro Reserve Maple', slot: 'bat', cost: 800, does: '40% of hits go one base farther. +45 ft in the Derby', perks: { extraBase: 0.4, derbyFeet: 45 }, art: { c1: '#eab308', c2: '#111827', finish: 'gold' }, photo: true },
   // Top BBCOR bats from the Baseball Bat Bros rankings (top 5), plus the Soldier Tank 3 as the top bat.
-  { id: 'bat-rckless', brand: 'Marucci', name: 'RCKLESS', slot: 'bat', cost: 1000, does: '42% of hits go one base farther. +50 ft in the Derby', perks: { extraBase: 0.42, derbyFeet: 50 }, art: { c1: '#111827', c2: '#a3e635', finish: 'metal' } },
-  { id: 'bat-selectpwr', brand: 'Louisville Slugger', name: 'Select PWR', slot: 'bat', cost: 1200, does: '44% of hits go one base farther. +55 ft in the Derby', perks: { extraBase: 0.44, derbyFeet: 55 }, art: { c1: '#1f2937', c2: '#facc15', finish: 'metal' } },
-  { id: 'bat-spech1', brand: 'Combat', name: 'Spec H1', slot: 'bat', cost: 1450, does: '46% of hits go one base farther. +60 ft in the Derby', perks: { extraBase: 0.46, derbyFeet: 60 }, art: { c1: '#374151', c2: '#0f172a', finish: 'metal' } },
-  { id: 'bat-atlas2', brand: 'Louisville Slugger', name: 'Atlas 2.0', slot: 'bat', cost: 1750, does: '48% of hits go one base farther. +65 ft in the Derby', perks: { extraBase: 0.48, derbyFeet: 65 }, art: { c1: '#0f172a', c2: '#e5e7eb', finish: 'metal' } },
-  { id: 'bat-speca1', brand: 'Combat', name: 'Spec A1', slot: 'bat', cost: 2100, does: '50% of hits go one base farther. +70 ft in the Derby. The #1 ranked BBCOR bat', perks: { extraBase: 0.5, derbyFeet: 70 }, art: { c1: '#f8fafc', c2: '#111827', finish: 'metal' } },
-  { id: 'bat-tank3', brand: 'Soldier', name: 'Tank 3', slot: 'bat', cost: 3000, does: '55% of hits go one base farther. +90 ft in the Derby. The best bat in the shop', perks: { extraBase: 0.55, derbyFeet: 90 }, art: { c1: '#4d5d2b', c2: '#111827', finish: 'metal' } },
+  { id: 'bat-rckless', brand: 'Marucci', name: 'RCKLESS', slot: 'bat', cost: 1000, does: '42% of hits go one base farther. +50 ft in the Derby', perks: { extraBase: 0.42, derbyFeet: 50 }, art: { c1: '#111827', c2: '#a3e635', finish: 'metal' }, photo: true },
+  { id: 'bat-selectpwr', brand: 'Louisville Slugger', name: 'Select PWR', slot: 'bat', cost: 1200, does: '44% of hits go one base farther. +55 ft in the Derby', perks: { extraBase: 0.44, derbyFeet: 55 }, art: { c1: '#1f2937', c2: '#facc15', finish: 'metal' }, photo: true },
+  { id: 'bat-spech1', brand: 'Combat', name: 'Spec H1', slot: 'bat', cost: 1450, does: '46% of hits go one base farther. +60 ft in the Derby', perks: { extraBase: 0.46, derbyFeet: 60 }, art: { c1: '#374151', c2: '#0f172a', finish: 'metal' }, photo: true },
+  { id: 'bat-atlas2', brand: 'Louisville Slugger', name: 'Atlas 2.0', slot: 'bat', cost: 1750, does: '48% of hits go one base farther. +65 ft in the Derby', perks: { extraBase: 0.48, derbyFeet: 65 }, art: { c1: '#0f172a', c2: '#e5e7eb', finish: 'metal' }, photo: true },
+  { id: 'bat-speca1', brand: 'Combat', name: 'Spec A1', slot: 'bat', cost: 2100, does: '50% of hits go one base farther. +70 ft in the Derby. The #1 ranked BBCOR bat', perks: { extraBase: 0.5, derbyFeet: 70 }, art: { c1: '#f8fafc', c2: '#111827', finish: 'metal' }, photo: true },
+  { id: 'bat-tank3', brand: 'Soldier', name: 'Tank 3', slot: 'bat', cost: 3000, does: '55% of hits go one base farther. +90 ft in the Derby. The best bat in the shop', perks: { extraBase: 0.55, derbyFeet: 90 }, art: { c1: '#4d5d2b', c2: '#111827', finish: 'metal' }, photo: true },
   { id: 'glove-leather', brand: 'Mizuno', name: 'Prospect Select', slot: 'glove', cost: 70, does: '10% chance your fielders catch a hit when you pitch', perks: { catchChance: 0.1 }, art: { c1: '#b45309', c2: '#78350f' } },
   { id: 'glove-gold', brand: 'Rawlings', name: 'Heart of the Hide', slot: 'glove', cost: 260, does: '20% chance your fielders catch a hit', perks: { catchChance: 0.2 }, art: { c1: '#92400e', c2: '#dc2626' } },
   { id: 'glove-platinum', brand: 'Wilson', name: 'A2K', slot: 'glove', cost: 600, does: '30% chance your fielders catch a hit', perks: { catchChance: 0.3 }, art: { c1: '#1f2937', c2: '#f59e0b' } },
