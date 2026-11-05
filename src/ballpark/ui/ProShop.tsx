@@ -12,7 +12,8 @@ const TIERS = ['Starter', 'Pro', 'Elite', 'Legend', 'Hall of Fame'];
 const tierOf = (g: BallGear) => {
   const list = BALL_GEAR.filter((x) => x.slot === g.slot);
   const i = list.indexOf(g);
-  // The top item in each row is always the best tier there is.
+  // Bats and gloves go all the way up by price. In other rows the top item is Elite.
+  if (g.slot === 'bat' || g.slot === 'glove') return TIERS[g.cost >= 2000 ? 4 : g.cost >= 1000 ? 3 : g.cost >= 450 ? 2 : g.cost > 0 ? 1 : 0];
   return i === list.length - 1 && i > 0 ? 'Elite' : TIERS[Math.min(i, 1)];
 };
 
@@ -72,7 +73,7 @@ export function ProShop() {
               return (
                 <div key={g.id} className={`gear-item ${on ? 'on' : ''} ${!have && short > 0 ? 'locked' : ''}`} style={{ ['--g1' as string]: g.art.c1, ['--g2' as string]: g.art.c2 }}>
                   <div className="gear-stage">
-                    <span className={`gear-tier t-${tier.toLowerCase()}`}>{tier}</span>
+                    <span className={`gear-tier t-${tier.split(' ')[0].toLowerCase()}`}>{tier}</span>
                     {on && <span className="gear-on">✓ Using</span>}
                     <GearArt g={g} size={110} />
                   </div>
