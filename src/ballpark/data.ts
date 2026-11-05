@@ -7,6 +7,7 @@ import { playerById, PLAYERS } from './players';
 import { cardKey, oneOfOneParallel, parallelOf, rollCard, type Parallel, type Pull } from './cards';
 import type { BallSlot } from './gear';
 import type { Season } from './season';
+import type { WeeklyProgress } from './weekly';
 import type { Squad } from './squad';
 
 export interface OwnedCard {
@@ -38,6 +39,8 @@ export interface BallData {
   season?: Season;
   /** Championships won. */
   titles?: number;
+  /** Weekly spelling challenges, by test date: perfect rounds so far, and whether the pack was claimed. */
+  weekly?: Record<string, WeeklyProgress>;
 }
 
 export type BallLook = Pick<Look, 'top' | 'topColor' | 'hat' | 'face' | 'shoes' | 'number'>;

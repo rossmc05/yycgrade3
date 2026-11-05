@@ -9,6 +9,7 @@ import { go } from '../../router';
 import { ballLookOf, ballOf, rankAt, rankOf } from '../data';
 import { PLAYERS } from '../players';
 import { teamOvr } from '../squad';
+import { canClaim, challengeOf, dayLabel, isOpen, PERFECT_NEEDED, progressOf } from '../weekly';
 import { BallBar } from './BallBar';
 
 interface Spot { id: string; label: string; sub: string; e: string; x: number; y: number; size: number; to: string }
@@ -22,6 +23,7 @@ export function Clubhouse() {
   const set = PLAYERS.filter((p) => !p.chase && !p.rookie && !p.milestone);
   const players = set.filter((p) => Object.keys(b.cards).some((k) => k.startsWith(`${p.id}:`))).length;
   const next = rankAt(r.index + 1);
+  const week = challengeOf(profile);
   const spots: Spot[] = [
     { id: 'game', label: 'Play Ball', sub: 'Win to earn 2 to 3 cards', e: '🏟️', x: 50, y: 40, size: 22, to: 'game' },
     { id: 'derby', label: 'Home Run Derby', sub: b.derby.plays ? `Best ${b.derby.bestFeet} ft` : 'Earns 1 to 3 cards', e: '💥', x: 17, y: 52, size: 12, to: 'derby' },
@@ -43,6 +45,14 @@ export function Clubhouse() {
         </div>
         <button className="btn primary" onClick={() => open('game')}>⚾ Play ball!</button>
       </section>
+      {week && isOpen(week, Date.now()) && !progressOf(b, week).claimed && (
+        <button className="weekly-banner" onClick={() => open('weekly')}>
+          <span className="wb-tag">Weekly Challenge</span>
+          <strong>Spell this week's words perfectly 3 times for a 3-card pack</strong>
+          <span className="wb-balls">{Array.from({ length: PERFECT_NEEDED }, (_, i) => <i key={i} className={i < progressOf(b, week).perfect ? 'on' : ''} />)}</span>
+          <small>{canClaim(b, week, Date.now()) ? 'Ready to claim!' : `Closes after ${dayLabel(week.date)}`}</small>
+        </button>
+      )}
 
       <div className="plaza">
         <svg viewBox="0 0 1000 640" preserveAspectRatio="none" className="plaza-svg" aria-hidden="true">
@@ -100,6 +110,7 @@ export function Clubhouse() {
         <ul>
           <li><b>XP</b>: 10 for every right answer, 2 for trying. XP moves you up from Rookie through MVP, Hall of Famer, Legend, Retired Jersey, All-Time Great and GOAT, then GOAT ★2, ★3 and on forever (every 5,000 XP). Every promotion gives a bonus card (Refractor or better), and Hall of Famer, Legend, Retired Jersey, All-Time Great and GOAT each unlock a special Milestone card you can't get any other way.</li>
           <li><b>Moment cards</b>: big plays unlock special cards too: a walk-off win, a shutout win, hitting for the cycle, 5 wins in a row, 10 right answers in a row, a perfect Derby, a 500 ft home run, and collecting every player in Today's Stars.</li>
+          <li><b>Weekly Challenge</b>: spell every word on this week's spelling list perfectly 3 times before the end of test day to claim a 3-card pack: that week's Card of the Week (numbered to 25, never available again), an Autograph or rarer, and a Refractor or better.</li>
           <li><b>Seasons</b>: play 10 season games, finish in the top 4 to make the playoffs, then win the semifinal and the final. The first title earns the Championship Ring card, and every title pays 100 coins and a bonus card. Quick games don't count in the standings.</li>
           <li><b>Your team</b>: in the Dugout, pick 8 hitters and an ace from your cards. Each card has an overall rating (better versions rate higher). When your player is up, a right answer can stretch into an extra base, and your ace can turn a wrong answer on the mound into a strikeout.</li>
           <li><b>Coins</b>: hits (2 to 10), runs (2 each) and outs you pitch (2 or 3), plus 40 for a win, 20 for a tie or 15 for a loss. A derby pays 10, plus 3 a home run. A card you already have trades in for coins.</li>

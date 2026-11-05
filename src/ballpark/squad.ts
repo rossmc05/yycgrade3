@@ -9,7 +9,7 @@ import { playerById, PLAYERS, type Player } from './players';
 export const LINEUP_SIZE = 8;
 
 /** Overall points a version adds on top of the player's ratings. */
-export const VERSION_BONUS: Record<Parallel, number> = { base: 0, rare: 2, refractor: 4, relic: 5, diamond: 7, auto: 9, super: 10, milestone: 10 };
+export const VERSION_BONUS: Record<Parallel, number> = { base: 0, rare: 2, refractor: 4, relic: 5, diamond: 7, auto: 9, super: 10, milestone: 10, weekly: 10 };
 
 export interface Squad {
   /** Player ids, in batting order after you. */

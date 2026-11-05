@@ -44,11 +44,13 @@ export function CardFront({ player, parallel, serial }: { player: Player; parall
         {ms?.style === 'rookieauto' && <span className="bcard-rc">RC</span>}
         {ms?.style === 'ruby' && <span className="ms-flip" aria-hidden="true">🏏</span>}
         {ms?.caption && <span className="ms-caption">{ms.caption}</span>}
+        {player.weekly && <span className="ms-caption wk-caption">Week of {new Date(`${player.weekly}T12:00:00`).toLocaleDateString('en-CA', { month: 'short', day: 'numeric' })}</span>}
+        {player.weekly && <span className="wk-stamp">Card of the Week</span>}
         {ms?.style === 'moon' && <span className="ms-moon" aria-hidden="true" />}
         {ms?.style === 'captain' && <span className="ms-c" title="Captain">C</span>}
         {ms?.style === 'cut' && <span className="ms-cut" title="Cut signature">{player.name}</span>}
         {ms?.style === 'logoman' && <span className="ms-logoman" title="Logo patch"><svg viewBox="0 0 40 24"><rect width="40" height="24" rx="4" fill="#1d4ed8" /><path d="M20 0h16a4 4 0 0 1 4 4v16a4 4 0 0 1-4 4H20z" fill="#dc2626" /><circle cx="22" cy="6" r="2.6" fill="#fff" /><path d="M21 9 L14 20 L17 20 L22 12 L26 20 L29 20 L23 9 Z M23 10 L33 5 L34 6.5 L24 12 Z" fill="#fff" /></svg></span>}
-        {(parallel === 'refractor' || parallel === 'diamond' || parallel === 'super' || ms?.style === 'ruby' || ms?.style === 'gold' || ms?.style === 'ring' || ms?.style === 'ice' || ms?.style === 'fire') && <span className="shine" aria-hidden="true" />}
+        {(parallel === 'refractor' || parallel === 'diamond' || parallel === 'super' || parallel === 'weekly' || ms?.style === 'ruby' || ms?.style === 'gold' || ms?.style === 'ring' || ms?.style === 'ice' || ms?.style === 'fire') && <span className="shine" aria-hidden="true" />}
         <span className="bcard-pos">{player.pos}</span>
         {player.canada && <span className="bcard-maple" title="Canadian connection">🍁</span>}
         {(isOneOfOne(player) || ms?.serial) && <span className="bcard-chase">1 of 1</span>}
@@ -82,7 +84,7 @@ export function CardBack({ player, parallel }: { player: Player; parallel: Paral
         ))}
       </div>
       <p>{player.fact}</p>
-      <small className="muted">{parallel === 'milestone' ? `${milestoneOf(player.id)?.rank ? `${milestoneOf(player.id)?.rank} milestone.` : 'Moment card.'} ${milestoneOf(player.id)?.about}` : player.chase ? 'The chase card. Signed, and only one was ever made.' : player.rookie ? `Rookie Superfractor${player.signed ? ' Autograph, signed by the player' : ''}. Swirling rainbow gold, and only one was ever made.` : parallelOf(parallel).about}</small>
+      <small className="muted">{parallel === 'weekly' ? parallelOf('weekly').about : parallel === 'milestone' ? `${milestoneOf(player.id)?.rank ? `${milestoneOf(player.id)?.rank} milestone.` : 'Moment card.'} ${milestoneOf(player.id)?.about}` : player.chase ? 'The chase card. Signed, and only one was ever made.' : player.rookie ? `Rookie Superfractor${player.signed ? ' Autograph, signed by the player' : ''}. Swirling rainbow gold, and only one was ever made.` : parallelOf(parallel).about}</small>
     </div>
   );
 }
