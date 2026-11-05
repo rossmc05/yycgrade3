@@ -120,6 +120,8 @@ export interface Profile {
   paused?: string[];
   /** Weekly words entered by a parent. */
   spellingList?: string[];
+  /** The day of the spelling test (YYYY-MM-DD). The Ballpark's weekly challenge closes after it. */
+  spellingTest?: string;
   typing?: Record<string, TypingResult>;
   /** Best scores in the arcade games. */
   games?: Record<string, { best: number; plays: number }>;

@@ -22,6 +22,8 @@ export interface Player {
   milestone?: boolean;
   /** A rookie Superfractor that is also signed. */
   signed?: boolean;
+  /** A Card of the Week: the challenge date it belongs to, e.g. "2026-11-09". */
+  weekly?: string;
   /** Canadian connection, shown with a maple leaf. */
   canada?: boolean;
   /** Card ratings out of 99 (made up for the game): contact, power, speed, or for pitchers velocity, control, stamina. */
@@ -159,7 +161,22 @@ export const PLAYERS: Player[] = [
   H('ruth', 'Babe Ruth', 'OF', 'New York', NYY_RUTH, [90, 99, 40], 'The most famous baseball player ever. Hit 714 home runs. This signed card is one of a kind!', { legend: true, chase: true }),
 ];
 
-export const playerById = (id: string) => PLAYERS.find((p) => p.id === id);
+/** Who is on the Card of the Week, in turn. After the list, the rest of today's stars. */
+const STAR_ROTATION = ['judge', 'ohtani', 'skenes', 'witt', 'soto', 'julio', 'raleigh', 'skubal', 'acuna', 'betts', 'tatis', 'vlad', 'gunnar', 'elly', 'harper', 'lindor'];
+const FIRST_WEEK = Date.UTC(2026, 10, 9);
+
+/** The Card of the Week for the challenge on `date` (YYYY-MM-DD): a star, numbered to 25, only for that week. */
+export function weeklyPlayer(date: string): Player | undefined {
+  const [y, m, d] = date.split('-').map(Number);
+  if (!y || !m || !d) return;
+  const stars = PLAYERS.filter((p) => !p.legend && !p.rookie && !p.chase && !p.milestone);
+  const order = [...STAR_ROTATION.map((id) => stars.find((p) => p.id === id)!).filter(Boolean), ...stars.filter((p) => !STAR_ROTATION.includes(p.id))];
+  const week = Math.floor((Date.UTC(y, m - 1, d) - FIRST_WEEK) / (7 * 86400000));
+  const star = order[((week % order.length) + order.length) % order.length];
+  return { ...star, id: `wk-${date}`, milestone: true, weekly: date };
+}
+
+export const playerById = (id: string) => (id.startsWith('wk-') ? weeklyPlayer(id.slice(3)) : PLAYERS.find((p) => p.id === id));
 
 export const RATING_NAMES: Record<Role, [string, string, string]> = {
   hitter: ['Contact', 'Power', 'Speed'],

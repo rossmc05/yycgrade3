@@ -273,10 +273,11 @@ function TopicSwitches({ p }: { p: Profile }) {
 function SpellingList({ p }: { p: Profile }) {
   const { setData } = useStore();
   const [text, setText] = useState((p.spellingList ?? []).join('\n'));
+  const [test, setTest] = useState(p.spellingTest ?? '');
   const [saved, setSaved] = useState(false);
   const save = () => {
     const words = text.split(/[\n,]+/).map((w) => w.trim()).filter(Boolean);
-    setData((d) => ({ ...d, profiles: d.profiles.map((x) => (x.id === p.id ? { ...x, spellingList: words } : x)) }));
+    setData((d) => ({ ...d, profiles: d.profiles.map((x) => (x.id === p.id ? { ...x, spellingList: words, spellingTest: test || undefined } : x)) }));
     setSaved(true);
   };
   return (
@@ -284,6 +285,8 @@ function SpellingList({ p }: { p: Profile }) {
       <h3>🔤 This week's spelling words</h3>
       <p className="muted small">One word per line (or separated by commas). Spell Builder reads them aloud for practice.</p>
       <textarea className="word-list" rows={5} value={text} onChange={(e) => { setText(e.target.value); setSaved(false); }} />
+      <label className="small">Test day: <input type="date" value={test} onChange={(e) => { setTest(e.target.value); setSaved(false); }} /></label>
+      <p className="muted small">With a test day set, these words become the Ballpark's Weekly Challenge: spell them all perfectly 3 times before the end of test day for a 3-card pack.</p>
       <div className="row" style={{ justifyContent: 'flex-start' }}>
         <button className="btn ghost" onClick={save}>Save list</button>
         {saved && <span className="good">Saved</span>}

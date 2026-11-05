@@ -5,6 +5,7 @@ import { go } from '../../router';
 import { CHASE, cardKey, isOneOfOne, oneOfOneParallel, parallelOf, PARALLELS, RANK, ROOKIES, type Parallel } from '../cards';
 import { ballOf, MILESTONES, MOMENT_CARDS, RANKS } from '../data';
 import { playerById, PLAYERS, type Player } from '../players';
+import { challengeOf, dayLabel, isOpen } from '../weekly';
 import { BallBar } from './BallBar';
 import { BallCard, CardFront } from './Card';
 
@@ -26,6 +27,8 @@ export function Binder() {
   const best = (p: Player) => owned(p).sort((x, y) => RANK[y] - RANK[x])[0];
   const count = SET.filter((p) => owned(p).length).length;
   const hasChase = !!b.cards[cardKey(CHASE.id, 'auto')];
+  const weeklyOwned = Object.keys(b.cards).filter((k) => k.startsWith('wk-') && k.endsWith(':weekly')).sort().map((k) => playerById(k.split(':')[0])).filter((p): p is Player => !!p);
+  const thisWeek = challengeOf(profile);
   const byPar = PARALLELS.map((par) => ({ par, n: SET.filter((p) => b.cards[cardKey(p.id, par.id)]).length }));
 
   return (
@@ -85,6 +88,23 @@ export function Binder() {
         </section>
       ))}
 
+      <section className="album-sec weekly-sec">
+        <SecHead name="Cards of the Week" got={weeklyOwned.length} of={weeklyOwned.length + (thisWeek && !weeklyOwned.some((p) => p.weekly === thisWeek.date) ? 1 : 0)} />
+        <p className="album-note">Win each week's Spelling Challenge to earn that week's card. Numbered to 25, and gone for good once the week ends.</p>
+        <div className="album-sleeves">
+          {weeklyOwned.map((p) => (
+            <button key={p.id} className="binder-slot" onClick={() => { setOpen(p); setView('weekly'); }} aria-label={`${p.name} Card of the Week`}>
+              <span className="mini-card"><CardFront player={p} parallel="weekly" serial={b.cards[cardKey(p.id, 'weekly')]?.serial} /></span>
+            </button>
+          ))}
+          {thisWeek && !weeklyOwned.some((p) => p.weekly === thisWeek.date) && (
+            <button className="binder-slot empty" onClick={() => go('weekly')} aria-label="This week's challenge">
+              <span className="mini-card blank gold"><LockIcon /><b>This week</b><small>{isOpen(thisWeek, Date.now()) ? `Spelling Challenge · until ${dayLabel(thisWeek.date)}` : 'Closed'}</small></span>
+            </button>
+          )}
+        </div>
+      </section>
+
       <section className="album-sec super-sec">
         <SecHead name="Rookie Superfractors" got={ROOKIES.filter((p) => b.cards[cardKey(p.id, 'super')]).length} of={ROOKIES.length} />
         <p className="album-note">The top rookies of 2025, each in one rainbow-gold Superfractor numbered 1 of 1. Rarer than an Autograph.</p>
@@ -130,7 +150,7 @@ export function Binder() {
           <div className="card-modal-inner" onClick={(e) => e.stopPropagation()}>
             <BallCard key={view} player={open} parallel={view} serial={b.cards[cardKey(open.id, view)]?.serial} big />
             <div className="par-legend">
-              {(view === 'milestone' ? [parallelOf('milestone')] : isOneOfOne(open) ? [parallelOf(oneOfOneParallel(open))] : PARALLELS).map((par) => {
+              {(view === 'milestone' || view === 'weekly' ? [parallelOf(view)] : isOneOfOne(open) ? [parallelOf(oneOfOneParallel(open))] : PARALLELS).map((par) => {
                 const c = b.cards[cardKey(open.id, par.id)];
                 return (
                   <button key={par.id} className={`par-chip p-${par.id} ${view === par.id ? 'sel' : ''}`} disabled={!c} onClick={() => setView(par.id)}>

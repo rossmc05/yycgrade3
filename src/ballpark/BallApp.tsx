@@ -11,6 +11,7 @@ import { Clubhouse } from './ui/Clubhouse';
 import { Derby } from './ui/Derby';
 import { Dugout } from './ui/Dugout';
 import { League } from './ui/League';
+import { Weekly } from './ui/Weekly';
 import { LockerRoom } from './ui/LockerRoom';
 import { PlayBall } from './ui/PlayBall';
 import { TitleScene } from './ui/TitleScene';
@@ -38,6 +39,7 @@ export function BallApp() {
   if (page === 'locker') return <LockerRoom />;
   if (page === 'team') return <Dugout />;
   if (page === 'league') return <League />;
+  if (page === 'weekly') return <Weekly />;
   return <Clubhouse />;
 }
 

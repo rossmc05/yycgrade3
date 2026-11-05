@@ -8,7 +8,7 @@ import bank from '../../content/spelling.json';
 const S = 'spelling' as const;
 
 /** A typed spelling question: the word is spoken, never shown. */
-function hearAndSpell(word: string, sentence: string | undefined, key: string, hint: string): Question {
+export function hearAndSpell(word: string, sentence: string | undefined, key: string, hint: string): Question {
   const shown = sentence ? sentence.replace(new RegExp(`\\b${word}\\b`, 'i'), '_____') : undefined;
   return {
     key,
