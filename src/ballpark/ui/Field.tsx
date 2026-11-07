@@ -19,6 +19,7 @@ const LANDING: Record<PlayKind, { x: number; y: number; high: number }[]> = {
   fly: [{ x: 200, y: 66, high: 120 }, { x: 120, y: 90, high: 110 }, { x: 280, y: 90, high: 110 }],
   'sac-fly': [{ x: 200, y: 62, high: 120 }],
   catch: [{ x: 110, y: 80, high: 60 }, { x: 290, y: 80, high: 60 }],
+  robbed: [{ x: 200, y: 4, high: 150 }, { x: 96, y: 40, high: 80 }, { x: 304, y: 40, high: 80 }],
   strikeout: [{ x: 200, y: 276, high: 0 }],
   foul: [{ x: 392, y: 228, high: 90 }, { x: 8, y: 228, high: 90 }],
 };

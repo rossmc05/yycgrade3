@@ -25,7 +25,17 @@ export function Ask({ q, skill, level, clock, readAloud, onAnswer, onNext, nextL
   const [left, setLeft] = useState(clock ?? 0);
   const [late, setLate] = useState(false);
   const start = useRef(Date.now());
+  const answeredAt = useRef(0);
+  const nextBtn = useRef<HTMLButtonElement>(null);
   const done = phase !== 'ask';
+  // The key or tap that answers must not also skip past the result: wait a moment before Next works.
+  const goNext = () => {
+    if (Date.now() - answeredAt.current < 600) return;
+    onNext();
+  };
+  useEffect(() => {
+    if (done) nextBtn.current?.focus({ preventScroll: true });
+  }, [done]);
 
   useEffect(() => {
     if (readAloud || q.say) speak(q.say ?? q.prompt);
@@ -35,6 +45,7 @@ export function Ask({ q, skill, level, clock, readAloud, onAnswer, onNext, nextL
     if (done) return;
     if (answer !== null && !normalize(answer)) return;
     const ok = answer !== null && (q.input === 'choice' ? answer === q.answer : normalize(answer) === normalize(q.answer));
+    answeredAt.current = Date.now();
     setPhase(ok ? 'right' : 'shown');
     onAnswer(ok, (Date.now() - start.current) / 1000);
     if (!ok && readAloud) speak(q.explain);
@@ -57,17 +68,17 @@ export function Ask({ q, skill, level, clock, readAloud, onAnswer, onNext, nextL
   useEffect(() => {
     const on = (e: KeyboardEvent) => {
       if (done) {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onNext(); }
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (!e.repeat) goNext(); }
         return;
       }
       if (q.input === 'text') {
         if (/^[a-zA-Z' ]$/.test(e.key)) setValue((v) => (v.length < 24 ? v + e.key.toLowerCase() : v));
         else if (e.key === 'Backspace') setValue((v) => v.slice(0, -1));
-        else if (e.key === 'Enter') submit(value);
+        else if (e.key === 'Enter') { e.preventDefault(); submit(value); }
       } else if (q.input === 'number') {
         if (/^[0-9]$/.test(e.key)) setValue((v) => (v.length < 7 ? v + e.key : v));
         else if (e.key === 'Backspace') setValue((v) => v.slice(0, -1));
-        else if (e.key === 'Enter') submit(value);
+        else if (e.key === 'Enter') { e.preventDefault(); submit(value); }
       } else if (q.input === 'choice' && q.choices && /^[1-9]$/.test(e.key)) {
         const c = q.choices[Number(e.key) - 1];
         if (c) { setPicked(c); submit(c); }
@@ -129,7 +140,7 @@ export function Ask({ q, skill, level, clock, readAloud, onAnswer, onNext, nextL
               <p>{q.explain}</p>
             </>
           )}
-          <button className="btn primary" onClick={onNext} autoFocus>{nextLabel}</button>
+          <button className="btn primary" onClick={goNext} ref={nextBtn}>{nextLabel}</button>
         </div>
       )}
     </section>

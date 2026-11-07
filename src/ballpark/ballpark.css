@@ -571,3 +571,4 @@ body.game .binder-page .btn.album-btn.claim { background: linear-gradient(90deg,
 .gear-photo { display: block; object-fit: contain; border-radius: 10px; background: #fff; }
 .gear-stage .gear-photo { width: 150px; height: 150px; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.18); }
 .loadout-slot .gear-photo { border-radius: 6px; }
+.banner.on-fire { background: linear-gradient(90deg, #f97316, #dc2626); color: #fff; border-color: #7c2d12; }

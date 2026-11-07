@@ -1,7 +1,8 @@
 // A single game, simulated one plate appearance at a time. You are the home team:
 // you pitch in the top of each inning and bat in the bottom.
 // At bat, a right answer is a hit (harder swings hit farther) and a wrong one is an out.
-// Pitching, a right answer gets the batter out (harder pitches more surely) and a wrong one gives up a hit.
+// Pitching, a right answer usually gets the batter out and a wrong one gives up a hit.
+// Better teams catch more of your hits and hit more of your good pitches.
 
 import type { BallPerks } from './gear';
 
@@ -16,9 +17,9 @@ export const SWINGS: { id: Swing; name: string; hit: string; offset: number }[] 
 ];
 
 export const PITCHES: { id: Pitch; name: string; does: string; offset: number; outChance: number }[] = [
-  { id: 'fastball', name: 'Fastball', does: 'Easier. Usually an out.', offset: -1, outChance: 0.8 },
-  { id: 'curve', name: 'Curveball', does: 'Your level. Almost always an out.', offset: 0, outChance: 0.92 },
-  { id: 'heater', name: 'Heater', does: 'Harder. Always a strikeout.', offset: 1, outChance: 1 },
+  { id: 'fastball', name: 'Fastball', does: 'Easier. Often an out.', offset: -1, outChance: 0.8 },
+  { id: 'curve', name: 'Curveball', does: 'Your level. Usually an out.', offset: 0, outChance: 0.9 },
+  { id: 'heater', name: 'Heater', does: 'Harder. Usually a strikeout.', offset: 1, outChance: 0.98 },
 ];
 
 /**
@@ -35,7 +36,7 @@ export function tierLevel(levels: number, current: number, offset: number): { le
 
 export type Bases = [boolean, boolean, boolean];
 export type Side = 'you' | 'them';
-export type PlayKind = 'single' | 'double' | 'triple' | 'hr' | 'strikeout' | 'ground' | 'fly' | 'double-play' | 'sac-fly' | 'foul' | 'catch';
+export type PlayKind = 'single' | 'double' | 'triple' | 'hr' | 'strikeout' | 'ground' | 'fly' | 'double-play' | 'sac-fly' | 'foul' | 'catch' | 'robbed';
 
 export interface Play {
   id: number;
@@ -60,6 +61,12 @@ export interface Game {
   line: { you: number[]; them: number[] };
   halfRuns: number;
   fouls: number;
+  /** How good the other team is, 0 (weak) to 1 (the best). */
+  opp?: number;
+  /** You were behind at some point. */
+  trailed?: boolean;
+  /** Right answers in a row. At ON_FIRE or more you're on fire: the other team plays half as well. */
+  streak?: number;
   coins: number;
   plays: number;
   stats: { hits: number; hrs: number; ks: number; right: number; asked: number; singles?: number; doubles?: number; triples?: number };
@@ -70,17 +77,33 @@ export interface Game {
   runRule?: boolean;
 }
 
-/** The most runs a team can score in one inning, except you in your last at-bat. */
+/** The most runs a team can score in one inning, except in the last inning when they're behind. */
 export const RUN_RULE = 5;
 export const EXTRA_INNINGS = 3;
 export const HIT_COINS = [0, 2, 4, 6, 10];
 export const RUN_COINS = 2;
 export const OUT_COINS = 2;
 
-export function newGame(innings: number, perks: BallPerks = {}): Game {
+/** A team's strength from its overall rating: 65 OVR is 0, 90 OVR is 1, and playoff teams can go higher. */
+export const strengthOf = (ovr: number) => Math.max(0, Math.min(1.5, (ovr - 65) / 25));
+
+/** How hard better teams fight back, per point of strength (tuned by simulation). */
+// Weak contact is easiest to catch, so harder questions are the better swing when you get them right.
+const ROB = [0.4, 0.36, 0.33, 0.3];
+const MAX_ROB = 0.45;
+// A home run swing that isn't caught can still come up short, off the wall.
+const WALL = [0.1, 0.2];
+const MAX_WALL = 0.4;
+// How much a good team cuts your chance of an out on a good pitch: fastball, curve, heater.
+const HITBACK: Record<Pitch, number> = { fastball: 0.6, curve: 0.58, heater: 0.56 };
+const MIN_OUT = 0.35;
+const OPP_HR = 0.15;
+const OPP_XBH = 0.45;
+
+export function newGame(innings: number, perks: BallPerks = {}, ovr = 78): Game {
   return {
     innings, inning: 1, half: 'top', outs: 0, bases: [false, false, false], you: 0, them: 0,
-    line: { you: [], them: [0] }, halfRuns: 0, fouls: perks.fouls ?? 0, coins: 0, plays: 0,
+    line: { you: [], them: [0] }, halfRuns: 0, fouls: perks.fouls ?? 0, opp: strengthOf(ovr), coins: 0, plays: 0,
     stats: { hits: 0, hrs: 0, ks: 0, right: 0, asked: 0 }, over: false,
   };
 }
@@ -103,7 +126,13 @@ export function advance(bases: Bases, n: number, fast: boolean): { bases: Bases;
   return { bases: next, runs };
 }
 
-const cap = (g: Game) => (g.half === 'bottom' && g.inning >= g.innings ? Infinity : RUN_RULE);
+// No run limit in the last inning for a team that's behind, so a comeback is always possible.
+const cap = (g: Game) => (g.inning >= g.innings && (g.half === 'bottom' ? g.you <= g.them : g.them <= g.you) ? Infinity : RUN_RULE);
+/** Right answers in a row that put you on fire. */
+export const ON_FIRE = 5;
+export const onFire = (g: Game) => (g.streak ?? 0) >= ON_FIRE;
+/** The other team's strength right now. They dig in when they're behind late in the game. */
+const oppNow = (g: Game) => Math.min(1.6, (g.opp ?? 0.5) + (g.inning >= g.innings && g.them < g.you ? 0.15 : 0));
 const pick = <T,>(rng: () => number, xs: T[]) => xs[Math.floor(rng() * xs.length)];
 
 function score(g: Game, runs: number): number {
@@ -197,7 +226,9 @@ function out(g: Game, rng: () => number, mine: boolean, strikeout: boolean): Pla
 function finish(g: Game, p: Play, correct: boolean): { game: Game; play: Play } {
   g.plays += 1;
   g.stats = { ...g.stats, asked: g.stats.asked + 1, right: g.stats.right + (correct ? 1 : 0) };
+  g.streak = correct ? (g.streak ?? 0) + 1 : 0;
   g.coins += p.coins;
+  if (g.them > g.you) g.trailed = true;
   settle(g);
   return { game: g, play: { ...p, id: g.plays } };
 }
@@ -211,10 +242,25 @@ export function bat(prev: Game, swing: Swing, correct: boolean, rng: () => numbe
     g.fouls -= 1;
     g.plays += 1;
     g.stats = { ...g.stats, asked: g.stats.asked + 1 };
+    g.streak = 0;
     return { game: g, play: { id: g.plays, side: 'you', kind: 'foul', text: 'Foul ball! Your helmet gives you another pitch.', runs: 0, reached: 0, coins: 0 } };
   }
   if (!correct) return finish(g, out(g, rng, true, false), false);
   let n = SWINGS.findIndex((s) => s.id === swing) + 1;
+  // A good team can still catch a well-hit ball. Big swings are easier to catch.
+  const s = oppNow(g) * (onFire(g) ? 0.5 : 1);
+  if (rng() < Math.min(MAX_ROB, s * ROB[n - 1])) {
+    g.outs += 1;
+    const text = n === 4 ? pick(rng, ['Robbed! Their centre fielder leaps at the wall and catches it!', 'Caught at the warning track! So close!'])
+      : pick(rng, ['Great swing, but their shortstop dives and snags it!', 'Smoked! Right at their second baseman, though. Out!', 'Their left fielder makes a sliding catch!']);
+    return finish(g, { id: 0, side: 'you', kind: 'robbed', text, runs: 0, reached: 0, coins: 1 }, true);
+  }
+  // A home run swing can come up short: off the wall for extra bases instead.
+  let wall = false;
+  if (n === 4 && rng() < Math.min(MAX_WALL, WALL[0] + WALL[1] * s)) {
+    n = rng() < 0.5 ? 2 : 3;
+    wall = true;
+  }
   let stretched = false;
   let starred = false;
   if (n < 4 && perks.extraBase && rng() < perks.extraBase) {
@@ -229,6 +275,7 @@ export function bat(prev: Game, swing: Swing, correct: boolean, rng: () => numbe
     ? n === 4 ? `${perks.star!.name} flies around the bases. Inside-the-park home run!` : `${['', '', 'Double', 'Triple'][n]}! ${perks.star!.name} hustles for an extra base.`
     : n === 4
     ? stretched ? 'Inside-the-park home run! Your bat gave it extra zip!' : pick(rng, ['HOME RUN! That ball is gone!', 'HOME RUN! Way out of here!', 'Goodbye, baseball! HOME RUN!'])
+    : wall ? `Off the top of the wall! ${['', 'Single', 'Double', 'Triple'][n]}!${stretched ? ' Your bat gave it extra zip for one more base.' : ''}`
     : `${['', 'Single', 'Double', 'Triple'][n]}!${stretched ? ' Your bat gave it extra zip for one more base.' : n === 1 ? ' A clean hit.' : n === 2 ? ' Into the gap!' : ' Off the wall!'}`;
   g.stats = { ...g.stats, hits: g.stats.hits + 1, hrs: g.stats.hrs + (n === 4 ? 1 : 0),
     singles: (g.stats.singles ?? 0) + (n === 1 ? 1 : 0), doubles: (g.stats.doubles ?? 0) + (n === 2 ? 1 : 0), triples: (g.stats.triples ?? 0) + (n === 3 ? 1 : 0) };
@@ -239,13 +286,18 @@ export function bat(prev: Game, swing: Swing, correct: boolean, rng: () => numbe
 export function pitch(prev: Game, kind: Pitch, correct: boolean, rng: () => number, perks: BallPerks = {}): { game: Game; play: Play } {
   const g = clone(prev);
   const def = PITCHES.find((p) => p.id === kind)!;
+  const s = oppNow(g) * (onFire(g) ? 0.5 : 1);
   if (correct) {
-    if (rng() < def.outChance) {
+    // Good teams hit good pitches more often.
+    if (rng() < Math.max(MIN_OUT, def.outChance - HITBACK[kind] * s)) {
       const p = out(g, rng, false, kind === 'heater');
       if (p.kind === 'strikeout') g.stats = { ...g.stats, ks: g.stats.ks + 1 };
       return finish(g, { ...p, coins: OUT_COINS + (kind === 'heater' ? 1 : 0) }, true);
     }
-    return finish(g, hit(g, 1, false, 'A bloop single just over the infield. Good pitch, lucky hit!', false), true);
+    const r = rng();
+    if (r < OPP_HR * s) return finish(g, hit(g, 4, false, 'Great pitch, but they crushed it. Home run!', false), true);
+    if (r < OPP_XBH * s) return finish(g, hit(g, 2, false, 'Good pitch, but they lined it into the gap for a double.', false), true);
+    return finish(g, hit(g, 1, false, pick(rng, ['A bloop single just over the infield. Good pitch, lucky hit!', 'They fought it off for a single.', 'A seeing-eye single through the infield.']), false), true);
   }
   if (perks.ace && rng() < perks.ace.boost) {
     g.outs += 1;
@@ -257,17 +309,26 @@ export function pitch(prev: Game, kind: Pitch, correct: boolean, rng: () => numb
     return finish(g, { id: 0, side: 'them', kind: 'catch', text: 'What a diving catch! Your glove saves the day.', runs: 0, reached: 0, coins: OUT_COINS }, false);
   }
   const r = rng() * 100;
-  const n = r < 52 ? 1 : r < 77 ? 2 : r < 85 ? 3 : 4;
+  const hr = 12 + 10 * s;
+  const n = r < 52 - 10 * s ? 1 : r < 77 - 5 * s ? 2 : r < 88 - hr ? 3 : 4;
   const text = ['', 'They hit a single.', 'They hit a double into the gap.', 'They hit a triple off the wall.', 'They hit a home run!'][n];
   return finish(g, hit(g, n, false, text, false), false);
 }
 
 export const WIN_COINS = { win: 40, tie: 20, loss: 15 };
+export const CLOSE_WIN_COINS = 15;
+export const COMEBACK_COINS = 15;
 
-/** Coins for the final result, on top of the coins from plays. */
+/** A win by 1 or 2 runs. */
+export const closeWin = (g: Game) => g.result === 'win' && g.you - g.them <= 2;
+/** A win after being behind. */
+export const comeback = (g: Game) => g.result === 'win' && !!g.trailed;
+
+/** Coins for the final result, on top of the coins from plays. A game with no right answers earns nothing. */
 export function resultCoins(g: Game): number {
-  if (!g.result) return 0;
-  return WIN_COINS[g.result] + (g.walkoff ? 10 : 0) + (g.result === 'win' && g.them === 0 ? 10 : 0);
+  if (!g.result || !g.stats.right) return 0;
+  return WIN_COINS[g.result] + (g.walkoff ? 10 : 0) + (g.result === 'win' && g.them === 0 ? 10 : 0)
+    + (closeWin(g) ? CLOSE_WIN_COINS : 0) + (comeback(g) ? COMEBACK_COINS : 0);
 }
 
 /** Card luck for a win: a blow-out or a shutout pulls better cards. No card for a loss or tie. */
