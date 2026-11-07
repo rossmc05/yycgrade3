@@ -5,7 +5,7 @@ import { newProfile } from '../src/engine/storage';
 import { CHASE, cardKey, chances, chaseChance, isOneOfOne, PARALLELS, RANK, rollCard, ROOKIES, superChance } from '../src/ballpark/cards';
 import { addCard, ballLookOf, GOAT_STEP, MILESTONES, MOMENT_CARDS, TODAYS_STARS, newBall, payout, rankAt, rankOf, RANKS } from '../src/ballpark/data';
 import { derbyCards, derbyHit, derbyLuck, derbyTotal, FENCE } from '../src/ballpark/derby';
-import { advance, bat, hitForCycle, newGame, pitch, RUN_RULE, tierLevel, winCards, winLuck, type Game } from '../src/ballpark/game';
+import { advance, bat, CLOSE_WIN_COINS, hitForCycle, newGame, ON_FIRE, onFire, pitch, resultCoins, RUN_RULE, strengthOf, tierLevel, WIN_COINS, winCards, winLuck, type Game } from '../src/ballpark/game';
 import { BALL_GEAR, ballPerks } from '../src/ballpark/gear';
 import { PLAYERS } from '../src/ballpark/players';
 import { planSkills, recordBall } from '../src/ballpark/questions';
@@ -37,9 +37,9 @@ describe('ballpark game', () => {
     expect(out.game.you).toBe(0);
   });
 
-  it('pitching: a heater answered right is always a strikeout; a wrong answer gives up a hit', () => {
+  it('pitching: a heater answered right is usually a strikeout; a wrong answer gives up a hit', () => {
     const g = newGame(3);
-    const k = pitch(g, 'heater', true, () => 0.99);
+    const k = pitch(g, 'heater', true, () => 0.5);
     expect(k.play.kind).toBe('strikeout');
     expect(k.game.outs).toBe(1);
     const hit = pitch(g, 'curve', false, () => 0.3);
@@ -287,6 +287,12 @@ describe('ballpark questions use the shared learning engine', () => {
     expect(plan.length).toBe(20);
     expect(new Set(plan.map((s) => s.subject))).toEqual(new Set(['math', 'science']));
   });
+
+  it('mixes many skills from each subject, not one skill per subject', () => {
+    const p = newProfile('Sam', '🦊');
+    const plan = planSkills(p, ['math', 'science', 'reading', 'spelling'], 30, seeded(9), Date.now());
+    expect(new Set(plan.map((s) => s.id)).size).toBeGreaterThanOrEqual(8);
+  });
 });
 
 describe('ballpark look', () => {
@@ -298,5 +304,53 @@ describe('ballpark look', () => {
     expect(l.hat).toBe('hat-cap');
     expect(l.pet).toBe('pet-none');
     expect(ballLookOf({ ...p, ball: { ...newBall(), look: { ...newBall().look, hat: 'hat-batting' } } }).hat).toBe('hat-batting');
+  });
+});
+
+describe('tougher opponents', () => {
+  const games = (ovr: number, acc: number, perks = {}) => {
+    const rng = seeded(7 + ovr + Math.round(acc * 100));
+    let wins = 0;
+    for (let i = 0; i < 400; i++) {
+      let g = newGame(3, perks, ovr);
+      while (!g.over) g = g.half === 'top' ? pitch(g, 'heater', rng() < acc, rng, perks).game : bat(g, 'homer', rng() < acc, rng, perks).game;
+      if (g.result === 'win') wins++;
+    }
+    return wins / 400;
+  };
+
+  it('rates teams from 0 to 1.5 by OVR', () => {
+    expect(strengthOf(60)).toBe(0);
+    expect(strengthOf(90)).toBe(1);
+    expect(strengthOf(200)).toBe(1.5);
+  });
+
+  it('makes better teams harder to beat, and right answers still matter', () => {
+    expect(games(71, 0.9)).toBeGreaterThan(games(100, 0.9));
+    expect(games(100, 0.95)).toBeGreaterThan(games(100, 0.75));
+    expect(games(100, 0.9)).toBeLessThan(0.97);
+  });
+
+  it('lets a strong team rob a well-hit ball', () => {
+    const g = { ...newGame(3, {}, 100), half: 'bottom' as const };
+    const r = bat(g, 'homer', true, () => 0.1);
+    expect(r.play.kind).toBe('robbed');
+    expect(r.game.outs).toBe(1);
+    expect(r.game.stats.right).toBe(1);
+  });
+
+  it('puts you on fire after five right in a row, and a miss puts it out', () => {
+    let g: Game = newGame(9, {}, 90);
+    for (let i = 0; i < ON_FIRE; i++) g = { ...pitch(g, 'heater', true, () => 0.01).game, outs: 0 };
+    expect(onFire(g)).toBe(true);
+    g = pitch(g, 'heater', false, () => 0.5).game;
+    expect(onFire(g)).toBe(false);
+  });
+
+  it('pays nothing for a game with no right answers, and a bonus for a close win', () => {
+    const lost = { ...newGame(3), over: true, result: 'loss' as const, you: 0, them: 5 };
+    expect(resultCoins(lost)).toBe(0);
+    const close = { ...newGame(3), over: true, result: 'win' as const, you: 4, them: 3, stats: { hits: 4, hrs: 0, ks: 0, right: 9, asked: 10 } };
+    expect(resultCoins(close)).toBe(WIN_COINS.win + CLOSE_WIN_COINS);
   });
 });

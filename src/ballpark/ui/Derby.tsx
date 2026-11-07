@@ -15,7 +15,7 @@ import { ballOf, payout, type Payout, ballLookOf } from '../data';
 import { DERBY_SWINGS, derbyCards, derbyCoins, derbyHit, derbyLuck, derbyTotal, FENCE, type DerbyHit } from '../derby';
 import { SWINGS, tierLevel, type Swing } from '../game';
 import { ballPerks } from '../gear';
-import { ask, levelOf, planSkills, recordBall, XP_RIGHT, XP_WRONG } from '../questions';
+import { ask, closeBallReviews, dueSkills, levelOf, planSkills, recordBall, XP_RIGHT, XP_WRONG } from '../questions';
 import { Ask } from './Ask';
 import { ALL_SUBJECTS, SubjectPicker } from './SubjectPicker';
 import { BallBar } from './BallBar';
@@ -59,6 +59,8 @@ function DerbyRound({ subjects, again }: { subjects: SubjectId[]; again: () => v
   const ball = ballOf(profile!);
   const perks = useMemo(() => ballPerks(ball.gearOn), []);
   const [plan] = useState(() => planSkills(profile!, subjects, 40, Math.random, Date.now()));
+  const [wasDue] = useState(() => dueSkills(profile!, Date.now()));
+  const results = useRef<{ skillId: string; correct: boolean }[]>([]);
   const [hits, setHits] = useState<DerbyHit[]>([]);
   const [atBat, setAtBat] = useState<{ skill: Skill; level: number; clock?: number; swing: Swing; q: Question } | null>(null);
   const [last, setLast] = useState<DerbyHit | null>(null);
@@ -91,6 +93,7 @@ function DerbyRound({ subjects, again }: { subjects: SubjectId[]; again: () => v
     setXp((x) => x + (correct ? XP_RIGHT : XP_WRONG));
     const now = Date.now();
     updateProfile((p) => recordBall(p, atBat.skill, atBat.q, correct, seconds, atBat.level, now));
+    results.current.push({ skillId: atBat.skill.id, correct });
     if (h.hr) { sfx.special(); setTimeout(() => fx.current?.burst('confetti', 0.5, 0.15), 1000); }
     else if (h.feet) sfx.hit();
     else sfx.ouch();
@@ -107,7 +110,7 @@ function DerbyRound({ subjects, again }: { subjects: SubjectId[]; again: () => v
       const out = payout(ball, xp, derbyCoins(t), derbyLuck(t, perks), perks.coinBonus ?? 0, Math.random, Date.now(), derbyCards(t), { perfectDerby: t.hrs >= DERBY_SWINGS, longest: t.longest, answerRun: run.current.best });
       const d = out.ball.derby;
       const derby = { plays: d.plays + 1, bestFeet: Math.max(d.bestFeet, t.feet), bestHrs: Math.max(d.bestHrs, t.hrs), longest: Math.max(d.longest, t.longest) };
-      updateProfile((p) => ({ ...p, ball: { ...out.ball, derby } }));
+      updateProfile((p) => ({ ...closeBallReviews(p, results.current, wasDue, Date.now()), ball: { ...out.ball, derby } }));
       setResult(out.payout);
       sfx.fanfare();
     }

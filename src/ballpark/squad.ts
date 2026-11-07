@@ -4,6 +4,7 @@
 
 import { RANK, type Parallel } from './cards';
 import type { BallData } from './data';
+import { ballPerks } from './gear';
 import { playerById, PLAYERS, type Player } from './players';
 
 export const LINEUP_SIZE = 8;
@@ -67,3 +68,21 @@ export function teamOvr(b: BallData): number {
   const all = [...lineup.map((c) => c.ovr), ...Array(LINEUP_SIZE - lineup.length).fill(50), ace?.ovr ?? 50];
   return Math.round(all.reduce((a, x) => a + x, 0) / all.length);
 }
+
+/** The most a team can raise its rating after scouting you. */
+export const MAX_SCOUT = 20;
+/** Extra rating for each playoff round: the semifinal, then the final. */
+export const PLAYOFF_BOOST = 5;
+
+/**
+ * Teams scout you: the better your lineup and your gear, the better they play against you.
+ * A new player meets the teams as they are; a star with top gear meets them at their best.
+ */
+export function scoutBoost(b: BallData): number {
+  const p = ballPerks(b.gearOn);
+  const gear = 10 * ((p.extraBase ?? 0) + (p.catchChance ?? 0) + (p.fouls ?? 0) / 6 + (p.speed ?? 0) / 4);
+  return Math.round(Math.max(0, Math.min(MAX_SCOUT, (teamOvr(b) - 75) * 0.5 + gear)));
+}
+
+/** A team's rating for your game against them. */
+export const gameOvr = (base: number, b: BallData, round = 0) => base + scoutBoost(b) + PLAYOFF_BOOST * round;

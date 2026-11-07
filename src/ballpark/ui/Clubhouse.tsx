@@ -27,7 +27,7 @@ export function Clubhouse() {
   const spots: Spot[] = [
     { id: 'game', label: 'Play Ball', sub: 'Win to earn 2 to 3 cards', e: '🏟️', x: 50, y: 40, size: 22, to: 'game' },
     { id: 'derby', label: 'Home Run Derby', sub: b.derby.plays ? `Best ${b.derby.bestFeet} ft` : 'Earns 1 to 3 cards', e: '💥', x: 17, y: 52, size: 12, to: 'derby' },
-    { id: 'binder', label: 'Card Shop', sub: `${players}/${set.length} players`, e: '🃏', x: 83, y: 52, size: 12, to: 'binder' },
+    { id: 'binder', label: 'Card Binder', sub: `${players}/${set.length} players`, e: '🃏', x: 83, y: 52, size: 12, to: 'binder' },
     { id: 'shop', label: 'Pro Shop', sub: `🪙 ${b.coins}`, e: '🏪', x: 28, y: 82, size: 12, to: 'shop' },
     { id: 'league', label: 'League', sub: b.season ? `Season ${b.season.n} · ${b.season.you.w}-${b.season.you.l}` : 'Season standings', e: '🏆', x: 83, y: 22, size: 10, to: 'league' },
     { id: 'team', label: 'Dugout', sub: `Team ${teamOvr(b)} OVR`, e: '🧢', x: 17, y: 22, size: 10, to: 'team' },
