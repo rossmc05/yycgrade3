@@ -35,9 +35,7 @@ describe('your team', () => {
 
   it('lets the card at bat stretch a hit, and the ace save a wrong pitch', () => {
     const g = { ...newGame(3), half: 'bottom' as const };
-    // The first roll beats their fielders; the rest are lucky.
-    const rolls = [0.99];
-    const r = bat(g, 'contact', true, () => rolls.shift() ?? 0, { star: { name: 'Aaron Judge', boost: 0.1 } });
+    const r = bat(g, 'contact', true, () => 0, { star: { name: 'Aaron Judge', boost: 0.1 } });
     expect(r.play.kind).toBe('double');
     expect(r.play.text).toContain('Aaron Judge');
     const miss = bat(g, 'contact', false, () => 0, { star: { name: 'Aaron Judge', boost: 1 } });

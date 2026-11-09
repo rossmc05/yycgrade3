@@ -1,7 +1,7 @@
 // Questions for the ballpark come from the same skills and learning engine as Grade 3 Quest.
 
-import { isReviewDue, newSkillState } from '../engine/adaptive';
-import { applyAnswer, closeReviews, freshQuestion, planMix } from '../engine/progress';
+import { newSkillState } from '../engine/adaptive';
+import { applyAnswer, freshQuestion, planMix } from '../engine/progress';
 import { isPaused, onSkills } from '../engine/topics';
 import type { Profile, Question, Skill, SubjectId } from '../engine/types';
 import { SUBJECTS } from '../subjects';
@@ -25,23 +25,12 @@ export function planSkills(p: Profile, subjects: SubjectId[], count: number, rng
   const open = picked.filter((s) => s.skills.some((k) => !isPaused(p, k.id)));
   const groups = (open.length ? open : picked).map((s) => planMix(p, onSkills(p, s.skills), count, rng, now).map((x) => x.skill));
   const out: Skill[] = [];
-  // Each subject keeps its own place in its plan, so every subject's skills all get a turn.
-  const at = groups.map(() => 0);
   for (let i = 0; out.length < count; i++) {
     // Two questions in a row from a subject, then the next subject.
-    const g = Math.floor(i / 2) % groups.length;
-    out.push(groups[g][at[g]++ % groups[g].length]);
+    out.push(groups[Math.floor(i / 2) % groups.length][i]);
   }
   return out;
 }
-
-/** The skills due for a spaced review when a game starts. */
-export const dueSkills = (p: Profile, now: number) =>
-  new Set(Object.keys(p.skills).filter((id) => isReviewDue(p.skills[id], now)));
-
-/** At the end of a game or derby, pass or reschedule the reviews that were due. */
-export const closeBallReviews = (p: Profile, results: { skillId: string; correct: boolean }[], wasDue: Set<string>, now: number) =>
-  closeReviews(p, results, wasDue, now);
 
 
 export const levelOf = (p: Profile, skill: Skill) => (p.skills[skill.id] ?? newSkillState()).level;

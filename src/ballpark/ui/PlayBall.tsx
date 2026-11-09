@@ -1,6 +1,6 @@
 // Play Ball: one game against a made-up Alberta team. Pick subjects, then pitch and bat by answering questions.
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { Icon } from '../../art/sprite';
 import { AvatarArt } from '../../avatar/AvatarArt';
 import { colorOf } from '../../avatar/catalog';
@@ -12,10 +12,10 @@ import { useStore } from '../../engine/store';
 import type { Question, Skill, SubjectId } from '../../engine/types';
 import { go } from '../../router';
 import { ballOf, payout, type Payout, ballLookOf } from '../data';
-import { bat, closeWin, comeback, CLOSE_WIN_COINS, COMEBACK_COINS, newGame, ON_FIRE, onFire, pitch, PITCHES, resultCoins, SWINGS, tierLevel, hitForCycle, winCards, winLuck, type Game, type Pitch, type Play, type Swing } from '../game';
+import { bat, newGame, pitch, PITCHES, resultCoins, SWINGS, tierLevel, hitForCycle, winCards, winLuck, type Game, type Pitch, type Play, type Swing } from '../game';
 import { ballPerks } from '../gear';
-import { gameOvr, scoutBoost, squadOf, teamOvr, type TeamCard } from '../squad';
-import { ask, closeBallReviews, dueSkills, levelOf, planSkills, recordBall, XP_RIGHT, XP_WRONG } from '../questions';
+import { squadOf, teamOvr, type TeamCard } from '../squad';
+import { ask, levelOf, planSkills, recordBall, XP_RIGHT, XP_WRONG } from '../questions';
 import { CHAMPION_COINS, newSeason, nextOpponent, played, PLAYOFF_TEAMS, recordSeasonGame, SEASON_GAMES, stageName, standings, type Season } from '../season';
 import { OPPONENTS, type Team } from '../teams';
 import { Ask } from './Ask';
@@ -40,7 +40,7 @@ interface AtBat {
   q: Question;
 }
 
-interface MatchSetup { subjects: SubjectId[]; innings: number; team: Team; season: boolean; /** The team's rating for this game, after scouting you. */ ovr: number }
+interface MatchSetup { subjects: SubjectId[]; innings: number; team: Team; season: boolean }
 
 export function PlayBall() {
   const { profile } = useStore();
@@ -65,13 +65,10 @@ function Setup({ onStart }: { onStart: (s: MatchSetup) => void }) {
   const ball = ballOf(profile!);
   const season = currentSeason(ball.season);
   const team = mode === 'season' ? OPPONENTS[nextOpponent(season)!] : quick;
-  const round = mode === 'season' ? (season.stage === 'semi' ? 1 : season.stage === 'final' ? 2 : 0) : 0;
-  const ovr = gameOvr(team.ovr, ball, round);
-  const scout = scoutBoost(ball);
   const start = () => {
     sfx.unlock();
     if (mode === 'season' && season !== ball.season) updateProfile((p) => ({ ...p, ball: { ...ballOf(p), season } }));
-    onStart({ subjects, innings, team, season: mode === 'season', ovr });
+    onStart({ subjects, innings, team, season: mode === 'season' });
   };
   return (
     <main className="page ballpark">
@@ -82,23 +79,21 @@ function Setup({ onStart }: { onStart: (s: MatchSetup) => void }) {
           <button className={`subject-chip ${mode === 'season' ? 'on' : ''}`} onClick={() => setMode('season')} aria-pressed={mode === 'season'}>🏆 Season {season.n} <small>{stageName(season)}</small></button>
           <button className={`subject-chip ${mode === 'quick' ? 'on' : ''}`} onClick={() => setMode('quick')} aria-pressed={mode === 'quick'}>⚾ Quick game <small>doesn't count</small></button>
         </div>
-        <p className="muted">{mode === 'season' && season.stage !== 'regular' ? <strong>{stageName(season)}! </strong> : null}You play the <strong>{team.name}</strong> ({ovr} OVR). Your team is {teamOvr(ball)} OVR. You pitch first, then you bat.</p>
-        {(scout > 0 || round > 0) && <p className="muted small">🔎 {[scout > 0 && `They scouted your team and gear: +${scout} OVR`, round > 0 && `Playoff intensity: +${ovr - team.ovr - scout} OVR`].filter(Boolean).join('. ')}.</p>}
+        <p className="muted">{mode === 'season' && season.stage !== 'regular' ? <strong>{stageName(season)}! </strong> : null}You play the <strong>{team.name}</strong> ({team.ovr} OVR). Your team is {teamOvr(ball)} OVR. You pitch first, then you bat.</p>
         <h3>Questions from</h3>
         <SubjectPicker value={subjects} onChange={setSubjects} />
         <h3>How long?</h3>
         <div className="subject-chips">
           {[3, 6].map((n) => (
             <button key={n} className={`subject-chip ${innings === n ? 'on' : ''}`} onClick={() => setInnings(n)} aria-pressed={innings === n}>
-              {n} innings <small>{n === 3 ? 'about 5 min' : 'about 10 min'}</small>
+              {n} innings <small>{n === 3 ? 'about 15 min' : 'about 30 min'}</small>
             </button>
           ))}
         </div>
         <ul className="rules">
-          <li>At bat, pick a swing. Harder questions hit farther: single, double, triple or home run. A wrong answer is an out, and good teams can rob a big hit.</li>
-          <li>Pitching, a right answer usually gets the batter out. Good teams can still hit a good pitch. A wrong answer gives up a hit.</li>
-          <li>Get {ON_FIRE} right in a row and you're 🔥 on fire: the other team plays at half strength until you miss.</li>
-          <li>Win to earn 2 collector cards, or 3 for a big win or a shutout. Close wins and comebacks earn bonus coins.</li>
+          <li>At bat, pick a swing. Harder questions hit farther: single, double, triple or home run. A wrong answer is an out.</li>
+          <li>Pitching, a right answer gets the batter out. Harder pitches are surer outs. A wrong answer gives up a hit.</li>
+          <li>Win to earn 2 collector cards. Win by 5 or more, or hold them scoreless, for 3!</li>
         </ul>
         {mode === 'season' && <p className="muted small">Play {SEASON_GAMES} games. Finish in the top {PLAYOFF_TEAMS} to make the playoffs, then win the semifinal and the final for the Championship Ring. <a href="#/league">See the standings</a></p>}
         <button className="btn primary big" onClick={start}>⚾ Play ball!</button>
@@ -107,16 +102,12 @@ function Setup({ onStart }: { onStart: (s: MatchSetup) => void }) {
   );
 }
 
-function Match({ subjects, innings, team, season: inSeason, ovr, again }: MatchSetup & { again: () => void }) {
+function Match({ subjects, innings, team, season: inSeason, again }: MatchSetup & { again: () => void }) {
   const { profile, data, setData, updateProfile } = useStore();
   const ball = ballOf(profile!);
   const perks = useMemo(() => ballPerks(ball.gearOn), []);
-  const [game, setGame] = useState<Game>(() => newGame(innings, perks, ovr));
+  const [game, setGame] = useState<Game>(() => newGame(innings, perks));
   const [plan] = useState(() => planSkills(profile!, subjects, 160, Math.random, Date.now()));
-  const [wasDue] = useState(() => dueSkills(profile!, Date.now()));
-  const results = useRef<{ skillId: string; correct: boolean }[]>([]);
-  // Start at the top so the scoreboard shows.
-  useEffect(() => window.scrollTo(0, 0), []);
   const [n, setN] = useState(0);
   const [atBat, setAtBat] = useState<AtBat | null>(null);
   const [play, setPlay] = useState<Play | null>(null);
@@ -165,7 +156,6 @@ function Match({ subjects, innings, team, season: inSeason, ovr, again }: MatchS
     setPlay(r.play);
     setXp((x) => x + (correct ? XP_RIGHT : XP_WRONG));
     updateProfile((p) => recordBall(p, atBat.skill, atBat.q, correct, seconds, atBat.level, now));
-    if (r.play.kind !== 'foul') results.current.push({ skillId: atBat.skill.id, correct });
     const k = r.play.kind;
     if (k === 'hr' && r.play.side === 'you') { sfx.special(); setTimeout(() => fx.current?.burst('confetti', 0.5, 0.2), 900); }
     else if (k === 'hr') sfx.growl();
@@ -194,7 +184,7 @@ function Match({ subjects, innings, team, season: inSeason, ovr, again }: MatchS
       const out = payout(ball, earned, coins + (champion ? CHAMPION_COINS : 0), winLuck(g, perks), perks.coinBonus ?? 0, Math.random, Date.now(), winCards(g) + (champion ? 1 : 0), moments);
       const rec = { ...ball.record };
       if (g.result === 'win') rec.w += 1; else if (g.result === 'loss') rec.l += 1; else rec.t += 1;
-      updateProfile((pr) => ({ ...closeBallReviews(pr, results.current, wasDue, Date.now()), ball: { ...out.ball, record: rec, winStreak, ...(s ? { season: s, titles: (ball.titles ?? 0) + (champion ? 1 : 0) } : {}) } }));
+      updateProfile((pr) => ({ ...pr, ball: { ...out.ball, record: rec, winStreak, ...(s ? { season: s, titles: (ball.titles ?? 0) + (champion ? 1 : 0) } : {}) } }));
       setAfter(s ?? null);
       setResult(out.payout);
       if (g.result === 'win') sfx.fanfare();
@@ -239,8 +229,6 @@ function Match({ subjects, innings, team, season: inSeason, ovr, again }: MatchS
       {!atBat && (
         <section className="card choose">
           {banner && <p className="banner">{banner}</p>}
-          {onFire(game) && <p className="banner on-fire">🔥 On fire! {game.streak} right in a row. The {team.name} play at half strength until you miss.</p>}
-          {!onFire(game) && (game.streak ?? 0) >= ON_FIRE - 2 && <p className="muted small">🔥 {ON_FIRE - (game.streak ?? 0)} more right in a row and you're on fire!</p>}
           <p className="at-bat">
             {batting ? <>Now batting: <strong>{up ? up.player.name : profile.name}</strong></> : <>You're pitching to the {team.name}.</>}
             <span className="chip">{skill.icon} {skill.name}</span>
@@ -295,14 +283,13 @@ function Match({ subjects, innings, team, season: inSeason, ovr, again }: MatchS
 
 function Final({ game, payout: pay, myTeam, team, season, again }: { game: Game; payout: Payout; myTeam: string; team: Team; season: Season | null; again: () => void }) {
   const win = game.result === 'win';
-  useEffect(() => window.scrollTo(0, 0), []);
   const cards = winCards(game) + (season?.stage === 'champion' ? 1 : 0);
   return (
     <main className="page ballpark">
       <BallBar back={() => go('')} />
       <section className="card center summary final">
         {win && <Celebrate big />}
-        <h1>{win ? (game.walkoff ? 'Walk-off win!' : comeback(game) ? 'Comeback win!' : 'You win!') : game.result === 'tie' ? "It's a tie!" : game.them - game.you <= 2 ? 'So close!' : `The ${team.name} win this one`}</h1>
+        <h1>{win ? (game.walkoff ? 'Walk-off win!' : 'You win!') : game.result === 'tie' ? "It's a tie!" : 'Good game!'}</h1>
         <p className="final-score"><span>{myTeam}</span> <b>{game.you}</b> – <b>{game.them}</b> <span>{team.name}</span></p>
         <Scoreboard g={game} you={myTeam} them={team.name} />
         <div className="loot-row">
@@ -313,8 +300,6 @@ function Final({ game, payout: pay, myTeam, team, season, again }: { game: Game;
           <div><strong>+{pay.xp}</strong><span>XP</span></div>
           <div><strong>+{pay.coins}</strong><span>coins</span></div>
         </div>
-        {(closeWin(game) || comeback(game)) && <p className="good">{closeWin(game) && `Nail-biter bonus: +${CLOSE_WIN_COINS} coins. `}{comeback(game) && `Comeback bonus: +${COMEBACK_COINS} coins.`}</p>}
-        {!game.stats.right && <p className="muted">No right answers this game, so no coins. Every right answer counts!</p>}
         {season && <SeasonNote s={season} myTeam={myTeam} />}
         {pay.rankUp && <p className="good"><Icon e="🎉" /> You were promoted to {pay.rankUp}! Here's a bonus card.</p>}
         {!win && <p className="muted">Win a game to earn 2 collector cards, or 3 for a big win. Try a Home Run Derby too: every derby earns at least one card!</p>}
