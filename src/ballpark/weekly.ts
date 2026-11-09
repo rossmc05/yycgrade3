@@ -40,30 +40,39 @@ export interface WeeklyProgress {
   claimed?: boolean;
 }
 
+const NOV_9_WORDS = ['get', 'light', 'people', 'little', 'pick', 'thank', 'live', 'play', 'went', 'where', 'who', 'much', 'were', 'put', 'must'];
+const NOV_9_SENTENCES: Record<string, string> = {
+  get: 'I want to get a hit today.',
+  light: 'Turn on the light so we can see.',
+  people: 'Lots of people came to the game.',
+  little: 'My little brother plays T-ball.',
+  pick: 'Pick a bat that feels just right.',
+  thank: 'Say thank you to the coach.',
+  live: 'We live close to the ballpark.',
+  play: "Let's play catch after school.",
+  went: 'We went to the game on Saturday.',
+  where: 'Where is my glove?',
+  who: 'Who hit the home run?',
+  much: 'How much is a hot dog?',
+  were: 'We were happy when our team won.',
+  put: 'Put your helmet on before you bat.',
+  must: 'You must run fast to steal a base.',
+};
+
 /** Lists sent in by a grown-up, newest last. A list typed in the Parent screen with a test date is used when it's newer. */
 export const CHALLENGES: WeeklyChallenge[] = [
   {
     date: '2026-11-09',
     perfect: 3,
     design: 'starlight',
-    words: ['get', 'light', 'people', 'little', 'pick', 'thank', 'live', 'play', 'went', 'where', 'who', 'much', 'were', 'put', 'must'],
-    sentences: {
-      get: 'I want to get a hit today.',
-      light: 'Turn on the light so we can see.',
-      people: 'Lots of people came to the game.',
-      little: 'My little brother plays T-ball.',
-      pick: 'Pick a bat that feels just right.',
-      thank: 'Say thank you to the coach.',
-      live: 'We live close to the ballpark.',
-      play: "Let's play catch after school.",
-      went: 'We went to the game on Saturday.',
-      where: 'Where is my glove?',
-      who: 'Who hit the home run?',
-      much: 'How much is a hot dog?',
-      were: 'We were happy when our team won.',
-      put: 'Put your helmet on before you bat.',
-      must: 'You must run fast to steal a base.',
-    },
+    words: NOV_9_WORDS,
+    sentences: NOV_9_SENTENCES,
+  },
+  // The same words again for another week, now 5 perfect rounds and the Orange Wave Refractor.
+  {
+    date: '2026-11-16',
+    words: NOV_9_WORDS,
+    sentences: NOV_9_SENTENCES,
   },
 ];
 
