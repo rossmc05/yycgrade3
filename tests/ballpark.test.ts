@@ -1,3 +1,4 @@
+import { SUBJECTS } from '../src/subjects';
 import { describe, expect, it } from 'vitest';
 import { newSkillState, recordAnswer } from '../src/engine/adaptive';
 import { seeded } from '../src/engine/random';
@@ -5,7 +6,7 @@ import { newProfile } from '../src/engine/storage';
 import { CHASE, cardKey, chances, chaseChance, isOneOfOne, PARALLELS, RANK, rollCard, ROOKIES, superChance } from '../src/ballpark/cards';
 import { addCard, ballLookOf, GOAT_STEP, MILESTONES, MOMENT_CARDS, TODAYS_STARS, newBall, payout, rankAt, rankOf, RANKS } from '../src/ballpark/data';
 import { derbyCards, derbyHit, derbyLuck, derbyTotal, FENCE } from '../src/ballpark/derby';
-import { advance, bat, hitForCycle, newGame, pitch, RUN_RULE, tierLevel, winCards, winLuck, type Game } from '../src/ballpark/game';
+import { advance, bat, hitForCycle, newGame, pitch, RUN_RULE, floorOf, tierLevel, winCards, winLuck, type Game } from '../src/ballpark/game';
 import { BALL_GEAR, ballPerks } from '../src/ballpark/gear';
 import { PLAYERS } from '../src/ballpark/players';
 import { planSkills, recordBall } from '../src/ballpark/questions';
@@ -92,6 +93,21 @@ describe('ballpark game', () => {
     expect(tierLevel(4, 3, 1)).toEqual({ level: 3, clock: 30 });
     expect(tierLevel(1, 0, 2).level).toBe(0);
     expect(tierLevel(1, 0, 2).clock).toBeGreaterThan(0);
+  });
+
+  it('never asks the easiest math level, but keeps it for grammar, spelling and science', () => {
+    for (const s of SUBJECTS) {
+      for (const k of s.skills) {
+        const floor = floorOf(k);
+        expect(floor).toBe(s.id === 'math' && k.levels.length > 2 ? 1 : 0);
+        for (const lvl of [0, 1]) for (const off of [-1, 0, 1, 2]) {
+          expect(tierLevel(k.levels.length, lvl, off, floor).level).toBeGreaterThanOrEqual(floor);
+        }
+      }
+    }
+    // A contact swing at level 1 in math asks level 1, not level 0; the other subjects still drop to 0.
+    expect(tierLevel(5, 1, -1, 1)).toEqual({ level: 1 });
+    expect(tierLevel(5, 1, -1, 0)).toEqual({ level: 0 });
   });
 
   it('gives a card only for a win', () => {
