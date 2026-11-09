@@ -9,7 +9,7 @@ import { go } from '../../router';
 import { ballLookOf, ballOf, rankAt, rankOf } from '../data';
 import { PLAYERS } from '../players';
 import { teamOvr } from '../squad';
-import { canClaim, challengeOf, dayLabel, isOpen, PERFECT_NEEDED, progressOf } from '../weekly';
+import { canClaim, challengeOf, dayLabel, isOpen, neededOf, progressOf } from '../weekly';
 import { BallBar } from './BallBar';
 
 interface Spot { id: string; label: string; sub: string; e: string; x: number; y: number; size: number; to: string }
@@ -48,8 +48,8 @@ export function Clubhouse() {
       {week && isOpen(week, Date.now()) && !progressOf(b, week).claimed && (
         <button className="weekly-banner" onClick={() => open('weekly')}>
           <span className="wb-tag">Weekly Challenge</span>
-          <strong>Spell this week's words perfectly 3 times for a 3-card pack</strong>
-          <span className="wb-balls">{Array.from({ length: PERFECT_NEEDED }, (_, i) => <i key={i} className={i < progressOf(b, week).perfect ? 'on' : ''} />)}</span>
+          <strong>Spell this week's words perfectly {neededOf(week)} times for a 3-card pack</strong>
+          <span className="wb-balls">{Array.from({ length: neededOf(week) }, (_, i) => <i key={i} className={i < progressOf(b, week).perfect ? 'on' : ''} />)}</span>
           <small>{canClaim(b, week, Date.now()) ? 'Ready to claim!' : `Closes after ${dayLabel(week.date)}`}</small>
         </button>
       )}

@@ -1,4 +1,4 @@
-// The weekly spelling challenge: spell every word on this week's list perfectly 3 times,
+// The weekly spelling challenge: spell every word on this week's list perfectly (3 or 5 times),
 // before the end of test day, to claim a 3-card pack with that week's Card of the Week.
 
 import { dayKey } from '../engine/adaptive';
@@ -7,7 +7,15 @@ import { cardKey, oneOfOneParallel, rollCard } from './cards';
 import { addCard, type BallData, type Pulled } from './data';
 import { weeklyPlayer } from './players';
 
-export const PERFECT_NEEDED = 3;
+/** Perfect rounds a new week's challenge needs, unless the challenge says otherwise. */
+export const PERFECT_NEEDED = 5;
+
+/** How a week's Card of the Week looks. */
+export type WeeklyDesign = 'starlight' | 'bee';
+export const DESIGNS: Record<WeeklyDesign, { name: string; stamp: string }> = {
+  starlight: { name: 'Starlight', stamp: 'Card of the Week' },
+  bee: { name: 'Golden Bee', stamp: 'Spelling Bee' },
+};
 
 export interface WeeklyChallenge {
   /** Test day, YYYY-MM-DD. The challenge is open until the end of that day. */
@@ -15,7 +23,16 @@ export interface WeeklyChallenge {
   words: string[];
   /** A sentence for each word, read aloud with it. */
   sentences?: Record<string, string>;
+  /** Perfect rounds needed. Defaults to PERFECT_NEEDED. */
+  perfect?: number;
+  /** The Card of the Week's design. Defaults to the newest design. */
+  design?: WeeklyDesign;
 }
+
+export const neededOf = (c: WeeklyChallenge) => c.perfect ?? PERFECT_NEEDED;
+
+/** The design of the Card of the Week for a test date. */
+export const designOf = (date: string): WeeklyDesign => CHALLENGES.find((c) => c.date === date)?.design ?? 'bee';
 
 export interface WeeklyProgress {
   perfect: number;
@@ -26,6 +43,8 @@ export interface WeeklyProgress {
 export const CHALLENGES: WeeklyChallenge[] = [
   {
     date: '2026-11-09',
+    perfect: 3,
+    design: 'starlight',
     words: ['get', 'light', 'people', 'little', 'pick', 'thank', 'live', 'play', 'went', 'where', 'who', 'much', 'were', 'put', 'must'],
     sentences: {
       get: 'I want to get a hit today.',
@@ -57,7 +76,7 @@ export function challengeOf(p: Profile): WeeklyChallenge | undefined {
   if (!c) return;
   // A typed list for the same day as a built-in one keeps the built-in sentences where the words match.
   const built = CHALLENGES.find((x) => x.date === c.date);
-  return built && c !== built ? { ...c, sentences: built.sentences } : c;
+  return built && c !== built ? { ...c, sentences: built.sentences, perfect: built.perfect, design: built.design } : c;
 }
 
 export const isOpen = (c: WeeklyChallenge, now: number) => dayKey(now) <= c.date;
@@ -66,7 +85,7 @@ export const progressOf = (b: BallData, c: WeeklyChallenge): WeeklyProgress => b
 
 export const canClaim = (b: BallData, c: WeeklyChallenge, now: number) => {
   const pr = progressOf(b, c);
-  return isOpen(c, now) && !pr.claimed && pr.perfect >= PERFECT_NEEDED;
+  return isOpen(c, now) && !pr.claimed && pr.perfect >= neededOf(c);
 };
 
 /** Count one perfect round. */

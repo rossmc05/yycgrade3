@@ -1,5 +1,5 @@
 // The weekly spelling challenge: every word on this week's list, read aloud in a sentence.
-// Three perfect rounds before the end of test day unlock a 3-card pack.
+// Perfect rounds (3 or 5) before the end of test day unlock a 3-card pack.
 
 import { useState } from 'react';
 import { useMusic } from '../../battle/music';
@@ -12,7 +12,7 @@ import { hearAndSpell, SPELLING_SKILLS } from '../../subjects/spelling/skills';
 import { ballOf, payout, type Pulled } from '../data';
 import { weeklyPlayer } from '../players';
 import { recordBall, XP_RIGHT, XP_WRONG } from '../questions';
-import { addPerfect, canClaim, challengeOf, claimWeekly, dayLabel, isOpen, PERFECT_NEEDED, progressOf, type WeeklyChallenge } from '../weekly';
+import { addPerfect, canClaim, challengeOf, claimWeekly, dayLabel, DESIGNS, designOf, isOpen, neededOf, progressOf, type WeeklyChallenge } from '../weekly';
 import { Ask } from './Ask';
 import { BallBar } from './BallBar';
 import { BallCard, CardReveal } from './Card';
@@ -36,6 +36,7 @@ export function Weekly() {
   const pr = progressOf(b, c);
   const open = isOpen(c, Date.now());
   const card = weeklyPlayer(c.date)!;
+  const PERFECT_NEEDED = neededOf(c);
 
   if (playing) return <Round key={round} c={c} onDone={() => setPlaying(false)} />;
 
@@ -62,7 +63,7 @@ export function Weekly() {
         <p className="album-note">
           {pr.claimed ? 'You claimed this week\'s pack. Great spelling! A new challenge comes with next week\'s list.'
             : !open ? 'This challenge closed after test day. Watch for next week\'s list!'
-            : pr.perfect >= PERFECT_NEEDED ? 'Three perfect rounds! Claim your pack.'
+            : pr.perfect >= PERFECT_NEEDED ? `${PERFECT_NEEDED === 5 ? 'Five' : 'Three'} perfect rounds! Claim your pack.`
             : `Spell all ${c.words.length} words with no mistakes, ${PERFECT_NEEDED} times, before the end of test day. Each word is read out in a sentence. ${PERFECT_NEEDED - pr.perfect} perfect round${PERFECT_NEEDED - pr.perfect === 1 ? '' : 's'} to go.`}
         </p>
         {canClaim(b, c, Date.now()) && !pulls && <button className="btn album-btn claim" onClick={claim}>Claim my 3-card pack</button>}
@@ -83,7 +84,7 @@ export function Weekly() {
           <div>
             <h2 className="album-head"><span>The prize</span><small>{pr.claimed ? 'Claimed' : open ? `Until ${dayLabel(c.date)}` : 'Closed'}</small></h2>
             <ul className="weekly-list">
-              <li><b>Card of the Week:</b> {card.name}, numbered to 25. Only for this week, and gone forever once it ends.</li>
+              <li><b>{DESIGNS[designOf(c.date)].name} Card of the Week:</b> {card.name}, numbered to 25. Only for this week, and gone forever once it ends.</li>
               <li><b>An Autograph or rarer:</b> could even be a Superfractor or the Babe Ruth.</li>
               <li><b>A Refractor or better.</b></li>
             </ul>

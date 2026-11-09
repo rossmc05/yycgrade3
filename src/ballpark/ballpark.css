@@ -571,3 +571,28 @@ body.game .binder-page .btn.album-btn.claim { background: linear-gradient(90deg,
 .gear-photo { display: block; object-fit: contain; border-radius: 10px; background: #fff; }
 .gear-stage .gear-photo { width: 150px; height: 150px; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.18); }
 .loadout-slot .gear-photo { border-radius: 6px; }
+
+/* Golden Bee: the Card of the Week from Nov 16 on. Honeycomb gold with a black-and-gold frame. */
+.bcard-face.p-weekly.wk-bee { background: linear-gradient(135deg, #fde047, #a16207 22%, #fef9c3 42%, #ca8a04 62%, #fde68a 82%, #854d0e); background-size: 300% 300%; }
+.bcard-face.p-weekly.wk-bee .bcard-art {
+  background:
+    radial-gradient(circle at 50% 40%, rgba(253, 224, 71, 0.55), transparent 60%),
+    conic-gradient(from 90deg at 2px 2px, transparent 90deg, rgba(0, 0, 0, 0.0) 0),
+    repeating-linear-gradient(60deg, rgba(120, 53, 15, 0.35) 0 2px, transparent 2px 16px),
+    repeating-linear-gradient(-60deg, rgba(120, 53, 15, 0.35) 0 2px, transparent 2px 16px),
+    repeating-linear-gradient(0deg, rgba(120, 53, 15, 0.25) 0 2px, transparent 2px 14px),
+    linear-gradient(180deg, #f59e0b, #b45309 70%, #78350f);
+}
+.bcard-face.p-weekly.wk-bee .bcard-art::before { display: none; }
+.bcard-face.p-weekly.wk-bee .bcard-name { background: #111827; color: #fde047; }
+.bcard-face.p-weekly.wk-bee .bcard-name small { color: #fef3c7; }
+.bcard-face.p-weekly.wk-bee .bcard-foot { background: repeating-linear-gradient(135deg, #111827 0 8px, #facc15 8px 16px); color: #fff; text-shadow: 0 1px 2px #000, 0 0 3px #000; }
+.bcard-face.p-weekly.wk-bee .wk-stamp { color: #fde047; background: linear-gradient(90deg, #111827, #3f3f46, #111827); }
+.bcard-face.p-weekly.wk-bee .wk-caption { background: #111827; color: #fde047; }
+/* A little bee buzzing in the top corner. */
+.bee-fly { position: absolute; z-index: 3; top: 13%; right: 8%; width: 16%; aspect-ratio: 1.4; border-radius: 50%; background: repeating-linear-gradient(90deg, #facc15 0 22%, #111827 22% 40%); border: 1px solid #111827; animation: bee-buzz 2.4s ease-in-out infinite; }
+.bee-fly i { position: absolute; top: -45%; width: 45%; aspect-ratio: 1; border-radius: 50%; background: rgba(240, 249, 255, 0.85); border: 1px solid #94a3b8; }
+.bee-fly i:first-child { left: 10%; transform: rotate(-20deg); }
+.bee-fly i:last-child { left: 42%; transform: rotate(20deg); }
+@keyframes bee-buzz { 0%, 100% { transform: translate(0, 0) rotate(-6deg); } 50% { transform: translate(-6px, 3px) rotate(6deg); } }
+@media (prefers-reduced-motion: reduce) { .bee-fly { animation: none; } }

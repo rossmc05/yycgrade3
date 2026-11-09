@@ -4,7 +4,7 @@ import { newProfile } from '../src/engine/storage';
 import { RANK } from '../src/ballpark/cards';
 import { newBall } from '../src/ballpark/data';
 import { playerById, weeklyPlayer } from '../src/ballpark/players';
-import { addPerfect, canClaim, challengeOf, claimWeekly, isOpen, PERFECT_NEEDED, progressOf } from '../src/ballpark/weekly';
+import { addPerfect, canClaim, challengeOf, claimWeekly, designOf, isOpen, neededOf, PERFECT_NEEDED, progressOf } from '../src/ballpark/weekly';
 
 const at = (d: string, h = 12) => new Date(`${d}T${String(h).padStart(2, '0')}:00:00`).getTime();
 
@@ -22,6 +22,20 @@ describe('weekly spelling challenge', () => {
     expect(challengeOf({ ...p, spellingTest: '2026-10-01' })?.date).toBe('2026-11-09');
   });
 
+  it('keeps the Nov 9 week at 3 rounds and Starlight, and new weeks at 5 rounds and the Golden Bee', () => {
+    expect(PERFECT_NEEDED).toBe(5);
+    const old = challengeOf({ ...newProfile('Sam', '🦊'), spellingTest: '2026-10-01', spellingList: ['boat'] })!;
+    expect(neededOf(old)).toBe(3);
+    expect(designOf('2026-11-09')).toBe('starlight');
+    const next = challengeOf({ ...newProfile('Sam', '🦊'), spellingTest: '2026-11-16', spellingList: ['boat', 'rain'] })!;
+    expect(neededOf(next)).toBe(5);
+    expect(designOf('2026-11-16')).toBe('bee');
+    let b = newBall();
+    for (let i = 0; i < 4; i++) b = addPerfect(b, next);
+    expect(canClaim(b, next, at('2026-11-12'))).toBe(false);
+    expect(canClaim(addPerfect(b, next), next, at('2026-11-12'))).toBe(true);
+  });
+
   it('stays open until the end of test day', () => {
     const c = challengeOf(newProfile('Sam', '🦊'))!;
     expect(isOpen(c, at('2026-11-05'))).toBe(true);
@@ -32,7 +46,7 @@ describe('weekly spelling challenge', () => {
   it('needs 3 perfect rounds, then gives the weekly card, an Autograph or rarer, and a Refractor or better, once', () => {
     const c = challengeOf(newProfile('Sam', '🦊'))!;
     let b = newBall();
-    for (let i = 0; i < PERFECT_NEEDED - 1; i++) b = addPerfect(b, c);
+    for (let i = 0; i < neededOf(c) - 1; i++) b = addPerfect(b, c);
     expect(canClaim(b, c, at('2026-11-06'))).toBe(false);
     expect(claimWeekly(b, c, seeded(1), at('2026-11-06')).pulls).toHaveLength(0);
     b = addPerfect(b, c);

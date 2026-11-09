@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { isOneOfOne, parallelOf, printRunOf, type Parallel } from '../cards';
 import { milestoneOf } from '../data';
 import { RATING_NAMES, type Player } from '../players';
+import { DESIGNS, designOf } from '../weekly';
 import { Figure } from './Figure';
 
 const skinOf = (id: string) => [...id].reduce((n, c) => n + c.charCodeAt(0), 0);
@@ -14,8 +15,9 @@ export function CardFront({ player, parallel, serial }: { player: Player; parall
   const ms = parallel === 'milestone' ? milestoneOf(player.id) : undefined;
   const run = ms ? ms.serial : printRunOf(player, parallel);
   const [c1, c2] = player.colors;
+  const wk = player.weekly ? designOf(player.weekly) : undefined;
   return (
-    <div className={`bcard-face front p-${parallel} ${ms ? `msf-${ms.style}` : ''} ${player.chase ? 'chase' : ''} ${player.rookie ? 'rookie' : ''}`} style={{ ['--c1' as string]: c1, ['--c2' as string]: c2 }}>
+    <div className={`bcard-face front p-${parallel} ${wk ? `wk-${wk}` : ''} ${ms ? `msf-${ms.style}` : ''} ${player.chase ? 'chase' : ''} ${player.rookie ? 'rookie' : ''}`} style={{ ['--c1' as string]: c1, ['--c2' as string]: c2 }}>
       <div className="bcard-art">
         <div className="bcard-stadium" />
         {ms?.style === 'ring' ? (
@@ -45,7 +47,8 @@ export function CardFront({ player, parallel, serial }: { player: Player; parall
         {ms?.style === 'ruby' && <span className="ms-flip" aria-hidden="true">🏏</span>}
         {ms?.caption && <span className="ms-caption">{ms.caption}</span>}
         {player.weekly && <span className="ms-caption wk-caption">Week of {new Date(`${player.weekly}T12:00:00`).toLocaleDateString('en-CA', { month: 'short', day: 'numeric' })}</span>}
-        {player.weekly && <span className="wk-stamp">Card of the Week</span>}
+        {wk && <span className="wk-stamp">{DESIGNS[wk].stamp}</span>}
+        {wk === 'bee' && <span className="bee-fly" aria-hidden="true"><i /><i /></span>}
         {ms?.style === 'moon' && <span className="ms-moon" aria-hidden="true" />}
         {ms?.style === 'captain' && <span className="ms-c" title="Captain">C</span>}
         {ms?.style === 'cut' && <span className="ms-cut" title="Cut signature">{player.name}</span>}

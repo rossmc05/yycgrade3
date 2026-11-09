@@ -33,7 +33,7 @@ export const SUPER: ParallelDef = { id: 'super', name: 'Superfractor', weight: 0
 export const MILESTONE: ParallelDef = { id: 'milestone', name: 'Special', weight: 0, dupeCoins: 0, about: 'Special card. Can only be earned, never pulled from a pack.' };
 
 /** The Card of the Week: earned only by finishing that week's spelling challenge. */
-export const WEEKLY: ParallelDef = { id: 'weekly', name: 'Card of the Week', weight: 0, printRun: 25, dupeCoins: 0, about: 'Card of the Week. Earned by spelling every word on that week\'s list perfectly 3 times. Only 25 made, and once the week is over it can never be earned again.' };
+export const WEEKLY: ParallelDef = { id: 'weekly', name: 'Card of the Week', weight: 0, printRun: 25, dupeCoins: 0, about: 'Card of the Week. Earned by spelling every word on that week\'s list perfectly, round after round. Only 25 made, and once the week is over it can never be earned again.' };
 
 export const parallelOf = (id: Parallel) => (id === 'super' ? SUPER : id === 'milestone' ? MILESTONE : id === 'weekly' ? WEEKLY : PARALLELS.find((p) => p.id === id)!);
 export const RANK: Record<Parallel, number> = { base: 0, rare: 1, refractor: 2, relic: 3, diamond: 4, auto: 5, super: 6, milestone: 7, weekly: 7 };
