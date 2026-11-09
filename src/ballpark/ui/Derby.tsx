@@ -13,7 +13,7 @@ import type { Question, Skill, SubjectId } from '../../engine/types';
 import { go } from '../../router';
 import { ballOf, payout, type Payout, ballLookOf } from '../data';
 import { DERBY_SWINGS, derbyCards, derbyCoins, derbyHit, derbyLuck, derbyTotal, FENCE, type DerbyHit } from '../derby';
-import { SWINGS, tierLevel, type Swing } from '../game';
+import { SWINGS, floorOf, tierLevel, type Swing } from '../game';
 import { ballPerks } from '../gear';
 import { ask, levelOf, planSkills, recordBall, XP_RIGHT, XP_WRONG } from '../questions';
 import { Ask } from './Ask';
@@ -78,7 +78,7 @@ function DerbyRound({ subjects, again }: { subjects: SubjectId[]; again: () => v
   const choose = (swing: Swing, offset: number) => {
     sfx.unlock();
     setLast(null);
-    const t = tierLevel(skill.levels.length, lvl, offset);
+    const t = tierLevel(skill.levels.length, lvl, offset, floorOf(skill));
     setAtBat({ skill, level: t.level, clock: t.clock, swing, q: ask(profile, skill, t.level, used.current) });
   };
 
@@ -163,7 +163,7 @@ function DerbyRound({ subjects, again }: { subjects: SubjectId[]; again: () => v
           <p className="at-bat">Pick your swing <span className="chip">{skill.icon} {skill.name}</span></p>
           <div className="swing-grid">
             {SWINGS.map((s, i) => {
-              const t = tierLevel(skill.levels.length, lvl, s.offset);
+              const t = tierLevel(skill.levels.length, lvl, s.offset, floorOf(skill));
               return (
                 <button key={s.id} className={`swing s-${s.id}`} onClick={() => choose(s.id, s.offset)}>
                   <strong>{FEET[s.id]}</strong>

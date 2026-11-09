@@ -22,13 +22,21 @@ export const PITCHES: { id: Pitch; name: string; does: string; offset: number; o
 ];
 
 /**
+ * The lowest level a skill's questions come from in the ballpark. Math skips its easiest
+ * level so there are no gimme questions; grammar, spelling and science keep theirs.
+ */
+export const floorOf = (skill: { subject: string; levels: unknown[] }) =>
+  skill.subject === 'math' && skill.levels.length > 2 ? 1 : 0;
+
+/**
  * The level to ask for a swing or pitch: easier or harder than the child's level in the skill.
  * When the skill has no harder level left, the question gets a pitch clock instead.
+ * `floor` is the lowest level to ask (see floorOf).
  */
-export function tierLevel(levels: number, current: number, offset: number): { level: number; clock?: number } {
+export function tierLevel(levels: number, current: number, offset: number, floor = 0): { level: number; clock?: number } {
   const top = levels - 1;
   const ideal = Math.max(1, current) + offset;
-  const level = Math.max(0, Math.min(top, ideal));
+  const level = Math.max(Math.min(floor, top), Math.min(top, ideal));
   const over = ideal - top;
   return over > 0 ? { level, clock: [30, 20, 15][Math.min(2, over - 1)] } : { level };
 }

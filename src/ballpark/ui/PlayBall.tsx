@@ -12,7 +12,7 @@ import { useStore } from '../../engine/store';
 import type { Question, Skill, SubjectId } from '../../engine/types';
 import { go } from '../../router';
 import { ballOf, payout, type Payout, ballLookOf } from '../data';
-import { bat, newGame, pitch, PITCHES, resultCoins, SWINGS, tierLevel, hitForCycle, winCards, winLuck, type Game, type Pitch, type Play, type Swing } from '../game';
+import { bat, newGame, pitch, PITCHES, resultCoins, SWINGS, floorOf, tierLevel, hitForCycle, winCards, winLuck, type Game, type Pitch, type Play, type Swing } from '../game';
 import { ballPerks } from '../gear';
 import { squadOf, teamOvr, type TeamCard } from '../squad';
 import { ask, levelOf, planSkills, recordBall, XP_RIGHT, XP_WRONG } from '../questions';
@@ -142,7 +142,7 @@ function Match({ subjects, innings, team, season: inSeason, again }: MatchSetup 
     sfx.unlock();
     setBanner(null);
     setPlay(null);
-    const t = tierLevel(skill.levels.length, lvl, offset);
+    const t = tierLevel(skill.levels.length, lvl, offset, floorOf(skill));
     setAtBat({ skill, level: t.level, clock: t.clock, choice, q: ask(profile, skill, t.level, used.current) });
   };
 
@@ -236,7 +236,7 @@ function Match({ subjects, innings, team, season: inSeason, again }: MatchSetup 
           {batting ? (
             <div className="swing-grid">
               {SWINGS.map((s, i) => {
-                const t = tierLevel(skill.levels.length, lvl, s.offset);
+                const t = tierLevel(skill.levels.length, lvl, s.offset, floorOf(skill));
                 return (
                   <button key={s.id} className={`swing s-${s.id}`} onClick={() => choose(s.id, s.offset)}>
                     <strong>{s.hit}</strong>
@@ -249,7 +249,7 @@ function Match({ subjects, innings, team, season: inSeason, again }: MatchSetup 
           ) : (
             <div className="swing-grid three">
               {PITCHES.map((p, i) => {
-                const t = tierLevel(skill.levels.length, lvl, p.offset);
+                const t = tierLevel(skill.levels.length, lvl, p.offset, floorOf(skill));
                 return (
                   <button key={p.id} className={`swing p-${p.id}`} onClick={() => choose(p.id, p.offset)}>
                     <strong>{p.name}</strong>
