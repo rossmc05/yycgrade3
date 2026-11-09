@@ -11,10 +11,11 @@ import { weeklyPlayer } from './players';
 export const PERFECT_NEEDED = 5;
 
 /** How a week's Card of the Week looks. */
-export type WeeklyDesign = 'starlight' | 'bee';
-export const DESIGNS: Record<WeeklyDesign, { name: string; stamp: string }> = {
+export type WeeklyDesign = 'starlight' | 'orange';
+export const DESIGNS: Record<WeeklyDesign, { name: string; stamp?: string; foot?: string }> = {
   starlight: { name: 'Starlight', stamp: 'Card of the Week' },
-  bee: { name: 'Golden Bee', stamp: 'Spelling Bee' },
+  // Modelled on a real chrome card: the Orange Wave Refractor, numbered to 25.
+  orange: { name: 'Orange Wave Refractor', foot: 'Orange Wave Refractor' },
 };
 
 export interface WeeklyChallenge {
@@ -32,7 +33,7 @@ export interface WeeklyChallenge {
 export const neededOf = (c: WeeklyChallenge) => c.perfect ?? PERFECT_NEEDED;
 
 /** The design of the Card of the Week for a test date. */
-export const designOf = (date: string): WeeklyDesign => CHALLENGES.find((c) => c.date === date)?.design ?? 'bee';
+export const designOf = (date: string): WeeklyDesign => CHALLENGES.find((c) => c.date === date)?.design ?? 'orange';
 
 export interface WeeklyProgress {
   perfect: number;

@@ -47,8 +47,9 @@ export function CardFront({ player, parallel, serial }: { player: Player; parall
         {ms?.style === 'ruby' && <span className="ms-flip" aria-hidden="true">🏏</span>}
         {ms?.caption && <span className="ms-caption">{ms.caption}</span>}
         {player.weekly && <span className="ms-caption wk-caption">Week of {new Date(`${player.weekly}T12:00:00`).toLocaleDateString('en-CA', { month: 'short', day: 'numeric' })}</span>}
-        {wk && <span className="wk-stamp">{DESIGNS[wk].stamp}</span>}
-        {wk === 'bee' && <span className="bee-fly" aria-hidden="true"><i /><i /></span>}
+        {wk && DESIGNS[wk].stamp && <span className="wk-stamp">{DESIGNS[wk].stamp}</span>}
+        {wk === 'orange' && <span className="ow-brand" aria-hidden="true">CHROME</span>}
+        {wk === 'orange' && serial !== undefined && <span className="ow-foil">{String(serial).padStart(2, '0')}/{run}</span>}
         {ms?.style === 'moon' && <span className="ms-moon" aria-hidden="true" />}
         {ms?.style === 'captain' && <span className="ms-c" title="Captain">C</span>}
         {ms?.style === 'cut' && <span className="ms-cut" title="Cut signature">{player.name}</span>}
@@ -64,7 +65,7 @@ export function CardFront({ player, parallel, serial }: { player: Player; parall
         <small>{player.city}{player.legend ? ' · Legend' : player.rookie ? ' · 2025 Rookie' : ''}</small>
       </div>
       <div className="bcard-foot">
-        <span className="par">{ms ? ms.title : player.chase ? 'Chase Autograph' : player.signed ? 'Superfractor Auto' : def.name}</span>
+        <span className="par">{wk && DESIGNS[wk].foot ? DESIGNS[wk].foot : ms ? ms.title : player.chase ? 'Chase Autograph' : player.signed ? 'Superfractor Auto' : def.name}</span>
         {serial !== undefined && run && <span className="serial">{serial}/{run}</span>}
       </div>
     </div>

@@ -22,14 +22,14 @@ describe('weekly spelling challenge', () => {
     expect(challengeOf({ ...p, spellingTest: '2026-10-01' })?.date).toBe('2026-11-09');
   });
 
-  it('keeps the Nov 9 week at 3 rounds and Starlight, and new weeks at 5 rounds and the Golden Bee', () => {
+  it('keeps the Nov 9 week at 3 rounds and Starlight, and new weeks at 5 rounds and the Orange Wave Refractor', () => {
     expect(PERFECT_NEEDED).toBe(5);
     const old = challengeOf({ ...newProfile('Sam', '🦊'), spellingTest: '2026-10-01', spellingList: ['boat'] })!;
     expect(neededOf(old)).toBe(3);
     expect(designOf('2026-11-09')).toBe('starlight');
     const next = challengeOf({ ...newProfile('Sam', '🦊'), spellingTest: '2026-11-16', spellingList: ['boat', 'rain'] })!;
     expect(neededOf(next)).toBe(5);
-    expect(designOf('2026-11-16')).toBe('bee');
+    expect(designOf('2026-11-16')).toBe('orange');
     let b = newBall();
     for (let i = 0; i < 4; i++) b = addPerfect(b, next);
     expect(canClaim(b, next, at('2026-11-12'))).toBe(false);

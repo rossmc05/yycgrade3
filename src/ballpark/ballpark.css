@@ -572,27 +572,29 @@ body.game .binder-page .btn.album-btn.claim { background: linear-gradient(90deg,
 .gear-stage .gear-photo { width: 150px; height: 150px; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.18); }
 .loadout-slot .gear-photo { border-radius: 6px; }
 
-/* Golden Bee: the Card of the Week from Nov 16 on. Honeycomb gold with a black-and-gold frame. */
-.bcard-face.p-weekly.wk-bee { background: linear-gradient(135deg, #fde047, #a16207 22%, #fef9c3 42%, #ca8a04 62%, #fde68a 82%, #854d0e); background-size: 300% 300%; }
-.bcard-face.p-weekly.wk-bee .bcard-art {
+/* Orange Wave Refractor: the Card of the Week from Nov 16 on, modelled on a real chrome parallel.
+   Chrome silver frame with an orange wave refractor shine, full-bleed art, foil serial number. */
+.bcard-face.p-weekly.wk-orange {
+  --frame: #e5e7eb; border-color: transparent;
   background:
-    radial-gradient(circle at 50% 40%, rgba(253, 224, 71, 0.55), transparent 60%),
-    conic-gradient(from 90deg at 2px 2px, transparent 90deg, rgba(0, 0, 0, 0.0) 0),
-    repeating-linear-gradient(60deg, rgba(120, 53, 15, 0.35) 0 2px, transparent 2px 16px),
-    repeating-linear-gradient(-60deg, rgba(120, 53, 15, 0.35) 0 2px, transparent 2px 16px),
-    repeating-linear-gradient(0deg, rgba(120, 53, 15, 0.25) 0 2px, transparent 2px 14px),
-    linear-gradient(180deg, #f59e0b, #b45309 70%, #78350f);
+    repeating-radial-gradient(circle at 20% 110%, rgba(251, 146, 60, 0.0) 0 6px, rgba(251, 146, 60, 0.55) 7px 9px, rgba(251, 146, 60, 0) 10px 15px),
+    linear-gradient(135deg, #f8fafc, #9ca3af 20%, #f1f5f9 40%, #fb923c 55%, #e5e7eb 70%, #6b7280 85%, #f8fafc);
+  background-size: 100% 100%, 300% 300%; animation: superflow 10s linear infinite;
 }
-.bcard-face.p-weekly.wk-bee .bcard-art::before { display: none; }
-.bcard-face.p-weekly.wk-bee .bcard-name { background: #111827; color: #fde047; }
-.bcard-face.p-weekly.wk-bee .bcard-name small { color: #fef3c7; }
-.bcard-face.p-weekly.wk-bee .bcard-foot { background: repeating-linear-gradient(135deg, #111827 0 8px, #facc15 8px 16px); color: #fff; text-shadow: 0 1px 2px #000, 0 0 3px #000; }
-.bcard-face.p-weekly.wk-bee .wk-stamp { color: #fde047; background: linear-gradient(90deg, #111827, #3f3f46, #111827); }
-.bcard-face.p-weekly.wk-bee .wk-caption { background: #111827; color: #fde047; }
-/* A little bee buzzing in the top corner. */
-.bee-fly { position: absolute; z-index: 3; top: 13%; right: 8%; width: 16%; aspect-ratio: 1.4; border-radius: 50%; background: repeating-linear-gradient(90deg, #facc15 0 22%, #111827 22% 40%); border: 1px solid #111827; animation: bee-buzz 2.4s ease-in-out infinite; }
-.bee-fly i { position: absolute; top: -45%; width: 45%; aspect-ratio: 1; border-radius: 50%; background: rgba(240, 249, 255, 0.85); border: 1px solid #94a3b8; }
-.bee-fly i:first-child { left: 10%; transform: rotate(-20deg); }
-.bee-fly i:last-child { left: 42%; transform: rotate(20deg); }
-@keyframes bee-buzz { 0%, 100% { transform: translate(0, 0) rotate(-6deg); } 50% { transform: translate(-6px, 3px) rotate(6deg); } }
-@media (prefers-reduced-motion: reduce) { .bee-fly { animation: none; } }
+.bcard-face.p-weekly.wk-orange .bcard-art {
+  border-radius: 4px 4px 0 0;
+  background:
+    repeating-radial-gradient(circle at 50% 120%, rgba(255, 255, 255, 0) 0 10px, rgba(253, 186, 116, 0.35) 11px 13px, rgba(255, 255, 255, 0) 14px 22px),
+    radial-gradient(circle at 50% 35%, color-mix(in srgb, var(--c1) 30%, #fff7ed) 0, color-mix(in srgb, var(--c1) 70%, #7c2d12) 60%, #1c0a02 100%);
+}
+.bcard-face.p-weekly.wk-orange .bcard-art::before { display: none; }
+.bcard-face.p-weekly.wk-orange .bcard-pos { top: 5%; left: auto; right: 5%; background: rgba(15, 23, 42, 0.75); border-color: #fdba74; }
+.bcard-face.p-weekly.wk-orange .bcard-name { background: linear-gradient(90deg, #111827, #374151 60%, #111827); border-top: 3px solid #f97316; text-transform: uppercase; letter-spacing: 0.04em; }
+.bcard-face.p-weekly.wk-orange .bcard-name small { color: #fdba74; text-transform: none; letter-spacing: 0; }
+.bcard-face.p-weekly.wk-orange .bcard-foot { background: linear-gradient(90deg, #c2410c, #fb923c, #fed7aa, #fb923c, #c2410c); color: #1c0a02; }
+.bcard-face.p-weekly.wk-orange .bcard-foot .serial { display: none; }
+.bcard-face.p-weekly.wk-orange .wk-caption { background: rgba(15, 23, 42, 0.8); color: #fed7aa; }
+/* The maker's chrome mark, top left, and the serial stamped in orange foil like a real numbered card. */
+.ow-brand { position: absolute; z-index: 3; top: 5%; left: 5%; padding: 1% 4%; border-radius: 3px; font-size: 0.62em; font-weight: 900; font-style: italic; letter-spacing: 0.08em; color: #111827; background: linear-gradient(180deg, #fff, #cbd5e1 50%, #94a3b8 51%, #f1f5f9); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4); }
+.ow-foil { position: absolute; z-index: 3; bottom: 4%; right: 5%; font-size: 0.8em; font-weight: 900; letter-spacing: 0.04em; color: transparent; background: linear-gradient(180deg, #fff7ed, #fb923c 45%, #c2410c 55%, #fed7aa); -webkit-background-clip: text; background-clip: text; filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.6)); }
+@media (prefers-reduced-motion: reduce) { .bcard-face.p-weekly.wk-orange { animation: none; } }
