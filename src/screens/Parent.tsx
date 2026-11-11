@@ -7,6 +7,10 @@ import { useStore } from '../engine/store';
 import type { Profile } from '../engine/types';
 import { go } from '../router';
 import { SUBJECTS, findSkill } from '../subjects';
+import { K_SUBJECTS } from '../subjects/kindergarten';
+
+/** The subjects a child plays: Kindergarten for a Unicorn Meadow rider, grade 3 otherwise. */
+const subjectsFor = (p: Profile) => (p.meadow ? K_SUBJECTS.map((s) => ({ ...s, ready: true })) : SUBJECTS);
 
 export function Parent() {
   const { data, setData } = useStore();
@@ -90,9 +94,9 @@ function ProfileReport({ p }: { p: Profile }) {
 
       <h3>Minutes this week by subject</h3>
       <div className="subject-minutes">
-        {SUBJECTS.map((s) => {
+        {subjectsFor(p).map((s) => {
           const sec = days.reduce((n, d) => n + (d.log?.secondsBySubject?.[s.id] ?? 0), 0);
-          const max = Math.max(60, ...SUBJECTS.map((x) => days.reduce((n, d) => n + (d.log?.secondsBySubject?.[x.id] ?? 0), 0)));
+          const max = Math.max(60, ...subjectsFor(p).map((x) => days.reduce((n, d) => n + (d.log?.secondsBySubject?.[x.id] ?? 0), 0)));
           return (
             <div key={s.id} className="minutes-row">
               <span>{s.icon} {s.name}</span>
@@ -114,7 +118,7 @@ function ProfileReport({ p }: { p: Profile }) {
         ))}
       </div>
 
-      {SUBJECTS.filter((s) => s.ready && s.skills.length).map((subject) => (
+      {subjectsFor(p).filter((s) => s.ready && s.skills.length).map((subject) => (
         <div key={subject.id}>
           <h3>{subject.icon} {subject.name}: curriculum progress</h3>
           <table className="skills-table">
@@ -253,8 +257,8 @@ function TopicSwitches({ p }: { p: Profile }) {
   return (
     <div>
       <h3>🏫 Topics taught at school so far</h3>
-      <p className="muted small">Untick anything the class hasn't covered yet and it won't come up in mixed practice or the Ballpark. Tick it again once it's been taught.</p>
-      {SUBJECTS.filter((s) => s.ready && s.skills.length).map((subject) => (
+      <p className="muted small">Untick anything the class hasn't covered yet and it won't come up in mixed practice, the Ballpark or Unicorn Meadow. Tick it again once it's been taught.</p>
+      {subjectsFor(p).filter((s) => s.ready && s.skills.length).map((subject) => (
         <div key={subject.id} className="topic-switches">
           <strong className="small">{subject.icon} {subject.name}</strong>
           <div className="row" style={{ justifyContent: 'flex-start', flexWrap: 'wrap' }}>

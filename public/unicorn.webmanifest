@@ -1,0 +1,10 @@
+{
+  "name": "Unicorn Meadow",
+  "short_name": "Unicorns",
+  "start_url": "./unicorn.html",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#fdf4ff",
+  "theme_color": "#c084fc",
+  "icons": [{ "src": "unicorn-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

@@ -1,11 +1,12 @@
 import type { Skill, SubjectId } from '../engine/types';
 import { GRAMMAR_SKILLS } from './grammar/skills';
+import { K_SKILLS } from './kindergarten';
 import { MATH_SKILLS } from './math/skills';
 import { SCIENCE_SKILLS } from './science/skills';
 import { SPELLING_SKILLS } from './spelling/skills';
 
 export interface Subject {
-  id: SubjectId;
+  id: Exclude<SubjectId, 'kmath' | 'kreading' | 'kscience'>;
   name: string;
   icon: string;
   color: string;
@@ -22,7 +23,8 @@ export const SUBJECTS: Subject[] = [
   { id: 'science', name: 'Science Lab', icon: '🔬', color: '#16a34a', tagline: 'Matter, forces, living things and dinosaurs', skills: SCIENCE_SKILLS, ready: true },
 ];
 
-export const ALL_SKILLS: Skill[] = SUBJECTS.flatMap((s) => s.skills);
+/** Every skill, grade 3 and Kindergarten, so saved progress and reviews can always find theirs. */
+export const ALL_SKILLS: Skill[] = [...SUBJECTS.flatMap((s) => s.skills), ...K_SKILLS];
 
 export function findSkill(id: string): Skill | undefined {
   return ALL_SKILLS.find((s) => s.id === id);

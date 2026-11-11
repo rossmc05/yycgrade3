@@ -20,7 +20,7 @@ export interface GameProps {
   fx: (kind: BurstKind, x: number, y: number, accent?: string) => void;
 }
 
-const THEMES: Record<SubjectId, Theme> = { math: 'math', spelling: 'spelling', grammar: 'grammar', science: 'science', typing: 'map' };
+const THEMES: Record<SubjectId, Theme> = { math: 'math', spelling: 'spelling', grammar: 'grammar', science: 'science', typing: 'map', kmath: 'math', kreading: 'spelling', kscience: 'science' };
 const MEDAL_NAME = { gold: 'Gold', silver: 'Silver', bronze: 'Bronze' };
 
 function MedalRow({ medals, best }: { medals: [number, number, number]; best: number }) {
