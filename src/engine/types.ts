@@ -3,7 +3,10 @@ import type { BallData } from '../ballpark/data';
 
 // Shared types for every subject app.
 
-export type SubjectId = 'math' | 'science' | 'typing' | 'spelling' | 'grammar';
+export type SubjectId = 'math' | 'science' | 'typing' | 'spelling' | 'grammar' | KinderSubjectId;
+
+/** The Kindergarten subjects, played in Unicorn Meadow. */
+export type KinderSubjectId = 'kmath' | 'kreading' | 'kscience';
 
 /** Pictures a question can show. Each subject renders its own kinds. */
 export type Visual =
@@ -18,7 +21,14 @@ export type Visual =
   | { kind: 'polygon'; sides: number; labels?: string[]; regular: boolean; rightAngles?: boolean }
   | { kind: 'balance'; left: string; right: string }
   | { kind: 'number-line'; denominator: number; mark: number }
-  | { kind: 'base-ten'; hundreds: number; tens: number; ones: number };
+  | { kind: 'base-ten'; hundreds: number; tens: number; ones: number }
+  // Kindergarten pictures. A picture token is an emoji, `4×🍓` for a group, or `shape:circle:red`.
+  /** Groups of pictures to count or compare. */
+  | { kind: 'k-groups'; groups: string[] }
+  /** A row of pictures, e.g. a pattern with a ❓ at the end, or one big picture. */
+  | { kind: 'k-row'; items: string[] }
+  /** A big letter or word to look at. */
+  | { kind: 'k-word'; text: string };
 
 export interface Question {
   /** Stable text for this exact item, used to bring missed items back later. */
@@ -35,6 +45,8 @@ export interface Question {
   say?: string;
   hint: string;
   explain: string;
+  /** Spoken names of the choices, in the same order (Kindergarten picture answers). */
+  labels?: string[];
 }
 
 export interface Skill {
