@@ -34,10 +34,10 @@ function letters(level: number, rng: Rng): Question {
   const L = pick(rng, UPPER);
   const l = L.toLowerCase();
   if (level === 0) {
-    return kq(rng, { key: `klet-${L}`, prompt: `Tap the letter ${L}.`, say: `Tap ${say(L)}.`, answer: L, wrong: letterWrong(rng, L, false, UPPER), visual: undefined, hint: `Look for ${say(L)}.`, explain: `That's ${say(L)}.` });
+    return kq(rng, { key: `klet-${L}`, prompt: 'Listen, then tap the letter you hear.', say: `Tap ${say(L)}.`, answer: L, wrong: letterWrong(rng, L, false, UPPER), visual: undefined, hint: `Look for ${say(L)}.`, explain: `That's ${say(L)}.` });
   }
   if (level === 1) {
-    return kq(rng, { key: `kletl-${l}`, prompt: `Tap the small letter ${l}.`, say: `Tap the small letter ${L}.`, answer: l, wrong: letterWrong(rng, l, true, UPPER.map((x) => x.toLowerCase())), hint: `Look for the small ${L}.`, explain: `That's a small ${L}.` });
+    return kq(rng, { key: `kletl-${l}`, prompt: 'Listen, then tap the small letter you hear.', say: `Tap the small letter ${L}.`, answer: l, wrong: letterWrong(rng, l, true, UPPER.map((x) => x.toLowerCase())), hint: `Look for the small ${L}.`, explain: `That's a small ${L}.` });
   }
   return kq(rng, {
     key: `kletm-${L}`,
@@ -85,7 +85,8 @@ function sounds(level: number, rng: Rng): Question {
   return {
     ...kq(rng, {
       key: `ksound-${pic}`,
-      prompt: `${w[0].toUpperCase() + w.slice(1)}. What letter does ${w} start with?`,
+      prompt: 'What letter does this picture start with?',
+      say: `${w[0].toUpperCase() + w.slice(1)}. What letter does ${w} start with?`,
       visual: { kind: 'k-row', items: [pic] },
       answer: letter,
       wrong: letterWrong(rng, letter, level === 2, pool.filter((l) => !(letter === 'c' && l === 'k') && !(letter === 'k' && l === 'c'))),
@@ -180,7 +181,7 @@ function sight(level: number, rng: Rng): Question {
   const wrong = [...shuffle(rng, near), ...shuffle(rng, list.filter((x) => x !== w && !near.includes(x)))];
   const q = kq(rng, {
     key: `ksight-${w}`,
-    prompt: `Tap the word "${w}".`,
+    prompt: 'Listen carefully!',
     say: `Tap the word, ${w}.`,
     answer: w,
     wrong,

@@ -28,6 +28,11 @@ describe('Kindergarten questions', () => {
             if (v !== '❓') expect(nameOf(v), q.prompt).not.toMatch(emoji);
           }
           expect(`${q.prompt} ${q.say ?? ''} ${q.hint} ${q.explain}`).not.toMatch(emoji);
+          // The words on screen must not show a text answer (a letter, number or word) she could just match.
+          if (!emoji.test(q.answer) && !q.answer.startsWith('shape:')) {
+            const shown = `${q.prompt} ${q.visual?.kind === 'k-word' && skill.id !== 'k-letters' ? q.visual.text : ''}`;
+            expect(shown.split(/[^A-Za-z0-9]+/), `${skill.id}: ${q.prompt}`).not.toContain(q.answer);
+          }
         }
       });
     }
