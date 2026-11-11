@@ -24,7 +24,7 @@ const SEASON_NEXT: Record<string, string> = { winter: 'spring', spring: 'summer'
 const SEASON_ITEMS: Item[] = [
   { q: 'It is cold and snowy. What do you wear outside?', a: '🧤', w: ['🩳', '🕶️'], hint: 'Snow is very cold. What keeps your hands warm?', why: 'Mittens keep your hands warm in winter.' },
   { q: 'It is a hot summer day. What do you wear?', a: '🩳', w: ['🧣', '🧤'], hint: 'Hot days need cool clothes.', why: 'Shorts keep you cool in summer.' },
-  { q: 'It is snowing. What do you wear on your head?', a: '🧢', w: ['🩳', '🕶️'], hint: 'Keep your head warm!', why: 'A warm hat keeps your head warm in the snow.' },
+  { q: 'It is cold and windy. What keeps your neck warm?', a: '🧣', w: ['🩳', '🕶️'], hint: 'You wrap it around your neck.', why: 'A scarf keeps your neck warm in winter.' },
   { q: 'Which one do you use in summer?', a: '🏖️', w: ['🛷', '⛸️'], hint: 'Summer is hot. Where can you play in the sand?', why: 'The beach is fun on a hot summer day.' },
   { q: 'Which one do you use in winter?', a: '🛷', w: ['🪁', '🏖️'], hint: 'Winter has snow.', why: 'You slide down snowy hills on a sled.' },
   { q: 'In fall, what happens to many leaves?', a: '🍂', w: ['🌷', '⛄'], hint: 'In fall, leaves change colour.', why: 'In fall, leaves turn colours and fall from the trees.' },
@@ -78,18 +78,24 @@ const WEATHER_ITEMS: Item[] = [
   { q: 'Where should you go when there is a thunderstorm?', a: '🏠', w: ['🏖️', '🌳'], hint: 'Stay safe and dry.', why: 'Go inside a building when there is a storm.' },
 ];
 
+const WEATHER_CLASH: Record<string, string[]> = { '🌧️': ['⛈️'], '⛈️': ['🌧️'], '☁️': ['🌧️', '⛈️'] };
+/** What to call each weather picture when asking her to tap it. */
+const WEATHER_PIC: Record<string, string> = { '☀️': 'sun', '🌧️': 'rain cloud', '❄️': 'snowflake', '☁️': 'cloud', '⛈️': 'storm cloud', '🌬️': 'wind' };
+
 function weather(level: number, rng: Rng): Question {
   if (level === 0) {
     const w = pick(rng, WEATHER);
     const name = { '☀️': 'sunny', '🌧️': 'rainy', '❄️': 'snowy', '☁️': 'cloudy', '⛈️': 'stormy', '🌬️': 'windy' }[w]!;
-    return kq(rng, {
+    const q = kq(rng, {
       key: `kweather-${w}`,
       prompt: `Which picture shows ${name} weather?`,
       answer: w,
-      wrong: others(WEATHER, w),
+      // A storm cloud has rain too, and rain comes from clouds, so those never sit side by side.
+      wrong: others(WEATHER, w, ...(WEATHER_CLASH[w] ?? [])),
       hint: { sunny: 'Look for the sun.', rainy: 'Look for raindrops.', snowy: 'Look for snowflakes.', cloudy: 'Look for a cloud.', stormy: 'Look for lightning.', windy: 'Look for blowing wind.' }[name]!,
       explain: `That's ${name} weather.`,
     });
+    return { ...q, labels: q.choices!.map((c) => WEATHER_PIC[c]) };
   }
   return fromItems(rng, 'kweatherq', level === 1 ? WEATHER_ITEMS.slice(0, 7) : WEATHER_ITEMS);
 }
@@ -136,15 +142,17 @@ const SENSE = { see: '👀', hear: '👂', smell: '👃', taste: '👅', touch: 
 type Sense = keyof typeof SENSE;
 const SENSE_NAMES = Object.keys(SENSE) as Sense[];
 
-const SENSE_THINGS: [string, Sense][] = [
-  ['🌈', 'see'], ['⭐', 'see'], ['📕', 'see'], ['🥁', 'hear'], ['🔔', 'hear'], ['🎸', 'hear'], ['⏰', 'hear'],
-  ['🌸', 'smell'], ['🦨', 'smell'], ['🌹', 'smell'], ['🍦', 'taste'], ['🍋', 'taste'], ['🍬', 'taste'], ['🧸', 'touch'], ['🌵', 'touch'], ['🧊', 'touch'],
+/** Things to sense, with how to say them ("an alarm clock", "ice cream"). */
+const SENSE_THINGS: [string, Sense, string][] = [
+  ['🌈', 'see', 'a rainbow'], ['⭐', 'see', 'a star'], ['📕', 'see', 'a book'], ['🥁', 'hear', 'a drum'], ['🔔', 'hear', 'a bell'], ['🎸', 'hear', 'a guitar'], ['⏰', 'hear', 'an alarm clock'],
+  ['🌸', 'smell', 'a flower'], ['🦨', 'smell', 'a skunk'], ['🌹', 'smell', 'a rose'], ['🍦', 'taste', 'ice cream'], ['🍋', 'taste', 'a lemon'], ['🍬', 'taste', 'candy'],
+  ['🧸', 'touch', 'a soft teddy bear'], ['🧽', 'touch', 'a squishy sponge'], ['🧊', 'touch', 'cold ice'],
 ];
 
 const SENSE_ITEMS: Item[] = [
   { q: 'Which one feels soft?', a: '🧸', w: ['🌵', '🪨'], hint: 'Soft things are nice to hug.', why: 'A teddy bear feels soft.' },
   { q: 'Which one feels cold?', a: '🧊', w: ['🔥', '☕'], hint: 'Cold things come from the freezer.', why: 'Ice feels cold.' },
-  { q: 'Which one feels prickly?', a: '🌵', w: ['🧸', '🪶'], hint: 'Prickly things can poke you.', why: 'A cactus is prickly.' },
+  { q: 'Which one is prickly?', a: '🌵', w: ['🧸', '🪶'], hint: 'Prickly things can poke you.', why: 'A cactus is prickly. Don’t touch it!' },
   { q: 'Which one tastes sour?', a: '🍋', w: ['🍬', '🍞'], hint: 'Sour makes your face scrunch up!', why: 'A lemon tastes sour.' },
   { q: 'Which one tastes sweet?', a: '🍬', w: ['🍋', '🧅'], hint: 'Sweet like a treat.', why: 'Candy tastes sweet.' },
   { q: 'Which one smells nice?', a: '🌸', w: ['🦨', '🗑️'], hint: 'Think of a garden.', why: 'Flowers smell nice.' },
@@ -165,8 +173,8 @@ function senses(level: number, rng: Rng): Question {
     });
   }
   if (level === 1 || rng() < 0.4) {
-    const [thing, s] = pick(rng, SENSE_THINGS);
-    const how = { see: `see a ${nameOf(thing)}`, hear: `hear a ${nameOf(thing)}`, smell: `smell a ${nameOf(thing)}`, taste: `taste ${nameOf(thing)}`, touch: `feel a ${nameOf(thing)}` }[s];
+    const [thing, s, what] = pick(rng, SENSE_THINGS);
+    const how = `${s === 'touch' ? 'feel' : s} ${what}`;
     return kq(rng, {
       key: `ksensething-${thing}`,
       prompt: `What do you use to ${how}?`,

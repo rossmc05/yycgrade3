@@ -38,6 +38,41 @@ describe('Kindergarten questions', () => {
     }
   }
 
+  const sample = (id: string, level: number, n = 400) => {
+    const skill = K_SKILLS.find((s) => s.id === id)!;
+    const rng = seeded(level + 5);
+    return Array.from({ length: n }, () => skill.generate(level, rng, { spellingList: [] }));
+  };
+
+  it('never gives the answer in a rhyme hint', () => {
+    for (const l of [0, 1, 2]) for (const q of sample('k-rhyme', l)) expect(q.hint, q.prompt).not.toContain(` ${q.labels![q.choices!.indexOf(q.answer)]}.`);
+  });
+
+  it('never offers two right answers for weather or sorting', () => {
+    for (const q of sample('k-weather', 0)) {
+      if (q.answer === '🌧️' || q.answer === '☁️') expect(q.choices).not.toContain('⛈️');
+      if (q.answer === '☁️' || q.answer === '⛈️') expect(q.choices).not.toContain('🌧️');
+    }
+    for (const l of [0, 1, 2]) for (const q of sample('k-sort', l)) {
+      const go = (xs: string[]) => xs.some((x) => ['✈️', '🚀'].includes(x));
+      const sky = (xs: string[]) => xs.some((x) => ['⭐', '🌙', '☁️', '🌈'].includes(x));
+      const row = q.visual?.kind === 'k-row' ? q.visual.items : [];
+      // Odd one out: no plane next to sky things. Goes with these: no plane offered for a sky row, or sky thing for a vehicle row.
+      const core = row.length ? [...row, q.answer] : q.choices!;
+      const rest = row.length ? q.choices!.filter((c) => c !== q.answer) : q.choices!;
+      expect((go(core) && sky(rest)) || (sky(core) && go(rest)), `${row.join('')} ${q.choices!.join(' ')}`).toBe(false);
+    }
+  });
+
+  it('keeps number choices inside each level', () => {
+    for (const q of sample('k-count', 0)) for (const c of q.choices!) expect(+c).toBeLessThanOrEqual(5);
+    for (const q of sample('k-numbers', 2)) for (const c of q.choices!) if (/^\d+$/.test(c)) expect(+c).toBeGreaterThanOrEqual(10);
+  });
+
+  it('shows at least two full repeats of a pattern', () => {
+    for (const l of [0, 1, 2]) for (const q of sample('k-patterns', l)) expect(q.visual!.kind === 'k-row' && q.visual.items.length).toBeGreaterThanOrEqual(5);
+  });
+
   it('every start-sound picture really starts with its letter', () => {
     for (const [letter, pics] of Object.entries(STARTS)) for (const p of pics) expect(startWord(p)[0], `${p} ${startWord(p)}`).toBe(letter);
   });
