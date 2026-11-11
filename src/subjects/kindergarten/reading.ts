@@ -114,7 +114,7 @@ function beginning(level: number, rng: Rng): Question {
     hint: `Say ${word(target)} slowly. Then say each picture. Which one starts the same way?`,
     explain: `${word(target)[0].toUpperCase() + word(target).slice(1)} and ${word(match)} both start with ${say(letter)}.`,
   });
-  return { ...q, labels: q.choices!.map(word) };
+  return { ...q, labels: q.choices!.map(word), sayChoices: true };
 }
 
 // ---------- Rhyming ----------
@@ -152,7 +152,7 @@ function rhyme(level: number, rng: Rng): Question {
     hint: `Rhyming words sound the same at the end, like cat and hat.`,
     explain: `${t[0].toUpperCase() + t.slice(1)} and ${rw(match)} rhyme!`,
   });
-  return { ...q, labels: q.choices!.map(rw) };
+  return { ...q, labels: q.choices!.map(rw), sayChoices: true };
 }
 
 // ---------- Sight words ----------

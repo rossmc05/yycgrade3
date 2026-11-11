@@ -1,5 +1,6 @@
 import type { Look } from '../avatar/catalog';
 import type { BallData } from '../ballpark/data';
+import type { MeadowData } from '../unicorn/data';
 
 // Shared types for every subject app.
 
@@ -47,6 +48,8 @@ export interface Question {
   explain: string;
   /** Spoken names of the choices, in the same order (Kindergarten picture answers). */
   labels?: string[];
+  /** Read the choice names aloud after the question (rhyming and first sounds, where hearing them is the point). */
+  sayChoices?: boolean;
 }
 
 export interface Skill {
@@ -150,6 +153,8 @@ export interface Profile {
   story?: { crystals: ('math' | 'spelling' | 'grammar' | 'science')[]; seen: string[]; champion?: number };
   /** The Big League Brains ballpark: its own coins, XP, gear and cards. */
   ball?: BallData;
+  /** Unicorn Meadow, the Kindergarten app: its own points, unicorns and outfits. */
+  meadow?: MeadowData;
 }
 
 export interface Settings {

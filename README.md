@@ -14,6 +14,17 @@ Every subject is tagged to the Alberta grade 3 programs of study (Math 2022, Eng
 - **Type Rocket** (15 lessons): home row outward, with an on-screen keyboard showing which finger to use, words per minute, accuracy and stars. Needs a physical keyboard.
 - **Science Lab** (7 skills, each with a short lesson): states of matter, the water cycle, materials and changes, forces and simple machines, food chains and animals, Earth's surface and Alberta dinosaurs, computational thinking.
 
+## Unicorn Meadow (Kindergarten)
+
+A third app for a Kindergarten student, at `unicorn.html` (live: https://rossmc05.github.io/yycgrade3/unicorn.html). It follows Big League Brains: same players, save, learning engine and parent dashboard, with its own points, unlocks and shop.
+
+- **Questions** (15 skills) tagged to the Alberta Kindergarten programs: counting to 20, numbers, more or less, patterns, shapes, sorting; letter names, letter sounds, beginning sounds, rhyming, sight words; seasons, weather, animals and the five senses.
+- **Made for a non-reader**: every question is read aloud, with a big replay button. Answers are 2 or 3 big pictures. A wrong answer gets a gentle "try again", the wrong picture fades, and after two tries the right one glows. Nothing is ever taken away.
+- **Go on a Ride** is 10 questions (about 5 minutes); **Star Catch** is a 5-question bonus round.
+- **Unicorns**: she starts with Starlight, and nine more arrive at the ballpark's rank steps (300, 800, 1600 ... 18000 XP; 10 XP a right answer).
+- **Sparkle Shop**: points buy coat colours, manes, flower crowns, saddles, horn sparkles, wings and stable decorations (40 to 1500 points). Each unicorn keeps its own outfit in the **Dress Up** barn, and **My Stable** shows them all. Moments (first ride, 5 and 10 in a row, a perfect ride, 25 rides) give free items.
+- The parent dashboard shows Kindergarten topics and outcomes for a Unicorn Meadow rider, and topics can be switched off there until they're taught.
+
 Shared by every subject:
 
 - **Adaptive practice**: 3 right in a row moves up a level, 2 misses moves down. A first miss shows a hint; a second shows the answer and explanation. Missed questions come back in later sessions.
@@ -39,7 +50,8 @@ Progress is stored in the browser (`localStorage`) on each device. Use the paren
 
 ```
 src/engine/      adaptive levels, mastery, rewards, storage, speech (shared by all subjects)
-src/subjects/    one folder per subject; math/skills.ts holds the Math Quest skills
+src/subjects/    one folder per subject; math/skills.ts holds the Math Quest skills, kindergarten/ the Unicorn Meadow skills
+src/unicorn/     Unicorn Meadow: unicorns, shop, points and its screens
 src/screens/     home, subject, play session, rewards, parent dashboard, profiles
 src/components/  top bar, question pictures (clock, coins, fraction bars, graphs…)
 tests/           vitest tests
