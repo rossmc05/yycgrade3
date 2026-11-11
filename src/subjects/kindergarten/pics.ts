@@ -29,9 +29,9 @@ export const NAMES: Record<string, string> = {
   // The five senses
   '👀': 'eyes', '👂': 'ear', '👃': 'nose', '👅': 'tongue', '✋': 'hand',
   // Weather and seasons
-  '☀️': 'sunny', '🌧️': 'rainy', '❄️': 'snowy', '⛈️': 'stormy', '☁️': 'cloudy', '🌬️': 'windy', '🌨️': 'snowing',
+  '☀️': 'sun', '🌧️': 'rainy', '❄️': 'snowy', '⛈️': 'stormy', '☁️': 'cloudy', '🌬️': 'windy', '🌨️': 'snowing',
   '⛄': 'snowman', '🏖️': 'beach', '🍂': 'falling leaves', '🌷': 'spring flowers', '☂️': 'umbrella', '🕶️': 'sunglasses', '⛸️': 'skates', '🛷': 'sled',
-  '🏊': 'swimming', '🎃': 'pumpkin', '🌱': 'sprout', '🍁': 'maple leaf', '🌊': 'water', '🏔️': 'mountain', '🕳️': 'hole', '🪺': 'nest', '🌾': 'field',
+  '🏊': 'swimmer', '🎃': 'pumpkin', '🌱': 'sprout', '🍁': 'maple leaf', '🌊': 'water', '🏔️': 'mountain', '🕳️': 'hole', '🪺': 'nest', '🌾': 'field',
 };
 
 /** The spoken name of a picture token. */

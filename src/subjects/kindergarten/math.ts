@@ -13,9 +13,9 @@ const COUNTABLE = ['🍎', '🍓', '⭐', '🌸', '🦋', '🐞', '🎈', '🧁'
 const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'];
 
 /** Numbers that are easy to mix up with n, for wrong choices. */
-function nearNumbers(rng: Rng, n: number, max: number): string[] {
-  const near = [n - 1, n + 1, n - 2, n + 2, n + 10, n - 10, +String(n).split('').reverse().join('')];
-  const ok = [...new Set(near)].filter((x) => x >= 1 && x <= max && x !== n);
+function nearNumbers(rng: Rng, n: number, max: number, min = 1): string[] {
+  const near = [n - 1, n + 1, n - 2, n + 2, n + 10, n - 10, +String(n).split('').reverse().join(''), n - 3, n + 3];
+  const ok = [...new Set(near)].filter((x) => x >= min && x <= max && x !== n);
   return shuffle(rng, ok.slice(0, 4)).map(String);
 }
 
@@ -33,9 +33,9 @@ function counting(level: number, rng: Rng): Question {
     prompt: `How many ${plural(nameOf(item))}? Count them!`,
     visual: { kind: 'k-groups', groups: [`${n}×${item}`] },
     answer: String(n),
-    wrong: nearNumbers(rng, n, max + 2),
+    wrong: nearNumbers(rng, n, max),
     hint: 'Touch each one as you count. Say one number for each.',
-    explain: `There are ${WORDS[n]} ${name}.`,
+    explain: n === 1 ? `There is one ${name}.` : `There are ${WORDS[n]} ${name}.`,
   });
 }
 
@@ -47,14 +47,15 @@ function numbers(level: number, rng: Rng): Question {
   if (rng() < (level === 0 ? 0.5 : 0.4)) {
     // Match a numeral to a group.
     const item = pick(rng, COUNTABLE);
+    const g = Math.max(1, n);
     return kq(rng, {
-      key: `knummatch-${n}-${item}`,
-      prompt: `Which group has ${WORDS[n]}?`,
-      answer: `${Math.max(1, n)}×${item}`,
-      wrong: nearNumbers(rng, Math.max(1, n), max).map((x) => `${x}×${item}`),
-      visual: { kind: 'k-word', text: String(Math.max(1, n)) },
+      key: `knummatch-${g}-${item}`,
+      prompt: `Which group has ${WORDS[g]}?`,
+      answer: `${g}×${item}`,
+      wrong: nearNumbers(rng, g, max).map((x) => `${x}×${item}`),
+      visual: { kind: 'k-word', text: String(g) },
       hint: 'Count each group. Find the one that matches the number.',
-      explain: `${WORDS[Math.max(1, n)]}.`,
+      explain: `This group has ${WORDS[g]}.`,
       count: 2,
     });
   }
@@ -62,8 +63,8 @@ function numbers(level: number, rng: Rng): Question {
     key: `knum-${n}`,
     prompt: `Tap the number ${WORDS[n]}.`,
     answer: String(n),
-    wrong: n === 0 ? ['6', '8', '9'] : nearNumbers(rng, n, Math.max(max, 9)),
-    hint: n >= 10 ? 'Numbers from ten to nineteen start with a 1.' : 'Look carefully at the shape of each number.',
+    wrong: n === 0 ? ['6', '8', '9'] : nearNumbers(rng, n, Math.max(max, 9), level === 2 ? 10 : 1),
+    hint: n === 20 ? 'Twenty starts with a 2.' : n >= 10 ? 'Numbers from ten to nineteen start with a 1.' : 'Look carefully at the shape of each number.',
     explain: `That's ${WORDS[n]}.`,
   });
 }
@@ -89,8 +90,8 @@ function compare(level: number, rng: Rng): Question {
       answer: String(more ? hi : lo),
       wrong: [String(more ? lo : hi)],
       count: 2,
-      hint: 'Count up from one. The number you say later is bigger.',
-      explain: `${WORDS[hi]} is bigger than ${WORDS[lo]}.`,
+      hint: more ? 'Count up from one. The number you say later is bigger.' : 'Count up from one. The number you say first is smaller.',
+      explain: more ? `${WORDS[hi]} is bigger than ${WORDS[lo]}.` : `${WORDS[lo]} is smaller than ${WORDS[hi]}.`,
     });
   }
   return kq(rng, {
@@ -100,7 +101,7 @@ function compare(level: number, rng: Rng): Question {
     wrong: [`${more ? small : big}×${item}`],
     count: 2,
     hint: more ? 'More means the bigger group. Count both groups.' : 'Fewer means the smaller group. Count both groups.',
-    explain: `${WORDS[big]} is more than ${WORDS[small]}.`,
+    explain: more ? `${WORDS[big]} is more than ${WORDS[small]}.` : `${WORDS[small]} is fewer than ${WORDS[big]}.`,
   });
 }
 
@@ -119,7 +120,8 @@ const CORES = [['AB'], ['AAB', 'ABB', 'AB'], ['ABC', 'AABB', 'ABB', 'AAB']];
 function patterns(level: number, rng: Rng): Question {
   const set = shuffle(rng, pick(rng, PATTERN_SETS));
   const core = pick(rng, CORES[level]).split('').map((c) => set[c.charCodeAt(0) - 65]);
-  const shown = level === 0 ? 5 : int(rng, 5, 7);
+  // Always show at least two full repeats, so she can check the rule.
+  const shown = Math.max(level === 0 ? 5 : int(rng, 5, 7), 2 * core.length);
   const row = Array.from({ length: shown + 1 }, (_, i) => core[i % core.length]);
   const answer = row[shown];
   const used = [...new Set(core)];
@@ -162,7 +164,7 @@ function shapes(level: number, rng: Rng): Question {
     prompt: `Find the ${shape}.`,
     answer,
     wrong: shuffle(rng, others(pool, shape)).map(tok),
-    hint: SIDES[shape] ? `A ${shape} has ${SIDES[shape]}.` : `Look for the ${shape} shape.`,
+    hint: SIDES[shape] ? `${shape === 'oval' ? 'An' : 'A'} ${shape} has ${SIDES[shape]}.` : `Look for the ${shape} shape.`,
     explain: `That's the ${shape}.`,
   });
 }
@@ -177,9 +179,13 @@ const GROUPS: Record<string, string[]> = {
   'things in the sky': ['⭐', '🌙', '☁️', '🌈'],
 };
 
+/** Airplanes and rockets are in the sky too, so those two groups never meet in one question. */
+const clash = (a: string, b: string) => [a, b].includes('things in the sky') && [a, b].includes('things that go');
+
 function sorting(level: number, rng: Rng): Question {
   const names = Object.keys(GROUPS).slice(0, level === 0 ? 4 : 5);
-  const [g, h] = shuffle(rng, names);
+  let [g, h] = shuffle(rng, names);
+  while (clash(g, h)) [g, h] = shuffle(rng, names);
   const same = shuffle(rng, GROUPS[g]);
   const odd = pick(rng, GROUPS[h]);
   if (level === 0 || (level === 2 && rng() < 0.5)) {
@@ -199,7 +205,7 @@ function sorting(level: number, rng: Rng): Question {
     prompt: 'Which one goes with these?',
     visual: { kind: 'k-row', items: same.slice(0, 3) },
     answer: same[3],
-    wrong: shuffle(rng, names.filter((n) => n !== g)).slice(0, 2).map((n) => pick(rng, GROUPS[n])),
+    wrong: shuffle(rng, names.filter((n) => n !== g && !clash(n, g))).slice(0, 2).map((n) => pick(rng, GROUPS[n])),
     hint: `These are all ${g}.`,
     explain: `The ${nameOf(same[3])} goes with the other ${g}.`,
   });
