@@ -137,6 +137,7 @@ h1, h2 { margin: 0; font-weight: 700; }
 .say-btn { width: 76px; height: 76px; border-radius: 50%; border: 0; background: linear-gradient(180deg, #c4b5fd, #8b5cf6); color: #fff; font-size: 2.2rem; box-shadow: 0 5px 0 #6d28d9; flex: none; animation: pulse 2.4s ease-in-out infinite; }
 .say-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #6d28d9; }
 .prompt { margin: 0; font-size: clamp(1.15rem, 3.6vw, 1.6rem); font-weight: 700; line-height: 1.25; }
+.sparkle-q { display: block; width: fit-content; margin-bottom: 4px; padding: 2px 12px; border-radius: 999px; font-size: 0.8em; color: #6d28d9; background: linear-gradient(90deg, #fde68a, #fbcfe8, #c4b5fd); }
 .k-visual { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px; padding: 6px; }
 .k-visual.k-row { gap: 6px; }
 .k-group { display: inline-grid; gap: 4px; justify-content: center; padding: 6px; }

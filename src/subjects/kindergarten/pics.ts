@@ -26,6 +26,8 @@ export const NAMES: Record<string, string> = {
   '🪁': 'kite', '🦷': 'tooth', '🎁': 'present', '🪵': 'log', '👑': 'crown', '🥛': 'milk', '☕': 'cup', '🧈': 'butter', '🍉': 'watermelon', '🥧': 'pie',
   '🧱': 'brick', '🛁': 'bathtub', '🖍️': 'crayon', '✂️': 'scissors', '🎨': 'paint', '🕯️': 'candle', '🪣': 'bucket', '⏰': 'alarm clock',
   '🔨': 'hammer', '🧲': 'magnet', '🪀': 'yo-yo', '🍔': 'hamburger', '🌽': 'corn', '🥦': 'broccoli', '🍗': 'drumstick', '🥒': 'cucumber',
+  '🌍': 'globe', '🔮': 'crystal ball', '🎲': 'block', '🎉': 'party hat',
+  '🌡️': 'thermometer', '💧': 'water',
   // The five senses
   '👀': 'eyes', '👂': 'ear', '👃': 'nose', '👅': 'tongue', '✋': 'hand',
   // Weather and seasons

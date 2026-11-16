@@ -32,6 +32,14 @@ const SEASON_ITEMS: Item[] = [
   { q: 'Which season has Halloween pumpkins?', a: '🍂', w: ['🌷', '🏖️'], hint: 'Halloween is when leaves are falling.', why: 'Halloween is in the fall.', show: '🎃' },
 ];
 
+const SEASON_HARD: Item[] = [
+  { q: 'Which season has the longest, warmest days?', a: '🏖️', w: ['⛄', '🍂'], hint: 'School is out and it is hot outside.', why: 'Summer has the longest and warmest days.' },
+  { q: 'Which season has the shortest, coldest days?', a: '⛄', w: ['🏖️', '🌷'], hint: 'It gets dark early and there is snow.', why: 'Winter has the shortest and coldest days.' },
+  { q: 'When do birds fly south to stay warm?', a: '🍂', w: ['🌷', '🏖️'], hint: 'It is getting colder and leaves are falling.', why: 'Many birds fly south in the fall.' },
+  { q: 'When does the snow melt and make puddles?', a: '🌷', w: ['🍂', '⛄'], hint: 'Winter is ending and it is getting warmer.', why: 'Snow melts in the spring.' },
+  { q: 'When do squirrels gather nuts for winter?', a: '🍂', w: ['🌷', '🏖️'], hint: 'They get ready before the cold comes.', why: 'Squirrels gather food in the fall.', show: '🐿️' },
+];
+
 function seasons(level: number, rng: Rng): Question {
   const season = pick(rng, SEASONS);
   const pic = (s: string) => SEASON_PIC[s][0];
@@ -58,7 +66,19 @@ function seasons(level: number, rng: Rng): Question {
       explain: `After ${season} comes ${next}.`,
     });
   }
-  return fromItems(rng, 'kseasonq', level === 1 ? SEASON_ITEMS.slice(0, 7) : SEASON_ITEMS);
+  if (level === 3 && rng() < 0.5) {
+    const before = Object.keys(SEASON_NEXT).find((k) => SEASON_NEXT[k] === season)!;
+    return kq(rng, {
+      key: `kseasonbefore-${season}`,
+      prompt: `It is ${season}. What season was just before?`,
+      visual: { kind: 'k-row', items: [pic(season)] },
+      answer: pic(before),
+      wrong: others(SEASONS, before, season).map(pic),
+      hint: 'The seasons go winter, spring, summer, fall, and around again. Go backwards one.',
+      explain: `Before ${season} comes ${before}.`,
+    });
+  }
+  return fromItems(rng, 'kseasonq', level === 1 ? SEASON_ITEMS.slice(0, 7) : level === 2 ? SEASON_ITEMS : [...SEASON_ITEMS.slice(5), ...SEASON_HARD]);
 }
 
 // ---------- Weather ----------
@@ -76,6 +96,14 @@ const WEATHER_ITEMS: Item[] = [
   { q: 'What do you see after the rain when the sun comes out?', a: '🌈', w: ['⛄', '🌙'], hint: 'It has lots of colours.', why: 'A rainbow can appear when the sun shines through raindrops.' },
   { q: 'There is thunder and lightning. What weather is it?', a: '⛈️', w: ['☀️', '❄️'], hint: 'Thunder is very loud and comes with dark clouds.', why: 'Thunder and lightning come with a storm.' },
   { q: 'Where should you go when there is a thunderstorm?', a: '🏠', w: ['🏖️', '🌳'], hint: 'Stay safe and dry.', why: 'Go inside a building when there is a storm.' },
+];
+
+const WEATHER_HARD: Item[] = [
+  { q: 'Which one tells you how hot or cold it is?', a: '🌡️', w: ['🕰️', '📕'], hint: 'It has a red line that goes up when it is hot.', why: 'A thermometer shows how hot or cold it is.' },
+  { q: 'It is minus twenty and windy. What should you wear?', a: '🧥', w: ['🩳', '🏊'], hint: 'It is very, very cold in an Alberta winter.', why: 'Bundle up in a warm coat, hat and mittens when it is very cold.' },
+  { q: 'Which cloud is going to bring rain?', a: '🌧️', w: ['☀️', '🌈'], hint: 'Look for the raindrops.', why: 'Dark clouds with drops bring rain.' },
+  { q: 'What happens to a snowman on a warm sunny day?', a: '💧', w: ['❄️', '⛄'], hint: 'Snow gets soft when it is warm.', why: 'Snow melts into water when it gets warm.', show: '⛄' },
+  { q: 'What can the wind move?', a: '🍂', w: ['🪨', '🏠'], hint: 'The wind can only blow light things.', why: 'Wind can blow light things like leaves.' },
 ];
 
 const WEATHER_CLASH: Record<string, string[]> = { '🌧️': ['⛈️'], '⛈️': ['🌧️'], '☁️': ['🌧️', '⛈️'] };
@@ -97,7 +125,7 @@ function weather(level: number, rng: Rng): Question {
     });
     return { ...q, labels: q.choices!.map((c) => WEATHER_PIC[c]) };
   }
-  return fromItems(rng, 'kweatherq', level === 1 ? WEATHER_ITEMS.slice(0, 7) : WEATHER_ITEMS);
+  return fromItems(rng, 'kweatherq', level === 1 ? WEATHER_ITEMS.slice(0, 7) : level === 2 ? WEATHER_ITEMS : [...WEATHER_ITEMS.slice(6), ...WEATHER_HARD]);
 }
 
 // ---------- Animals ----------
@@ -121,6 +149,15 @@ const ANIMAL_ITEMS: Item[] = [
   { q: 'What do plants need to grow?', a: '☀️', w: ['🍪', '🧸'], hint: 'Plants need water and something warm and bright.', why: 'Plants need sunlight and water to grow.', show: '🌱' },
 ];
 
+const ANIMAL_HARD: Item[] = [
+  { q: 'Which animal has six legs?', a: '🐜', w: ['🐶', '🐦'], hint: 'Bugs have six legs.', why: 'An ant is an insect. Insects have six legs.' },
+  { q: 'Which animal has no legs?', a: '🐍', w: ['🐸', '🐢'], hint: 'It slides along the ground.', why: 'A snake has no legs. It slithers.' },
+  { q: 'What does a baby frog hatch from?', a: '🥚', w: ['🪺', '🐟'], hint: 'A frog starts as a tiny egg in a pond, then becomes a tadpole.', why: 'Frogs hatch from eggs and become tadpoles first.', show: '🐸' },
+  { q: 'Which one is alive?', a: '🐞', w: ['🧸', '🪨'], hint: 'Living things eat, grow and move on their own.', why: 'A ladybug is alive. It eats and grows.' },
+  { q: 'Which one is not living?', a: '🪨', w: ['🌳', '🐰'], hint: 'Living things need food and water to grow.', why: 'A rock does not eat, drink or grow.' },
+  { q: 'What do all animals need?', a: '💧', w: ['🧸', '📕'], hint: 'You drink it every day too.', why: 'All animals need water, food and air.' },
+];
+
 function animals(level: number, rng: Rng): Question {
   if (level === 0 || (level === 1 && rng() < 0.4)) {
     const [animal, sound] = pick(rng, SOUNDS);
@@ -133,7 +170,7 @@ function animals(level: number, rng: Rng): Question {
       explain: `The ${nameOf(animal)} says ${sound}!`,
     });
   }
-  return fromItems(rng, 'kanimal', level === 1 ? ANIMAL_ITEMS.slice(0, 8) : ANIMAL_ITEMS);
+  return fromItems(rng, 'kanimal', level === 1 ? ANIMAL_ITEMS.slice(0, 8) : level === 2 ? ANIMAL_ITEMS : [...ANIMAL_ITEMS.slice(8), ...ANIMAL_HARD]);
 }
 
 // ---------- The five senses ----------
@@ -172,6 +209,22 @@ function senses(level: number, rng: Rng): Question {
       explain: `You ${s} with your ${nameOf(SENSE[s])}.`,
     });
   }
+  if (level === 3 && rng() < 0.6) {
+    // Start from the body part: which thing do you use it for?
+    const s = pick(rng, SENSE_NAMES);
+    const [thing, , what] = pick(rng, SENSE_THINGS.filter((t) => t[1] === s));
+    const wrong = shuffle(rng, SENSE_THINGS.filter((t) => t[1] !== s)).slice(0, 2).map((t) => t[0]);
+    const verb = s === 'touch' ? 'feel' : s;
+    return kq(rng, {
+      key: `ksenseback-${s}-${thing}`,
+      prompt: `What would you ${verb} with your ${nameOf(SENSE[s])}?`,
+      visual: { kind: 'k-row', items: [SENSE[s]] },
+      answer: thing,
+      wrong,
+      hint: `Your ${nameOf(SENSE[s])} helps you ${verb}. Which one do you ${verb}?`,
+      explain: `You ${verb} ${what} with your ${nameOf(SENSE[s])}.`,
+    });
+  }
   if (level === 1 || rng() < 0.4) {
     const [thing, s, what] = pick(rng, SENSE_THINGS);
     const how = `${s === 'touch' ? 'feel' : s} ${what}`;
@@ -191,8 +244,8 @@ function senses(level: number, rng: Rng): Question {
 const K = 'Alberta Kindergarten Science (2023)';
 
 export const KSCIENCE_SKILLS: Skill[] = [
-  { id: 'k-seasons', subject: S, name: 'Seasons', blurb: 'Winter, spring, summer, fall', strand: 'Earth Systems', outcome: `${K}: Children describe the seasons and how they change.`, icon: '🍂', levels: ['Name the season', 'What to wear', 'What comes next'], generate: seasons },
-  { id: 'k-weather', subject: S, name: 'Weather', blurb: 'Sunny, rainy, snowy', strand: 'Earth Systems', outcome: `${K}: Children observe and describe daily weather.`, icon: '🌦️', levels: ['Name the weather', 'Ready for weather', 'Weather safety'], generate: weather },
-  { id: 'k-animals', subject: S, name: 'Animals', blurb: 'Who says moo?', strand: 'Living Systems', outcome: `${K}: Children describe animals and what living things need.`, icon: '🐾', levels: ['Animal sounds', 'Animal bodies', 'Homes and needs'], generate: animals },
-  { id: 'k-senses', subject: S, name: 'Five senses', blurb: 'See, hear, smell, taste, touch', strand: 'Living Systems', outcome: `${K}: Children use their senses to explore the world.`, icon: '👃', levels: ['Body parts', 'Which sense?', 'Soft, sour, loud'], generate: senses },
+  { id: 'k-seasons', subject: S, name: 'Seasons', blurb: 'Winter, spring, summer, fall', strand: 'Earth Systems', outcome: `${K}: Children describe the seasons and how they change.`, icon: '🍂', levels: ['Name the season', 'What to wear', 'What comes next', 'Season changes'], generate: seasons },
+  { id: 'k-weather', subject: S, name: 'Weather', blurb: 'Sunny, rainy, snowy', strand: 'Earth Systems', outcome: `${K}: Children observe and describe daily weather.`, icon: '🌦️', levels: ['Name the weather', 'Ready for weather', 'Weather safety', 'Hot, cold and melting'], generate: weather },
+  { id: 'k-animals', subject: S, name: 'Animals', blurb: 'Who says moo?', strand: 'Living Systems', outcome: `${K}: Children describe animals and what living things need.`, icon: '🐾', levels: ['Animal sounds', 'Animal bodies', 'Homes and needs', 'Living or not'], generate: animals },
+  { id: 'k-senses', subject: S, name: 'Five senses', blurb: 'See, hear, smell, taste, touch', strand: 'Living Systems', outcome: `${K}: Children use their senses to explore the world.`, icon: '👃', levels: ['Body parts', 'Which sense?', 'Soft, sour, loud', 'Sense detective'], generate: senses },
 ];

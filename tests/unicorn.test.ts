@@ -3,7 +3,7 @@ import { RANKS } from '../src/ballpark/data';
 import { seeded } from '../src/engine/random';
 import { newProfile } from '../src/engine/storage';
 import { bank, buy, newMeadow, wear, toggleDecor, RIDE_BONUS, XP_RIGHT } from '../src/unicorn/data';
-import { planRide } from '../src/unicorn/questions';
+import { planRide, recordK, rideLevel } from '../src/unicorn/questions';
 import { ITEMS } from '../src/unicorn/shop';
 import { nextUnicorn, UNICORNS, unlocked } from '../src/unicorn/unicorns';
 import { K_SKILLS } from '../src/subjects/kindergarten';
@@ -84,5 +84,38 @@ describe('ride planning', () => {
     expect(plan).toHaveLength(10);
     expect(plan.every((s) => K_SKILLS.includes(s))).toBe(true);
     expect(new Set(plan.map((s) => s.subject)).size).toBe(3);
+  });
+});
+
+describe('ride difficulty', () => {
+  const skill = K_SKILLS.find((s) => s.id === 'k-count')!;
+  const withLevel = (level: number) => {
+    const p = newProfile('Ava', '🦄');
+    return { ...p, skills: { ...p.skills, [skill.id]: { level, upStreak: 0, downStreak: 0, history: [], reviewStep: 0, missed: [] } } };
+  };
+
+  it('skips the easiest level, so there are no gimme questions', () => {
+    expect(rideLevel(newProfile('Ava', '🦄'), skill, 0)).toEqual({ level: 1, sparkle: false });
+    expect(rideLevel(withLevel(2), skill, 0)).toEqual({ level: 2, sparkle: false });
+  });
+
+  it('asks a Sparkle question one level up after three right in a row', () => {
+    expect(rideLevel(withLevel(1), skill, 2).sparkle).toBe(false);
+    expect(rideLevel(withLevel(1), skill, 3)).toEqual({ level: 2, sparkle: true });
+    // Nothing above the top level.
+    expect(rideLevel(withLevel(3), skill, 5)).toEqual({ level: 3, sparkle: false });
+  });
+
+  it('a missed Sparkle question does not move her level down', () => {
+    let p = withLevel(1);
+    for (let i = 0; i < 5; i++) {
+      const q = skill.generate(2, seeded(i), { spellingList: [] });
+      p = recordK(p, skill, q, false, 5, Date.now(), 2);
+    }
+    expect(p.skills[skill.id].level).toBe(1);
+  });
+
+  it('every Kindergarten skill has a fourth, challenge level', () => {
+    for (const s of K_SKILLS) expect(s.levels, s.id).toHaveLength(4);
   });
 });
