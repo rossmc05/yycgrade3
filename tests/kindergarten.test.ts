@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { seeded } from '../src/engine/random';
 import { K_SKILLS, K_SUBJECTS } from '../src/subjects/kindergarten';
 import { NAMES, nameOf } from '../src/subjects/kindergarten/pics';
-import { STARTS, rhymeWord, startWord } from '../src/subjects/kindergarten/reading';
+import { ENDS, STARTS, endWord, rhymeWord, startWord } from '../src/subjects/kindergarten/reading';
 import { SUBJECTS } from '../src/subjects';
 
 const emoji = /\p{Extended_Pictographic}/u;
@@ -10,13 +10,13 @@ const emoji = /\p{Extended_Pictographic}/u;
 describe('Kindergarten questions', () => {
   for (const skill of K_SKILLS) {
     for (let level = 0; level < skill.levels.length; level++) {
-      it(`${skill.id} level ${level + 1} has 2 or 3 picture-friendly choices`, () => {
+      it(`${skill.id} level ${level + 1} has 3 picture-friendly choices`, () => {
         const rng = seeded(level * 77 + skill.id.length);
         for (let i = 0; i < 300; i++) {
           const q = skill.generate(level, rng, { spellingList: [] });
           expect(q.input).toBe('choice');
-          expect(q.choices!.length, q.prompt).toBeGreaterThanOrEqual(2);
-          expect(q.choices!.length, q.prompt).toBeLessThanOrEqual(3);
+          expect(q.choices!.length, q.prompt).toBe(3);
+          expect(q.choices, q.prompt).toContain(q.answer);
           // Short choices only: pictures, numbers, letters or a single sight word.
           for (const c of q.choices!) if (!c.startsWith('shape:')) expect(c.length, `${q.prompt} ${c}`).toBeLessThanOrEqual(12);
           if (q.labels) {
@@ -45,7 +45,7 @@ describe('Kindergarten questions', () => {
   };
 
   it('never gives the answer in a rhyme hint', () => {
-    for (const l of [0, 1, 2]) for (const q of sample('k-rhyme', l)) expect(q.hint, q.prompt).not.toContain(` ${q.labels![q.choices!.indexOf(q.answer)]}.`);
+    for (const l of [0, 1, 2, 3]) for (const q of sample('k-rhyme', l)) if (!q.key.startsWith('knorhyme')) expect(q.hint, q.prompt).not.toContain(` ${q.labels![q.choices!.indexOf(q.answer)]}.`);
   });
 
   it('never offers two right answers for weather or sorting', () => {
@@ -70,7 +70,18 @@ describe('Kindergarten questions', () => {
   });
 
   it('shows at least two full repeats of a pattern', () => {
-    for (const l of [0, 1, 2]) for (const q of sample('k-patterns', l)) expect(q.visual!.kind === 'k-row' && q.visual.items.length).toBeGreaterThanOrEqual(5);
+    for (const l of [0, 1, 2, 3]) for (const q of sample('k-patterns', l)) expect(q.visual!.kind === 'k-row' && q.visual.items.length).toBeGreaterThanOrEqual(5);
+  });
+
+  it('every end-sound picture really ends with its letter', () => {
+    for (const [letter, pics] of Object.entries(ENDS)) for (const p of pics) expect(endWord(p).at(-1), `${p} ${endWord(p)}`).toBe(letter);
+  });
+
+  it('never offers a sound-alike sight word (two and to)', () => {
+    for (const l of [0, 1, 2, 3]) for (const q of sample('k-sight', l)) {
+      const homo = [['to', 'two', 'too'], ['one', 'won'], ['here', 'hear']];
+      for (const h of homo) expect(q.choices!.filter((c) => h.includes(c)).length, q.choices!.join(' ')).toBeLessThanOrEqual(1);
+    }
   });
 
   it('every start-sound picture really starts with its letter', () => {

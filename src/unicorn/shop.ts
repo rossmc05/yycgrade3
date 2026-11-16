@@ -16,6 +16,8 @@ export interface Item {
   style?: 'plain' | 'sparkle' | 'spots' | 'glitter' | 'rainbow' | 'gold' | 'flowers' | 'stars' | 'hearts';
   /** For decorations: the picture shown in the stable. */
   e?: string;
+  /** A Challenge of the Week prize: never sold in the shop. */
+  weekly?: boolean;
 }
 
 export const SLOT_NAME: Record<ItemSlot, string> = { coat: 'Colours', mane: 'Manes', horn: 'Horn sparkles', saddle: 'Saddles', crown: 'Flower crowns', wings: 'Wings', decor: 'Stable' };
@@ -74,6 +76,18 @@ export const ITEMS: Item[] = [
   { id: 'decor-rainbow', name: 'Rainbow', slot: 'decor', cost: 450, colors: [], e: '🌈' },
   { id: 'decor-fountain', name: 'Fountain', slot: 'decor', cost: 600, colors: [], e: '⛲' },
   { id: 'decor-castle', name: 'Castle stable', slot: 'decor', cost: 1500, colors: [], e: '🏰' },
+  // Challenge of the Week prizes: only won, never sold. Winter and northern-lights themed for Alberta.
+  { id: 'wings-aurora', name: 'Northern lights wings', slot: 'wings', cost: 0, colors: ['#22d3ee', '#a78bfa', '#4ade80', '#f472b6'], style: 'rainbow', weekly: true },
+  { id: 'crown-snowflake', name: 'Snowflake crown', slot: 'crown', cost: 0, colors: ['#e0f2fe', '#7dd3fc'], weekly: true },
+  { id: 'mane-aurora', name: 'Northern lights mane', slot: 'mane', cost: 0, colors: ['#22d3ee', '#4ade80', '#a78bfa'], style: 'stars', weekly: true },
+  { id: 'horn-crystal', name: 'Ice crystal horn', slot: 'horn', cost: 0, colors: ['#bae6fd'], style: 'glitter', weekly: true },
+  { id: 'coat-moonbeam', name: 'Moonbeam coat', slot: 'coat', cost: 0, colors: ['#e0e7ff', '#c4b5fd'], style: 'sparkle', weekly: true },
+  { id: 'saddle-snow', name: 'Snowflake saddle', slot: 'saddle', cost: 0, colors: ['#38bdf8', '#ffffff'], style: 'stars', weekly: true },
+  { id: 'decor-snowglobe', name: 'Snow globe', slot: 'decor', cost: 0, colors: [], e: '🔮', weekly: true },
+  { id: 'wings-moon', name: 'Moonlight wings', slot: 'wings', cost: 0, colors: ['#c7d2fe', '#fde68a'], style: 'gold', weekly: true },
 ];
+
+/** What the Sparkle Shop sells: everything but the Challenge of the Week prizes. */
+export const SHOP_ITEMS = ITEMS.filter((i) => !i.weekly);
 
 export const itemById = (id?: string) => ITEMS.find((i) => i.id === id);

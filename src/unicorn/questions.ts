@@ -18,8 +18,21 @@ export function planRide(p: Profile, count: number, rng: () => number, now: numb
 
 export const levelOf = (p: Profile, skill: Skill) => p.skills[skill.id]?.level ?? 0;
 
-export function askK(p: Profile, skill: Skill, used: Set<string>): Question {
-  const q = freshQuestion(skill, p.skills[skill.id], levelOf(p, skill), Math.random, { spellingList: [] }, used);
+/** Rides skip each skill's easiest level, like the ballpark skips easy math: no gimme questions. */
+export const RIDE_FLOOR = 1;
+/** After this many right in a row, the next question is a Sparkle question, one level harder. */
+export const SPARKLE_AFTER = 3;
+
+/** The level to ask: her level in the skill (at least the floor), one higher on a hot streak. */
+export function rideLevel(p: Profile, skill: Skill, run: number): { level: number; sparkle: boolean } {
+  const top = skill.levels.length - 1;
+  const base = Math.min(top, Math.max(RIDE_FLOOR, levelOf(p, skill)));
+  const sparkle = run >= SPARKLE_AFTER && base < top;
+  return { level: sparkle ? base + 1 : base, sparkle };
+}
+
+export function askK(p: Profile, skill: Skill, used: Set<string>, level = rideLevel(p, skill, 0).level): Question {
+  const q = freshQuestion(skill, p.skills[skill.id], level, Math.random, { spellingList: [] }, used);
   used.add(q.key);
   return q;
 }
@@ -28,7 +41,9 @@ export function askK(p: Profile, skill: Skill, used: Set<string>): Question {
  * Record an answer in the shared learning engine (levels, mastery, reviews, the day's practice),
  * keeping Grade 3 Quest's own XP and coins as they were: the meadow pays out in its own points.
  */
-export function recordK(p: Profile, skill: Skill, q: Question, firstTry: boolean, seconds: number, now: number): Profile {
-  const out = applyAnswer(p, skill, q, firstTry, true, seconds, now, levelOf(p, skill));
+export function recordK(p: Profile, skill: Skill, q: Question, firstTry: boolean, seconds: number, now: number, asked = levelOf(p, skill)): Profile {
+  // `asked` is the level the question came from: a Sparkle question missed, or a floor question
+  // right, doesn't move her level (see recordAnswer).
+  const out = applyAnswer(p, skill, q, firstTry, true, seconds, now, asked);
   return { ...out.profile, xp: p.xp, coins: p.coins };
 }

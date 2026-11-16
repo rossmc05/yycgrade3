@@ -14,6 +14,7 @@ import { Ride } from './ui/Ride';
 import { Shop } from './ui/Shop';
 import { Stable } from './ui/Stable';
 import { UnicornArt } from './ui/UnicornArt';
+import { Weekly } from './ui/Weekly';
 import { UNICORNS } from './unicorns';
 import { say } from './voice';
 
@@ -34,6 +35,7 @@ export function UnicornApp() {
   if (page === 'stars') return <Ride key={a ?? 'stars'} mode="stars" />;
   if (page === 'stable') return <Stable />;
   if (page === 'shop') return <Shop />;
+  if (page === 'weekly') return <Weekly />;
   if (page === 'barn') return <Barn key={a} start={a} />;
   return <Meadow />;
 }

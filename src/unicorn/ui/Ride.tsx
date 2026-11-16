@@ -10,8 +10,9 @@ import type { Question, Skill } from '../../engine/types';
 import { go } from '../../router';
 import { nameOf } from '../../subjects/kindergarten/pics';
 import { bank, meadowOf, POINTS_RETRY, POINTS_RIGHT, RIDE_BONUS, RIDE_LENGTH, STAR_BONUS, STAR_LENGTH, XP_RETRY, XP_RIGHT, type Payout } from '../data';
-import { askK, planRide, recordK } from '../questions';
+import { askK, planRide, recordK, rideLevel } from '../questions';
 import { unicornById, UNICORNS } from '../unicorns';
+import { addPlay } from '../weekly';
 import { hush, orList, praise, say, tryAgain } from '../voice';
 import { Pic } from './Pic';
 import { RideEnd } from './RideEnd';
@@ -36,16 +37,17 @@ export function Ride({ mode = 'ride' }: { mode?: 'ride' | 'stars' }) {
   const [wasDue] = useState(() => new Set(plan.filter((s) => isReviewDue(profile!.skills[s.id], Date.now())).map((s) => s.id)));
   const used = useRef(new Set<string>());
   const [i, setI] = useState(0);
-  const [q, setQ] = useState<Question>(() => askK(profile!, plan[0], used.current));
+  const [lv, setLv] = useState(() => rideLevel(profile!, plan[0], 0));
+  const [q, setQ] = useState<Question>(() => askK(profile!, plan[0], used.current, lv.level));
   const [phase, setPhase] = useState<Phase>('ask');
   const [wrong, setWrong] = useState<string[]>([]);
-  const [tally, setTally] = useState({ xp: 0, points: 0, firstTry: 0, run: 0, bestRun: 0 });
+  const [tally, setTally] = useState({ xp: 0, points: 0, firstTry: 0, run: 0, bestRun: 0, sparkles: 0, runs5: 0 });
   const [payout, setPayout] = useState<Payout | null>(null);
   const results = useRef<{ skillId: string; correct: boolean }[]>([]);
   const started = useRef(Date.now());
   const skill: Skill = plan[i];
 
-  const read = () => { void say(...spokenQuestion(q)); };
+  const read = () => { void say(...(lv.sparkle ? ['Sparkle question!'] : []), ...spokenQuestion(q)); };
   useEffect(() => { if (!payout) read(); }, [q]);
   useEffect(() => () => hush(), []);
 
@@ -55,7 +57,8 @@ export function Ride({ mode = 'ride' }: { mode?: 'ride' | 'stars' }) {
 
   const finish = (t: typeof tally, early = false) => {
     const banked = bank(meadowOf(latest.current), t.xp, t.points, { right: i + 1, firstTry: t.firstTry, asked: length, bestRun: t.bestRun }, early ? 0 : mode === 'stars' ? STAR_BONUS : RIDE_BONUS, !early && mode === 'ride');
-    updateProfile((p) => closeReviews({ ...p, meadow: banked.meadow }, results.current, wasDue, Date.now()));
+    const week = addPlay(banked.meadow, { mode, finished: !early, firstTry: t.firstTry, sparkles: t.sparkles, runs5: t.runs5 }, Date.now());
+    updateProfile((p) => closeReviews({ ...p, meadow: week }, results.current, wasDue, Date.now()));
     if (early) return go('');
     setPayout(banked.payout);
   };
@@ -67,7 +70,9 @@ export function Ride({ mode = 'ride' }: { mode?: 'ride' | 'stars' }) {
     setWrong([]);
     setPhase('ask');
     started.current = Date.now();
-    setQ(askK(latest.current, plan[n], used.current));
+    const l = rideLevel(latest.current, plan[n], t.run);
+    setLv(l);
+    setQ(askK(latest.current, plan[n], used.current, l.level));
   };
 
   const tap = (c: string) => {
@@ -82,12 +87,14 @@ export function Ride({ mode = 'ride' }: { mode?: 'ride' | 'stars' }) {
         firstTry: tally.firstTry + (first ? 1 : 0),
         run,
         bestRun: Math.max(tally.bestRun, run),
+        sparkles: tally.sparkles + (first && lv.sparkle ? 1 : 0),
+        runs5: tally.runs5 + (run > 0 && run % 5 === 0 ? 1 : 0),
       };
       setTally(t);
       setPhase('yay');
       sfx.coin();
       results.current.push({ skillId: skill.id, correct: first });
-      updateProfile((p) => recordK(p, skill, q, first, (Date.now() - started.current) / 1000, Date.now()));
+      updateProfile((p) => recordK(p, skill, q, first, (Date.now() - started.current) / 1000, Date.now(), lv.level));
       const cheer = run >= 3 && run % 3 === 0 ? `${run} in a row! ${praise()}` : praise();
       void say(cheer).then(() => setTimeout(() => next(t), 350));
       return;
@@ -146,7 +153,7 @@ export function Ride({ mode = 'ride' }: { mode?: 'ride' | 'stars' }) {
       <section className="ask">
         <div className="ask-head">
           <button className="say-btn" onClick={read} aria-label="Hear it again">🔊</button>
-          <p className="prompt">{q.prompt}</p>
+          <p className="prompt">{lv.sparkle && <span className="sparkle-q">✨ Sparkle question!</span>}{q.prompt}</p>
         </div>
         {q.visual && (
           <div className={`k-visual ${q.visual.kind}`}>
