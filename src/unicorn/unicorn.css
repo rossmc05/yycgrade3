@@ -231,3 +231,27 @@ h1, h2 { margin: 0; font-weight: 700; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* Challenge of the Week */
+.spot.spot-weekly { grid-column: 1 / -1; min-height: 96px; flex-direction: row; gap: 14px; background: linear-gradient(135deg, #fef3c7, #fde68a 40%, #fbcfe8); position: relative; }
+.spot-badge { position: absolute; top: -10px; right: -6px; font-size: 1.8rem; }
+.weekly-page { display: flex; flex-direction: column; align-items: center; gap: 16px; padding-bottom: 30px; }
+.weekly-page h1 { margin: 0; font-size: clamp(1.6rem, 6vw, 2.4rem); color: #a21caf; text-align: center; }
+.week-card { width: min(100%, 560px); background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.week-goal { margin: 0; display: flex; align-items: center; gap: 10px; font-size: clamp(1.2rem, 4.4vw, 1.6rem); font-weight: 700; text-align: left; cursor: pointer; }
+.week-note { margin: 0; font-weight: 700; color: #16a34a; }
+.week-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+.week-row > span { filter: grayscale(1); opacity: 0.35; transition: opacity 0.3s, filter 0.3s; }
+.week-row > span.on { filter: none; opacity: 1; }
+.week-row.bar { width: 100%; align-items: center; flex-wrap: nowrap; gap: 10px; }
+.week-row.bar > span { filter: none; opacity: 1; }
+.week-row .bar { flex: 1; height: 24px; border-radius: 999px; background: #f3e8ff; overflow: hidden; }
+.week-row .bar span { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, #facc15, #f472b6, #a78bfa); transition: width 0.8s; }
+.week-row.small .bar { height: 16px; }
+.week-row b { font-size: 1.2rem; }
+.week-prize { width: min(100%, 560px); display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; }
+.prize-stage { min-height: 200px; display: grid; place-items: center; }
+.prize-tag { display: flex; flex-direction: column; align-items: center; gap: 4px; background: linear-gradient(135deg, #fef3c7, #fbcfe8); border-radius: var(--radius); padding: 10px 22px; box-shadow: var(--shadow); font-size: 1.3rem; font-weight: 700; }
+.prize-tag small { font-size: 0.85rem; font-weight: 600; color: #7c3aed; }
+.week-mini { border: 0; display: flex; align-items: center; gap: 10px; background: var(--card); border-radius: 999px; padding: 6px 16px; box-shadow: var(--shadow); width: min(100%, 460px); min-height: 56px; font-size: 1.6rem; }
+.week-mini .week-row { flex: 1; justify-content: flex-start; }

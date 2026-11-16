@@ -7,7 +7,7 @@ import { sfx } from '../../battle/sfx';
 import { useStore } from '../../engine/store';
 import { go } from '../../router';
 import { buy, meadowOf, wear, type Outfit } from '../data';
-import { ITEMS, SLOT_ICON, SLOT_NAME, SLOTS, type Item, type ItemSlot, type Slot } from '../shop';
+import { SHOP_ITEMS, SLOT_ICON, SLOT_NAME, SLOTS, type Item, type ItemSlot, type Slot } from '../shop';
 import { unicornById, UNICORNS } from '../unicorns';
 import { say } from '../voice';
 import { UnicornArt } from './UnicornArt';
@@ -18,7 +18,7 @@ export function Shop() {
   const rider = unicornById(m.rider) ?? UNICORNS[0];
   const [slot, setSlot] = useState<ItemSlot>('coat');
   const [pick, setPick] = useState<Item | null>(null);
-  const items = ITEMS.filter((it) => it.slot === slot);
+  const items = SHOP_ITEMS.filter((it) => it.slot === slot);
   const preview: Outfit = pick && pick.slot !== 'decor' ? { ...m.outfits[rider.id], [pick.slot]: pick.id } : m.outfits[rider.id] ?? {};
 
   const choose = (it: Item) => {

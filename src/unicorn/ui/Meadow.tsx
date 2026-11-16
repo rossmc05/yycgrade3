@@ -9,6 +9,7 @@ import { say } from '../voice';
 import { NextUnicornBar } from './RideEnd';
 import { UnicornArt } from './UnicornArt';
 import { Sprite } from '../../art/sprite';
+import { unclaimed } from '../weekly';
 
 interface Spot { id: string; label: string; speak: string; e: string; to: string; big?: boolean }
 
@@ -18,12 +19,14 @@ const SPOTS: Spot[] = [
   { id: 'shop', label: 'Sparkle Shop', speak: 'The Sparkle Shop!', e: '🛍️', to: 'shop' },
   { id: 'barn', label: 'Dress Up', speak: 'Time to dress up!', e: '🎀', to: 'barn' },
   { id: 'stars', label: 'Star Catch', speak: 'Star catch! Catch the falling stars.', e: '🌟', to: 'stars' },
+  { id: 'weekly', label: 'Weekly Challenge', speak: 'The challenge of the week!', e: '🏆', to: 'weekly' },
 ];
 
 export function Meadow() {
   const { profile } = useStore();
   const m = meadowOf(profile!);
   const rider = unicornById(m.rider) ?? UNICORNS[0];
+  const prize = unclaimed(m, Date.now()).length > 0;
   const friends = unlocked(m.xp).filter((u) => u.id !== rider.id).slice(0, 3);
 
   const open = (s: Spot) => {
@@ -59,8 +62,9 @@ export function Meadow() {
 
       <nav className="spots">
         {SPOTS.map((s) => (
-          <button key={s.id} className={`spot ${s.big ? 'big' : ''} spot-${s.id}`} onClick={() => open(s)}>
+          <button key={s.id} className={`spot ${s.big ? 'big' : ''} spot-${s.id} ${s.id === 'weekly' && prize ? 'pulse ready' : ''}`} onClick={() => open(s)}>
             <Sprite e={s.e} size={s.big ? 76 : 56} />
+            {s.id === 'weekly' && prize && <b className="spot-badge" aria-label="A prize is ready">🎁</b>}
             <span>{s.label}</span>
           </button>
         ))}

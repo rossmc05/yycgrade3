@@ -10,6 +10,8 @@ import { itemById } from '../shop';
 import { nextUnicorn, unicornById, UNICORNS } from '../unicorns';
 import { say } from '../voice';
 import { UnicornArt } from './UnicornArt';
+import { unclaimed, weekly } from '../weekly';
+import { WeekRow } from './Weekly';
 
 /** How many more right answers until the next unicorn, for a child who counts in answers, not XP. */
 export const answersToGo = (need: number) => Math.ceil(need / XP_RIGHT);
@@ -93,9 +95,14 @@ export function RideEnd({ payout, mode, firstTry, asked }: { payout: Payout; mod
         {Array.from({ length: asked }, (_, k) => <span key={k} className={k < firstTry ? 'lit' : ''}>⭐</span>)}
       </div>
       <NextUnicornBar xp={m.xp} />
+      <button className="week-mini" onClick={() => go('weekly')} aria-label="Weekly Challenge">
+        <span aria-hidden="true">🏆</span><WeekRow w={weekly(m, Date.now())} small />
+      </button>
       <div className="end-actions">
         {arrivals.length ? (
           <button className="big-btn pulse" onClick={showNext}>🎉 Surprise!</button>
+        ) : unclaimed(m, Date.now()).length ? (
+          <button className="big-btn pulse" onClick={() => { sfx.unlock(); go('weekly'); }}>🏆 Weekly prize!</button>
         ) : (
           <>
             <button className="big-btn" onClick={() => { sfx.unlock(); go(mode === 'stars' ? 'stars' : 'ride', String(Date.now())); }}>🦄 Again!</button>

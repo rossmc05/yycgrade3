@@ -24,6 +24,7 @@ A third app for a Kindergarten student, at `unicorn.html` (live: https://rossmc0
 - **Go on a Ride** is 10 questions (about 5 minutes); **Star Catch** is a 5-question bonus round.
 - **Unicorns**: she starts with Starlight, and nine more arrive at the ballpark's rank steps (300, 800, 1600 ... 18000 XP; 10 XP a right answer).
 - **Sparkle Shop**: points buy coat colours, manes, flower crowns, saddles, horn sparkles, wings and stable decorations (40 to 1500 points). Each unicorn keeps its own outfit in the **Dress Up** barn, and **My Stable** shows them all. Moments (first ride, 5 and 10 in a row, a perfect ride, 25 rides) give free items.
+- **Weekly Challenge**: one goal each week, Monday to Sunday, read aloud with a picture row that fills up (30 right answers, 5 rides, 8 Sparkle questions, rides on 4 days, 5 in a row 3 times, 4 Star Catches, in turn). The prize is a special item the Sparkle Shop never sells (northern lights wings, snowflake crown and more), put straight on her unicorn. A finished challenge can still be claimed in a later week, and once every prize is won it gives 200 stars.
 - The parent dashboard shows Kindergarten topics and outcomes for a Unicorn Meadow rider, and topics can be switched off there until they're taught.
 
 Shared by every subject:

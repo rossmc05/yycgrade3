@@ -12,6 +12,7 @@ import { nameOf } from '../../subjects/kindergarten/pics';
 import { bank, meadowOf, POINTS_RETRY, POINTS_RIGHT, RIDE_BONUS, RIDE_LENGTH, STAR_BONUS, STAR_LENGTH, XP_RETRY, XP_RIGHT, type Payout } from '../data';
 import { askK, planRide, recordK, rideLevel } from '../questions';
 import { unicornById, UNICORNS } from '../unicorns';
+import { addPlay } from '../weekly';
 import { hush, orList, praise, say, tryAgain } from '../voice';
 import { Pic } from './Pic';
 import { RideEnd } from './RideEnd';
@@ -40,7 +41,7 @@ export function Ride({ mode = 'ride' }: { mode?: 'ride' | 'stars' }) {
   const [q, setQ] = useState<Question>(() => askK(profile!, plan[0], used.current, lv.level));
   const [phase, setPhase] = useState<Phase>('ask');
   const [wrong, setWrong] = useState<string[]>([]);
-  const [tally, setTally] = useState({ xp: 0, points: 0, firstTry: 0, run: 0, bestRun: 0 });
+  const [tally, setTally] = useState({ xp: 0, points: 0, firstTry: 0, run: 0, bestRun: 0, sparkles: 0, runs5: 0 });
   const [payout, setPayout] = useState<Payout | null>(null);
   const results = useRef<{ skillId: string; correct: boolean }[]>([]);
   const started = useRef(Date.now());
@@ -56,7 +57,8 @@ export function Ride({ mode = 'ride' }: { mode?: 'ride' | 'stars' }) {
 
   const finish = (t: typeof tally, early = false) => {
     const banked = bank(meadowOf(latest.current), t.xp, t.points, { right: i + 1, firstTry: t.firstTry, asked: length, bestRun: t.bestRun }, early ? 0 : mode === 'stars' ? STAR_BONUS : RIDE_BONUS, !early && mode === 'ride');
-    updateProfile((p) => closeReviews({ ...p, meadow: banked.meadow }, results.current, wasDue, Date.now()));
+    const week = addPlay(banked.meadow, { mode, finished: !early, firstTry: t.firstTry, sparkles: t.sparkles, runs5: t.runs5 }, Date.now());
+    updateProfile((p) => closeReviews({ ...p, meadow: week }, results.current, wasDue, Date.now()));
     if (early) return go('');
     setPayout(banked.payout);
   };
@@ -85,6 +87,8 @@ export function Ride({ mode = 'ride' }: { mode?: 'ride' | 'stars' }) {
         firstTry: tally.firstTry + (first ? 1 : 0),
         run,
         bestRun: Math.max(tally.bestRun, run),
+        sparkles: tally.sparkles + (first && lv.sparkle ? 1 : 0),
+        runs5: tally.runs5 + (run > 0 && run % 5 === 0 ? 1 : 0),
       };
       setTally(t);
       setPhase('yay');

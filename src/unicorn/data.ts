@@ -5,6 +5,7 @@
 import type { Profile } from '../engine/types';
 import type { Slot } from './shop';
 import { unlocked } from './unicorns';
+import type { WeeklyState } from './weekly';
 
 export type Outfit = Partial<Record<Slot, string>>;
 
@@ -24,6 +25,8 @@ export interface MeadowData {
   bestRun: number;
   /** Moments earned, such as ten right in a row. */
   moments: string[];
+  /** The Challenge of the Week, by the Monday that starts each week. */
+  weekly?: Record<string, WeeklyState>;
 }
 
 export const newMeadow = (): MeadowData => ({ xp: 0, points: 0, owned: [], outfits: {}, decor: [], rider: 'starlight', rides: 0, bestRun: 0, moments: [] });
