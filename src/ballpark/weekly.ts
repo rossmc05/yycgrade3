@@ -11,12 +11,17 @@ import { weeklyPlayer } from './players';
 export const PERFECT_NEEDED = 5;
 
 /** How a week's Card of the Week looks. */
-export type WeeklyDesign = 'starlight' | 'orange';
-export const DESIGNS: Record<WeeklyDesign, { name: string; stamp?: string; foot?: string }> = {
+export type WeeklyDesign = 'starlight' | 'orange' | 'aqua';
+export const DESIGNS: Record<WeeklyDesign, { name: string; stamp?: string; foot?: string; run?: number }> = {
   starlight: { name: 'Starlight', stamp: 'Card of the Week' },
   // Modelled on a real chrome card: the Orange Wave Refractor, numbered to 25.
   orange: { name: 'Orange Wave Refractor', foot: 'Orange Wave Refractor' },
+  // Modelled on a real chrome card: the Samurai Japan Aqua Refractor, numbered to 199.
+  aqua: { name: 'Samurai Japan Aqua Refractor', foot: 'Aqua Refractor', run: 199 },
 };
+
+/** How many of a week's Card of the Week were made. */
+export const runOfWeek = (date: string) => DESIGNS[designOf(date)].run ?? 25;
 
 export interface WeeklyChallenge {
   /** Test day, YYYY-MM-DD. The challenge is open until the end of that day. */
@@ -74,6 +79,28 @@ export const CHALLENGES: WeeklyChallenge[] = [
     words: NOV_9_WORDS,
     sentences: NOV_9_SENTENCES,
   },
+  {
+    date: '2026-11-23',
+    design: 'aqua',
+    words: ['together', 'shall', 'eight', 'laugh', 'found', 'by', 'buy', 'held', 'going', 'myself', 'write', 'right', 'yellow', 'wish', "we'll"],
+    sentences: {
+      together: 'The team cheered together after the win.',
+      shall: 'Shall we play catch in the yard?',
+      eight: 'Our team scored eight runs.',
+      laugh: 'The silly mascot made us laugh.',
+      found: 'I found my lost baseball under the bench.',
+      by: 'The ball rolled by the pitcher.',
+      buy: 'Dad will buy me a new glove.',
+      held: 'I held the bat with both hands.',
+      going: 'We are going to the ballpark tonight.',
+      myself: 'I tied my cleats all by myself.',
+      write: 'Write your name on your glove.',
+      right: 'He throws with his right hand.',
+      yellow: 'The pitcher wore yellow socks.',
+      wish: 'I wish I could hit a home run.',
+      "we'll": "We'll win the next game.",
+    },
+  },
 ];
 
 const clean = (words: string[]) => [...new Set(words.map((w) => w.trim().toLowerCase()).filter((w) => /^[a-z' -]+$/.test(w)))];
@@ -116,7 +143,7 @@ export function claimWeekly(b: BallData, c: WeeklyChallenge, rng: () => number, 
   let ball = b;
   const pulls: Pulled[] = [];
   const add = (r: ReturnType<typeof addCard>) => { ball = r.ball; pulls.push(r.pulled); };
-  add(addCard(ball, { player: weeklyPlayer(c.date)!, parallel: 'weekly', serial: 1 + Math.floor(rng() * 25) }, now));
+  add(addCard(ball, { player: weeklyPlayer(c.date)!, parallel: 'weekly', serial: 1 + Math.floor(rng() * runOfWeek(c.date)) }, now));
   const owned = (id: string, par: Parameters<typeof cardKey>[1]) => !!ball.cards[cardKey(id, par)];
   add(addCard(ball, rollCard(rng, 3, 'auto', (p) => owned(p.id, oneOfOneParallel(p))), now));
   add(addCard(ball, rollCard(rng, 2, 'refractor', (p) => owned(p.id, oneOfOneParallel(p))), now));

@@ -166,9 +166,24 @@ const STAR_ROTATION = ['judge', 'ohtani', 'skenes', 'witt', 'soto', 'julio', 'ra
 const FIRST_WEEK = Date.UTC(2026, 10, 9);
 
 /** The Card of the Week for the challenge on `date` (YYYY-MM-DD): a star, numbered to 25, only for that week. */
+/** A Card of the Week that isn't the next star in the rotation: a set player and look, by test date. */
+const WEEKLY_SPECIAL: Record<string, { from: string } & Partial<Player>> = {
+  // Modelled on Shohei Ohtani's Samurai Japan Aqua Refractor, pitching for Japan, numbered to 199.
+  '2026-11-23': {
+    from: 'ohtani', pos: 'P', role: 'pitcher', city: 'Samurai Japan', colors: ['#f1f5f9', '#1e3a8a'], ratings: [97, 88, 84],
+    fact: 'He pitched for Japan in the 2023 World Baseball Classic and struck out Mike Trout for the final out to win it.',
+  },
+};
+
 export function weeklyPlayer(date: string): Player | undefined {
   const [y, m, d] = date.split('-').map(Number);
   if (!y || !m || !d) return;
+  const special = WEEKLY_SPECIAL[date];
+  if (special) {
+    const { from, ...look } = special;
+    const base = PLAYERS.find((p) => p.id === from);
+    if (base) return { ...base, ...look, id: `wk-${date}`, milestone: true, weekly: date };
+  }
   const stars = PLAYERS.filter((p) => !p.legend && !p.rookie && !p.chase && !p.milestone);
   const order = [...STAR_ROTATION.map((id) => stars.find((p) => p.id === id)!).filter(Boolean), ...stars.filter((p) => !STAR_ROTATION.includes(p.id))];
   const week = Math.floor((Date.UTC(y, m - 1, d) - FIRST_WEEK) / (7 * 86400000));

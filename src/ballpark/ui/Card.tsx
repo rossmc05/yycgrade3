@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { isOneOfOne, parallelOf, printRunOf, type Parallel } from '../cards';
 import { milestoneOf } from '../data';
 import { RATING_NAMES, type Player } from '../players';
-import { DESIGNS, designOf } from '../weekly';
+import { DESIGNS, designOf, runOfWeek } from '../weekly';
 import { Figure } from './Figure';
 
 const skinOf = (id: string) => [...id].reduce((n, c) => n + c.charCodeAt(0), 0);
@@ -13,7 +13,7 @@ const skinOf = (id: string) => [...id].reduce((n, c) => n + c.charCodeAt(0), 0);
 export function CardFront({ player, parallel, serial }: { player: Player; parallel: Parallel; serial?: number }) {
   const def = parallelOf(parallel);
   const ms = parallel === 'milestone' ? milestoneOf(player.id) : undefined;
-  const run = ms ? ms.serial : printRunOf(player, parallel);
+  const run = player.weekly ? runOfWeek(player.weekly) : ms ? ms.serial : printRunOf(player, parallel);
   const [c1, c2] = player.colors;
   const wk = player.weekly ? designOf(player.weekly) : undefined;
   return (
@@ -48,8 +48,16 @@ export function CardFront({ player, parallel, serial }: { player: Player; parall
         {ms?.caption && <span className="ms-caption">{ms.caption}</span>}
         {player.weekly && <span className="ms-caption wk-caption">Week of {new Date(`${player.weekly}T12:00:00`).toLocaleDateString('en-CA', { month: 'short', day: 'numeric' })}</span>}
         {wk && DESIGNS[wk].stamp && <span className="wk-stamp">{DESIGNS[wk].stamp}</span>}
-        {wk === 'orange' && <span className="ow-brand" aria-hidden="true">CHROME</span>}
+        {(wk === 'orange' || wk === 'aqua') && <span className="ow-brand" aria-hidden="true">CHROME</span>}
         {wk === 'orange' && serial !== undefined && <span className="ow-foil">{String(serial).padStart(2, '0')}/{run}</span>}
+        {wk === 'aqua' && serial !== undefined && <span className="aq-foil">{String(serial).padStart(3, '0')}/{run}</span>}
+        {wk === 'aqua' && (
+          <span className="aq-plate" aria-hidden="true">
+            <b>SAMURAI</b>
+            <b>JAPAN</b>
+            <i />
+          </span>
+        )}
         {ms?.style === 'moon' && <span className="ms-moon" aria-hidden="true" />}
         {ms?.style === 'captain' && <span className="ms-c" title="Captain">C</span>}
         {ms?.style === 'cut' && <span className="ms-cut" title="Cut signature">{player.name}</span>}
@@ -112,7 +120,7 @@ export function BallCard({ player, parallel, serial, big }: { player: Player; pa
 export function CardReveal({ player, parallel, serial, isNew, coins, label }: { player: Player; parallel: Parallel; serial?: number; isNew: boolean; coins: number; label?: string }) {
   const def = parallelOf(parallel);
   const ms = parallel === 'milestone' ? milestoneOf(player.id) : undefined;
-  const run = ms ? ms.serial : printRunOf(player, parallel);
+  const run = player.weekly ? runOfWeek(player.weekly) : ms ? ms.serial : printRunOf(player, parallel);
   return (
     <div className={`card-reveal p-${parallel}`}>
       <div className="reveal-spin"><BallCard player={player} parallel={parallel} serial={serial} /></div>

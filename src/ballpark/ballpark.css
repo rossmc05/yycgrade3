@@ -598,3 +598,44 @@ body.game .binder-page .btn.album-btn.claim { background: linear-gradient(90deg,
 .ow-brand { position: absolute; z-index: 3; top: 5%; left: 5%; padding: 1% 4%; border-radius: 3px; font-size: 0.62em; font-weight: 900; font-style: italic; letter-spacing: 0.08em; color: #111827; background: linear-gradient(180deg, #fff, #cbd5e1 50%, #94a3b8 51%, #f1f5f9); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4); }
 .ow-foil { position: absolute; z-index: 3; bottom: 4%; right: 5%; font-size: 0.8em; font-weight: 900; letter-spacing: 0.04em; color: transparent; background: linear-gradient(180deg, #fff7ed, #fb923c 45%, #c2410c 55%, #fed7aa); -webkit-background-clip: text; background-clip: text; filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.6)); }
 @media (prefers-reduced-motion: reduce) { .bcard-face.p-weekly.wk-orange { animation: none; } }
+
+/* Samurai Japan Aqua Refractor: the Card of the Week for Nov 23, modelled on a real chrome card.
+   Aqua wave refractor border, thin gold frame around the photo, home-plate team badge, navy name bar. */
+.bcard-face.p-weekly.wk-aqua {
+  border-color: transparent;
+  background:
+    repeating-radial-gradient(ellipse at 90% -10%, rgba(255, 255, 255, 0) 0 7px, rgba(255, 255, 255, 0.45) 8px 9px, rgba(255, 255, 255, 0) 10px 16px),
+    linear-gradient(135deg, #a5f3fc, #67e8f9 20%, #cffafe 38%, #5eead4 52%, #fecaca 60%, #99f6e4 70%, #22d3ee 85%, #a5f3fc);
+  background-size: 100% 100%, 300% 300%; animation: superflow 12s linear infinite;
+}
+.bcard-face.p-weekly.wk-aqua .bcard-art {
+  border-radius: 2px; margin: 0 0 0; box-shadow: 0 0 0 2px #d6a756, 0 0 0 3px #7c5a1e;
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(255, 255, 255, 0.18), transparent 60%),
+    radial-gradient(circle at 20% 70%, rgba(45, 212, 191, 0.35), transparent 40%),
+    linear-gradient(180deg, #0f3b45, #1f5662 45%, #2c6b5a 100%);
+}
+.bcard-face.p-weekly.wk-aqua .bcard-art::before { display: none; }
+.bcard-face.p-weekly.wk-aqua .bcard-stadium { opacity: 0.45; filter: hue-rotate(20deg) blur(1px); }
+.bcard-face.p-weekly.wk-aqua .bcard-pos { display: none; }
+.bcard-face.p-weekly.wk-aqua .wk-caption { display: none; }
+.bcard-face.p-weekly.wk-aqua .bcard-name {
+  position: relative; margin-top: 3px; align-items: center; text-align: center;
+  border-top: 2px solid #d6a756; text-transform: uppercase; letter-spacing: 0.05em; font-family: Georgia, 'Times New Roman', serif;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.16) 1px, transparent 1.5px) 0 0 / 5px 5px, linear-gradient(180deg, #1e3a8a, #1e40af 50%, #172554);
+}
+.bcard-face.p-weekly.wk-aqua .bcard-name small { color: #a5f3fc; font-family: system-ui, sans-serif; text-transform: none; letter-spacing: 0; }
+.bcard-face.p-weekly.wk-aqua .bcard-foot { background: transparent; color: #134e4a; }
+.bcard-face.p-weekly.wk-aqua .bcard-foot .serial { display: none; }
+.aq-foil { position: absolute; z-index: 3; top: 15%; left: 6%; font-size: 0.85em; font-weight: 900; font-family: 'Courier New', monospace; letter-spacing: 0.02em; color: transparent; background: linear-gradient(180deg, #fde68a, #d6a756 45%, #92400e 55%, #fcd34d); -webkit-background-clip: text; background-clip: text; filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.7)); }
+/* The home-plate badge: SAMURAI JAPAN over a red sun, sitting on the name bar. */
+.aq-plate {
+  position: absolute; z-index: 3; bottom: 0; left: 50%; transform: translateX(-50%); width: 27%; aspect-ratio: 1 / 1.05;
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 6%;
+  background: #fff; border: 2px solid #d6a756; clip-path: polygon(0 0, 100% 0, 100% 70%, 50% 100%, 0 70%);
+  font-family: Georgia, 'Times New Roman', serif; color: #0f172a; line-height: 1;
+}
+.aq-plate b { font-size: 0.5em; letter-spacing: 0.06em; }
+.aq-plate b + b { font-size: 0.66em; margin-top: 3%; }
+.aq-plate i { width: 20%; aspect-ratio: 1; border-radius: 50%; background: #bc002d; margin-top: 5%; }
+@media (prefers-reduced-motion: reduce) { .bcard-face.p-weekly.wk-aqua { animation: none; } }
