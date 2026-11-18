@@ -4,7 +4,7 @@ import { newProfile } from '../src/engine/storage';
 import { RANK } from '../src/ballpark/cards';
 import { newBall } from '../src/ballpark/data';
 import { playerById, weeklyPlayer } from '../src/ballpark/players';
-import { addPerfect, canClaim, CHALLENGES, challengeOf, claimWeekly, designOf, isOpen, neededOf, PERFECT_NEEDED, progressOf } from '../src/ballpark/weekly';
+import { addPerfect, canClaim, CHALLENGES, challengeOf, claimWeekly, designOf, isOpen, neededOf, PERFECT_NEEDED, progressOf, runOfWeek } from '../src/ballpark/weekly';
 
 const at = (d: string, h = 12) => new Date(`${d}T${String(h).padStart(2, '0')}:00:00`).getTime();
 const sam = () => newProfile('Sam', '🦊');
@@ -25,13 +25,13 @@ describe('weekly spelling challenge', () => {
     expect(challengeOf({ ...p, spellingTest: '2026-10-01' })?.date).toBe('2026-11-23');
   });
 
-  it('keeps the Nov 9 week at 3 rounds and Starlight, and new weeks at 5 rounds and the Orange Wave Refractor', () => {
+  it('keeps the Nov 9 week at 3 rounds and Starlight, and new weeks at 5 rounds', () => {
     expect(PERFECT_NEEDED).toBe(5);
     expect(neededOf(CHALLENGES.find((x) => x.date === '2026-11-09')!)).toBe(3);
     expect(designOf('2026-11-09')).toBe('starlight');
     const c = challengeOf(sam())!;
     expect(neededOf(c)).toBe(5);
-    expect(designOf(c.date)).toBe('orange');
+    expect(designOf('2026-11-16')).toBe('orange');
   });
 
   it('stays open until the end of test day', () => {
@@ -56,7 +56,7 @@ describe('weekly spelling challenge', () => {
       expect(r.pulls).toHaveLength(3);
       expect(r.pulls[0]).toMatchObject({ parallel: 'weekly' });
       expect(r.pulls[0].player.weekly).toBe('2026-11-23');
-      expect(r.pulls[0].serial).toBeLessThanOrEqual(25);
+      expect(r.pulls[0].serial).toBeLessThanOrEqual(199);
       expect(RANK[r.pulls[1].parallel]).toBeGreaterThanOrEqual(RANK.auto);
       expect(RANK[r.pulls[2].parallel]).toBeGreaterThanOrEqual(RANK.refractor);
       expect(progressOf(r.ball, c).claimed).toBe(true);
@@ -70,5 +70,13 @@ describe('weekly spelling challenge', () => {
     expect(a.name).toBe('Aaron Judge');
     expect(b.name).toBe('Shohei Ohtani');
     expect(playerById('wk-2026-11-09')?.name).toBe('Aaron Judge');
+  });
+
+  it('makes Nov 23 the Samurai Japan Aqua Refractor: Ohtani pitching for Japan, numbered to 199', () => {
+    const p = weeklyPlayer('2026-11-23')!;
+    expect(p).toMatchObject({ name: 'Shohei Ohtani', role: 'pitcher', pos: 'P', city: 'Samurai Japan', id: 'wk-2026-11-23', weekly: '2026-11-23' });
+    expect(designOf('2026-11-23')).toBe('aqua');
+    expect(runOfWeek('2026-11-23')).toBe(199);
+    expect(runOfWeek('2026-11-16')).toBe(25);
   });
 });

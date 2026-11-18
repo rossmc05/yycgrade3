@@ -12,7 +12,7 @@ import { hearAndSpell, SPELLING_SKILLS } from '../../subjects/spelling/skills';
 import { ballOf, payout, type Pulled } from '../data';
 import { weeklyPlayer } from '../players';
 import { recordBall, XP_RIGHT, XP_WRONG } from '../questions';
-import { addPerfect, canClaim, challengeOf, claimWeekly, dayLabel, DESIGNS, designOf, isOpen, neededOf, progressOf, type WeeklyChallenge } from '../weekly';
+import { addPerfect, canClaim, challengeOf, claimWeekly, dayLabel, DESIGNS, designOf, isOpen, neededOf, progressOf, type WeeklyChallenge, runOfWeek } from '../weekly';
 import { Ask } from './Ask';
 import { BallBar } from './BallBar';
 import { BallCard, CardReveal } from './Card';
@@ -84,7 +84,7 @@ export function Weekly() {
           <div>
             <h2 className="album-head"><span>The prize</span><small>{pr.claimed ? 'Claimed' : open ? `Until ${dayLabel(c.date)}` : 'Closed'}</small></h2>
             <ul className="weekly-list">
-              <li><b>{DESIGNS[designOf(c.date)].name} Card of the Week:</b> {card.name}, numbered to 25. Only for this week, and gone forever once it ends.</li>
+              <li><b>{DESIGNS[designOf(c.date)].name} Card of the Week:</b> {card.name}, numbered to {runOfWeek(c.date)}. Only for this week, and gone forever once it ends.</li>
               <li><b>An Autograph or rarer:</b> could even be a Superfractor or the Babe Ruth.</li>
               <li><b>A Refractor or better.</b></li>
             </ul>
