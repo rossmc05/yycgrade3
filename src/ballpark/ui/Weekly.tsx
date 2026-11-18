@@ -80,11 +80,25 @@ export function Weekly() {
         </section>
       ) : (
         <section className="album-sec weekly-prize">
-          <div className="weekly-card"><BallCard player={card} parallel="weekly" /></div>
+          <div className="weekly-card">
+            {pr.claimed ? (
+              <BallCard player={card} parallel="weekly" />
+            ) : (
+              // Kept secret until the pack is claimed, so the card is a surprise.
+              <div className="bcard mystery-card" aria-label="Mystery card">
+                <span className="mc-q">?</span>
+                <small>Mystery card</small>
+              </div>
+            )}
+          </div>
           <div>
             <h2 className="album-head"><span>The prize</span><small>{pr.claimed ? 'Claimed' : open ? `Until ${dayLabel(c.date)}` : 'Closed'}</small></h2>
             <ul className="weekly-list">
-              <li><b>{DESIGNS[designOf(c.date)].name} Card of the Week:</b> {card.name}, numbered to {runOfWeek(c.date)}. Only for this week, and gone forever once it ends.</li>
+              {pr.claimed ? (
+                <li><b>{DESIGNS[designOf(c.date)].name} Card of the Week:</b> {card.name}, numbered to {runOfWeek(c.date)}. Only for this week, and gone forever once it ends.</li>
+              ) : (
+                <li><b>A mystery Card of the Week:</b> a special card you'll only see when you claim it. Only for this week, and gone forever once it ends.</li>
+              )}
               <li><b>An Autograph or rarer:</b> could even be a Superfractor or the Babe Ruth.</li>
               <li><b>A Refractor or better.</b></li>
             </ul>
