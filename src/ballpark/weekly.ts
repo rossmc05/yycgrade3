@@ -74,6 +74,27 @@ export const CHALLENGES: WeeklyChallenge[] = [
     words: NOV_9_WORDS,
     sentences: NOV_9_SENTENCES,
   },
+  {
+    date: '2026-11-23',
+    words: ['together', 'shall', 'eight', 'laugh', 'found', 'by', 'buy', 'held', 'going', 'myself', 'write', 'right', 'yellow', 'wish', "we'll"],
+    sentences: {
+      together: 'The team cheered together after the win.',
+      shall: 'Shall we play catch in the yard?',
+      eight: 'Our team scored eight runs.',
+      laugh: 'The silly mascot made us laugh.',
+      found: 'I found my lost baseball under the bench.',
+      by: 'The ball rolled by the pitcher.',
+      buy: 'Dad will buy me a new glove.',
+      held: 'I held the bat with both hands.',
+      going: 'We are going to the ballpark tonight.',
+      myself: 'I tied my cleats all by myself.',
+      write: 'Write your name on your glove.',
+      right: 'He throws with his right hand.',
+      yellow: 'The pitcher wore yellow socks.',
+      wish: 'I wish I could hit a home run.',
+      "we'll": "We'll win the next game.",
+    },
+  },
 ];
 
 const clean = (words: string[]) => [...new Set(words.map((w) => w.trim().toLowerCase()).filter((w) => /^[a-z' -]+$/.test(w)))];
